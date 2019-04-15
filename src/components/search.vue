@@ -38,6 +38,15 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+const instance = axios.create({
+  baseURL: 'http://localhost:3000/api',
+  url: '/reservations',
+  headers: { 'X-Showcase-User': 'fuji' },
+  method: 'get'
+});
+
 export default {
   data: () => ({
     traQID: '',
@@ -46,7 +55,20 @@ export default {
   }),
   methods: {
     submit () {
-      console.log(this.traQID, this.dateBegin, this.dateEnd)
+      console.log(this.traQID, this.dateBegin, this.dateEnd);
+
+      axios.get('http://localhost:3000/api/reservations',{
+        headers:{ 
+          'X-Showcase-User': 'fuji' 
+        },
+        data: {} 
+      })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   }
 }
