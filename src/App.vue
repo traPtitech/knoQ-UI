@@ -10,19 +10,20 @@
     <v-content>
       <search />
     </v-content>
-    <div>
-      {{ $store.state.reservations }}
-    </div>
+
+      <Table />
   </v-app>
 </template>
 
 <script>
 import search from './components/search'
+import Table from './components/reservationsTable'
 
 export default {
   name: 'App',
   components: {
-    search
+    search,
+    Table
   },
   data () {
     return {

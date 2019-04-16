@@ -12,7 +12,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    reservations: {}
+    reservations: [],
+    revHeaders: [
+      { text: '識別id', value: 'id' },
+      { text: 'グループID', value: 'group_id' },
+      { text: '部屋ID', value: 'room_id' },
+      { text: '日付', value: 'date' },
+      { text: '開始時刻', value: 'time_start' },
+      { text: '終了時刻', value: 'time_end' }
+    ]
   },
   mutations: {
     changeReservation (state, payload) {
