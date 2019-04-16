@@ -10,17 +10,18 @@
     <v-content>
       <search />
     </v-content>
+    <div>
+      {{ $store.state.reservations }}
+    </div>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 import search from './components/search'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     search
   },
   data () {
