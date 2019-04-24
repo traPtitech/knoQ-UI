@@ -8,7 +8,7 @@
       <td>{{ props.item.id }}</td>
       <td class="text-xs-right">{{ props.item.group_id }}</td>
       <td class="text-xs-right">{{ props.item.room_id }}</td>
-      <td class="text-xs-right">{{ props.item.date }}</td>
+      <td class="text-xs-center">{{ props.item.date }}</td>
       <td class="text-xs-right">{{ props.item.time_start }}</td>
       <td class="text-xs-right">{{ props.item.time_end }}</td>
     </template>

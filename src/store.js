@@ -2,10 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
+const client = 'fuji1'
+
 const instance = axios.create({
   baseURL: 'http://localhost:3000/api',
-  url: '/reservations',
-  headers: { 'X-Showcase-User': 'fuji' }
+  headers: { 'X-Showcase-User': client }
 })
 
 Vue.use(Vuex)
@@ -20,11 +21,19 @@ export default new Vuex.Store({
       { text: '日付', value: 'date' },
       { text: '開始時刻', value: 'time_start' },
       { text: '終了時刻', value: 'time_end' }
+    ],
+    groups: [],
+    groupHeaders: [
+      { text: '識別id', value: 'id' },
+      { text: 'グループ名', value: 'name' }
     ]
   },
   mutations: {
-    changeReservation (state, payload) {
+    changeReservations (state, payload) {
       state.reservations = payload
+    },
+    changeGroups (state, payload) {
+      state.groups = payload
     }
   },
   actions: {
@@ -38,7 +47,38 @@ export default new Vuex.Store({
       })
         .then(function (response) {
           console.log(response)
-          commit('changeReservation', response.data)
+          commit('changeReservations', response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    initGet ({ commit }) {
+      instance.get('/reservations', {
+        params: {
+          userid: client
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          for (let i = 0; i < response.data.length; i++) {
+            let date
+            date = new Date(response.data[i].date)
+            response.data[i].date = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
+          }
+          commit('changeReservations', response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+      instance.get('/groups', {
+        params: {
+          userid: client
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          commit('changeGroups', response.data)
         })
         .catch(function (error) {
           console.log(error)
