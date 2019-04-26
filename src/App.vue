@@ -7,6 +7,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
+
     <v-content>
       <router-view/>
     </v-content>
@@ -23,9 +24,6 @@ export default {
     return {
       //
     }
-  },
-  created: function () {
-    this.$store.dispatch('initGet')
   }
 }
 </script>
