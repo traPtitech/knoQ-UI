@@ -94,7 +94,7 @@
                   full-width
                   @click:minute="$refs.refEndMenu.save(reservation.time_end)"
                 ></v-time-picker>
-              </v-menu>>
+              </v-menu>
               <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
               <v-btn color="info" @click="save">save</v-btn>
             </v-form>
