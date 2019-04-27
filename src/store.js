@@ -22,37 +22,41 @@ export default new Vuex.Store({
       { text: '開始時刻', value: 'time_start' },
       { text: '終了時刻', value: 'time_end' }
     ],
-    groups: [],
+    myGroups: [],
     groupHeaders: [
       { text: '識別id', value: 'id' },
       { text: 'グループ名', value: 'name' }
-    ]
+    ],
+    allowedRooms: []
   },
   mutations: {
     changeReservations (state, payload) {
       state.reservations = payload
     },
     changeGroups (state, payload) {
-      state.groups = payload
+      state.myGroups = payload
+    },
+    checkRooms (state, payload) {
+      state.allowedRooms = payload
+    }
+  },
+  getters: {
+    getRoomIDs: (state) => {
+      let rooms = []
+      state.allowedRooms.forEach(element => {
+        rooms.push(element.id)
+      })
+      return rooms
+    },
+    getGroupIDs: (state) => {
+      let groups = []
+      state.myGroups.forEach(element => {
+        groups.push(element.id)
+      })
+      return groups
     }
   },
   actions: {
-    getReservations ({ commit }, payload) {
-      instance.get('/reservations', {
-        params: {
-          userid: payload.traQID,
-          date_begin: payload.dateBegin,
-          date_end: payload.dateEnd
-        }
-      })
-        .then(function (response) {
-          console.log(response)
-          commit('changeReservations', response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
     initGet ({ commit }) {
       instance.get('/reservations', {
         params: {
@@ -79,6 +83,51 @@ export default new Vuex.Store({
         .then(function (response) {
           console.log(response)
           commit('changeGroups', response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    getReservations ({ commit }, payload) {
+      instance.get('/reservations', {
+        params: {
+          userid: payload.traQID,
+          date_begin: payload.dateBegin,
+          date_end: payload.dateEnd
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          commit('changeReservations', response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    postReservation ({ commit }, payload) {
+      instance.post('/reservations', {
+        group_id: parseInt(payload.group_id),
+        room_id: parseInt(payload.room_id),
+        time_start: payload.time_start,
+        time_end: payload.time_end
+      })
+        .then(function (response) {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    getRooms ({ commit }, payload) {
+      instance.get('/rooms', {
+        params: {
+          date_begin: payload,
+          date_end: payload
+        }
+      })
+        .then(function (response) {
+          console.log(response)
+          commit('checkRooms', response.data)
         })
         .catch(function (error) {
           console.log(error)

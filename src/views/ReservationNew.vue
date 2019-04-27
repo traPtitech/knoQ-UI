@@ -5,18 +5,22 @@
         <h1>予約追加</h1>
       </v-flex>
 
-      <v-flex xs10 sm6 mt-5>
+      <v-flex xs10 sm8 mt-5>
         <v-card>
           <v-card-text>
             <v-form>
-              <v-text-field v-model="reservation.group_id" label="グループid"></v-text-field>
-              <v-text-field v-model="reservation.room_id" label="部屋id"></v-text-field>
+              <v-select
+                v-model="reservation.group_id"
+                :items="getGroupIDs()"
+                no-data-text="あなたが所属しているグループはありません"
+                label="グループid"
+              ></v-select>
               <v-menu
                 ref="dateMenu"
                 v-model="dateMenu"
                 :close-on-content-click="false"
                 :nudge-right="0"
-                :return-value.sync="reservation.date"
+                :return-value.sync="date"
                 lazy
                 transition="scale-transition"
                 offset-y
@@ -25,18 +29,24 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="reservation.date"
+                    v-model="date"
                     label="日付"
                     readonly
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="reservation.date" no-title>
+                <v-date-picker v-model="date" no-title>
                   <v-spacer></v-spacer>
                   <v-btn flat color="primary" @click="dateMenu = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.dateMenu.save(reservation.date)">OK</v-btn>
+                  <v-btn flat color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
                 </v-date-picker>
               </v-menu>
+              <v-select
+                v-model="reservation.room_id"
+                :items="getRoomIDs()"
+                no-data-text="指定された日付の部屋は存在しません"
+                label="部屋id"
+              ></v-select>
               <v-menu
                 ref="refStartMenu"
                 v-model="startMenu"
@@ -96,7 +106,7 @@
                 ></v-time-picker>
               </v-menu>
               <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
-              <v-btn color="info" @click="save">save</v-btn>
+              <v-btn color="info" @click="postReservation(reservation)">save</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -106,10 +116,12 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
       reservation: {},
+      date: null,
       dateMenu: false,
       startMenu: false,
       endMenu: false
@@ -119,6 +131,14 @@ export default {
     allowedMinutes: m => m % 5 === 0,
     save: function () {
       console.log(this.reservation)
+    },
+    ...mapActions(['postReservation', 'getRooms']),
+    ...mapGetters(['getRoomIDs', 'getGroupIDs'])
+  },
+  watch: {
+    date: function () {
+      this.reservation.room_id = null
+      this.getRooms(this.date)
     }
   }
 }
