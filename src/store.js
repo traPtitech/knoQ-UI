@@ -5,8 +5,7 @@ import axios from 'axios'
 const client = 'fuji1'
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api',
-  headers: { 'X-Showcase-User': client }
+  baseURL: 'http://localhost:3000/api'
 })
 
 Vue.use(Vuex)
