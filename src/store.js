@@ -2,8 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
-const client = 'fuji1'
-
 const instance = axios.create({
   baseURL: 'http://localhost:3000/api'
 })
@@ -12,6 +10,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    loginUser: {},
     reservations: [],
     revHeaders: [
       { text: '識別id', value: 'id' },
@@ -37,6 +36,9 @@ export default new Vuex.Store({
     },
     checkRooms (state, payload) {
       state.allowedRooms = payload
+    },
+    setLoginUser (state, payload) {
+      state.loginUser = payload
     }
   },
   getters: {
@@ -57,9 +59,18 @@ export default new Vuex.Store({
   },
   actions: {
     initGet ({ commit }) {
+      instance.get('/users/me', {}
+      )
+        .then(function (response) {
+          console.log(response)
+          commit('setLoginUser', response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
       instance.get('/reservations', {
         params: {
-          userid: client
+          traQID: this.state.traQID
         }
       })
         .then(function (response) {
@@ -76,7 +87,7 @@ export default new Vuex.Store({
         })
       instance.get('/groups', {
         params: {
-          userid: client
+          traQID: this.state.traQID
         }
       })
         .then(function (response) {
@@ -90,7 +101,7 @@ export default new Vuex.Store({
     getReservations ({ commit }, payload) {
       instance.get('/reservations', {
         params: {
-          userid: payload.traQID,
+          traQID: payload.traQID,
           date_begin: payload.dateBegin,
           date_end: payload.dateEnd
         }
