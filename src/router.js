@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import ReservationNew from './views/ReservationNew'
+import GroupsNew from './views/GroupNew'
 
 Vue.use(Router)
 
@@ -17,6 +18,11 @@ export default new Router({
       path: '/reservaions/new',
       name: 'ReservationNew',
       component: ReservationNew
+    },
+    {
+      path: '/groups/new',
+      name: 'GroupNew',
+      component: GroupsNew
     },
     {
       path: '/about',

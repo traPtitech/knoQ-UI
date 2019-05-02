@@ -16,7 +16,7 @@
       </v-flex>
       <v-flex lg3>
         <h1>グループ情報
-          <v-btn icon large>
+          <v-btn icon large @click="$router.push({ name: 'GroupNew' })">
            <v-icon>add</v-icon>
          </v-btn>
         </h1>
@@ -30,6 +30,7 @@
 import search from '../components/search'
 import reservationTable from '../components/reservationsTable'
 import groupTable from '../components/groupsTable'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -37,8 +38,12 @@ export default {
     reservationTable,
     groupTable
   },
-  created: function () {
-    this.$store.dispatch('initGet')
+  created: async function () {
+    await this.getUserMe()
+    this.initGet()
+  },
+  methods: {
+    ...mapActions(['getUserMe', 'initGet'])
   }
 }
 </script>

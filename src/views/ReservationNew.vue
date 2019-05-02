@@ -14,7 +14,21 @@
                 :items="getGroupIDs()"
                 no-data-text="あなたが所属しているグループはありません"
                 label="グループid"
-              ></v-select>
+              >
+                <template v-slot:append-item>
+                  <v-list-tile
+                    ripple
+                    @click="$router.push({ name: 'GroupNew' })"
+                  >
+                    <v-list-tile-action>
+                      <v-icon>add</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>グループを追加する</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </template>
+              </v-select>
               <v-menu
                 ref="dateMenu"
                 v-model="dateMenu"
@@ -106,7 +120,7 @@
                 ></v-time-picker>
               </v-menu>
               <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
-              <v-btn color="info" @click="postReservation(reservation)">save</v-btn>
+              <v-btn color="info" @click="postReservation(reservation) ,$router.push({ name: 'Home' })">save</v-btn>
             </v-form>
           </v-card-text>
         </v-card>

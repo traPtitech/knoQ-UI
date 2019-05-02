@@ -11,6 +11,7 @@
       <td class="text-xs-center">{{ props.item.date }}</td>
       <td class="text-xs-right">{{ props.item.time_start }}</td>
       <td class="text-xs-right">{{ props.item.time_end }}</td>
+      <td class="text-xs-right">{{ props.item.room.place }}</td>
     </template>
   </v-data-table>
 </template>

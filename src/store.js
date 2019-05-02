@@ -11,6 +11,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loginUser: {},
+    allUsers: [],
     reservations: [],
     revHeaders: [
       { text: '識別id', value: 'id' },
@@ -18,7 +19,8 @@ export default new Vuex.Store({
       { text: '部屋ID', value: 'room_id' },
       { text: '日付', value: 'date' },
       { text: '開始時刻', value: 'time_start' },
-      { text: '終了時刻', value: 'time_end' }
+      { text: '終了時刻', value: 'time_end' },
+      { text: '場所', value: 'room.place' }
     ],
     myGroups: [],
     groupHeaders: [
@@ -39,6 +41,9 @@ export default new Vuex.Store({
     },
     setLoginUser (state, payload) {
       state.loginUser = payload
+    },
+    setAllUsers (state, users) {
+      state.allUsers = users
     }
   },
   getters: {
@@ -55,22 +60,29 @@ export default new Vuex.Store({
         groups.push(element.id)
       })
       return groups
+    },
+    gettraQIDs: (state) => {
+      let users = []
+      state.allUsers.forEach(element => {
+        users.push(element.traq_id)
+      })
+      return users
     }
   },
   actions: {
+    getUserMe: async function ({ commit }) {
+      try {
+        const response = await instance.get('/users/me')
+        console.log(response)
+        await commit('setLoginUser', response.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
     initGet ({ commit }) {
-      instance.get('/users/me', {}
-      )
-        .then(function (response) {
-          console.log(response)
-          commit('setLoginUser', response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
       instance.get('/reservations', {
         params: {
-          traQID: this.state.traQID
+          traQID: this.state.loginUser.traq_id
         }
       })
         .then(function (response) {
@@ -87,7 +99,7 @@ export default new Vuex.Store({
         })
       instance.get('/groups', {
         params: {
-          traQID: this.state.traQID
+          traQID: this.state.loginUser.traq_id
         }
       })
         .then(function (response) {
@@ -128,6 +140,15 @@ export default new Vuex.Store({
           console.log(error)
         })
     },
+    postGroup ({ commit }, group) {
+      instance.post('/groups', group)
+        .then(function (response) {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     getRooms ({ commit }, payload) {
       instance.get('/rooms', {
         params: {
@@ -138,6 +159,17 @@ export default new Vuex.Store({
         .then(function (response) {
           console.log(response)
           commit('checkRooms', response.data)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    getUsers ({ commit }) {
+      instance.get('/users', {}
+      )
+        .then(function (response) {
+          console.log(response)
+          commit('setAllUsers', response.data)
         })
         .catch(function (error) {
           console.log(error)
