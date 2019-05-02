@@ -2,20 +2,20 @@
   <v-form>
     <v-container>
       <v-layout row wrap>
-        <v-flex xs12 md2>
+        <v-flex xs12 sm2>
           <v-select
             v-model="nowItem"
             :items="items"
           ></v-select>
         </v-flex>
-        <v-flex xs10 md2 v-if="nowItem === '予約' || nowItem === 'グループ'">
+        <v-flex xs10 sm2 v-if="nowItem === '予約' || nowItem === 'グループ'">
           <v-text-field
             v-model="Condition.traQID"
             label="traQID"
             placeholder="fuji"
           ></v-text-field>
         </v-flex>
-        <v-flex xs10 md3 v-if="nowItem === '予約' || nowItem === '部屋'">
+        <v-flex xs10 sm3 v-if="nowItem === '予約' || nowItem === '部屋'">
           <v-menu
             ref="menuBegin"
             v-model="menuBegin"
@@ -44,7 +44,7 @@
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex xs10 md3 v-if="nowItem === '予約' || nowItem === '部屋'">
+        <v-flex xs10 sm3 v-if="nowItem === '予約' || nowItem === '部屋'">
           <v-menu
             ref="menuEnd"
             v-model="menuEnd"
@@ -73,7 +73,7 @@
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex xs2 md1>
+        <v-flex xs2 sm1>
           <v-btn icon @click="submit">
             <v-icon>search</v-icon>
           </v-btn>
