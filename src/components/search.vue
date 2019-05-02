@@ -9,11 +9,11 @@
           ></v-select>
         </v-flex>
         <v-flex xs10 sm2 v-if="nowItem === '予約' || nowItem === 'グループ'">
-          <v-text-field
+          <v-combobox
             v-model="Condition.traQID"
+            :items="gettraQIDs()"
             label="traQID"
-            placeholder="fuji"
-          ></v-text-field>
+          ></v-combobox>
         </v-flex>
         <v-flex xs10 sm3 v-if="nowItem === '予約' || nowItem === '部屋'">
           <v-menu
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data: () => ({
     items: ['予約', 'グループ', '部屋'],
@@ -96,16 +97,23 @@ export default {
     menuBegin: false,
     menuEnd: false
   }),
+  created: function () {
+    this.getUsers()
+  },
   methods: {
     submit () {
       console.log(this.Condition.traQID, this.Condition.dateBegin, this.Condition.dateEnd)
-      /*
-      this.$store.dispatch('getReservations', {
-        traQID: this.Condition.traQID,
-        dateBegin: this.Condition.dateBegin,
-        dateEnd: this.Condition.dateEnd
-      })
-      */
+      switch (this.nowItem) {
+        case '予約':
+          this.getReservations(this.Condition)
+      }
+    },
+    ...mapActions(['getUsers', 'getReservations']),
+    ...mapGetters(['gettraQIDs'])
+  },
+  watch: {
+    nowItem: function () {
+      this.Condition = {}
     }
   }
 }
