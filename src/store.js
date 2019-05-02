@@ -79,10 +79,26 @@ export default new Vuex.Store({
         console.error(error)
       }
     },
-    initGet ({ commit }) {
+    getGroups: async function ({ commit }, traQID) {
+      try {
+        const response = await instance.get('/groups', {
+          params: {
+            traQID: traQID
+          }
+        })
+        console.log(response)
+        commit('changeGroups', response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    getReservations ({ commit }, payload) {
       instance.get('/reservations', {
         params: {
-          traQID: this.state.loginUser.traq_id
+          traQID: payload.traQID,
+          groupid: payload.groupID,
+          date_begin: payload.dateBegin,
+          date_end: payload.dateEnd
         }
       })
         .then(function (response) {
@@ -92,34 +108,6 @@ export default new Vuex.Store({
             date = new Date(response.data[i].date)
             response.data[i].date = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
           }
-          commit('changeReservations', response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-      instance.get('/groups', {
-        params: {
-          traQID: this.state.loginUser.traq_id
-        }
-      })
-        .then(function (response) {
-          console.log(response)
-          commit('changeGroups', response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
-    getReservations ({ commit }, payload) {
-      instance.get('/reservations', {
-        params: {
-          traQID: payload.traQID,
-          date_begin: payload.dateBegin,
-          date_end: payload.dateEnd
-        }
-      })
-        .then(function (response) {
-          console.log(response)
           commit('changeReservations', response.data)
         })
         .catch(function (error) {
