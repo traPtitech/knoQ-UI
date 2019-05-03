@@ -6,7 +6,7 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <v-flex lg9>
+      <v-flex>
         <h1>予約情報
           <v-btn icon large @click="$router.push({ name: 'ReservationNew' })">
            <v-icon>add</v-icon>
@@ -14,7 +14,7 @@
         </h1>
        <reservationTable />
       </v-flex>
-      <v-flex lg3>
+      <v-flex>
         <h1>グループ情報
           <v-btn icon large @click="$router.push({ name: 'GroupNew' })">
            <v-icon>add</v-icon>
