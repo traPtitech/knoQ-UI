@@ -116,6 +116,8 @@ export default new Vuex.Store({
     },
     postReservation ({ commit }, payload) {
       instance.post('/reservations', {
+        name: payload.name,
+        description: payload.description,
         group_id: parseInt(payload.group_id),
         room_id: parseInt(payload.room_id),
         time_start: payload.time_start,

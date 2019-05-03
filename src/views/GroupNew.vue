@@ -9,6 +9,7 @@
           <v-card-text>
             <v-form>
                <v-text-field v-model="group.name" label="名前"></v-text-field>
+               <v-text-field v-model="group.description" label="説明"></v-text-field>
                 <v-select
                   v-model="group.members"
                   :items="$store.state.allUsers"

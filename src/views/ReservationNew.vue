@@ -11,9 +11,11 @@
             <v-form>
               <v-select
                 v-model="reservation.group_id"
-                :items="getGroupIDs()"
+                :items="$store.state.myGroups"
+                item-text="name"
+                item-value="id"
                 no-data-text="あなたが所属しているグループはありません"
-                label="グループid"
+                label="グループ"
               >
                 <template v-slot:append-item>
                   <v-list-tile
@@ -29,6 +31,8 @@
                   </v-list-tile>
                 </template>
               </v-select>
+              <v-text-field v-model="reservation.name" label="名前"></v-text-field>
+              <v-text-field v-model="reservation.description" label="説明"></v-text-field>
               <v-menu
                 ref="dateMenu"
                 v-model="dateMenu"
@@ -57,7 +61,9 @@
               </v-menu>
               <v-select
                 v-model="reservation.room_id"
-                :items="getRoomIDs()"
+                :items="$store.state.allowedRooms"
+                item-text="place"
+                item-value="id"
                 no-data-text="指定された日付の部屋は存在しません"
                 label="部屋id"
               ></v-select>
