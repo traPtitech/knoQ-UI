@@ -106,7 +106,7 @@ export default new Vuex.Store({
           for (let i = 0; i < response.data.length; i++) {
             let date
             date = new Date(response.data[i].date)
-            response.data[i].date = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
+            response.data[i].date = date
           }
           commit('changeReservations', response.data)
         })
