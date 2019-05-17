@@ -13,7 +13,7 @@
             <v-icon>add</v-icon>
           </v-btn>
         </h1>
-        <reservationTable/>
+        <reservationsCarousel/>
       </v-flex>
       <v-flex>
         <h1>
@@ -30,14 +30,14 @@
 
 <script>
 import search from '../components/search'
-import reservationTable from '../components/reservationsTable'
+import reservationsCarousel from '../components/reservationsCarousel'
 import groupTable from '../components/groupsTable'
 import { mapActions } from 'vuex'
 
 export default {
   components: {
     search,
-    reservationTable,
+    reservationsCarousel,
     groupTable
   },
   created: async function () {
