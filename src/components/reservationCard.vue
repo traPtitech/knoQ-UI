@@ -1,5 +1,5 @@
 <template>
-  <v-card color="blue-grey darken-2" class="title">
+  <v-card color="blue-grey darken-2" class="title" height="350" min-width="220">
     <v-card-title primary-title>
       <v-container>
         <v-layout>
@@ -18,7 +18,7 @@
       <v-container fluid>
         <v-layout>
           <v-flex>
-            <div>グループ：{{ reservation.group.name }}</div>
+            <div>{{ reservation.group.name }}</div>
           </v-flex>
           <v-flex>
             <div class="text-xs-right">{{ reservation.group.members.length }}人</div>
@@ -30,7 +30,7 @@
           </v-flex>
         </v-layout>
         <v-layout>
-          <v-flex>
+          <v-flex text-xs-center>
             <div>
               {{ reservation.time_start.slice(0,5) }} ~ {{ reservation.time_end.slice(0,5) }}
             </div>

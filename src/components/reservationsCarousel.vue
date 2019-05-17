@@ -1,10 +1,10 @@
 <template>
   <v-container>
-    <v-carousel interval="60000" height="1000">
-      <v-carousel-item :key="i" v-for="i in numCarousel">
+    <v-carousel interval="60000" height="800">
+      <v-carousel-item :key="i" v-for="i in numCarousel" class="lime">
         <v-container grid-list-right>
-          <v-layout row wrap align-center justify-space-around>
-            <v-flex xs12 sm8 md6 :key="j" v-for="j in numCards(i)">
+          <v-layout row wrap align-center>
+            <v-flex xs12 sm6 :key="j" v-for="j in numCards(i)">
               <reservationCard :reservation="reservations[(i-1)*4+j-1]"></reservationCard>
             </v-flex>
           </v-layout>

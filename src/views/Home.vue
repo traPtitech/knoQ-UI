@@ -5,7 +5,7 @@
         <search/>
       </v-flex>
     </v-layout>
-    <v-layout row wrap>
+    <v-layout column>
       <v-flex>
         <h1>
           予約情報
