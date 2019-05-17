@@ -2,9 +2,9 @@
   <v-container>
     <v-carousel interval="60000" height="1000">
       <v-carousel-item :key="i" v-for="i in Math.floor(reservations.length / 4) + 1">
-        <v-container grid-list-md>
+        <v-container grid-list-right>
           <v-layout row wrap align-center justify-space-around>
-            <v-flex xs12 sm6 :key="j" v-for="j in cards">
+            <v-flex xs12 sm8 md6 :key="j" v-for="j in cards">
               <reservationCard :reservation="reservations[(i-1)*4+j-1]"></reservationCard>
             </v-flex>
           </v-layout>
