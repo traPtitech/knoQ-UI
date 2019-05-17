@@ -92,7 +92,7 @@ export default new Vuex.Store({
     async getMyReservations ({ commit }) {
       const payload = { traQID: this.state.loginUser.traq_id }
       try {
-        const response = await ReservationsRepository.get(payload)
+        let response = await ReservationsRepository.get(payload)
         console.log(response)
         for (let i = 0; i < response.data.length; i++) {
           let date
