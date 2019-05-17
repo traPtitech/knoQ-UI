@@ -26,7 +26,7 @@ export default {
   methods: {},
   computed: {
     reservations () {
-      return this.$store.state.reservations
+      return this.$store.state.myReservations
     },
     cards () {
       return this.reservations.length % 4

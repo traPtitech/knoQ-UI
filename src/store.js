@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
-
-const instance = axios.create({
-  baseURL: 'http://localhost:3000/api'
-})
+import { RepositoryFactory } from './repositories/RepositoryFactory'
+const ReservationsRepository = RepositoryFactory.set('reservations')
+const GroupsRepository = RepositoryFactory.set('groups')
+const UsersRepository = RepositoryFactory.set('users')
+const RoomsRepository = RepositoryFactory.set('rooms')
 
 Vue.use(Vuex)
 
@@ -12,7 +12,7 @@ export default new Vuex.Store({
   state: {
     loginUser: {},
     allUsers: [],
-    reservations: [],
+    myReservations: [],
     revHeaders: [
       { text: '識別id', value: 'id' },
       { text: 'グループID', value: 'group_id' },
@@ -30,10 +30,10 @@ export default new Vuex.Store({
     allowedRooms: []
   },
   mutations: {
-    changeReservations (state, payload) {
-      state.reservations = payload
+    changeMyReservations (state, payload) {
+      state.myReservations = payload
     },
-    changeGroups (state, payload) {
+    changeMyGroups (state, payload) {
       state.myGroups = payload
     },
     checkRooms (state, payload) {
@@ -72,98 +72,71 @@ export default new Vuex.Store({
   actions: {
     getUserMe: async function ({ commit }) {
       try {
-        const response = await instance.get('/users/me')
+        const response = await UsersRepository.getMe()
         console.log(response)
         await commit('setLoginUser', response.data)
       } catch (error) {
         console.error(error)
       }
     },
-    getGroups: async function ({ commit }, traQID) {
+    getMyGroups: async function ({ commit }) {
+      const traQID = this.state.loginUser.traq_id
       try {
-        const response = await instance.get('/groups', {
-          params: {
-            traQID: traQID
-          }
-        })
+        const response = await GroupsRepository.get(traQID)
         console.log(response)
-        commit('changeGroups', response.data)
+        commit('changeMyGroups', response.data)
       } catch (error) {
         console.log(error)
       }
     },
-    getReservations ({ commit }, payload) {
-      instance.get('/reservations', {
-        params: {
-          traQID: payload.traQID,
-          groupid: payload.groupID,
-          date_begin: payload.dateBegin,
-          date_end: payload.dateEnd
+    async getMyReservations ({ commit }) {
+      const payload = { traQID: this.state.loginUser.traq_id }
+      try {
+        const response = await ReservationsRepository.get(payload)
+        console.log(response)
+        for (let i = 0; i < response.data.length; i++) {
+          let date
+          date = new Date(response.data[i].date)
+          response.data[i].date = date
         }
-      })
-        .then(function (response) {
-          console.log(response)
-          for (let i = 0; i < response.data.length; i++) {
-            let date
-            date = new Date(response.data[i].date)
-            response.data[i].date = date
-          }
-          commit('changeReservations', response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+        commit('changeMyReservations', response.data)
+      } catch (error) {
+        console.log(error)
+      }
     },
-    postReservation ({ commit }, payload) {
-      instance.post('/reservations', {
-        name: payload.name,
-        description: payload.description,
-        group_id: parseInt(payload.group_id),
-        room_id: parseInt(payload.room_id),
-        time_start: payload.time_start,
-        time_end: payload.time_end
-      })
-        .then(function (response) {
-          console.log(response)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    async postReservation ({ commit }, payload) {
+      try {
+        const response = await ReservationsRepository.post(payload)
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
     },
-    postGroup ({ commit }, group) {
-      instance.post('/groups', group)
-        .then(function (response) {
-          console.log(response)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    async postGroup ({ commit }, group) {
+      try {
+        const response = await GroupsRepository.post(group)
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
     },
-    getRooms ({ commit }, payload) {
-      instance.get('/rooms', {
-        params: {
-          date_begin: payload,
-          date_end: payload
-        }
-      })
-        .then(function (response) {
-          console.log(response)
-          commit('checkRooms', response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    async getRooms ({ commit }, payload) {
+      try {
+        const response = await RoomsRepository.get(payload)
+        console.log(response)
+        commit('checkRooms', response.data)
+      } catch (error) {
+        console.log(error)
+      }
     },
-    getUsers ({ commit }) {
-      instance.get('/users', {}
-      )
-        .then(function (response) {
-          console.log(response)
-          commit('setAllUsers', response.data)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    async getUsers ({ commit }) {
+      try {
+        const response = await UsersRepository.get()
+        console.log(response)
+        commit('setAllUsers', response.data)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 })

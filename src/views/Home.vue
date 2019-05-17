@@ -42,11 +42,11 @@ export default {
   },
   created: async function () {
     await this.getUserMe()
-    this.getGroups(this.$store.state.loginUser.traq_id)
-    this.getReservations({ traQID: this.$store.state.loginUser.traq_id })
+    this.getMyGroups()
+    this.getMyReservations()
   },
   methods: {
-    ...mapActions(['getUserMe', 'getGroups', 'getReservations'])
+    ...mapActions(['getUserMe', 'getMyGroups', 'getMyReservations'])
   }
 }
 </script>
