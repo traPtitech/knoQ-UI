@@ -3,13 +3,13 @@
     <v-card-title primary-title>
       <v-container>
         <v-layout>
-          <v-flex xs12>
+          <v-flex xs7>
             <div class="headline">{{ reservation.name }}</div>
           </v-flex>
           <v-flex>
             <div
-              class="headline text-md-right info--text"
-            >{{ reservation.date.getMonth() + 1 }}/{{ reservation.date.getDate() }}</div>
+              class="headline text-xs-right info--text"
+            ><v-icon>calendar_today</v-icon> {{ reservation.date.getMonth() + 1 }}/{{ reservation.date.getDate() }}</div>
           </v-flex>
         </v-layout>
       </v-container>
@@ -18,7 +18,7 @@
       <v-container fluid>
         <v-layout>
           <v-flex>
-            <div>{{ reservation.group.name }}</div>
+            <div><v-icon>people</v-icon> {{ reservation.group.name }}</div>
           </v-flex>
           <v-flex>
             <div class="text-xs-right">{{ reservation.group.members.length }}人</div>
@@ -26,13 +26,13 @@
         </v-layout>
         <v-layout>
           <v-flex>
-            <div>{{ reservation.room.place }}</div>
+            <div><v-icon>place</v-icon> {{ reservation.room.place }}</div>
           </v-flex>
         </v-layout>
         <v-layout>
           <v-flex text-xs-center>
             <div>
-              {{ reservation.time_start.slice(0,5) }} ~ {{ reservation.time_end.slice(0,5) }}
+              <v-icon>watch_later</v-icon> {{ reservation.time_start.slice(0,5) }} ~ {{ reservation.time_end.slice(0,5) }}
             </div>
           </v-flex>
         </v-layout>
