@@ -6,8 +6,8 @@ export default {
   get (payload) {
     return Repository.get(`${resource}`, {
       params: {
-        date_begin: payload,
-        date_end: payload
+        date_begin: payload.dateBegin,
+        date_end: payload.dateEnd
       }
     })
   }

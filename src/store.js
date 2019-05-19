@@ -27,7 +27,13 @@ export default new Vuex.Store({
       { text: '識別id', value: 'id' },
       { text: 'グループ名', value: 'name' }
     ],
-    allowedRooms: []
+    allowedRooms: [],
+    roomHeaders: [
+      { text: '日付', value: 'date' },
+      { text: '場所', value: 'place' },
+      { text: '開始時刻', value: 'time_start' },
+      { text: '終了時刻', value: 'time_end' }
+    ]
   },
   mutations: {
     changeMyReservations (state, payload) {
