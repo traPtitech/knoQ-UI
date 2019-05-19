@@ -8,6 +8,7 @@
       <v-spacer></v-spacer>
       <v-btn @click="$router.push({ name: 'Rooms' })">rooms</v-btn>
       <v-btn @click="$router.push({ name: 'Reservations' })">reservations</v-btn>
+      <v-btn @click="$router.push({ name: 'Groups' })">groups</v-btn>
     </v-toolbar>
 
     <v-content>

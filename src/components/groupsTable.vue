@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="$store.state.groupHeaders"
-    :items="$store.state.myGroups"
+    :items="groups"
     class="elevation-1"
   >
     <template v-slot:items="props">
@@ -10,3 +10,9 @@
     </template>
   </v-data-table>
 </template>
+
+<script>
+export default {
+  props: ['groups']
+}
+</script>

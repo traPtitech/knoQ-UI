@@ -1,10 +1,5 @@
 <template>
   <v-container grid-list-xl>
-    <v-layout>
-      <v-flex>
-        <search/>
-      </v-flex>
-    </v-layout>
     <v-layout column>
       <v-flex>
         <h1>
@@ -22,7 +17,7 @@
             <v-icon>add</v-icon>
           </v-btn>
         </h1>
-        <groupTable/>
+        <groupsTable :groups="$store.state.myGroups"></groupsTable>
       </v-flex>
     </v-layout>
   </v-container>
@@ -31,14 +26,14 @@
 <script>
 import search from '../components/search'
 import reservationsCarousel from '../components/reservationsCarousel'
-import groupTable from '../components/groupsTable'
+import groupsTable from '../components/groupsTable'
 import { mapActions } from 'vuex'
 
 export default {
   components: {
     search,
     reservationsCarousel,
-    groupTable
+    groupsTable
   },
   created: async function () {
     await this.getUserMe()

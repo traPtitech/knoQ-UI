@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Rooms from './views/Rooms.vue'
 import Reservations from './views/Reservations'
 import ReservationNew from './views/ReservationNew'
+import Groups from './views/Groups'
 import GroupsNew from './views/GroupNew'
 
 Vue.use(Router)
@@ -30,6 +31,11 @@ export default new Router({
       path: '/reservaions/new',
       name: 'ReservationNew',
       component: ReservationNew
+    },
+    {
+      path: '/groups',
+      name: 'Groups',
+      component: Groups
     },
     {
       path: '/groups/new',
