@@ -1,5 +1,8 @@
 <template>
-  <v-card color="blue-grey darken-2" class="title white--text" height="350" min-width="220" @click="$router.push({ name: 'ReservationDescription', params: { id: reservation.id } })">
+  <v-card color="blue-grey darken-2" class="title white--text" height="350" min-width="220"
+    @click="$router.push({ name: 'ReservationDescription', params: { id: reservation.id } })"
+    hover
+  >
     <v-card-title primary-title>
       <v-container>
         <v-layout>
@@ -17,12 +20,16 @@
     <v-card-text>
       <v-container fluid grid-list-xl>
         <v-layout>
+                  <v-btn flat color="white" block
+          @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
+        >
           <v-flex>
-            <div><v-icon color="white">people</v-icon> {{ reservation.group.name }}</div>
+            <div class="text-xs-left"><v-icon color="white">people</v-icon> {{ reservation.group.name }}</div>
           </v-flex>
           <v-flex>
             <div class="text-xs-right">{{ reservation.group.members.length }}人</div>
           </v-flex>
+        </v-btn>
         </v-layout>
         <v-layout>
           <v-flex>

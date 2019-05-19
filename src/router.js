@@ -6,6 +6,7 @@ import Reservations from './views/Reservations'
 import ReservationDescription from './views/ReservationDescription'
 import ReservationNew from './views/ReservationNew'
 import Groups from './views/Groups'
+import GroupDescription from './views/GroupDescription'
 import GroupsNew from './views/GroupNew'
 
 Vue.use(Router)
@@ -42,6 +43,11 @@ export default new Router({
       path: '/groups',
       name: 'Groups',
       component: Groups
+    },
+    {
+      path: '/groups/:id',
+      name: 'GroupDescription',
+      component: GroupDescription
     },
     {
       path: '/groups/new',
