@@ -1,5 +1,5 @@
 <template>
-  <v-card color="blue-grey darken-2" class="title white--text" height="350" min-width="220">
+  <v-card color="blue-grey darken-2" class="title white--text" height="350" min-width="220" @click="$router.push({ name: 'ReservationDescription', params: { id: reservation.id } })">
     <v-card-title primary-title>
       <v-container>
         <v-layout>
