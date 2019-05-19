@@ -30,7 +30,7 @@
           </v-flex>
         </v-layout>
         <v-layout>
-          <v-flex text-xs-center>
+          <v-flex>
             <div>
               <v-icon>watch_later</v-icon> {{ reservation.time_start.slice(0,5) }} ~ {{ reservation.time_end.slice(0,5) }}
             </div>
