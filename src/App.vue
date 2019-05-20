@@ -2,7 +2,7 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-side-icon></v-toolbar-side-icon>
-      <v-toolbar-title @click="$router.push({ name: 'Home' })">
+      <v-toolbar-title style="cursor: pointer" @click="$router.push({ name: 'Home' })">
         <span>部屋管理</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>

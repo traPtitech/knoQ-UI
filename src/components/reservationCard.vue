@@ -19,9 +19,9 @@
     </v-card-title>
     <v-card-text>
       <v-container fluid grid-list-xl>
-        <v-layout>
-                  <v-btn flat color="white" block
+        <v-layout
           @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
+          class="test"
         >
           <v-flex>
             <div class="text-xs-left"><v-icon color="white">people</v-icon> {{ reservation.group.name }}</div>
@@ -29,7 +29,6 @@
           <v-flex>
             <div class="text-xs-right">{{ reservation.group.members.length }}人</div>
           </v-flex>
-        </v-btn>
         </v-layout>
         <v-layout>
           <v-flex>
@@ -45,10 +44,6 @@
         </v-layout>
       </v-container>
     </v-card-text>
-    <v-card-actions>
-      <v-btn flat color="orange"></v-btn>
-      <v-btn flat color="orange"></v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 
@@ -57,3 +52,9 @@ export default {
   props: ['reservation']
 }
 </script>
+
+<style>
+  .test:hover{
+    color: orange;
+  }
+</style>
