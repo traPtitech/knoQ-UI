@@ -126,7 +126,7 @@
                 ></v-time-picker>
               </v-menu>
               <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
-              <v-btn color="info" @click="postReservation(reservation) ,$router.push({ name: 'Home' })">save</v-btn>
+              <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
@@ -137,6 +137,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { RepositoryFactory } from '../repositories/RepositoryFactory'
+const ReservationsRepository = RepositoryFactory.set('reservations')
 export default {
   data () {
     return {
@@ -144,7 +146,8 @@ export default {
       date: null,
       dateMenu: false,
       startMenu: false,
-      endMenu: false
+      endMenu: false,
+      IsLoading: false
     }
   },
   methods: {
@@ -152,7 +155,19 @@ export default {
     save: function () {
       console.log(this.reservation)
     },
-    ...mapActions(['postReservation', 'getRooms']),
+    async postReservation (payload) {
+      try {
+        this.IsLoading = true
+        const response = await ReservationsRepository.post(payload)
+        this.IsLoading = false
+        this.reservation = {}
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+        this.IsLoading = false
+      }
+    },
+    ...mapActions(['getRooms']),
     ...mapGetters(['getRoomIDs', 'getGroupIDs'])
   },
   watch: {

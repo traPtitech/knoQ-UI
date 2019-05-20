@@ -110,14 +110,6 @@ export default new Vuex.Store({
         console.log(error)
       }
     },
-    async postReservation ({ commit }, payload) {
-      try {
-        const response = await ReservationsRepository.post(payload)
-        console.log(response)
-      } catch (error) {
-        console.log(error)
-      }
-    },
     async postGroup ({ commit }, group) {
       try {
         const response = await GroupsRepository.post(group)
