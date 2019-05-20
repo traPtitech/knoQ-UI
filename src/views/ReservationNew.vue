@@ -158,7 +158,11 @@ export default {
   watch: {
     date: function () {
       this.reservation.room_id = null
-      this.getRooms(this.date)
+      this.getRooms(
+        { dateBegin: this.date,
+          dateEnd: this.date
+        }
+      )
     }
   }
 }
