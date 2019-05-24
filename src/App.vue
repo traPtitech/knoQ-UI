@@ -9,6 +9,11 @@
       <v-btn @click="$router.push({ name: 'Rooms' })">rooms</v-btn>
       <v-btn @click="$router.push({ name: 'Reservations' })">reservations</v-btn>
       <v-btn @click="$router.push({ name: 'Groups' })">groups</v-btn>
+      <v-avatar
+        :size="32"
+      >
+        <img :src="'https://q.trapti.tech/static/icon/' + traQID + '/64.png'" alt="avatar">
+      </v-avatar>
     </v-toolbar>
 
     <v-content>
@@ -26,6 +31,11 @@ export default {
   data () {
     return {
       //
+    }
+  },
+  computed: {
+    traQID () {
+      return this.$store.state.loginUser.traq_id
     }
   }
 }
