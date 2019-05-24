@@ -45,14 +45,14 @@ export default new Router({
       component: Groups
     },
     {
-      path: '/groups/:id',
-      name: 'GroupDescription',
-      component: GroupDescription
-    },
-    {
       path: '/groups/new',
       name: 'GroupNew',
       component: GroupsNew
+    },
+    {
+      path: '/groups/:id',
+      name: 'GroupDescription',
+      component: GroupDescription
     },
     {
       path: '/about',
