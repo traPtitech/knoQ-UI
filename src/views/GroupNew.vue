@@ -4,7 +4,7 @@
       <v-flex xs12>
         <h1>グループ追加</h1>
       </v-flex>
-      <v-flex xs10 mt-5>
+      <v-flex xs12 mt-5>
         <v-card>
           <v-card-text>
             <v-form>
@@ -37,7 +37,28 @@
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <v-container fluid>
-                      <p>{{ group.members }},{{ ID }}</p>
+                      <v-container grid-list-md text-xs-left>
+                      <v-layout row wrap>
+                        <v-flex xs12 sm6 md4 v-for="member in group.members.slice((pageSelected-1) * displaySelectedNum, pageSelected * displaySelectedNum)" :key="member.traq_id">
+                          <v-card>
+                            <v-card-text>
+                              <v-avatar size=24>
+                                <img
+                                  :src="'https://q.trapti.tech/static/icon/' + member.traq_id + '/64.png'"
+                                  :alt="member.traq_id"
+                                >
+                              </v-avatar>
+                              <span style="margin-left:10px;">{{ member.traq_id }}</span>
+                            </v-card-text>
+                          </v-card>
+                        </v-flex>
+                      </v-layout>
+                      </v-container>
+                      <v-pagination
+                        v-model="pageSelected"
+                        total-visible="5"
+                        :length="Math.ceil(group.members.length / displaySelectedNum)"
+                      ></v-pagination>
                       <v-text-field
                         v-model="ID"
                         label="traQID"
@@ -60,7 +81,7 @@
                       </v-layout>
                       <v-pagination
                         v-model="page"
-                        :length="Math.ceil(targetMembers.length / 24)"
+                        :length="Math.ceil(targetMembers.length / displayMemberNum)"
                       ></v-pagination>
                     </v-container>
                     <v-btn
@@ -109,7 +130,9 @@ export default {
         step1: this.nameIsRequired
       },
       displayMemberNum: 24,
-      page: 1
+      displaySelectedNum: 3,
+      page: 1,
+      pageSelected: 1
     }
   },
   created: async function () {
