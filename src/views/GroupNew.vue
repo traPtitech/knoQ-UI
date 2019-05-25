@@ -8,6 +8,19 @@
         <v-card>
           <v-card-text>
             <v-form>
+              <v-snackbar
+                v-model="snackbar"
+                top
+              >
+                {{ snackMessage }}
+                <v-btn
+                  color="pink"
+                  flat
+                  @click="snackbar = false"
+                >
+                  Close
+                </v-btn>
+              </v-snackbar>
               <v-stepper v-model="e1">
                 <v-stepper-header>
                   <v-stepper-step :complete="e1 > 1" step="1" :rules="[rules.step1]">
@@ -27,6 +40,11 @@
                   <v-stepper-content step="1">
                     <v-text-field v-model="group.name" :rules="[rules.required(group.name)]" label="名前"></v-text-field>
                     <v-text-field v-model="group.description" label="説明"></v-text-field>
+                    <v-btn
+                      @click="$router.push({ name: 'Home' })"
+                    >
+                      Cancel
+                    </v-btn>
                     <v-btn
                       color="primary"
                       @click="e1 = 2"
@@ -141,7 +159,7 @@
                       </v-layout>
                       </v-container>
                       <v-btn @click="e1 = 2">back</v-btn>
-                      <v-btn color="info" @click="postGroup(group), $router.push({ name: 'Home' })">保存</v-btn>
+                      <v-btn color="info" @click="postGroup(group)">保存</v-btn>
                   </v-stepper-content>
                 </v-stepper-items>
               </v-stepper>
@@ -155,7 +173,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-// import groupsRepository from '../repositories/groupsRepository'
+import { RepositoryFactory } from '../repositories/RepositoryFactory'
+const GroupsRepository = RepositoryFactory.set('groups')
+
 export default {
   data () {
     return {
@@ -163,7 +183,7 @@ export default {
       group: {
         name: '',
         members: [
-          this.$store.state.loginUser
+
         ]
       },
       targetMembers: this.$store.state.allUsers,
@@ -175,20 +195,41 @@ export default {
       displayMemberNum: 24,
       displaySelectedNum: 3,
       page: 1,
-      pageSelected: 1
+      pageSelected: 1,
+      snackbar: false,
+      snackMessage: ''
     }
   },
   created: async function () {
     await this.getUsers()
+    this.targetMembers = this.$store.state.allUsers
+    this.group.members.push(this.$store.state.loginUser)
   },
   methods: {
-    ...mapActions(['getUsers', 'postGroup']),
+    ...mapActions(['getUsers']),
     ...mapGetters(['gettraQIDs']),
     save: function () {
       console.log(this.group)
     },
     nameIsRequired: function () {
       return this.group.name !== ''
+    },
+    async postGroup (group) {
+      try {
+        const response = await GroupsRepository.post(group)
+        this.snackMessage = response.statusText
+        this.snackbar = true
+        this.group = {
+          name: '',
+          members: [
+            this.$store.state.loginUser
+          ]
+        }
+        this.e1 = 1
+      } catch (error) {
+        this.snackMessage = error
+        this.snackbar = true
+      }
     }
   },
   watch: {

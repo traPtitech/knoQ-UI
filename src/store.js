@@ -110,14 +110,6 @@ export default new Vuex.Store({
         console.log(error)
       }
     },
-    async postGroup ({ commit }, group) {
-      try {
-        const response = await GroupsRepository.post(group)
-        console.log(response)
-      } catch (error) {
-        console.log(error)
-      }
-    },
     async getRooms ({ commit }, payload) {
       try {
         const response = await RoomsRepository.get(payload)
@@ -131,7 +123,7 @@ export default new Vuex.Store({
       try {
         const response = await UsersRepository.get()
         console.log(response)
-        commit('setAllUsers', response.data)
+        await commit('setAllUsers', response.data)
       } catch (error) {
         console.log(error)
       }
