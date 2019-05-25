@@ -23,7 +23,7 @@
 </template>
 
 <script>
-
+import { mapActions } from 'vuex'
 export default {
   name: 'App',
   components: {
@@ -33,8 +33,17 @@ export default {
       //
     }
   },
+  created: async function () {
+    await this.getUserMe()
+  },
+  methods: {
+    ...mapActions(['getUserMe'])
+  },
   computed: {
     traQID () {
+      if (!this.$store.state.loginUser.traq_id) {
+        return 'fuji'
+      }
       return this.$store.state.loginUser.traq_id
     }
   }

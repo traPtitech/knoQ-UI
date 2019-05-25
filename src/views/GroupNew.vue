@@ -63,13 +63,15 @@ export default {
     return {
       ID: '',
       group: {
-        members: [this.$store.state.loginUser]
+        members: [
+          this.$store.state.loginUser
+        ]
       },
       targetMembers: this.$store.state.allUsers
     }
   },
-  created: function () {
-    this.getUsers()
+  created: async function () {
+    await this.getUsers()
   },
   methods: {
     ...mapActions(['getUsers', 'postGroup']),
