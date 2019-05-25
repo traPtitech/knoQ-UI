@@ -44,7 +44,7 @@
                       >
                       </v-text-field>
                       <v-layout row wrap>
-                        <v-flex xs12 sm6 md4 v-for="member in targetMembers" :key="member.traq_id">
+                        <v-flex xs12 sm6 md4 v-for="member in targetMembers.slice((page-1) * displayMemberNum, page * displayMemberNum)" :key="member.traq_id">
                           <v-checkbox v-model="group.members" :value="member" >
                             <template v-slot:label>
                               <v-avatar size=32>
@@ -58,6 +58,10 @@
                           </v-checkbox>
                         </v-flex>
                       </v-layout>
+                      <v-pagination
+                        v-model="page"
+                        :length="Math.ceil(targetMembers.length / 24)"
+                      ></v-pagination>
                     </v-container>
                     <v-btn
                       @click="e1 = 1"
@@ -103,7 +107,9 @@ export default {
       rules: {
         required: value => !!value || 'Required',
         step1: this.nameIsRequired
-      }
+      },
+      displayMemberNum: 24,
+      page: 1
     }
   },
   created: async function () {
