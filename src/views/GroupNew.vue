@@ -39,7 +39,14 @@
                 <v-stepper-items>
                   <v-stepper-content step="1">
                     <v-text-field v-model="group.name" :rules="[rules.required(group.name)]" label="名前"></v-text-field>
-                    <v-text-field v-model="group.description" label="説明"></v-text-field>
+                    <v-textarea
+                      box
+                      height="240"
+                      name="description"
+                      label="説明"
+                      v-model="group.description"
+                    >
+                    </v-textarea>
                     <v-btn
                       @click="$router.push({ name: 'Home' })"
                     >
