@@ -32,7 +32,14 @@
                 </template>
               </v-select>
               <v-text-field v-model="reservation.name" label="名前"></v-text-field>
-              <v-text-field v-model="reservation.description" label="説明"></v-text-field>
+              <v-textarea
+                box
+                height="240"
+                name="description"
+                label="説明"
+                v-model="reservation.description"
+              >
+              </v-textarea>
               <v-menu
                 ref="dateMenu"
                 v-model="dateMenu"
@@ -127,6 +134,7 @@
               </v-menu>
               <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
               <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
+              <v-btn color="info" :loading="IsLoading" @click="save()">save</v-btn>
             </v-form>
           </v-card-text>
         </v-card>
