@@ -1,5 +1,5 @@
 <template>
-<v-form>
+<v-form v-if="!loading">
   <v-container mt-5>
     <v-flex>
       <v-card>
@@ -108,15 +108,8 @@ const ReservationsRepository = RepositoryFactory.set('reservations')
 export default {
   data () {
     return {
-      reservation: {
-        group: {
-          members: [
-            {
-              traq_id: ''
-            }
-          ]
-        }
-      },
+      reservation: {},
+      loading: true,
       pageSelected: 1
     }
   },
@@ -130,6 +123,7 @@ export default {
     } catch (error) {
       console.log(error)
     }
+    this.loading = false
   },
   computed: {
     Month () {
