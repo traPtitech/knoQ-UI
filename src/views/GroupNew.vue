@@ -134,8 +134,8 @@
                                 <div class="text-xs-right">人数:{{ group.members.length }}人</div>
                               </v-flex>
                           </v-layout>
-                          <h6>詳細</h6>
-                          {{ group.description }}
+                          <h6>説明</h6>
+                          <span style="white-space: pre-wrap">{{ group.description }}</span>
                         </v-container>
                       </v-card-text>
                     </v-card>
