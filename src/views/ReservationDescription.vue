@@ -38,7 +38,7 @@
             <div>日時と場所</div>
           </v-card-text>
           <v-card-text>
-            <p>{{date}}</p>
+            <p class="title">{{date}}</p>
             <p>{{timeStart}} ~ {{timeEnd}}</p>
             <p>{{reservation.room.place}}</p>
           </v-card-text>
