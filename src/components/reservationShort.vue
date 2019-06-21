@@ -2,7 +2,7 @@
 <v-card>
   <v-card-text>
     <v-layout row wrap>
-      <v-flex xs3.5 class="font-weight-bold">
+      <v-flex xs4 class="font-weight-bold">
         {{reservation.name}}
       </v-flex>
       <v-flex xs2.5 :class="groupColor">

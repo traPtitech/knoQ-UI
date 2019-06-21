@@ -42,7 +42,7 @@
             <p>{{timeStart}} ~ {{timeEnd}}</p>
             <p>{{reservation.room.place}}</p>
             <v-flex>
-              <RoomsExpapansion :rooms=[reservation.room]></RoomsExpapansion>
+              <RoomsExpansion :rooms=[reservation.room]></RoomsExpansion>
             </v-flex>
           </v-card-text>
           <v-card-actions>

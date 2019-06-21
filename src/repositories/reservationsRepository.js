@@ -10,6 +10,7 @@ export default {
         name: payload.name,
         traQID: payload.traQID,
         groupid: payload.groupID,
+        roomid: payload.roomID,
         date_begin: payload.dateBegin,
         date_end: payload.dateEnd
       }
