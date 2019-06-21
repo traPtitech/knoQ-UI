@@ -3,10 +3,11 @@ import Repository from './Repository'
 const resource = '/groups'
 
 export default {
-  get (traQID) {
+  get (payload) {
     return Repository.get(`${resource}`, {
       params: {
-        traQID: traQID
+        id: payload.id,
+        traQID: payload.traQID
       }
     })
   },
