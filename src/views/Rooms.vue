@@ -70,7 +70,7 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <RoomsTable :rooms="rooms"></RoomsTable>
+          <RoomsExpansion :rooms="rooms"></RoomsExpansion>
         </v-flex>
       </v-layout>
     </v-container>
@@ -78,12 +78,14 @@
 </template>
 <script>
 import RoomsTable from '../components/roomsTable'
+import RoomsExpansion from '../components/roomsExpansion'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const RoomsRepository = RepositoryFactory.set('rooms')
 
 export default {
   components: {
-    RoomsTable
+    RoomsTable,
+    RoomsExpansion
   },
   data () {
     return {
