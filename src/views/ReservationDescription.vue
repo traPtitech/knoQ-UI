@@ -1,6 +1,6 @@
 <template>
 <v-form v-if="!loading">
-  <v-container mt-5>
+  <v-container fluid mt-3>
     <v-flex>
       <v-card>
         <v-card-title class="display-1 font-weight-bold" id="rev-name-title" primary-title>
@@ -30,9 +30,9 @@
       </v-card>
     </v-flex>
   </v-container>
-  <v-container>
+  <v-container fluid>
     <v-layout text-xs-center justify-center wrap>
-      <v-flex xs12 sm9 md6>
+      <v-flex xs12 md6>
         <v-card>
           <v-card-text class="title font-weight-bold">
             <div>日時と場所</div>
@@ -41,6 +41,9 @@
             <p class="title">{{date}}</p>
             <p>{{timeStart}} ~ {{timeEnd}}</p>
             <p>{{reservation.room.place}}</p>
+            <v-flex>
+              <RoomsExpapansion :rooms=[reservation.room]></RoomsExpapansion>
+            </v-flex>
           </v-card-text>
           <v-card-actions>
             <v-flex>
@@ -49,7 +52,7 @@
           </v-card-actions>
         </v-card>
       </v-flex>
-      <v-flex xs12 sm9 md6>
+      <v-flex xs12 md6>
        <v-card>
           <v-card-text class="title font-weight-bold">
             <div class="text-xs-center">グループ情報</div>
@@ -70,7 +73,7 @@
                   <v-flex xs12>
                     <p>Members</p>
                   </v-flex>
-                  <v-flex xs12 md6 v-for="member in reservation.group.members.slice((pageSelected-1) * 2, pageSelected * 2)" :key="member.traq_id">
+                  <v-flex xs12 sm6 md6 v-for="member in reservation.group.members.slice((pageSelected-1) * 2, pageSelected * 2)" :key="member.traq_id">
                     <v-card>
                       <v-card-text>
                         <v-avatar size=24>
@@ -102,10 +105,14 @@
 <script>
 import dateFormat from '../tips/date'
 import moment from 'moment'
+import RoomsExpansion from '../components/roomsExpansion'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {
+  components: {
+    RoomsExpansion
+  },
   data () {
     return {
       reservation: {},

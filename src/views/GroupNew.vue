@@ -1,5 +1,5 @@
 <template>
-<v-container text-xs-center>
+<v-container fluid text-xs-center>
     <v-layout row wrap justify-center>
       <v-flex xs12>
         <h1>グループ追加</h1>
@@ -62,7 +62,7 @@
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <v-container fluid>
-                      <v-container grid-list-md text-xs-left>
+                      <v-container fluid grid-list-md text-xs-left>
                       <v-layout row wrap>
                         <v-flex xs12 sm6 md4 v-for="member in group.members.slice((pageSelected-1) * displaySelectedNum, pageSelected * displaySelectedNum)" :key="member.traq_id">
                           <v-card>
@@ -139,7 +139,7 @@
                         </v-container>
                       </v-card-text>
                     </v-card>
-                    <v-container grid-list-md text-xs-left>
+                    <v-container fluid grid-list-md text-xs-left>
                       <v-layout row wrap>
                         <v-flex xs12 sm6 md4 v-for="member in group.members.slice((pageSelected-1) * displayMemberNum, pageSelected * displayMemberNum)" :key="member.traq_id">
                           <v-card>
