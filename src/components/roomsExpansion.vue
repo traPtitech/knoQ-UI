@@ -26,12 +26,15 @@
           </v-flex>
         </v-layout>
       </template>
-      <v-container>
+      <v-container v-if="!loading">
         <v-layout row wrap>
-          <v-flex  xs12 v-for="reservation in room.reservations" :key="reservation.id">
+          <v-flex xs12 v-for="reservation in room.reservations" :key="reservation.id">
             <ReservationShort :reservation="reservation"></ReservationShort>
           </v-flex>
         </v-layout>
+      </v-container>
+      <v-container v-else>
+        ろーど中
       </v-container>
     </v-expansion-panel-content>
   </v-expansion-panel>
@@ -51,7 +54,8 @@ export default {
   props: ['rooms'],
   data () {
     return {
-      panel: []
+      panel: [],
+      loading: false
     }
   },
   methods: {
@@ -69,7 +73,7 @@ export default {
   computed: {
     date: function () {
       return function (room) {
-        return moment(new Date(room.date)).format('MM/DD')
+        return moment(new Date(room.date)).format('YYYY/MM/DD')
       }
     }
   },
@@ -78,12 +82,14 @@ export default {
       console.log(this.panel)
       for (var i = 0; i < this.panel.length; i++) {
         if (this.panel[i] && typeof this.rooms[i].reservations === 'undefined') {
+          this.loading = true
           this.rooms[i].reservations = []
           const reservation = { roomID: this.rooms[i].id }
           try {
             const response = await ReservationsRepository.get(reservation)
             console.log(response)
             this.rooms[i].reservations = response.data
+            this.loading = false
           } catch (error) {
             console.log(error)
           }
