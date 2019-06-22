@@ -74,25 +74,23 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-container  >
-      <v-layout row wrap>
-        <v-flex xs12 sm6 md4 :key="i" v-for="i in reservations.length">
-          <reservationCard :reservation="reservations[i-1]"></reservationCard>
-        </v-flex>
-      </v-layout>
-    </v-container>
+    <reservationCardShorts :reservations="reservations"></reservationCardShorts>
   </v-form>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import reservationCard from '../components/reservationCard'
+import reservationShort from '../components/reservationShort'
+import reservationCardShorts from '../components/reservationCardShorts'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {
   components: {
-    reservationCard
+    reservationCard,
+    reservationShort,
+    reservationCardShorts
   },
   data () {
     return {

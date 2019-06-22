@@ -8,7 +8,7 @@
             <v-icon>add</v-icon>
           </v-btn>
         </h1>
-        <reservationsCarousel/>
+        <reservationCardShorts :reservations="$store.state.myReservations"></reservationCardShorts>
       </v-flex>
       <v-flex>
         <h1>
@@ -26,6 +26,7 @@
 <script>
 import search from '../components/search'
 import reservationsCarousel from '../components/reservationsCarousel'
+import reservationCardShorts from '../components/reservationCardShorts'
 import groupsTable from '../components/groupsTable'
 import { mapActions } from 'vuex'
 
@@ -33,7 +34,8 @@ export default {
   components: {
     search,
     reservationsCarousel,
-    groupsTable
+    groupsTable,
+    reservationCardShorts
   },
   created: async function () {
     await this.getUserMe()
