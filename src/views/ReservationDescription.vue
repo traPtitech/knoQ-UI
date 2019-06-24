@@ -14,18 +14,33 @@
         </v-card-title>
         <v-card-text>
           <span class="subheading" style="white-space: pre-wrap">{{reservation.description}}</span>
-          <v-flex xs12 text-xs-right>
-            <span>Created by
-              <span>
-                <v-avatar
-                  :size="24"
-                >
-                  <img :src="'https://q.trapti.tech/static/icon/' + reservation.created_by.traq_id + '/64.png'" alt="avatar">
-                </v-avatar>
+          <v-layout wrap>
+            <v-flex sm8>
+              <v-btn flat disabled v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id">
+                <v-icon>edit</v-icon>
+                edit this
+              </v-btn>
+              <v-btn
+                flat
+                v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
+              >
+                <v-icon>delete_forever</v-icon>
+                delete this
+              </v-btn>
+            </v-flex>
+            <v-flex xs12 sm4 text-xs-right>
+              <span>Created by
+                <span>
+                  <v-avatar
+                    :size="24"
+                  >
+                    <img :src="'https://q.trapti.tech/static/icon/' + reservation.created_by.traq_id + '/64.png'" alt="avatar">
+                  </v-avatar>
+                </span>
+                @{{reservation.created_by.traq_id}}
               </span>
-              @{{reservation.created_by.traq_id}}
-            </span>
-          </v-flex>
+            </v-flex>
+          </v-layout>
         </v-card-text>
       </v-card>
     </v-flex>

@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl>
+  <v-container fluid grid-list-xl>
     <v-layout column>
       <v-flex>
         <h1>

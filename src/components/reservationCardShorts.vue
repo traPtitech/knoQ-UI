@@ -1,7 +1,7 @@
 <template>
-<v-container>
+<v-container fluid>
   <v-layout row wrap>
-    <v-flex xs12 md6 :key="i" v-for="i in reservations.length">
+    <v-flex xs12 lg6 :key="i" v-for="i in reservations.length">
       <reservationShort :reservation="reservations[i-1]"></reservationShort>
     </v-flex>
   </v-layout>
