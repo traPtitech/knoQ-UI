@@ -161,7 +161,7 @@
                   <v-layout wrap>
                   <v-flex xs12 v-for="room in $store.state.allowedRooms" :key="room.id">
                     <v-checkbox v-model="reservation.room_id" :value="room.id">
-                      <template grow v-slot:label>
+                      <template v-slot:label>
                         <v-flex xs12 grow>
                           <RoomsExpansion :rooms=[room]></RoomsExpansion>
                           &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
