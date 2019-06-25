@@ -24,8 +24,8 @@ export default new Vuex.Store({
     ],
     myGroups: [],
     groupHeaders: [
-      { text: '識別id', value: 'id' },
-      { text: 'グループ名', value: 'name' }
+      { text: 'グループ名', value: 'name' },
+      { text: '人数', value: 'members.length' }
     ],
     allowedRooms: [],
     roomHeaders: [
