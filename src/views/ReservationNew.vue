@@ -1,79 +1,176 @@
 <template>
-<v-container text-xs-center>
+<v-container text-xs-center fluid>
     <v-layout row wrap justify-center>
       <v-flex xs12>
         <h1>予約追加</h1>
       </v-flex>
-
-      <v-flex xs10 sm8 mt-5>
+      <v-flex xs10 mt-3>
         <v-card>
           <v-card-text>
             <v-form>
-              <v-select
-                v-model="reservation.group_id"
-                :items="$store.state.myGroups"
-                item-text="name"
-                item-value="id"
-                no-data-text="あなたが所属しているグループはありません"
-                label="グループ"
-              >
-                <template v-slot:append-item>
-                  <v-list-tile
-                    ripple
-                    @click="$router.push({ name: 'GroupNew' })"
+              <v-layout column>
+                <v-flex>
+                  <v-autocomplete
+                    v-model="reservation.group_id"
+                    :items="$store.state.myGroups"
+                    box
+                    chips
+                    color="blue-grey lighten-2"
+                    label="グループ"
+                    item-text="name"
+                    item-value="id"
                   >
-                    <v-list-tile-action>
-                      <v-icon>add</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                      <v-list-tile-title>グループを追加する</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </template>
-              </v-select>
-              <v-text-field v-model="reservation.name" label="名前"></v-text-field>
-              <v-textarea
-                box
-                height="240"
-                name="description"
-                label="説明"
-                v-model="reservation.description"
-              >
-              </v-textarea>
-              <v-menu
-                ref="dateMenu"
-                v-model="dateMenu"
-                :close-on-content-click="false"
-                :nudge-right="0"
-                :return-value.sync="date"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="date"
-                    label="日付"
-                    readonly
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="date" no-title>
-                  <v-spacer></v-spacer>
-                  <v-btn flat color="primary" @click="dateMenu = false">Cancel</v-btn>
-                  <v-btn flat color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
-                </v-date-picker>
-              </v-menu>
-              <v-select
-                v-model="reservation.room_id"
-                :items="$store.state.allowedRooms"
-                item-text="place"
-                item-value="id"
-                no-data-text="指定された日付の部屋は存在しません"
-                label="部屋id"
-              ></v-select>
+                    <template v-slot:item="data">
+                      <template v-if="typeof data.item !== 'object'">
+                        <v-list-tile-content v-text="data.item"></v-list-tile-content>
+                      </template>
+                      <template v-else>
+                        <v-list-tile-content>
+                          <v-list-tile-title :class="groupColor(data.item.id)">◦{{data.item.name}}</v-list-tile-title>
+                        </v-list-tile-content>
+                      </template>
+                    </template>
+                    <template v-slot:append-item>
+                      <v-list-tile
+                        ripple
+                        @click="$router.push({ name: 'GroupNew' })"
+                      >
+                        <v-list-tile-action>
+                          <v-icon>add</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                          <v-list-tile-title>グループを追加する</v-list-tile-title>
+                        </v-list-tile-content>
+                      </v-list-tile>
+                    </template>
+                  </v-autocomplete>
+                </v-flex>
+                <v-flex>
+                  <v-text-field v-model="reservation.name" label="名前"></v-text-field>
+                </v-flex>
+                <v-flex>
+                  <v-textarea
+                    box
+                    height="240"
+                    name="description"
+                    label="説明"
+                    v-model="reservation.description"
+                  >
+                  </v-textarea>
+                </v-flex>
+                <v-flex>
+                  <v-layout row>
+                    <v-flex xs2>
+                      <v-checkbox
+                        v-model="Isrange"
+                        label="範囲"
+                      ></v-checkbox>
+                    </v-flex>
+                    <v-flex v-show="!Isrange" xs10>
+                      <v-menu
+                        ref="dateMenu"
+                        v-model="dateMenu"
+                        :close-on-content-click="false"
+                        :nudge-right="0"
+                        :return-value.sync="date"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="date"
+                            label="日付"
+                            readonly
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="date" no-title>
+                          <v-spacer></v-spacer>
+                          <v-btn flat color="primary" @click="dateMenu = false">Cancel</v-btn>
+                          <v-btn flat color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </v-flex>
+                    <v-flex v-show="Isrange">
+                      <v-layout>
+                        <v-flex xs5>
+                          <v-menu
+                            ref="dateBeginMenu"
+                            v-model="dateBeginMenu"
+                            :close-on-content-click="false"
+                            :nudge-right="0"
+                            :return-value.sync="Condition.dateBegin"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                v-model="Condition.dateBegin"
+                                label="begin"
+                                prepend-icon="event"
+                                readonly
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="Condition.dateBegin" no-title>
+                              <v-spacer></v-spacer>
+                              <v-btn flat color="primary" @click="dateBeginMenu = false">Cancel</v-btn>
+                              <v-btn flat color="primary" @click="$refs.dateBeginMenu.save(Condition.dateBegin)">OK</v-btn>
+                            </v-date-picker>
+                          </v-menu>
+                        </v-flex>
+                        <v-flex xs5>
+                        <v-menu
+                            ref="dateEndMenu"
+                            v-model="dateEndMenu"
+                            :close-on-content-click="false"
+                            :nudge-right="0"
+                            :return-value.sync="Condition.dateEnd"
+                            lazy
+                            transition="scale-transition"
+                            offset-y
+                            full-width
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                v-model="Condition.dateEnd"
+                                label="end"
+                                prepend-icon="event"
+                                readonly
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="Condition.dateEnd" no-title>
+                              <v-spacer></v-spacer>
+                              <v-btn flat color="primary" @click="dateEndMenu = false">Cancel</v-btn>
+                              <v-btn flat color="primary" @click="$refs.dateEndMenu.save(Condition.dateEnd)">OK</v-btn>
+                            </v-date-picker>
+                          </v-menu>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+                  <v-layout wrap>
+                  <v-flex xs12 v-for="room in $store.state.allowedRooms" :key="room.id">
+                    <v-checkbox v-model="reservation.room_id" :value="room.id">
+                      <template grow v-slot:label>
+                        <v-flex xs12 grow>
+                          <RoomsExpansion :rooms=[room]></RoomsExpansion>
+                          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                        </v-flex>
+                      </template>
+                    </v-checkbox>
+                  </v-flex>
+                  </v-layout>
+              </v-layout>
               <v-menu
                 ref="refStartMenu"
                 v-model="startMenu"
@@ -145,17 +242,26 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import color from '../tips/color'
+import RoomsExpansion from '../components/roomsExpansion'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 export default {
+  components: {
+    RoomsExpansion
+  },
   data () {
     return {
       reservation: {},
       date: null,
+      Condition: {},
       dateMenu: false,
+      dateBeginMenu: false,
+      dateEndMenu: false,
       startMenu: false,
       endMenu: false,
-      IsLoading: false
+      IsLoading: false,
+      Isrange: false
     }
   },
   methods: {
@@ -175,17 +281,29 @@ export default {
         this.IsLoading = false
       }
     },
+    groupColor: function (groupID) {
+      return color.GroupColors(groupID) + '--text'
+    },
     ...mapActions(['getRooms']),
     ...mapGetters(['getRoomIDs', 'getGroupIDs'])
   },
   watch: {
     date: function () {
       this.reservation.room_id = null
-      this.getRooms(
-        { dateBegin: this.date,
-          dateEnd: this.date
-        }
-      )
+      if (!this.Isrange) {
+        this.getRooms(
+          { dateBegin: this.date,
+            dateEnd: this.date
+          }
+        )
+      }
+    },
+    Condition: function () {
+      console.log('watch')
+      this.reservation.room_id = null
+      if (this.Isrange) {
+        this.getRooms(this.Condition)
+      }
     }
   }
 }
