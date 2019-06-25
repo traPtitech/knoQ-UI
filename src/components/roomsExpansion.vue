@@ -15,25 +15,25 @@
     >
       <template v-slot:header>
         <v-layout>
-          <v-flex>
-            <v-icon small>place</v-icon>{{room.place}}
-          </v-flex>
-          <v-flex text-xs-center>
+          <v-flex text-xs-left>
             {{date(room)}}
           </v-flex>
-          <v-flex text-xs-right>
+          <v-flex text-xs-left>
             {{room.time_start.slice(0,5)}} - {{room.time_end.slice(0,5)}}
+          </v-flex>
+          <v-flex text-xs-center>
+            <v-icon small>place</v-icon>{{room.place}}
           </v-flex>
         </v-layout>
       </template>
-      <v-container v-if="!loading">
+      <v-container v-show="!loading">
         <v-layout row wrap>
           <v-flex xs12 v-for="reservation in room.reservations" :key="reservation.id">
             <ReservationShort :reservation="reservation"></ReservationShort>
           </v-flex>
         </v-layout>
       </v-container>
-      <v-container v-else>
+      <v-container v-show="loading">
         ろーど中
       </v-container>
     </v-expansion-panel-content>
@@ -73,7 +73,7 @@ export default {
   computed: {
     date: function () {
       return function (room) {
-        return moment(new Date(room.date)).format('YYYY/MM/DD')
+        return moment(new Date(room.date)).format('YYYY/MM/DD (ddd)')
       }
     }
   },
