@@ -34,7 +34,7 @@
       <v-flex sm1.5 text-xs-right>
         <v-icon small>place</v-icon>{{reservation.room.place}}
       </v-flex>
-      <v-flex hidden-xs-only sm1 text-xs-right>
+      <v-flex hidden-xs-only sm2 text-xs-right>
         {{date}}
       </v-flex>
       <v-flex hidden-xs-only sm3 text-xs-right>
