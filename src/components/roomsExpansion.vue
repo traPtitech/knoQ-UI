@@ -15,13 +15,13 @@
     >
       <template v-slot:header>
         <v-layout>
-          <v-flex text-xs-left>
+          <v-flex xs4 text-xs-left>
             {{date(room)}}
           </v-flex>
-          <v-flex text-xs-left>
+          <v-flex xs4 text-xs-left>
             {{room.time_start.slice(0,5)}} - {{room.time_end.slice(0,5)}}
           </v-flex>
-          <v-flex text-xs-center>
+          <v-flex xs4 text-xs-center>
             <v-icon small>place</v-icon>{{room.place}}
           </v-flex>
         </v-layout>
@@ -35,6 +35,7 @@
       </v-container>
       <v-container v-show="loading">
         ろーど中
+        <v-progress-circular :indeterminate="true" :value="0" size="24" class="ml-2"></v-progress-circular>
       </v-container>
     </v-expansion-panel-content>
   </v-expansion-panel>
