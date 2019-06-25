@@ -42,7 +42,7 @@
       </v-flex>
       <v-flex hidden-sm-and-up xs3.5 text-xs-right>
         <div>
-          {{date}}
+          {{date.slice(0,5)}}
         </div>
         <span style="font-size: 75%;" class="font-weight-bold">{{reservation.time_start.slice(0,5)}} -</span>
       </v-flex>
@@ -53,20 +53,17 @@
 
 <script>
 import moment from 'moment'
+import color from '../tips/color'
 export default {
   props: ['reservation'],
   created () {
   },
   computed: {
     groupColor: function () {
-      const colors = ['red', 'pink', 'purple', 'deep-purple', 'indigo', 'blue',
-        'light-blue', 'cyan', 'teal', 'green', 'light-green', 'lime',
-        'yellow', 'amber', 'orange', 'deep-orange', 'brown', 'blue-grey'
-      ]
-      return colors[this.reservation.group.id % colors.length] + '--text'
+      return color.GroupColors(this.reservation.group.id) + '--text'
     },
     date: function () {
-      return moment(new Date(this.reservation.date)).format('MM/DD')
+      return moment(new Date(this.reservation.date)).format('MM/DD (ddd)')
     }
   }
 
