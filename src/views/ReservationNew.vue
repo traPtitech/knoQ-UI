@@ -235,7 +235,7 @@
                   </v-flex>
                 </v-layout>
               </v-layout>
-                            <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
+              <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
               <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
               <v-btn color="info" :loading="IsLoading" @click="save()">save</v-btn>
             </v-form>
@@ -267,7 +267,27 @@ export default {
       startMenu: false,
       endMenu: false,
       IsLoading: false,
-      Isrange: false
+      Isrange: false,
+      upload: false
+    }
+  },
+  created: function () {
+    window.addEventListener('beforeunload', function (event) {
+      // event.returnValue = 'true'
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    // 空でない時
+    if (Object.keys(this.reservation).length) {
+      let message = '変更は保存されませんがよろしいですか?'
+      let result = window.confirm(message)
+      if (result) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
     }
   },
   methods: {
@@ -305,7 +325,8 @@ export default {
       this.reservation.room_id = null
       if (!this.Isrange) {
         this.getRooms(
-          { dateBegin: this.date,
+          {
+            dateBegin: this.date,
             dateEnd: this.date
           }
         )
