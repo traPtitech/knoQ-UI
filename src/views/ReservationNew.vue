@@ -121,7 +121,7 @@
                             <v-date-picker v-model="Condition.dateBegin" no-title>
                               <v-spacer></v-spacer>
                               <v-btn flat color="primary" @click="dateBeginMenu = false">Cancel</v-btn>
-                              <v-btn flat color="primary" @click="$refs.dateBeginMenu.save(Condition.dateBegin)">OK</v-btn>
+                              <v-btn flat color="primary" @click="$refs.dateBeginMenu.save(Condition.dateBegin); findRooms()">OK</v-btn>
                             </v-date-picker>
                           </v-menu>
                         </v-flex>
@@ -150,7 +150,7 @@
                             <v-date-picker v-model="Condition.dateEnd" no-title>
                               <v-spacer></v-spacer>
                               <v-btn flat color="primary" @click="dateEndMenu = false">Cancel</v-btn>
-                              <v-btn flat color="primary" @click="$refs.dateEndMenu.save(Condition.dateEnd)">OK</v-btn>
+                              <v-btn flat color="primary" @click="$refs.dateEndMenu.save(Condition.dateEnd); findRooms()">OK</v-btn>
                             </v-date-picker>
                           </v-menu>
                         </v-flex>
@@ -158,78 +158,84 @@
                     </v-flex>
                   </v-layout>
                 </v-flex>
-                  <v-layout wrap>
+                <v-layout wrap>
                   <v-flex xs12 v-for="room in $store.state.allowedRooms" :key="room.id">
                     <v-layout row>
                       <v-flex xs1>
                         <v-checkbox v-model="reservation.room_id" :value="room.id"></v-checkbox>
                       </v-flex>
-                      <v-flex xs11 style="padding-top:10px">
+                      <v-flex xs11 style="padding-top:9px">
                         <RoomsExpansion :rooms=[room]></RoomsExpansion>
                       </v-flex>
                     </v-layout>
-                 </v-flex>
-                  </v-layout>
+                  </v-flex>
+                </v-layout>
+                <v-layout justify-space-around>
+                  <v-flex xs5>
+                    <v-menu
+                      ref="refStartMenu"
+                      v-model="startMenu"
+                      :close-on-content-click="false"
+                      :return-value.sync="reservation.time_start"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      max-width="250px"
+                      min-width="250px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="reservation.time_start"
+                          label="開始時間"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="startMenu"
+                        v-model="reservation.time_start"
+                        format="24hr"
+                        :allowed-minutes="allowedMinutes"
+                        full-width
+                        @click:minute="$refs.refStartMenu.save(reservation.time_start);findRooms()"
+                      ></v-time-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs5>
+                    <v-menu
+                      ref="refEndMenu"
+                      v-model="endMenu"
+                      :close-on-content-click="false"
+                      :return-value.sync="reservation.time_end"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      max-width="250px"
+                      min-width="250px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="reservation.time_end"
+                          label="終了時刻"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="endMenu"
+                        v-model="reservation.time_end"
+                        format="24hr"
+                        :allowed-minutes="allowedMinutes"
+                        full-width
+                        @click:minute="$refs.refEndMenu.save(reservation.time_end)"
+                      ></v-time-picker>
+                    </v-menu>
+                  </v-flex>
+                </v-layout>
               </v-layout>
-              <v-menu
-                ref="refStartMenu"
-                v-model="startMenu"
-                :close-on-content-click="false"
-                :return-value.sync="reservation.time_start"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                max-width="250px"
-                min-width="250px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="reservation.time_start"
-                    label="開始時間"
-                    readonly
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-time-picker
-                  v-if="startMenu"
-                  v-model="reservation.time_start"
-                  format="24hr"
-                  :allowed-minutes="allowedMinutes"
-                  full-width
-                  @click:minute="$refs.refStartMenu.save(reservation.time_start)"
-                ></v-time-picker>
-              </v-menu>
-              <v-menu
-                ref="refEndMenu"
-                v-model="endMenu"
-                :close-on-content-click="false"
-                :return-value.sync="reservation.time_end"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                max-width="250px"
-                min-width="250px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="reservation.time_end"
-                    label="終了時刻"
-                    readonly
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-time-picker
-                  v-if="endMenu"
-                  v-model="reservation.time_end"
-                  format="24hr"
-                  :allowed-minutes="allowedMinutes"
-                  full-width
-                  @click:minute="$refs.refEndMenu.save(reservation.time_end)"
-                ></v-time-picker>
-              </v-menu>
-              <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
+                            <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
               <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
               <v-btn color="info" :loading="IsLoading" @click="save()">save</v-btn>
             </v-form>
@@ -284,6 +290,13 @@ export default {
     groupColor: function (groupID) {
       return color.GroupColors(groupID) + '--text'
     },
+    findRooms: function () {
+      console.log('find')
+      this.reservation.room_id = null
+      if (this.Isrange) {
+        this.getRooms(this.Condition)
+      }
+    },
     ...mapActions(['getRooms']),
     ...mapGetters(['getRoomIDs', 'getGroupIDs'])
   },
@@ -296,13 +309,6 @@ export default {
             dateEnd: this.date
           }
         )
-      }
-    },
-    Condition: function () {
-      console.log('watch')
-      this.reservation.room_id = null
-      if (this.Isrange) {
-        this.getRooms(this.Condition)
       }
     }
   }
