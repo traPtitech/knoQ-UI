@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { RepositoryFactory } from './repositories/RepositoryFactory'
+import moment from 'moment'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 const GroupsRepository = RepositoryFactory.set('groups')
 const UsersRepository = RepositoryFactory.set('users')
@@ -96,7 +97,10 @@ export default new Vuex.Store({
       }
     },
     async getMyReservations ({ commit }) {
-      const payload = { traQID: this.state.loginUser.traq_id }
+      const payload = {
+        traQID: this.state.loginUser.traq_id,
+        dateBegin: moment(new Date()).format('YYYY-MM-DD')
+      }
       try {
         let response = await ReservationsRepository.get(payload)
         console.log(response)
