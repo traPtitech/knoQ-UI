@@ -81,7 +81,7 @@ export default {
   },
   data () {
     return {
-      drawer: true
+      drawer: false
     }
   },
   created: async function () {
