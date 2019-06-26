@@ -6,9 +6,12 @@
         <span>部屋管理</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="$router.push({ name: 'Rooms' })">rooms</v-btn>
-      <v-btn @click="$router.push({ name: 'Reservations' })">reservations</v-btn>
-      <v-btn @click="$router.push({ name: 'Groups' })">groups</v-btn>
+      <v-flex hidden-xs-only text-xs-right>
+        <v-btn @click="$router.push({ name: 'Rooms' })">rooms</v-btn>
+        <v-btn @click="$router.push({ name: 'Reservations' })">reservations</v-btn>
+        <v-btn @click="$router.push({ name: 'Groups' })">groups</v-btn>
+      </v-flex>
+
       <v-avatar
         :size="32"
       >
