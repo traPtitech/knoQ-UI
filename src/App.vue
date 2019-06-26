@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar app>
-      <v-toolbar-side-icon></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title style="cursor: pointer" @click="$router.push({ name: 'Home' })">
         <span>部屋管理</span>
       </v-toolbar-title>
@@ -17,7 +17,55 @@
       >
         <img :src="'https://q.trapti.tech/static/icon/' + traQID + '/64.png'" alt="avatar">
       </v-avatar>
+
     </v-toolbar>
+    <v-navigation-drawer
+        v-model="drawer"
+        absolute
+        temporary
+      >
+        <v-list class="pa-1">
+          <v-list-tile @click="$router.push({ name: 'Home' })">
+            <v-list-tile-action>
+              <v-icon>home</v-icon>
+            </v-list-tile-action>
+
+            <v-list-tile-content>
+              <v-list-tile-title>Home</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+
+        <v-list class="pt-0" dense>
+          <v-divider></v-divider>
+          <v-list-tile @click="$router.push({ name: 'Rooms' })">
+            <v-list-tile-action>
+              <v-icon>meeting_room</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Rooms</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="$router.push({ name: 'Reservations' })">
+            <v-list-tile-action>
+              <v-icon>bookmarks</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Reservations</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="$router.push({ name: 'Groups' })">
+            <v-list-tile-action>
+              <v-icon>group</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Groups</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-navigation-drawer>
 
     <v-content>
       <router-view/>
@@ -33,7 +81,7 @@ export default {
   },
   data () {
     return {
-      //
+      drawer: true
     }
   },
   created: async function () {
