@@ -160,15 +160,15 @@
                 </v-flex>
                   <v-layout wrap>
                   <v-flex xs12 v-for="room in $store.state.allowedRooms" :key="room.id">
-                    <v-checkbox v-model="reservation.room_id" :value="room.id">
-                      <template v-slot:label>
-                        <v-flex xs12 grow>
-                          <RoomsExpansion :rooms=[room]></RoomsExpansion>
-                          &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                        </v-flex>
-                      </template>
-                    </v-checkbox>
-                  </v-flex>
+                    <v-layout row>
+                      <v-flex xs1>
+                        <v-checkbox v-model="reservation.room_id" :value="room.id"></v-checkbox>
+                      </v-flex>
+                      <v-flex xs11 style="padding-top:10px">
+                        <RoomsExpansion :rooms=[room]></RoomsExpansion>
+                      </v-flex>
+                    </v-layout>
+                 </v-flex>
                   </v-layout>
               </v-layout>
               <v-menu
