@@ -267,8 +267,7 @@ export default {
       startMenu: false,
       endMenu: false,
       IsLoading: false,
-      Isrange: false,
-      upload: false
+      Isrange: false
     }
   },
   created: function () {
