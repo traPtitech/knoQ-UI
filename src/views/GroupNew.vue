@@ -187,12 +187,7 @@ export default {
   data () {
     return {
       ID: '',
-      group: {
-        name: '',
-        members: [
-
-        ]
-      },
+      group: {},
       targetMembers: this.$store.state.allUsers,
       e1: 0,
       rules: {
@@ -211,6 +206,20 @@ export default {
     await this.getUsers()
     this.targetMembers = this.$store.state.allUsers
     this.group.members.push(this.$store.state.loginUser)
+  },
+  beforeRouteLeave (to, from, next) {
+    // 空でない時
+    if (Object.keys(this.group).length) {
+      let message = '変更は保存されませんがよろしいですか?'
+      let result = window.confirm(message)
+      if (result) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
   },
   methods: {
     ...mapActions(['getUsers']),
