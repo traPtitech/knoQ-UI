@@ -15,13 +15,16 @@
     >
       <template v-slot:header>
         <v-layout>
-          <v-flex xs4 text-xs-left>
+          <v-flex sm4 hidden-xs-only text-xs-left>
             {{date(room)}}
           </v-flex>
-          <v-flex xs4 text-xs-left>
+          <v-flex xs3>
+            {{date(room).slice(5,16)}}
+          </v-flex>
+          <v-flex xs6 sm4 text-xs-left>
             {{room.time_start.slice(0,5)}} - {{room.time_end.slice(0,5)}}
           </v-flex>
-          <v-flex xs4 text-xs-center>
+          <v-flex xs3 sm4 text-xs-center>
             <v-icon small>place</v-icon>{{room.place}}
           </v-flex>
         </v-layout>
