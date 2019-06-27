@@ -341,7 +341,9 @@ export default {
       snackMessage: ''
     }
   },
-  created: function () {
+  created: async function () {
+    await this.getUserMe()
+    this.getMyGroups()
     window.addEventListener('beforeunload', function (event) {
       // event.returnValue = 'true'
     })
@@ -393,7 +395,7 @@ export default {
     nameIsRequired: function () {
       return this.reservation.name !== ''
     },
-    ...mapActions(['getRooms']),
+    ...mapActions(['getRooms', 'getMyGroups', 'getUserMe']),
     ...mapGetters(['getRoomIDs', 'getGroupIDs'])
   },
   watch: {
