@@ -4,10 +4,27 @@
       <v-flex xs12>
         <h1>予約追加</h1>
       </v-flex>
-      <v-flex xs10 mt-3>
+      <v-flex xs12 sm10 mt-3>
         <v-card>
           <v-card-text>
             <v-form>
+              <v-stepper v-model="e1">
+              <v-stepper-header>
+                <v-stepper-step :complete="e1 > 1" step="1">
+                  step 1
+                  <small>name is required</small>
+                </v-stepper-step>
+
+                <v-divider></v-divider>
+
+                <v-stepper-step :complete="e1 > 2" step="2">step 2</v-stepper-step>
+
+                <v-divider></v-divider>
+
+                <v-stepper-step step="3">step 3</v-stepper-step>
+              </v-stepper-header>
+              <v-stepper-items>
+                <v-stepper-content step="1">
               <v-layout column>
                 <v-flex>
                   <v-autocomplete
@@ -58,9 +75,25 @@
                   >
                   </v-textarea>
                 </v-flex>
-                <v-flex>
+              </v-layout>
+                  <v-btn
+                    @click="$router.push({ name: 'Home' })"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="e1 = 2"
+                    :disabled="false"
+                  >
+                    Continue
+                  </v-btn>
+                </v-stepper-content>
+                <v-stepper-content step="2">
+                <v-layout wrap>
+                <v-flex xs12>
                   <v-layout row>
-                    <v-flex xs2>
+                    <v-flex xs3>
                       <v-checkbox
                         v-model="Isrange"
                         label="範囲"
@@ -235,9 +268,25 @@
                   </v-flex>
                 </v-layout>
               </v-layout>
-              <v-btn @click="$router.push({ name: 'Home' })">キャンセル</v-btn>
-              <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
-              <v-btn color="info" :loading="IsLoading" @click="save()">save</v-btn>
+                  <v-btn
+                    @click="e1 = 1"
+                  >
+                    back
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    @click="e1 = 3"
+                  >
+                    Continue
+                  </v-btn>
+                </v-stepper-content>
+                <v-stepper-content step="3">
+                  <v-btn @click="e1 = 2">back</v-btn>
+                  <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
+                  <v-btn color="info" :loading="IsLoading" @click="save()">save</v-btn>
+                </v-stepper-content>
+              </v-stepper-items>
+              </v-stepper>
             </v-form>
           </v-card-text>
         </v-card>
@@ -267,7 +316,8 @@ export default {
       startMenu: false,
       endMenu: false,
       IsLoading: false,
-      Isrange: false
+      Isrange: false,
+      e1: 0
     }
   },
   created: function () {
