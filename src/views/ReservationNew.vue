@@ -10,7 +10,7 @@
             <v-form>
               <v-stepper v-model="e1">
               <v-stepper-header>
-                <v-stepper-step :complete="e1 > 1" step="1">
+                <v-stepper-step :complete="e1 > 1" step="1" :rules="[rules.step1]">
                   step 1
                   <small>name is required</small>
                 </v-stepper-step>
@@ -84,7 +84,7 @@
                   <v-btn
                     color="primary"
                     @click="e1 = 2"
-                    :disabled="false"
+                    :disabled="!nameIsRequired()"
                   >
                     Continue
                   </v-btn>
@@ -307,7 +307,9 @@ export default {
   },
   data () {
     return {
-      reservation: {},
+      reservation: {
+        name: ''
+      },
       date: null,
       Condition: {},
       dateMenu: false,
@@ -317,7 +319,11 @@ export default {
       endMenu: false,
       IsLoading: false,
       Isrange: false,
-      e1: 0
+      e1: 0,
+      rules: {
+        required: value => !!value || 'Required',
+        step1: this.nameIsRequired
+      }
     }
   },
   created: function () {
@@ -365,6 +371,9 @@ export default {
       if (this.Isrange) {
         this.getRooms(this.Condition)
       }
+    },
+    nameIsRequired: function () {
+      return this.reservation.name !== ''
     },
     ...mapActions(['getRooms']),
     ...mapGetters(['getRoomIDs', 'getGroupIDs'])
