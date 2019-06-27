@@ -133,7 +133,7 @@
                             v-on="on"
                           ></v-text-field>
                         </template>
-                        <v-date-picker v-model="date" no-title>
+                        <v-date-picker v-model="date" no-title :allowed-dates="allowedDates">
                           <v-spacer></v-spacer>
                           <v-btn flat color="primary" @click="dateMenu = false">Cancel</v-btn>
                           <v-btn flat color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
@@ -164,7 +164,7 @@
                                 v-on="on"
                               ></v-text-field>
                             </template>
-                            <v-date-picker v-model="Condition.dateBegin" no-title>
+                            <v-date-picker v-model="Condition.dateBegin" no-title :allowed-dates="allowedDates">
                               <v-spacer></v-spacer>
                               <v-btn flat color="primary" @click="dateBeginMenu = false">Cancel</v-btn>
                               <v-btn flat color="primary" @click="$refs.dateBeginMenu.save(Condition.dateBegin); findRooms()">OK</v-btn>
@@ -193,7 +193,7 @@
                                 v-on="on"
                               ></v-text-field>
                             </template>
-                            <v-date-picker v-model="Condition.dateEnd" no-title>
+                            <v-date-picker v-model="Condition.dateEnd" no-title :allowed-dates="allowedDates">
                               <v-spacer></v-spacer>
                               <v-btn flat color="primary" @click="dateEndMenu = false">Cancel</v-btn>
                               <v-btn flat color="primary" @click="$refs.dateEndMenu.save(Condition.dateEnd); findRooms()">OK</v-btn>
@@ -394,6 +394,10 @@ export default {
     },
     nameIsRequired: function () {
       return this.reservation.name !== ''
+    },
+    allowedDates: val => {
+      const date = new Date(val)
+      return date.getTime() > new Date().getTime() - 86400000
     },
     ...mapActions(['getRooms', 'getMyGroups', 'getUserMe']),
     ...mapGetters(['getRoomIDs', 'getGroupIDs'])
