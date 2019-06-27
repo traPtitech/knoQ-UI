@@ -8,6 +8,19 @@
         <v-card>
           <v-card-text>
             <v-form>
+              <v-snackbar
+                v-model="snackbar"
+                top
+              >
+                {{ snackMessage }}
+                <v-btn
+                  color="pink"
+                  flat
+                  @click="snackbar = false"
+                >
+                  Close
+                </v-btn>
+              </v-snackbar>
               <v-stepper v-model="e1">
               <v-stepper-header>
                 <v-stepper-step :complete="e1 > 1" step="1" :rules="[rules.step1]">
@@ -323,7 +336,9 @@ export default {
       rules: {
         required: value => !!value || 'Required',
         step1: this.nameIsRequired
-      }
+      },
+      snackbar: false,
+      snackMessage: ''
     }
   },
   created: function () {
@@ -354,12 +369,15 @@ export default {
       try {
         this.IsLoading = true
         const response = await ReservationsRepository.post(payload)
+        this.snackMessage = response.statusText
+        this.snackbar = true
         this.IsLoading = false
         this.reservation = {}
-        console.log(response)
+        this.e1 = 1
       } catch (error) {
-        console.log(error)
         this.IsLoading = false
+        this.snackMessage = error
+        this.snackbar = true
       }
     },
     groupColor: function (groupID) {
