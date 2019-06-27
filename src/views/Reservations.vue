@@ -2,6 +2,12 @@
   <v-form>
     <v-container>
       <v-layout row wrap>
+        <v-flex xs10 sm3>
+          <v-text-field
+            v-model="Condition.name"
+            label="name"
+          ></v-text-field>
+        </v-flex>
         <v-flex xs10 sm2 >
           <v-combobox
             v-model="Condition.traQID"
@@ -96,6 +102,7 @@ export default {
     return {
       reservations: [],
       Condition: {
+        name: '',
         traQID: '',
         dateBegin: '',
         dateEnd: ''

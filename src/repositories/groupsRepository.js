@@ -7,6 +7,7 @@ export default {
     return Repository.get(`${resource}`, {
       params: {
         id: payload.id,
+        name: payload.name,
         traQID: payload.traQID
       }
     })

@@ -2,6 +2,12 @@
   <v-form>
     <v-container>
       <v-layout row wrap>
+        <v-flex xs10 sm3>
+          <v-text-field
+            v-model="Condition.name"
+            label="name"
+          ></v-text-field>
+        </v-flex>
         <v-flex xs10 sm2>
           <v-combobox
             v-model="Condition.traQID"
@@ -40,6 +46,7 @@ export default {
     return {
       groups: [],
       Condition: {
+        name: '',
         traQID: ''
       }
     }
@@ -50,7 +57,7 @@ export default {
   methods: {
     async getGroups (payload) {
       try {
-        const response = await GroupsRepository.get(payload.traQID)
+        const response = await GroupsRepository.get(payload)
         this.groups = response.data
         console.log(response)
       } catch (error) {
