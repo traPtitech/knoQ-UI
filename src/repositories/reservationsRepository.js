@@ -26,5 +26,9 @@ export default {
       time_start: payload.time_start,
       time_end: payload.time_end
     })
+  },
+
+  delete (id) {
+    return Repository.delete(`${resource}/${id}`)
   }
 }

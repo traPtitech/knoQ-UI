@@ -2,6 +2,19 @@
 <v-form v-if="!loading">
   <v-container fluid mt-3>
     <v-flex>
+      <v-snackbar
+        v-model="snackbar"
+        top
+      >
+        {{ snackMessage }}
+        <v-btn
+          color="pink"
+          flat
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
       <v-card>
         <v-card-title class="display-1 font-weight-bold" id="rev-name-title" primary-title>
           <div  id="sampleCalender2">
@@ -23,7 +36,7 @@
               <v-btn
                 flat
                 v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
-                disabled
+                @click="Delete()"
               >
                 <v-icon>delete_forever</v-icon>
                 delete this
@@ -133,7 +146,9 @@ export default {
     return {
       reservation: {},
       loading: true,
-      pageSelected: 1
+      pageSelected: 1,
+      snackbar: false,
+      snackMessage: ''
     }
   },
   created: async function () {
@@ -147,6 +162,22 @@ export default {
       console.log(error)
     }
     this.loading = false
+  },
+  methods: {
+    Delete: async function () {
+      let message = '本当に削除してよろしいですか?\n(この操作は取り消せません)'
+      let result = window.confirm(message)
+      if (result) {
+        try {
+          await ReservationsRepository.delete(this.reservation.id)
+          this.snackMessage = '正常に削除されました。'
+          this.snackbar = true
+        } catch (error) {
+          this.snackMessage = '削除に失敗しました。'
+          this.snackbar = true
+        }
+      }
+    }
   },
   computed: {
     Month () {
