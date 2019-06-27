@@ -187,7 +187,10 @@ export default {
   data () {
     return {
       ID: '',
-      group: {},
+      group: {
+        name: '',
+        members: []
+      },
       targetMembers: this.$store.state.allUsers,
       e1: 0,
       rules: {
