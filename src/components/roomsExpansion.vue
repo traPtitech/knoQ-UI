@@ -18,7 +18,7 @@
           <v-flex sm4 hidden-xs-only text-xs-left>
             {{date(room)}}
           </v-flex>
-          <v-flex xs3>
+          <v-flex xs3 hidden-sm-and-up>
             {{date(room).slice(5,16)}}
           </v-flex>
           <v-flex xs6 sm4 text-xs-left>
