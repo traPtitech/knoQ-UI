@@ -23,7 +23,7 @@ export default new Vuex.Store({
       { text: '終了時刻', value: 'time_end' },
       { text: '場所', value: 'room.place' }
     ],
-    myGroups: [],
+    myGroups: [{ id: 0 }],
     groupHeaders: [
       { text: 'グループ名', value: 'name' },
       { text: '人数', value: 'members.length' }

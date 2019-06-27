@@ -288,15 +288,34 @@
                   </v-btn>
                   <v-btn
                     color="primary"
-                    @click="e1 = 3"
+                    @click="e1 = 3; SelectRoom()"
                   >
                     Continue
                   </v-btn>
                 </v-stepper-content>
                 <v-stepper-content step="3">
+                  <v-card color="blue-grey lighten-3">
+                    <v-card-text>
+                      <v-container>
+                        <v-layout class="title">
+                           <v-flex>
+                              <div class="text-xs-left">予約: {{ reservation.name }}</div>
+                            </v-flex>
+                            <v-flex>
+                              <div class="text-xs-right">グループ: {{ groupName }}</div>
+                            </v-flex>
+                        </v-layout>
+                          <h6>説明</h6>
+                        <v-flex  class="text-xs-left">
+                          <span style="white-space: pre-wrap">{{ reservation.description }}</span>
+                        </v-flex>
+                      </v-container>
+                      <RoomsExpansion v-if="e1 === 3" :rooms="selectedRoom"></RoomsExpansion>
+                      <v-flex mt-3 class="title">{{reservation.time_start}} - {{reservation.time_end}}</v-flex>
+                    </v-card-text>
+                  </v-card>
                   <v-btn @click="e1 = 2">back</v-btn>
                   <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
-                  <v-btn color="info" :loading="IsLoading" @click="save()">save</v-btn>
                 </v-stepper-content>
               </v-stepper-items>
               </v-stepper>
@@ -314,6 +333,7 @@ import color from '../tips/color'
 import RoomsExpansion from '../components/roomsExpansion'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
+const RoomsRepository = RepositoryFactory.set('rooms')
 export default {
   components: {
     RoomsExpansion
@@ -338,7 +358,8 @@ export default {
         step1: this.nameIsRequired
       },
       snackbar: false,
-      snackMessage: ''
+      snackMessage: '',
+      selectedRoom: []
     }
   },
   created: async function () {
@@ -399,8 +420,25 @@ export default {
       const date = new Date(val)
       return date.getTime() > new Date().getTime() - 86400000
     },
+    SelectRoom: async function () {
+      const { data } = await RoomsRepository.get({ id: this.reservation.room_id })
+      console.log(data)
+      this.selectedRoom = data
+    },
     ...mapActions(['getRooms', 'getMyGroups', 'getUserMe']),
     ...mapGetters(['getRoomIDs', 'getGroupIDs'])
+  },
+  computed: {
+    groupName: function () {
+      let name = ''
+      for (const group of this.$store.state.myGroups) {
+        if (group.id === this.reservation.group_id) {
+          name = group.name
+          break
+        }
+      }
+      return name
+    }
   },
   watch: {
     date: function () {

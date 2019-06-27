@@ -123,7 +123,7 @@
                   </v-btn>
                 </v-stepper-content>
                 <v-stepper-content step="3">
-                  <v-card color="blue-grey">
+                  <v-card color="blue-grey lighten-3">
                     <v-card-text>
                       <v-container>
                         <v-layout class="title">
