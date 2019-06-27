@@ -23,6 +23,7 @@
               <v-btn
                 flat
                 v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
+                disabled
               >
                 <v-icon>delete_forever</v-icon>
                 delete this
