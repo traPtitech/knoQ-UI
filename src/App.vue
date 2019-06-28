@@ -67,7 +67,7 @@
 
           <v-list-tile v-if="this.$store.state.loginUser.Admin" @click="roomsAll()">
             <v-list-tile-action>
-              <v-icon>plus</v-icon>
+              <v-icon>add</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>ADD ROOMS</v-list-tile-title>
