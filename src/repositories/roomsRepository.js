@@ -11,5 +11,9 @@ export default {
         date_end: payload.dateEnd
       }
     })
+  },
+
+  postAll () {
+    return Repository.post(`/admin${resource}/all`)
   }
 }

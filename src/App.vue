@@ -64,6 +64,15 @@
               <v-list-tile-title>Groups</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+
+          <v-list-tile v-if="this.$store.state.loginUser.Admin" @click="roomsAll()">
+            <v-list-tile-action>
+              <v-icon>plus</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>ADD ROOMS</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
         </v-list>
       </v-navigation-drawer>
 
@@ -74,7 +83,9 @@
 </template>
 
 <script>
+import { RepositoryFactory } from './repositories/RepositoryFactory'
 import { mapActions } from 'vuex'
+const RoomsRepository = RepositoryFactory.set('rooms')
 export default {
   name: 'App',
   components: {
@@ -88,6 +99,14 @@ export default {
     await this.getUserMe()
   },
   methods: {
+    roomsAll: async function () {
+      try {
+        const response = await RoomsRepository.postAll()
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     ...mapActions(['getUserMe'])
   },
   computed: {
