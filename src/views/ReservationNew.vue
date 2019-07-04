@@ -244,7 +244,7 @@
                         format="24hr"
                         :allowed-minutes="allowedMinutes"
                         full-width
-                        @click:minute="$refs.refStartMenu.save(reservation.time_start);findRooms()"
+                        @click:minute="$refs.refStartMenu.save(reservation.time_start)"
                       ></v-time-picker>
                     </v-menu>
                   </v-flex>
@@ -407,8 +407,8 @@ export default {
       return color.GroupColors(groupID) + '--text'
     },
     findRooms: function () {
-      console.log('find')
-      this.reservation.room_id = null
+      console.log('Find rooms')
+      this.reservation.room_id = 0
       if (this.Isrange) {
         this.getRooms(this.Condition)
       }
@@ -421,6 +421,7 @@ export default {
       return date.getTime() > new Date().getTime() - 86400000
     },
     SelectRoom: async function () {
+      console.log(this.reservation.room_id)
       const { data } = await RoomsRepository.get({ id: this.reservation.room_id })
       console.log(data)
       this.selectedRoom = data
@@ -442,7 +443,7 @@ export default {
   },
   watch: {
     date: function () {
-      this.reservation.room_id = null
+      this.reservation.room_id = 0
       if (!this.Isrange) {
         this.getRooms(
           {
