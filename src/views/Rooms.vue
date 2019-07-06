@@ -81,6 +81,7 @@ import RoomsTable from '../components/roomsTable'
 import RoomsExpansion from '../components/roomsExpansion'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const RoomsRepository = RepositoryFactory.set('rooms')
+const ReservationsRepo = RepositoryFactory.set('reservations')
 
 export default {
   components: {
@@ -90,6 +91,7 @@ export default {
   data () {
     return {
       rooms: [],
+      reservations: [],
       Condition: {
         dateBegin: '',
         dateEnd: ''
@@ -107,6 +109,14 @@ export default {
         }
         this.rooms = response.data
         console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getReservations (payload) {
+      try {
+        const { data } = await ReservationsRepo.get(payload)
+        this.reservations = data
       } catch (error) {
         console.log(error)
       }

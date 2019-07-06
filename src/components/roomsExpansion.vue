@@ -49,7 +49,7 @@
 import moment from 'moment'
 import ReservationShort from '../components/reservationShort'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
-const ReservationsRepository = RepositoryFactory.set('reservations')
+const ReservationsRepo = RepositoryFactory.set('reservations')
 
 export default {
   components: {
@@ -59,6 +59,7 @@ export default {
   data () {
     return {
       panel: [],
+      targetRevs: [],
       loading: false
     }
   },
@@ -72,6 +73,15 @@ export default {
     // Reset the panel
     none () {
       this.panel = [...Array(this.rooms.length).keys()].map(_ => false)
+    },
+    async getReservations (payload) {
+      try {
+        const { data } = await ReservationsRepo.get(payload)
+        this.reservations = data
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   computed: {
@@ -82,20 +92,30 @@ export default {
     }
   },
   watch: {
-    panel: async function () {
-      console.log(this.panel)
-      for (var i = 0; i < this.panel.length; i++) {
-        if (this.panel[i] && typeof this.rooms[i].reservations === 'undefined') {
-          this.loading = true
-          this.rooms[i].reservations = []
-          const reservation = { roomID: this.rooms[i].id }
-          try {
-            const response = await ReservationsRepository.get(reservation)
-            console.log(response)
-            this.rooms[i].reservations = response.data
-            this.loading = false
-          } catch (error) {
-            console.log(error)
+    rooms: async function () {
+      console.log('watch')
+      this.none()
+
+      // bind reservation
+      const payload = {
+        dateBegin: this.rooms[0].date,
+        dateEnd: this.rooms[this.rooms.length - 1].date
+      }
+      try {
+        const { data } = await ReservationsRepo.get(payload)
+        this.targetRevs = data
+      } catch (error) {
+        console.log(error)
+      }
+      let i = 0
+      for (let reservation of this.targetRevs) {
+        for (; i < this.rooms.length; i++) {
+          if (reservation.room_id === this.rooms[i].id) {
+            if (typeof this.rooms[i].reservations === 'undefined') {
+              this.rooms[i].reservations = []
+            }
+            this.rooms[i].reservations.push(reservation)
+            break
           }
         }
       }
