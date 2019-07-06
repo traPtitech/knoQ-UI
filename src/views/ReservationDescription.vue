@@ -186,8 +186,6 @@ export default {
                 '/' + dateFormat.FormatGoogle(this.reservation.date, this.reservation.time_end) +
               '&location=' + this.reservation.room.place +
               '&details=' + this.reservation.description
-
-      console.log(link)
       window.open(link)
     }
   },
