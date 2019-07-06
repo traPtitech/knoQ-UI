@@ -1,3 +1,4 @@
+import moment from 'moment'
 
 export default{
   formatEnglishMonths (num) {
@@ -8,6 +9,7 @@ export default{
     ]
     return months[num]
   },
+
   formatEnglishDays (num) {
     let r
     switch (num) {
@@ -24,5 +26,12 @@ export default{
         r = num + 'th'
     }
     return r
+  },
+
+  FormatGoogle (date, time) {
+    date.setHours(parseInt(time.slice(0, 2)))
+    date.setMinutes(time.slice(3, 5))
+    date = moment(date).add(-9, 'hours')
+    return moment(date).format('YYYYMMDD') + 'T' + moment(date).format('HHmmss') + 'Z'
   }
 }

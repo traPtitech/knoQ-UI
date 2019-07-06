@@ -76,7 +76,7 @@
           </v-card-text>
           <v-card-actions>
             <v-flex>
-              <v-btn flat disabled color="orange">AddGoogleCalendar</v-btn>
+              <v-btn flat color="orange" @click="AddGoogle()">AddGoogleCalendar</v-btn>
             </v-flex>
           </v-card-actions>
         </v-card>
@@ -177,6 +177,18 @@ export default {
           this.snackbar = true
         }
       }
+    },
+    AddGoogle: function () {
+      console.log(this.reservation)
+      let link = 'https://calendar.google.com/calendar/r/eventedit'
+      link += '?text=' + this.reservation.name +
+              '&dates=' + dateFormat.FormatGoogle(this.reservation.date, this.reservation.time_start) +
+                '/' + dateFormat.FormatGoogle(this.reservation.date, this.reservation.time_end) +
+              '&location=' + this.reservation.room.place +
+              '&details=' + this.reservation.description
+
+      console.log(link)
+      window.open(link)
     }
   },
   computed: {
