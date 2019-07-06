@@ -421,8 +421,23 @@ export default {
       this.selectedRoom = data
     },
     getRooms: async function () {
-      const { data } = await RoomsRepository.get(this.Condition)
+      let { data } = await RoomsRepository.get(this.Condition)
       this.allowedRooms = data
+
+      let response = await ReservationsRepository.get(this.Condition)
+      const targetRevs = response.data
+      let i = 0
+      for (let reservation of targetRevs) {
+        for (; i < this.allowedRooms.length; i++) {
+          if (reservation.room_id === this.allowedRooms[i].id) {
+            if (typeof this.allowedRooms[i].reservations === 'undefined') {
+              this.allowedRooms[i].reservations = []
+            }
+            this.allowedRooms[i].reservations.push(reservation)
+            break
+          }
+        }
+      }
     },
     getDayRooms: function () {
       this.Condition = {

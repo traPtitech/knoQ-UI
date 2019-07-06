@@ -108,18 +108,26 @@ export default {
           response.data[i].date = response.data[i].date.substr(0, 10)
         }
         this.rooms = response.data
-        console.log(response)
+        await this.getReservations(this.Condition)
+        let i = 0
+        for (let reservation of this.reservations) {
+          for (; i < this.rooms.length; i++) {
+            if (reservation.room_id === this.rooms[i].id) {
+              if (typeof this.rooms[i].reservations === 'undefined') {
+                this.rooms[i].reservations = []
+              }
+              this.rooms[i].reservations.push(reservation)
+              break
+            }
+          }
+        }
       } catch (error) {
         console.log(error)
       }
     },
     async getReservations (payload) {
-      try {
-        const { data } = await ReservationsRepo.get(payload)
-        this.reservations = data
-      } catch (error) {
-        console.log(error)
-      }
+      const { data } = await ReservationsRepo.get(payload)
+      this.reservations = data
     }
   }
 }

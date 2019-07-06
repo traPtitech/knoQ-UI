@@ -94,6 +94,7 @@ export default {
   watch: {
     rooms: async function () {
       this.none()
+      /*
       for (let j = 0; j < this.rooms.length; j++) {
         this.rooms[j].reservations = []
       }
@@ -123,6 +124,7 @@ export default {
         }
       }
       this.loading = false
+      */
     }
   }
 }

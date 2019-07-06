@@ -161,6 +161,13 @@ export default {
     } catch (error) {
       console.log(error)
     }
+
+    const { data } = await ReservationsRepository.get({ roomID: this.reservation.room.id })
+    const targetRevs = data
+    this.reservation.room.reservations = []
+    for (let reservation of targetRevs) {
+      this.reservation.room.reservations.push(reservation)
+    }
     this.loading = false
   },
   methods: {
