@@ -8,6 +8,25 @@
         </v-card-title>
         <v-card-text>
           <span class="subheading" style="white-space: pre-wrap">{{group.description}}</span>
+          <v-layout wrap>
+            <v-flex sm8>
+              <v-btn
+                flat
+                v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
+                @click="$router.push({ name: 'GroupEdit' })"
+              >
+                <v-icon>edit</v-icon>
+                edit this
+              </v-btn>
+              <v-btn
+                flat
+                disabled
+                v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
+              >
+                <v-icon>delete_forever</v-icon>
+                delete this
+              </v-btn>
+            </v-flex>
           <v-flex xs12 text-xs-right>
             <span>Created by
               <span>
@@ -20,6 +39,7 @@
               @{{group.created_by.traq_id}}
             </span>
           </v-flex>
+        </v-layout>
         </v-card-text>
       </v-card>
     </v-flex>

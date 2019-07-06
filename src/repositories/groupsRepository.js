@@ -15,5 +15,9 @@ export default {
 
   post (payload) {
     return Repository.post(`${resource}`, payload)
+  },
+
+  patch (id, payload) {
+    return Repository.patch(`${resource}/${id}`, payload)
   }
 }
