@@ -5,7 +5,7 @@ import moment from 'moment'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 const GroupsRepository = RepositoryFactory.set('groups')
 const UsersRepository = RepositoryFactory.set('users')
-const RoomsRepository = RepositoryFactory.set('rooms')
+// const RoomsRepository = RepositoryFactory.set('rooms')
 
 Vue.use(Vuex)
 
@@ -28,7 +28,6 @@ export default new Vuex.Store({
       { text: 'グループ名', value: 'name' },
       { text: '人数', value: 'members.length' }
     ],
-    allowedRooms: [],
     roomHeaders: [
       { text: '日付', value: 'date' },
       { text: '場所', value: 'place' },
@@ -43,9 +42,6 @@ export default new Vuex.Store({
     changeMyGroups (state, payload) {
       state.myGroups = payload
     },
-    checkRooms (state, payload) {
-      state.allowedRooms = payload
-    },
     setLoginUser (state, payload) {
       state.loginUser = payload
     },
@@ -54,13 +50,6 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    getRoomIDs: (state) => {
-      let rooms = []
-      state.allowedRooms.forEach(element => {
-        rooms.push(element.id)
-      })
-      return rooms
-    },
     getGroupIDs: (state) => {
       let groups = []
       state.myGroups.forEach(element => {
@@ -110,15 +99,6 @@ export default new Vuex.Store({
           response.data[i].date = date
         }
         commit('changeMyReservations', response.data)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async getRooms ({ commit }, payload) {
-      try {
-        const response = await RoomsRepository.get(payload)
-        console.log(response)
-        commit('checkRooms', response.data)
       } catch (error) {
         console.log(error)
       }

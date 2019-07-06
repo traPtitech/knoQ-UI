@@ -136,7 +136,7 @@
                         <v-date-picker v-model="date" no-title :allowed-dates="allowedDates">
                           <v-spacer></v-spacer>
                           <v-btn flat color="primary" @click="dateMenu = false">Cancel</v-btn>
-                          <v-btn flat color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
+                          <v-btn flat color="primary" @click="$refs.dateMenu.save(date); getDayRooms()">OK</v-btn>
                         </v-date-picker>
                       </v-menu>
                     </v-flex>
@@ -167,7 +167,7 @@
                             <v-date-picker v-model="Condition.dateBegin" no-title :allowed-dates="allowedDates">
                               <v-spacer></v-spacer>
                               <v-btn flat color="primary" @click="dateBeginMenu = false">Cancel</v-btn>
-                              <v-btn flat color="primary" @click="$refs.dateBeginMenu.save(Condition.dateBegin); findRooms()">OK</v-btn>
+                              <v-btn flat color="primary" @click="$refs.dateBeginMenu.save(Condition.dateBegin); getRooms()">OK</v-btn>
                             </v-date-picker>
                           </v-menu>
                         </v-flex>
@@ -196,7 +196,7 @@
                             <v-date-picker v-model="Condition.dateEnd" no-title :allowed-dates="allowedDates">
                               <v-spacer></v-spacer>
                               <v-btn flat color="primary" @click="dateEndMenu = false">Cancel</v-btn>
-                              <v-btn flat color="primary" @click="$refs.dateEndMenu.save(Condition.dateEnd); findRooms()">OK</v-btn>
+                              <v-btn flat color="primary" @click="$refs.dateEndMenu.save(Condition.dateEnd); getRooms()">OK</v-btn>
                             </v-date-picker>
                           </v-menu>
                         </v-flex>
@@ -205,7 +205,7 @@
                   </v-layout>
                 </v-flex>
                 <v-layout wrap>
-                  <v-flex xs12 v-for="room in $store.state.allowedRooms" :key="room.id">
+                  <v-flex xs12 v-for="room in allowedRooms" :key="room.id">
                     <v-layout row>
                       <v-flex xs1>
                         <v-checkbox v-model="reservation.room_id" :value="room.id"></v-checkbox>
@@ -343,7 +343,7 @@ export default {
       reservation: {
         name: ''
       },
-      date: null,
+      date: '',
       Condition: {},
       dateMenu: false,
       dateBeginMenu: false,
@@ -359,7 +359,8 @@ export default {
       },
       snackbar: false,
       snackMessage: '',
-      selectedRoom: []
+      selectedRoom: [],
+      allowedRooms: []
     }
   },
   created: async function () {
@@ -406,13 +407,6 @@ export default {
     groupColor: function (groupID) {
       return color.GroupColors(groupID) + '--text'
     },
-    findRooms: function () {
-      console.log('Find rooms')
-      this.reservation.room_id = 0
-      if (this.Isrange) {
-        this.getRooms(this.Condition)
-      }
-    },
     nameIsRequired: function () {
       return this.reservation.name !== ''
     },
@@ -426,8 +420,19 @@ export default {
       console.log(data)
       this.selectedRoom = data
     },
-    ...mapActions(['getRooms', 'getMyGroups', 'getUserMe']),
-    ...mapGetters(['getRoomIDs', 'getGroupIDs'])
+    getRooms: async function () {
+      const { data } = await RoomsRepository.get(this.Condition)
+      this.allowedRooms = data
+    },
+    getDayRooms: function () {
+      this.Condition = {
+        dateBegin: this.date,
+        dateEnd: this.date
+      }
+      this.getRooms()
+    },
+    ...mapActions(['getMyGroups', 'getUserMe']),
+    ...mapGetters(['getGroupIDs'])
   },
   computed: {
     groupName: function () {
@@ -442,16 +447,9 @@ export default {
     }
   },
   watch: {
-    date: function () {
+    Isrange: function () {
       this.reservation.room_id = 0
-      if (!this.Isrange) {
-        this.getRooms(
-          {
-            dateBegin: this.date,
-            dateEnd: this.date
-          }
-        )
-      }
+      this.allowedRooms = []
     }
   }
 }

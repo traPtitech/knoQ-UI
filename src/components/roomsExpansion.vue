@@ -111,8 +111,6 @@ export default {
         console.log(error)
       }
       let i = 0
-      console.log(this.rooms)
-      console.log(this.targetRevs)
       for (let reservation of this.targetRevs) {
         for (; i < this.rooms.length; i++) {
           if (reservation.room_id === this.rooms[i].id) {
@@ -124,7 +122,6 @@ export default {
           }
         }
       }
-      console.log(this.rooms)
       this.loading = false
     }
   }
