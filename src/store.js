@@ -67,12 +67,16 @@ export default new Vuex.Store({
   },
   actions: {
     getUserMe: async function ({ commit }) {
-      try {
-        const response = await UsersRepository.getMe()
-        console.log(response)
-        await commit('setLoginUser', response.data)
-      } catch (error) {
-        console.error(error)
+      if (!Object.keys(this.state.loginUser).length) {
+        try {
+          const response = await UsersRepository.getMe()
+          console.log(response)
+          await commit('setLoginUser', response.data)
+        } catch (error) {
+          console.error(error)
+        }
+      } else {
+        console.log('Use cash')
       }
     },
     getMyGroups: async function ({ commit }) {
@@ -104,12 +108,14 @@ export default new Vuex.Store({
       }
     },
     async getUsers ({ commit }) {
-      try {
-        const response = await UsersRepository.get()
-        console.log(response)
-        await commit('setAllUsers', response.data)
-      } catch (error) {
-        console.log(error)
+      if (this.state.allUsers.length === 0) {
+        try {
+          const response = await UsersRepository.get()
+          console.log(response)
+          await commit('setAllUsers', response.data)
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   }
