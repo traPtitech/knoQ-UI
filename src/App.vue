@@ -126,7 +126,6 @@ export default {
     },
     trigger: function (event) {
       if (event.keyCode === 13) {
-        console.log(this.query)
         this.$router.push({ name: 'Search', query: { q: this.query } })
       }
     },
