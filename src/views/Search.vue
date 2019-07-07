@@ -29,21 +29,27 @@
         <v-tab-item>
           <v-card raised>
             <v-card-text>
-              <h3>所属メンバーから</h3>
-              <reservationCardShorts
-                v-if="ReservationsBytraQID.length > 0"
-                :reservations="ReservationsBytraQID"
-              >
-              </reservationCardShorts>
-              <span v-else>該当するデータはありません</span>
-
-              <h3>予約名から</h3>
-              <reservationCardShorts v-if="ReservationsByName.length > 0" :reservations="ReservationsByName"></reservationCardShorts>
-              <span v-else>該当するデータはありません</span>
+              <v-flex mt-3>
+                <h3>所属メンバーから</h3>
+                <reservationCardShorts
+                  v-if="ReservationsBytraQID.length > 0"
+                  :reservations="ReservationsBytraQID"
+                >
+                </reservationCardShorts>
+                <span v-else>該当するデータはありません</span>
+                </v-flex>
+              <v-flex mt-5>
+                <h3>予約名から</h3>
+                <reservationCardShorts
+                  v-if="ReservationsByName.length > 0"
+                  :reservations="ReservationsByName"
+                >
+                </reservationCardShorts>
+                <span v-else>該当するデータはありません</span>
+              </v-flex>
             </v-card-text>
           </v-card>
         </v-tab-item>
-
         <v-tab-item>
           <v-card flat>
             <v-card-text>あいうえお</v-card-text>
