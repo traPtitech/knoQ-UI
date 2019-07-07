@@ -27,7 +27,7 @@
         </v-tab>
 
         <v-tab-item>
-          <v-card raised>
+          <v-card raised v-show="!loading">
             <v-card-text>
               <v-flex mt-3>
                 <h3>所属メンバーから</h3>
@@ -50,6 +50,7 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+
         <v-tab-item>
           <v-card flat>
             <v-card-text>あいうえお</v-card-text>

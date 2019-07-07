@@ -14,6 +14,14 @@
         </span>
       </td>
       <td class="text-xs-left">{{ props.item.members.length }}</td>
+      <td>
+        <v-avatar
+          :size="24"
+        >
+          <img :src="'https://q.trapti.tech/static/icon/' + props.item.created_by_refer + '/64.png'" alt="avatar">
+        </v-avatar>
+        @{{props.item.created_by_refer}}
+      </td>
     </template>
   </v-data-table>
 </template>
