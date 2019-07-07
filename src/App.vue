@@ -5,19 +5,35 @@
       <v-toolbar-title style="cursor: pointer" @click="$router.push({ name: 'Home' })">
         <span>部屋管理</span>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <!--
       <v-flex hidden-xs-only text-xs-right>
         <v-btn @click="$router.push({ name: 'Rooms' })">rooms</v-btn>
         <v-btn @click="$router.push({ name: 'Reservations' })">reservations</v-btn>
         <v-btn @click="$router.push({ name: 'Groups' })">groups</v-btn>
       </v-flex>
+      -->
+      <v-spacer></v-spacer>
+        <v-flex xs6 hidden-xs-only>
+          <v-text-field
+            v-model="query"
+            @keydown.enter="trigger"
+            prepend-icon="search"
+            single-line
+            color="red"
+            background-color="pink lighten-5"
+            clearable
+         >
+         </v-text-field>
+        </v-flex>
 
-      <v-avatar
-        :size="32"
-      >
-        <img :src="'https://q.trapti.tech/static/icon/' + traQID + '/64.png'" alt="avatar">
-      </v-avatar>
-
+      <v-spacer></v-spacer>
+      <v-flex text-xs-right>
+        <v-avatar
+          :size="32"
+        >
+          <img :src="'https://q.trapti.tech/static/icon/' + traQID + '/64.png'" alt="avatar">
+        </v-avatar>
+      </v-flex>
     </v-toolbar>
     <v-navigation-drawer
         v-model="drawer"
@@ -92,7 +108,8 @@ export default {
   },
   data () {
     return {
-      drawer: false
+      drawer: false,
+      query: ''
     }
   },
   created: async function () {
@@ -105,6 +122,12 @@ export default {
         console.log(response)
       } catch (error) {
         console.log(error)
+      }
+    },
+    trigger: function (event) {
+      if (event.keyCode === 13) {
+        console.log(this.query)
+        this.$router.push({ name: 'Search', query: { q: this.query } })
       }
     },
     ...mapActions(['getUserMe'])

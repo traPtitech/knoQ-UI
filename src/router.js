@@ -9,6 +9,7 @@ import Groups from './views/Groups'
 import GroupDescription from './views/GroupDescription'
 import GroupEdit from './views/GroupEdit'
 import GroupsNew from './views/GroupNew'
+import Search from './views/Search'
 
 Vue.use(Router)
 
@@ -59,6 +60,11 @@ export default new Router({
       path: '/groups/:id/edit',
       name: 'GroupEdit',
       component: GroupEdit
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search
     },
     {
       path: '/about',
