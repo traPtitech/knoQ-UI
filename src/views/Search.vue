@@ -27,7 +27,7 @@
         </v-tab>
 
         <v-tab-item>
-          <v-card raised v-show="!loading">
+          <v-card raised v-if="!loading">
             <v-card-text>
               <v-flex mt-3>
                 <h3>所属メンバーから</h3>
@@ -49,11 +49,39 @@
               </v-flex>
             </v-card-text>
           </v-card>
+          <v-progress-circular
+            v-else
+            :size="70"
+            :width="7"
+            color="purple"
+            indeterminate
+          >
+          </v-progress-circular>
+
         </v-tab-item>
 
         <v-tab-item>
-          <v-card flat>
-            <v-card-text>あいうえお</v-card-text>
+          <v-card raised>
+            <v-card-text>
+              <v-flex mt-3>
+                <h3>所属メンバーから</h3>
+                <groupsTable
+                  v-if="GroupsBytraQID.length > 0"
+                  :groups="GroupsBytraQID"
+                >
+                </groupsTable>
+                <span v-else>該当するデータはありません</span>
+                </v-flex>
+              <v-flex mt-5>
+                <h3>グループ名から</h3>
+                <groupsTable
+                  v-if="GroupsByName.length > 0"
+                  :groups="GroupsByName"
+                >
+                </groupsTable>
+                <span v-else>該当するデータはありません</span>
+              </v-flex>
+            </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs>
@@ -63,13 +91,15 @@
 
 <script>
 import reservationCardShorts from '../components/reservationCardShorts'
+import groupsTable from '../components/groupsTable'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepo = RepositoryFactory.set('reservations')
 const GroupsRepo = RepositoryFactory.set('groups')
 
 export default {
   components: {
-    reservationCardShorts
+    reservationCardShorts,
+    groupsTable
   },
   data () {
     return {

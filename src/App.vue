@@ -125,7 +125,7 @@ export default {
       }
     },
     trigger: function (event) {
-      if (event.keyCode === 13) {
+      if (event.keyCode === 13 && this.query !== '') {
         this.$router.push({ name: 'Search', query: { q: this.query } })
       }
     },
