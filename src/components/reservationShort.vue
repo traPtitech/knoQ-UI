@@ -2,14 +2,14 @@
 <v-card>
   <v-card-text  style="font-size: 100%;">
     <v-layout row wrap>
-      <v-flex hidden-xs-only sm4 class="font-weight-bold" overflow-hidden>
+      <v-flex hidden-xs-only sm3.5 class="font-weight-bold" overflow-hidden>
         <span style="cursor: pointer"
           @click="$router.push({ name: 'ReservationDescription', params: { id: reservation.id } })"
         >
           {{reservation.name}}
         </span>
       </v-flex>
-      <v-flex hidden-xs-only sm2.5 :class="groupColor">
+      <v-flex hidden-xs-only sm3 :class="groupColor">
         <span style="cursor: pointer"
           @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
         >

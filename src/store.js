@@ -75,8 +75,6 @@ export default new Vuex.Store({
         } catch (error) {
           console.error(error)
         }
-      } else {
-        console.log('Use cash')
       }
     },
     getMyGroups: async function ({ commit }) {
