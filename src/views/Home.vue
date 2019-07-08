@@ -36,6 +36,7 @@ import { RepositoryFactory } from '../repositories/RepositoryFactory'
 import { mapActions } from 'vuex'
 import moment from 'moment'
 const RoomsRepository = RepositoryFactory.set('rooms')
+const ReservationsRepo = RepositoryFactory.set('reservations')
 
 export default {
   components: {
@@ -53,14 +54,29 @@ export default {
     await this.getUserMe()
     const today = moment(new Date()).format('YYYY-MM-DD')
 
-    const { data } = await RoomsRepository.get(
-      {
-        dateBegin: today,
-        dateEnd: today
-      }
-    )
+    const condition = {
+      dateBegin: today,
+      dateEnd: today
+    }
+
+    const { data } = await RoomsRepository.get(condition)
     this.todayRooms = data
-    console.log(data)
+
+    const response = await ReservationsRepo.get(condition)
+    const targetRevs = response.data
+    let i = 0
+    for (let reservation of targetRevs) {
+      for (; i < this.todayRooms.length; i++) {
+        if (reservation.room_id === this.todayRooms[i].id) {
+          if (typeof this.todayRooms[i].reservations === 'undefined') {
+            this.todayRooms[i].reservations = []
+          }
+          this.todayRooms[i].reservations.push(reservation)
+          break
+        }
+      }
+    }
+
     this.getMyGroups()
     this.getMyReservations()
   },

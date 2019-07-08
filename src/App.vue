@@ -17,6 +17,7 @@
           <v-text-field
             v-model="query"
             @keydown.enter="trigger"
+            label="フリーワード検索"
             prepend-icon="search"
             single-line
             color="red"

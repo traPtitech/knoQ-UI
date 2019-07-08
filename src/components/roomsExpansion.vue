@@ -35,6 +35,11 @@
             <ReservationShort :reservation="reservation"></ReservationShort>
           </v-flex>
         </v-layout>
+        <v-layout v-if="typeof room.reservations === 'undefined'">
+          <v-flex>
+            この進捗部屋の予約はありません
+          </v-flex>
+        </v-layout>
       </v-container>
       <v-container v-show="loading">
         ろーど中
