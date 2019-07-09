@@ -13,28 +13,70 @@
       </v-flex>
       -->
       <v-spacer></v-spacer>
-        <v-flex xs6 hidden-xs-only>
-          <v-text-field
-            v-model="query"
-            @keydown.enter="trigger"
-            label="フリーワード検索"
-            prepend-icon="search"
-            single-line
-            color="red"
-            background-color="pink lighten-5"
-            clearable
-         >
-         </v-text-field>
-        </v-flex>
+      <v-flex xs6 hidden-xs-only>
+        <v-text-field
+          v-model="query"
+          @keydown.enter="trigger"
+          label="フリーワード検索"
+          prepend-icon="search"
+          single-line
+          color="red"
+          background-color="pink lighten-5"
+          clearable
+       >
+       </v-text-field>
+      </v-flex>
 
       <v-spacer></v-spacer>
-      <v-flex text-xs-right>
+      <v-flex hidden-sm-and-up text-xs-right>
+      <v-dialog
+        v-model="dialog"
+        full-width
+      >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            v-on="on"
+            flat
+            icon
+          >
+          <v-icon>search</v-icon>
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title
+            class="headline grey lighten-2"
+            primary-title
+          >
+        <v-text-field
+          v-model="query"
+          @keydown.enter="trigger"
+          label="フリーワード検索"
+          prepend-icon="search"
+          single-line
+          color="red"
+          background-color="pink lighten-5"
+          clearable
+       >
+       </v-text-field>
+            <v-btn
+              color="primary"
+              flat
+              icon
+              @click="dialog = false; search();"
+            >
+              <v-icon>search</v-icon>
+            </v-btn>
+          </v-card-title>
+        </v-card>
+      </v-dialog>
+      </v-flex>
+
         <v-avatar
           :size="32"
         >
           <img :src="'https://q.trapti.tech/static/icon/' + traQID + '/64.png'" alt="avatar">
         </v-avatar>
-      </v-flex>
     </v-toolbar>
     <v-navigation-drawer
         v-model="drawer"
@@ -110,7 +152,8 @@ export default {
   data () {
     return {
       drawer: false,
-      query: ''
+      query: '',
+      dialog: false
     }
   },
   created: async function () {
@@ -126,7 +169,13 @@ export default {
       }
     },
     trigger: function (event) {
-      if (event.keyCode === 13 && this.query !== '') {
+      if (event.keyCode === 13) {
+        this.search()
+      }
+    },
+    search: function () {
+      if (this.query !== '') {
+        this.dialog = false
         this.$router.push({ name: 'Search', query: { q: this.query } })
       }
     },
@@ -142,3 +191,11 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-dialog {
+    position: absolute;
+    top: 0;
+    padding-right: 50px;
+}
+</style>
