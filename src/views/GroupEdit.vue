@@ -110,63 +110,17 @@
                       :length="Math.ceil(targetMembers.length / displayMemberNum)"
                     ></v-pagination>
                   </v-container>
-                  <v-btn
-                    @click="e1 = 1"
-                  >
+                  <v-btn @click="e1 = 1">
                     back
                   </v-btn>
-                  <v-btn
-                    color="primary"
-                    @click="e1 = 3"
-                  >
+                  <v-btn color="primary" @click="e1 = 3">
                     Continue
                   </v-btn>
                 </v-stepper-content>
                 <v-stepper-content step="3">
-                  <v-card color="blue-grey lighten-3">
-                    <v-card-text>
-                      <v-container>
-                        <v-layout class="title">
-                           <v-flex>
-                              <div class="text-xs-left">グループ名: {{ group.name }}</div>
-                            </v-flex>
-                            <v-flex>
-                              <div class="text-xs-right">人数:{{ group.members.length }}人</div>
-                            </v-flex>
-                        </v-layout>
-                        <h6>説明</h6>
-                        <span style="white-space: pre-wrap">{{ group.description }}</span>
-                      </v-container>
-                    </v-card-text>
-                  </v-card>
-                  <v-container fluid grid-list-md text-xs-left>
-                    <v-layout row wrap>
-                      <v-flex xs12 sm6 md4 v-for="member in group.members.slice((pageSelected-1) * displayMemberNum, pageSelected * displayMemberNum)" :key="member.traq_id">
-                        <v-card>
-                          <v-card-text>
-                            <v-avatar size=24>
-                              <img
-                                :src="'https://q.trapti.tech/static/icon/' + member.traq_id + '/64.png'"
-                                :alt="member.traq_id"
-                              >
-                            </v-avatar>
-                            <span style="margin-left:10px;">{{ member.traq_id }}</span>
-                          </v-card-text>
-                        </v-card>
-                      </v-flex>
-                    </v-layout>
-                    <v-layout>
-                      <v-flex xs12 text-xs-center>
-                      <v-pagination
-                        v-model="pageSelected"
-                        total-visible="5"
-                        :length="Math.ceil(group.members.length / displayMemberNum)"
-                      ></v-pagination>
-                      </v-flex>
-                    </v-layout>
-                    </v-container>
-                    <v-btn @click="e1 = 2">back</v-btn>
-                    <v-btn color="info" @click="postGroup(group)">保存</v-btn>
+                  <GroupConfirm :group="group"></GroupConfirm>
+                  <v-btn @click="e1 = 2">back</v-btn>
+                  <v-btn color="info" @click="patchGroup(group)">保存</v-btn>
                 </v-stepper-content>
               </v-stepper-items>
             </v-stepper>
@@ -180,10 +134,15 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import marked from 'marked'
+import GroupConfirm from '../components/groupConfirm'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const GroupsRepository = RepositoryFactory.set('groups')
 
 export default {
+  components: {
+    GroupConfirm
+  },
   data () {
     return {
       ID: '',
@@ -239,7 +198,7 @@ export default {
     nameIsRequired: function () {
       return this.group.name !== ''
     },
-    async postGroup (group) {
+    async patchGroup (group) {
       try {
         const response = await GroupsRepository.patch(this.$route.params.id, group)
         console.log(response)
@@ -250,6 +209,11 @@ export default {
         this.snackMessage = error
         this.snackbar = true
       }
+    }
+  },
+  computed: {
+    markedDescription: function () {
+      return marked(this.group.description)
     }
   },
   watch: {

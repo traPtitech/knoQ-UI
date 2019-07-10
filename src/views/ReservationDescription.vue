@@ -26,7 +26,7 @@
           {{reservation.name}}
         </v-card-title>
         <v-card-text>
-          <span class="subheading" style="white-space: pre-wrap">{{reservation.description}}</span>
+          <span class="subheading" v-html="reservation.description"></span>
           <v-layout wrap>
             <v-flex sm8>
               <v-btn flat disabled v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id">
@@ -134,6 +134,7 @@
 <script>
 import dateFormat from '../tips/date'
 import moment from 'moment'
+import marked from 'marked'
 import RoomsExpansion from '../components/roomsExpansion'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
@@ -168,6 +169,8 @@ export default {
     for (let reservation of targetRevs) {
       this.reservation.room.reservations.push(reservation)
     }
+
+    this.reservation.description = marked(this.reservation.description)
     this.loading = false
   },
   methods: {

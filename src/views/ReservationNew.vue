@@ -294,26 +294,7 @@
                   </v-btn>
                 </v-stepper-content>
                 <v-stepper-content step="3">
-                  <v-card color="blue-grey lighten-3">
-                    <v-card-text>
-                      <v-container>
-                        <v-layout class="title">
-                           <v-flex>
-                              <div class="text-xs-left">予約: {{ reservation.name }}</div>
-                            </v-flex>
-                            <v-flex>
-                              <div class="text-xs-right">グループ: {{ groupName }}</div>
-                            </v-flex>
-                        </v-layout>
-                          <h6>説明</h6>
-                        <v-flex  class="text-xs-left">
-                          <span style="white-space: pre-wrap">{{ reservation.description }}</span>
-                        </v-flex>
-                      </v-container>
-                      <RoomsExpansion v-if="e1 === 3" :rooms="selectedRoom"></RoomsExpansion>
-                      <v-flex mt-3 class="title">{{reservation.time_start}} - {{reservation.time_end}}</v-flex>
-                    </v-card-text>
-                  </v-card>
+                  <ReservationConfirm :reservation="reservation" :selectedRoom="selectedRoom"></ReservationConfirm>
                   <v-btn @click="e1 = 2">back</v-btn>
                   <v-btn color="info" :loading="IsLoading" @click="postReservation(reservation)">send</v-btn>
                 </v-stepper-content>
@@ -331,17 +312,20 @@
 import { mapActions, mapGetters } from 'vuex'
 import color from '../tips/color'
 import RoomsExpansion from '../components/roomsExpansion'
+import ReservationConfirm from '../components/reservationConfirm'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 const RoomsRepository = RepositoryFactory.set('rooms')
 export default {
   components: {
-    RoomsExpansion
+    RoomsExpansion,
+    ReservationConfirm
   },
   data () {
     return {
       reservation: {
-        name: ''
+        name: '',
+        room_id: ''
       },
       date: '',
       Condition: {},
@@ -416,6 +400,7 @@ export default {
     },
     SelectRoom: async function () {
       console.log(this.reservation.room_id)
+      if (this.reservation.room_id === '') return
       const { data } = await RoomsRepository.get({ id: this.reservation.room_id })
       console.log(data)
       this.selectedRoom = data
@@ -448,18 +433,6 @@ export default {
     },
     ...mapActions(['getMyGroups', 'getUserMe']),
     ...mapGetters(['getGroupIDs'])
-  },
-  computed: {
-    groupName: function () {
-      let name = ''
-      for (const group of this.$store.state.myGroups) {
-        if (group.id === this.reservation.group_id) {
-          name = group.name
-          break
-        }
-      }
-      return name
-    }
   },
   watch: {
     Isrange: function () {

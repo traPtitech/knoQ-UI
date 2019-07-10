@@ -7,7 +7,7 @@
           {{group.name}}
         </v-card-title>
         <v-card-text>
-          <span class="subheading" style="white-space: pre-wrap">{{group.description}}</span>
+          <span class="subheading" v-html="group.description"></span>
           <v-layout wrap>
             <v-flex sm8>
               <v-btn
@@ -121,6 +121,7 @@
 
 <script>
 import moment from 'moment'
+import marked from 'marked'
 import ReservationShort from '../components/reservationShort'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const GroupsRepository = RepositoryFactory.set('groups')
@@ -174,6 +175,8 @@ export default {
     } catch (error) {
       console.log(error)
     }
+
+    this.group.description = marked(this.group.description)
     this.loading = false
   }
 }
