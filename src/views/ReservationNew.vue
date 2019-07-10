@@ -242,7 +242,8 @@
                         v-if="startMenu"
                         v-model="reservation.time_start"
                         format="24hr"
-                        :allowed-minutes="allowedMinutes"
+                        :allowed-minutes="LimitStartMinutes"
+                        :allowed-hours="LimitHours"
                         full-width
                         @click:minute="$refs.refStartMenu.save(reservation.time_start)"
                       ></v-time-picker>
@@ -273,7 +274,8 @@
                         v-if="endMenu"
                         v-model="reservation.time_end"
                         format="24hr"
-                        :allowed-minutes="allowedMinutes"
+                        :allowed-minutes="LimitEndMinutes"
+                        :allowed-hours="LimitHours"
                         full-width
                         @click:minute="$refs.refEndMenu.save(reservation.time_end)"
                       ></v-time-picker>
@@ -288,7 +290,7 @@
                   </v-btn>
                   <v-btn
                     color="primary"
-                    @click="e1 = 3; SelectRoom()"
+                    @click="e1 = 3"
                   >
                     Continue
                   </v-btn>
@@ -369,7 +371,40 @@ export default {
     }
   },
   methods: {
-    allowedMinutes: m => m % 5 === 0,
+    FiveMinutes: m => m % 5 === 0,
+    LimitStartMinutes: function (minute) {
+      let flag = true
+      let startMinute = parseInt(this.selectedRoom[0].time_start.slice(3, 5))
+      let endMinute = parseInt(this.selectedRoom[0].time_end.slice(3, 5))
+      let startHour = parseInt(this.selectedRoom[0].time_start.slice(0, 2))
+      let endHour = parseInt(this.selectedRoom[0].time_end.slice(0, 2))
+      if (startHour === parseInt(this.reservation.time_start.slice(0, 2))) {
+        flag = startMinute <= minute
+      }
+      if (endHour === parseInt(this.reservation.time_start.slice(0, 2))) {
+        flag = minute <= endMinute
+      }
+      return flag && this.FiveMinutes(minute)
+    },
+    LimitEndMinutes: function (minute) {
+      let flag = true
+      let startMinute = parseInt(this.selectedRoom[0].time_start.slice(3, 5))
+      let endMinute = parseInt(this.selectedRoom[0].time_end.slice(3, 5))
+      let startHour = parseInt(this.selectedRoom[0].time_start.slice(0, 2))
+      let endHour = parseInt(this.selectedRoom[0].time_end.slice(0, 2))
+      if (startHour === parseInt(this.reservation.time_end.slice(0, 2))) {
+        flag = startMinute <= minute
+      }
+      if (endHour === parseInt(this.reservation.time_end.slice(0, 2))) {
+        flag = minute <= endMinute
+      }
+      return flag && this.FiveMinutes(minute)
+    },
+    LimitHours: function (hour) {
+      let startHour = parseInt(this.selectedRoom[0].time_start.slice(0, 2))
+      let endHour = parseInt(this.selectedRoom[0].time_end.slice(0, 2))
+      return startHour <= hour && hour <= endHour
+    },
     save: function () {
       console.log(this.reservation)
     },
@@ -399,7 +434,6 @@ export default {
       return date.getTime() > new Date().getTime() - 86400000
     },
     SelectRoom: async function () {
-      console.log(this.reservation.room_id)
       if (this.reservation.room_id === '') return
       const { data } = await RoomsRepository.get({ id: this.reservation.room_id })
       console.log(data)
@@ -438,6 +472,12 @@ export default {
     Isrange: function () {
       this.reservation.room_id = 0
       this.allowedRooms = []
+    },
+    'reservation.room_id': async function () {
+      await this.SelectRoom()
+      this.reservation.time_start = this.selectedRoom[0].time_start.slice(0, 5)
+      this.reservation.time_end = this.selectedRoom[0].time_end.slice(0, 5)
+      this.startMenu = true
     }
   }
 }
