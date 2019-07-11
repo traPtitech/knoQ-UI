@@ -24,17 +24,21 @@
               <v-stepper v-model="e1">
               <v-stepper-header>
                 <v-stepper-step :complete="e1 > 1" step="1" :rules="[rules.step1]">
-                  step 1
+                  Determine name and details
                   <small>name is required</small>
                 </v-stepper-step>
 
                 <v-divider></v-divider>
 
-                <v-stepper-step :complete="e1 > 2" step="2">step 2</v-stepper-step>
+                <v-stepper-step :complete="e1 > 2" step="2">
+                  Select room and time
+                </v-stepper-step>
 
                 <v-divider></v-divider>
 
-                <v-stepper-step step="3">step 3</v-stepper-step>
+                <v-stepper-step step="3">
+                  Confirm request
+                </v-stepper-step>
               </v-stepper-header>
               <v-stepper-items>
                 <v-stepper-content step="1">
@@ -226,7 +230,6 @@
                       lazy
                       transition="scale-transition"
                       offset-y
-                      full-width
                       max-width="250px"
                       min-width="250px"
                     >
@@ -242,8 +245,9 @@
                         v-if="startMenu"
                         v-model="reservation.time_start"
                         format="24hr"
-                        :allowed-minutes="LimitStartMinutes"
-                        :allowed-hours="LimitHours"
+                        :allowed-minutes="FiveMinutes"
+                        :min="selectedRoom[0].time_start.slice(0, 5)"
+                        :max="selectedRoom[0].time_end.slice(0,5)"
                         full-width
                         @click:minute="$refs.refStartMenu.save(reservation.time_start)"
                       ></v-time-picker>
@@ -274,8 +278,9 @@
                         v-if="endMenu"
                         v-model="reservation.time_end"
                         format="24hr"
-                        :allowed-minutes="LimitEndMinutes"
-                        :allowed-hours="LimitHours"
+                        :allowed-minutes="FiveMinutes"
+                        :min="selectedRoom[0].time_start.slice(0, 5)"
+                        :max="selectedRoom[0].time_end.slice(0,5)"
                         full-width
                         @click:minute="$refs.refEndMenu.save(reservation.time_end)"
                       ></v-time-picker>
@@ -325,10 +330,7 @@ export default {
   },
   data () {
     return {
-      reservation: {
-        name: '',
-        room_id: ''
-      },
+      reservation: { name: '', room_id: '', time_start: '', time_end: '' },
       date: '',
       Condition: {},
       dateMenu: false,
@@ -345,7 +347,7 @@ export default {
       },
       snackbar: false,
       snackMessage: '',
-      selectedRoom: [],
+      selectedRoom: [{ time_start: '', time_end: '' }],
       allowedRooms: []
     }
   },
@@ -372,39 +374,6 @@ export default {
   },
   methods: {
     FiveMinutes: m => m % 5 === 0,
-    LimitStartMinutes: function (minute) {
-      let flag = true
-      let startMinute = parseInt(this.selectedRoom[0].time_start.slice(3, 5))
-      let endMinute = parseInt(this.selectedRoom[0].time_end.slice(3, 5))
-      let startHour = parseInt(this.selectedRoom[0].time_start.slice(0, 2))
-      let endHour = parseInt(this.selectedRoom[0].time_end.slice(0, 2))
-      if (startHour === parseInt(this.reservation.time_start.slice(0, 2))) {
-        flag = startMinute <= minute
-      }
-      if (endHour === parseInt(this.reservation.time_start.slice(0, 2))) {
-        flag = minute <= endMinute
-      }
-      return flag && this.FiveMinutes(minute)
-    },
-    LimitEndMinutes: function (minute) {
-      let flag = true
-      let startMinute = parseInt(this.selectedRoom[0].time_start.slice(3, 5))
-      let endMinute = parseInt(this.selectedRoom[0].time_end.slice(3, 5))
-      let startHour = parseInt(this.selectedRoom[0].time_start.slice(0, 2))
-      let endHour = parseInt(this.selectedRoom[0].time_end.slice(0, 2))
-      if (startHour === parseInt(this.reservation.time_end.slice(0, 2))) {
-        flag = startMinute <= minute
-      }
-      if (endHour === parseInt(this.reservation.time_end.slice(0, 2))) {
-        flag = minute <= endMinute
-      }
-      return flag && this.FiveMinutes(minute)
-    },
-    LimitHours: function (hour) {
-      let startHour = parseInt(this.selectedRoom[0].time_start.slice(0, 2))
-      let endHour = parseInt(this.selectedRoom[0].time_end.slice(0, 2))
-      return startHour <= hour && hour <= endHour
-    },
     save: function () {
       console.log(this.reservation)
     },
@@ -434,9 +403,10 @@ export default {
       return date.getTime() > new Date().getTime() - 86400000
     },
     SelectRoom: async function () {
-      if (this.reservation.room_id === '') return
+      this.selectedRoom = [{ time_start: '', time_end: '' }]
+      if (this.reservation.room_id === '' || this.reservation.room_id === null) return
+      console.log(this.reservation.room_id)
       const { data } = await RoomsRepository.get({ id: this.reservation.room_id })
-      console.log(data)
       this.selectedRoom = data
     },
     getRooms: async function () {
@@ -477,7 +447,6 @@ export default {
       await this.SelectRoom()
       this.reservation.time_start = this.selectedRoom[0].time_start.slice(0, 5)
       this.reservation.time_end = this.selectedRoom[0].time_end.slice(0, 5)
-      this.startMenu = true
     }
   }
 }
