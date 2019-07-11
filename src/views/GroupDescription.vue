@@ -5,6 +5,10 @@
       <v-card>
         <v-card-title primary-title class="display-1 font-weight-bold" id="rev-name-title">
           {{group.name}}
+          <v-spacer></v-spacer>
+          <v-btn icon color="pink lighten-3" large @click="$router.push({ name: 'ReservationNew',query: { group_id: group.id } })">
+            <v-icon>add</v-icon>
+          </v-btn>
         </v-card-title>
         <v-card-text>
           <span class="subheading" v-html="group.description"></span>

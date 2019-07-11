@@ -330,7 +330,7 @@ export default {
   },
   data () {
     return {
-      reservation: { name: '', room_id: '', time_start: '', time_end: '' },
+      reservation: { name: '', group_id: 0, room_id: '', time_start: '', time_end: '' },
       date: '',
       Condition: {},
       dateMenu: false,
@@ -353,7 +353,9 @@ export default {
   },
   created: async function () {
     await this.getUserMe()
-    this.getMyGroups()
+    await this.getMyGroups()
+    this.reservation.group_id = parseInt(this.$route.query.group_id)
+    console.log(this.reservation)
     window.addEventListener('beforeunload', function (event) {
       // event.returnValue = 'true'
     })

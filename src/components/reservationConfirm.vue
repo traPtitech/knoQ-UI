@@ -44,6 +44,7 @@ export default {
   },
   computed: {
     groupName: function () {
+      console.log(this.reservation.group_id)
       let name = ''
       for (const group of this.$store.state.myGroups) {
         if (group.id === this.reservation.group_id) {
