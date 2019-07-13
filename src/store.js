@@ -80,8 +80,9 @@ export default new Vuex.Store({
     },
     getMyGroups: async function ({ commit }) {
       const traQID = this.state.loginUser.traq_id
+      console.log(traQID)
       try {
-        const response = await GroupsRepository.get(traQID)
+        const response = await GroupsRepository.get({ traQID: traQID })
         console.log(response)
         commit('changeMyGroups', response.data)
       } catch (error) {
