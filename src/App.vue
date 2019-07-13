@@ -80,8 +80,8 @@
     </v-toolbar>
     <v-navigation-drawer
         v-model="drawer"
-        absolute
         temporary
+        app
       >
         <v-list class="pa-1">
           <v-list-tile @click="$router.push({ name: 'Home' })">
