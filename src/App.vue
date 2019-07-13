@@ -138,6 +138,34 @@
     <v-content>
       <router-view/>
     </v-content>
+
+    <v-footer
+      dark
+      height="auto"
+    >
+      <v-card
+        class="flex"
+        flat
+        tile
+      >
+        <v-card-title class="teal justify-center">
+          <v-btn
+            v-for="(link) in footerlinks"
+            :key="link.head"
+            class="mx-3"
+            dark
+            flat
+            @click="openLink(link.src)"
+          >
+          {{ link.head }}
+          </v-btn>
+        </v-card-title>
+
+        <v-card-actions class="grey darken-3 font-italic justify-end">
+          バージョン 0.1.0
+        </v-card-actions>
+      </v-card>
+    </v-footer>
   </v-app>
 </template>
 
@@ -153,7 +181,12 @@ export default {
     return {
       drawer: false,
       query: '',
-      dialog: false
+      dialog: false,
+      footerlinks: [
+        { head: '使い方', src: 'https://md.trapti.tech/0spW8adnSyCUaV_wioVlWA' },
+        { head: '要望・報告', src: 'http://anke-to.sysad.trap.show/targeted' },
+        { head: '進捗部屋の追加申告', src: 'https://q.trap.jp/channels/general/executive/room' }
+      ]
     }
   },
   created: async function () {
@@ -179,6 +212,7 @@ export default {
         this.$router.push({ name: 'Search', query: { q: this.query } })
       }
     },
+    openLink: link => window.open(link),
     ...mapActions(['getUserMe'])
   },
   computed: {
