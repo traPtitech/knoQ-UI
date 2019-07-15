@@ -65,6 +65,7 @@
                     <v-flex text-xs-left>
                     <details>
                       <summary>一括追加</summary>
+                      <div>@traQID_1 @traQID_2 ...で追加出来ます</div>
                       <v-textarea
                         v-model="aIDs"
                         box
