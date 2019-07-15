@@ -155,6 +155,7 @@
             class="mx-3"
             dark
             flat
+            small
             @click="openLink(link.src)"
           >
           {{ link.head }}
@@ -184,7 +185,7 @@ export default {
       dialog: false,
       footerlinks: [
         { head: '使い方', src: 'https://md.trapti.tech/0spW8adnSyCUaV_wioVlWA' },
-        { head: '要望・報告', src: 'http://anke-to.sysad.trap.show/targeted' },
+        { head: '質問・要望・報告', src: 'http://anke-to.sysad.trap.show/targeted' },
         { head: '進捗部屋の追加申告', src: 'https://q.trap.jp/channels/general/executive/room' }
       ]
     }
