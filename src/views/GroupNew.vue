@@ -62,6 +62,24 @@
                 </v-stepper-content>
                 <v-stepper-content step="2">
                   <v-container fluid>
+                    <v-flex text-xs-left>
+                    <details>
+                      <summary>一括追加</summary>
+                      <v-textarea
+                        v-model="aIDs"
+                        box
+                        label="@traQID"
+                      >
+                      </v-textarea>
+                      <v-flex text-xs-center>
+                        <v-btn @click="addAll">
+                          addAll
+                        </v-btn>
+                      </v-flex>
+
+                    </details>
+                    </v-flex>
+
                     <v-container fluid grid-list-md text-xs-left>
                       <v-layout row wrap>
                         <v-flex xs12 sm6 md4 v-for="member in group.members.slice((pageSelected-1) * displaySelectedNum, pageSelected * displaySelectedNum)" :key="member.traq_id">
@@ -145,6 +163,7 @@ export default {
   data () {
     return {
       ID: '',
+      aIDs: '',
       group: {
         name: '',
         members: []
@@ -207,6 +226,29 @@ export default {
         this.snackMessage = error
         this.snackbar = true
       }
+    },
+    addAll: function () {
+      let traQIDArray = this.aIDs.split('@')
+      for (let traQID of traQIDArray) {
+        traQID = traQID.trim()
+        // Todo 高速化
+        for (let v of this.$store.state.allUsers) {
+          if (v.traq_id === traQID) {
+            let exist = false
+            for (let w of this.group.members) {
+              if (w.traq_id === v.traq_id) {
+                exist = true
+                break
+              }
+            }
+            if (!exist) {
+              this.group.members.push(v)
+            }
+            break
+          }
+        }
+      }
+      console.log(this.group)
     }
   },
   watch: {
