@@ -24,17 +24,17 @@
             <v-stepper v-model="e1">
               <v-stepper-header>
                 <v-stepper-step :complete="e1 > 1" step="1" :rules="[rules.step1]">
-                  step 1
+                  Determine name and details
                   <small>name is required</small>
                 </v-stepper-step>
 
                 <v-divider></v-divider>
 
-                <v-stepper-step :complete="e1 > 2" step="2">step 2</v-stepper-step>
+                <v-stepper-step :complete="e1 > 2" step="2">Select members</v-stepper-step>
 
                 <v-divider></v-divider>
 
-                <v-stepper-step step="3">step 3</v-stepper-step>
+                <v-stepper-step step="3">Confirm request</v-stepper-step>
               </v-stepper-header>
               <v-stepper-items>
                 <v-stepper-content step="1">
