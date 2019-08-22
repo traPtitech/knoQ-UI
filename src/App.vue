@@ -1,5 +1,18 @@
 <template>
   <v-app>
+    <v-snackbar
+      v-model="snackbar"
+      top
+    >
+      {{ snackMessage }}
+      <v-btn
+        color="pink"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
     <v-toolbar app>
       <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title style="cursor: pointer" @click="$router.push({ name: 'Home' })">
@@ -187,7 +200,9 @@ export default {
         { head: '使い方', src: 'https://md.trapti.tech/0spW8adnSyCUaV_wioVlWA' },
         { head: '質問・要望・報告', src: 'http://anke-to.sysad.trap.show/targeted' },
         { head: '進捗部屋の追加申告', src: 'https://q.trap.jp/channels/general/executive/room' }
-      ]
+      ],
+      snackbar: false,
+      snackMessage: ''
     }
   },
   created: async function () {
@@ -198,8 +213,11 @@ export default {
       try {
         const response = await RoomsRepository.postAll()
         console.log(response)
+        this.snackMessage = response.statusText
+        this.snackbar = true
       } catch (error) {
-        console.log(error)
+        this.snackMessage = error
+        this.snackbar = true
       }
     },
     trigger: function (event) {
