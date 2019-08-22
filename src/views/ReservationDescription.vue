@@ -69,7 +69,11 @@
           <v-card-text>
             <p class="title">{{date}}</p>
             <p>{{timeStart}} ~ {{timeEnd}}</p>
-            <p>{{reservation.room.place}}</p>
+            <p @click="openClassinfo(reservation.room.place)"
+              style="cursor: pointer;"
+            >
+              {{reservation.room.place}}
+            </p>
             <v-flex>
               <RoomsExpansion :rooms=[reservation.room]></RoomsExpansion>
             </v-flex>
@@ -135,6 +139,7 @@
 import dateFormat from '../tips/date'
 import moment from 'moment'
 import marked from 'marked'
+import TokyoTech from '../tips/TokyoTech'
 import RoomsExpansion from '../components/roomsExpansion'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
@@ -197,6 +202,10 @@ export default {
               '&location=' + this.reservation.room.place +
               '&details=' + this.reservation.description
       window.open(link)
+    },
+    openClassinfo: place => {
+      const classLink = TokyoTech.searchRoom(place)
+      window.open(classLink)
     }
   },
   computed: {

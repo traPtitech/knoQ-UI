@@ -31,7 +31,9 @@
           ◦{{reservation.group.name}}
         </span>
       </v-flex>
-      <v-flex sm1 text-xs-right>
+      <v-flex sm1 text-xs-right
+        @click="openClassinfo(reservation.room.place)" style="cursor: pointer;"
+      >
         <v-icon small>place</v-icon>{{reservation.room.place}}
       </v-flex>
       <v-flex hidden-xs-only sm2 text-xs-right>
@@ -54,9 +56,16 @@
 <script>
 import moment from 'moment'
 import color from '../tips/color'
+import TokyoTech from '../tips/TokyoTech'
 export default {
   props: ['reservation'],
   created () {
+  },
+  methods: {
+    openClassinfo: place => {
+      const classLink = TokyoTech.searchRoom(place)
+      window.open(classLink)
+    }
   },
   computed: {
     groupColor: function () {

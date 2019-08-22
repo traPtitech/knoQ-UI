@@ -24,7 +24,9 @@
           <v-flex xs6 sm4 text-xs-left>
             {{room.time_start.slice(0,5)}} - {{room.time_end.slice(0,5)}}
           </v-flex>
-          <v-flex xs3 sm4 text-xs-center>
+          <v-flex xs3 sm4 text-xs-center
+            @click="openClassinfo(room.place)"
+          >
             <v-icon small>place</v-icon>{{room.place}}
           </v-flex>
         </v-layout>
@@ -52,6 +54,7 @@
 
 <script>
 import moment from 'moment'
+import TokyoTech from '../tips/TokyoTech'
 import ReservationShort from '../components/reservationShort'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
 const ReservationsRepo = RepositoryFactory.set('reservations')
@@ -87,6 +90,10 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    openClassinfo (place) {
+      const classLink = TokyoTech.searchRoom(place)
+      window.open(classLink)
     }
   },
   computed: {
