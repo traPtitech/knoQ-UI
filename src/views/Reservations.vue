@@ -86,7 +86,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import reservationCard from '../components/reservationCard'
 import reservationShort from '../components/reservationShort'
 import reservationCardShorts from '../components/reservationCardShorts'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
@@ -94,7 +93,6 @@ const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {
   components: {
-    reservationCard,
     reservationShort,
     reservationCardShorts
   },

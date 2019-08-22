@@ -29,7 +29,6 @@
 
 <script>
 import roomsExpansion from '../components/roomsExpansion'
-import reservationsCarousel from '../components/reservationsCarousel'
 import reservationCardShorts from '../components/reservationCardShorts'
 import groupsTable from '../components/groupsTable'
 import { RepositoryFactory } from '../repositories/RepositoryFactory'
@@ -41,7 +40,6 @@ const ReservationsRepo = RepositoryFactory.set('reservations')
 export default {
   components: {
     roomsExpansion,
-    reservationsCarousel,
     groupsTable,
     reservationCardShorts
   },
