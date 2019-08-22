@@ -106,37 +106,6 @@ export default {
   watch: {
     rooms: async function () {
       this.none()
-      /*
-      for (let j = 0; j < this.rooms.length; j++) {
-        this.rooms[j].reservations = []
-      }
-
-      // bind reservation
-      this.loading = true
-      const payload = {
-        dateBegin: this.rooms[0].date,
-        dateEnd: this.rooms[this.rooms.length - 1].date
-      }
-      try {
-        const { data } = await ReservationsRepo.get(payload)
-        this.targetRevs = data
-      } catch (error) {
-        console.log(error)
-      }
-      let i = 0
-      for (let reservation of this.targetRevs) {
-        for (; i < this.rooms.length; i++) {
-          if (reservation.room_id === this.rooms[i].id) {
-            if (typeof this.rooms[i].reservations === 'undefined') {
-              this.rooms[i].reservations = []
-            }
-            this.rooms[i].reservations.push(reservation)
-            break
-          }
-        }
-      }
-      this.loading = false
-      */
     }
   }
 }
