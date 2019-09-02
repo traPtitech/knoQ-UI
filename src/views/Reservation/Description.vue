@@ -187,12 +187,12 @@
 </template>
 
 <script>
-import dateFormat from '../tips/date'
 import moment from 'moment'
 import marked from 'marked'
-import TokyoTech from '../tips/TokyoTech'
-import RoomsExpansion from '../components/roomsExpansion'
-import { RepositoryFactory } from '../repositories/RepositoryFactory'
+import dateFormat from '../../tips/date'
+import TokyoTech from '../../tips/TokyoTech'
+import RoomsExpansion from '../../components/room/expansion'
+import { RepositoryFactory } from '../../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {

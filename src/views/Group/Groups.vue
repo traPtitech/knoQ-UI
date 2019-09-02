@@ -49,8 +49,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import GroupsTable from '../components/groupsTable'
-import { RepositoryFactory } from '../repositories/RepositoryFactory'
+import GroupsTable from '../../components/group/table'
+import { RepositoryFactory } from '../../repositories/RepositoryFactory'
 const GroupsRepository = RepositoryFactory.set('groups')
 
 export default {

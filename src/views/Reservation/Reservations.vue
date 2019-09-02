@@ -129,9 +129,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import reservationShort from '../components/reservationShort'
-import reservationCardShorts from '../components/reservationCardShorts'
-import { RepositoryFactory } from '../repositories/RepositoryFactory'
+import reservationShort from '../../components/reservation/short'
+import reservationCardShorts from '../../components/reservation/card-short'
+import { RepositoryFactory } from '../../repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {

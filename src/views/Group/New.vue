@@ -202,8 +202,8 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { RepositoryFactory } from '../repositories/RepositoryFactory'
-import GroupConfirm from '../components/groupConfirm'
+import GroupConfirm from '../../components/group/confirm'
+import { RepositoryFactory } from '../../repositories/RepositoryFactory'
 const GroupsRepository = RepositoryFactory.set('groups')
 
 export default {

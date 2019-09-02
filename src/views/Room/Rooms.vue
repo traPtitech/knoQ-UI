@@ -114,9 +114,9 @@
   </v-form>
 </template>
 <script>
-import RoomsTable from '../components/roomsTable'
-import RoomsExpansion from '../components/roomsExpansion'
-import { RepositoryFactory } from '../repositories/RepositoryFactory'
+import RoomsTable from '../../components/room/table'
+import RoomsExpansion from '../../components/room/expansion'
+import { RepositoryFactory } from '../../repositories/RepositoryFactory'
 const RoomsRepository = RepositoryFactory.set('rooms')
 const ReservationsRepo = RepositoryFactory.set('reservations')
 
