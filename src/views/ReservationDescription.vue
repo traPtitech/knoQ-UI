@@ -1,138 +1,189 @@
 <template>
-<v-form v-if="!loading">
-  <v-container fluid mt-3>
-    <v-flex>
-      <v-snackbar
-        v-model="snackbar"
-        top
-      >
-        {{ snackMessage }}
-        <v-btn
-          color="pink"
-          flat
-          @click="snackbar = false"
+  <v-form v-if="!loading">
+    <v-container 
+      fluid 
+      mt-3
+    >
+      <v-flex>
+        <v-snackbar
+          v-model="snackbar"
+          top
         >
-          Close
-        </v-btn>
-      </v-snackbar>
-      <v-card>
-        <v-card-title class="display-1 font-weight-bold" id="rev-name-title" primary-title>
-          <div  id="sampleCalender2">
-          <div class="the_date orange">
-              <div class="date_m title">{{Month}}</div>
-              <div class="date_d title">{{day}}</div>
-          </div>
-          </div>
-          {{reservation.name}}
-        </v-card-title>
-        <v-card-text>
-          <span class="subheading" v-html="reservation.description"></span>
-          <v-layout wrap>
-            <v-flex sm8>
-              <v-btn flat disabled v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id">
-                <v-icon>edit</v-icon>
-                edit this
-              </v-btn>
-              <v-btn
-                flat
-                v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
-                @click="Delete()"
-              >
-                <v-icon>delete_forever</v-icon>
-                delete this
-              </v-btn>
-            </v-flex>
-            <v-flex xs12 sm4 text-xs-right>
-              <span>Created by
-                <span>
-                  <v-avatar
-                    :size="24"
-                  >
-                    <img :src="'https://q.trapti.tech/static/icon/' + reservation.created_by.traq_id + '/64.png'" alt="avatar">
-                  </v-avatar>
-                </span>
-                @{{reservation.created_by.traq_id}}
-              </span>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
-    </v-flex>
-  </v-container>
-  <v-container fluid>
-    <v-layout text-xs-center justify-center wrap>
-      <v-flex xs12 md6>
+          {{ snackMessage }}
+          <v-btn
+            color="pink"
+            flat
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </v-snackbar>
         <v-card>
-          <v-card-text class="title font-weight-bold">
-            <div>日時と場所</div>
-          </v-card-text>
+          <v-card-title 
+            id="rev-name-title" 
+            class="display-1 font-weight-bold" 
+            primary-title
+          >
+            <div id="sampleCalender2">
+              <div class="the_date orange">
+                <div class="date_m title">{{ Month }}</div>
+                <div class="date_d title">{{ day }}</div>
+              </div>
+            </div>
+            {{ reservation.name }}
+          </v-card-title>
           <v-card-text>
-            <p class="title">{{date}}</p>
-            <p>{{timeStart}} ~ {{timeEnd}}</p>
-            <p @click="openClassinfo(reservation.room.place)"
-              style="cursor: pointer;"
-            >
-              {{reservation.room.place}}
-            </p>
-            <v-flex>
-              <RoomsExpansion :rooms=[reservation.room]></RoomsExpansion>
-            </v-flex>
-          </v-card-text>
-          <v-card-actions>
-            <v-flex>
-              <v-btn flat color="orange" @click="AddGoogle()">AddGoogleCalendar</v-btn>
-            </v-flex>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-      <v-flex xs12 md6>
-       <v-card>
-          <v-card-text class="title font-weight-bold">
-            <div class="text-xs-center">グループ情報</div>
-          </v-card-text>
-          <v-card-text>
-            <v-layout text-xs-left>
-              <v-flex xs6 class="title">
-                <p>{{reservation.group.name}}</p>
+            <span 
+              class="subheading" 
+              v-html="reservation.description"
+            />
+            <v-layout wrap>
+              <v-flex sm8>
+                <v-btn 
+                  v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id" 
+                  flat 
+                  disabled
+                >
+                  <v-icon>edit</v-icon>
+                  edit this
+                </v-btn>
+                <v-btn
+                  v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
+                  flat
+                  @click="Delete()"
+                >
+                  <v-icon>delete_forever</v-icon>
+                  delete this
+                </v-btn>
               </v-flex>
-              <v-flex xs6>
-                <li>メンバー数 {{reservation.group.members.length}}人</li>
-                <li>イベント回数 N回</li>
+              <v-flex 
+                xs12 
+                sm4 
+                text-xs-right
+              >
+                <span>Created by
+                  <span>
+                    <v-avatar
+                      :size="24"
+                    >
+                      <img 
+                        :src="'https://q.trapti.tech/static/icon/' + reservation.created_by.traq_id + '/64.png'" 
+                        alt="avatar"
+                      >
+                    </v-avatar>
+                  </span>
+                  @{{ reservation.created_by.traq_id }}
+                </span>
               </v-flex>
             </v-layout>
-            <v-flex>
-              <v-container grid-list-md text-xs-left>
-                <v-layout row wrap>
-                  <v-flex xs12>
-                    <p>Members</p>
-                  </v-flex>
-                  <v-flex xs12 sm6 md6 v-for="member in reservation.group.members.slice((pageSelected-1) * 2, pageSelected * 2)" :key="member.traq_id">
-                    <v-card>
-                      <v-card-text>
-                        <v-avatar size=24>
-                          <img
-                            :src="'https://q.trapti.tech/static/icon/' + member.traq_id + '/64.png'"
-                            :alt="member.traq_id"
-                          >
-                        </v-avatar>
-                        <span style="margin-left:10px;">{{ member.traq_id }}</span>
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-              <v-pagination
-                v-model="pageSelected"
-                total-visible="5"
-                :length="Math.ceil(reservation.group.members.length / 2)"
-              ></v-pagination>
-            </v-flex>
-         </v-card-text>
-       </v-card>
+          </v-card-text>
+        </v-card>
       </v-flex>
-    </v-layout>
-  </v-container>
-</v-form>
+    </v-container>
+    <v-container fluid>
+      <v-layout 
+        text-xs-center 
+        justify-center 
+        wrap
+      >
+        <v-flex 
+          xs12 
+          md6
+        >
+          <v-card>
+            <v-card-text class="title font-weight-bold">
+              <div>日時と場所</div>
+            </v-card-text>
+            <v-card-text>
+              <p class="title">{{ date }}</p>
+              <p>{{ timeStart }} ~ {{ timeEnd }}</p>
+              <p 
+                style="cursor: pointer;"
+                @click="openClassinfo(reservation.room.place)"
+              >
+                {{ reservation.room.place }}
+              </p>
+              <v-flex>
+                <RoomsExpansion :rooms="[reservation.room]"/>
+              </v-flex>
+            </v-card-text>
+            <v-card-actions>
+              <v-flex>
+                <v-btn 
+                  flat 
+                  color="orange" 
+                  @click="AddGoogle()"
+                >AddGoogleCalendar</v-btn>
+              </v-flex>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+        <v-flex 
+          xs12 
+          md6
+        >
+          <v-card>
+            <v-card-text class="title font-weight-bold">
+              <div class="text-xs-center">グループ情報</div>
+            </v-card-text>
+            <v-card-text>
+              <v-layout text-xs-left>
+                <v-flex 
+                  xs6 
+                  class="title"
+                >
+                  <p>{{ reservation.group.name }}</p>
+                </v-flex>
+                <v-flex xs6>
+                  <li>メンバー数 {{ reservation.group.members.length }}人</li>
+                  <li>イベント回数 N回</li>
+                </v-flex>
+              </v-layout>
+              <v-flex>
+                <v-container 
+                  grid-list-md 
+                  text-xs-left
+                >
+                  <v-layout 
+                    row 
+                    wrap
+                  >
+                    <v-flex xs12>
+                      <p>Members</p>
+                    </v-flex>
+                    <v-flex 
+                      v-for="member in reservation.group.members.slice((pageSelected-1) * 2, pageSelected * 2)" 
+                      :key="member.traq_id" 
+                      xs12 
+                      sm6 
+                      md6
+                    >
+                      <v-card>
+                        <v-card-text>
+                          <v-avatar size="24">
+                            <img
+                              :src="'https://q.trapti.tech/static/icon/' + member.traq_id + '/64.png'"
+                              :alt="member.traq_id"
+                            >
+                          </v-avatar>
+                          <span style="margin-left:10px;">{{ member.traq_id }}</span>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+                <v-pagination
+                  v-model="pageSelected"
+                  :length="Math.ceil(reservation.group.members.length / 2)"
+                  total-visible="5"
+                />
+              </v-flex>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-form>
 </template>
 
 <script>
@@ -155,6 +206,28 @@ export default {
       pageSelected: 1,
       snackbar: false,
       snackMessage: ''
+    }
+  },
+  computed: {
+    Month () {
+      const date = new Date(this.reservation.date)
+      let month = date.getMonth()
+      return dateFormat.formatEnglishMonths(month)
+    },
+    day () {
+      const date = new Date(this.reservation.date)
+      let day = date.getDate()
+      return dateFormat.formatEnglishDays(day)
+    },
+    date () {
+      const date = new Date(this.reservation.date)
+      return moment(date).format('YYYY/MM/DD')
+    },
+    timeStart () {
+      return this.reservation.time_start.slice(0, 5)
+    },
+    timeEnd () {
+      return this.reservation.time_end.slice(0, 5)
     }
   },
   created: async function () {
@@ -208,28 +281,6 @@ export default {
       window.open(classLink)
     }
   },
-  computed: {
-    Month () {
-      const date = new Date(this.reservation.date)
-      let month = date.getMonth()
-      return dateFormat.formatEnglishMonths(month)
-    },
-    day () {
-      const date = new Date(this.reservation.date)
-      let day = date.getDate()
-      return dateFormat.formatEnglishDays(day)
-    },
-    date () {
-      const date = new Date(this.reservation.date)
-      return moment(date).format('YYYY/MM/DD')
-    },
-    timeStart () {
-      return this.reservation.time_start.slice(0, 5)
-    },
-    timeEnd () {
-      return this.reservation.time_end.slice(0, 5)
-    }
-  }
 }
 </script>
 

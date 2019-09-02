@@ -13,17 +13,17 @@ export default{
   formatEnglishDays (num) {
     let r
     switch (num) {
-      case 1:
-        r = '1st'
-        break
-      case 2:
-        r = '2nd'
-        break
-      case 3:
-        r = '3rd'
-        break
-      default:
-        r = num + 'th'
+    case 1:
+      r = '1st'
+      break
+    case 2:
+      r = '2nd'
+      break
+    case 3:
+      r = '3rd'
+      break
+    default:
+      r = num + 'th'
     }
     return r
   },

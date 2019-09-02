@@ -3,26 +3,28 @@
     <v-card-text>
       <v-container>
         <v-layout class="title">
-           <v-flex>
-              <div class="text-xs-left">
-                予約: {{ reservation.name }}
-              </div>
-            </v-flex>
-            <v-flex>
-              <div class="text-xs-right">
-                グループ: {{ groupName }}
-              </div>
-            </v-flex>
+          <v-flex>
+            <div class="text-xs-left">
+              予約: {{ reservation.name }}
+            </div>
+          </v-flex>
+          <v-flex>
+            <div class="text-xs-right">
+              グループ: {{ groupName }}
+            </div>
+          </v-flex>
         </v-layout>
-          <h6>説明</h6>
-        <v-flex  class="text-xs-left">
-          <span v-html="markedDescription">
-          </span>
+        <h6>説明</h6>
+        <v-flex class="text-xs-left">
+          <span v-html="markedDescription"/>
         </v-flex>
       </v-container>
-      <RoomsExpansion :rooms="selectedRoom"></RoomsExpansion>
-      <v-flex mt-3 class="title">
-        {{reservation.time_start}} - {{reservation.time_end}}
+      <RoomsExpansion :rooms="selectedRoom"/>
+      <v-flex 
+        mt-3 
+        class="title"
+      >
+        {{ reservation.time_start }} - {{ reservation.time_end }}
       </v-flex>
     </v-card-text>
   </v-card>
@@ -36,7 +38,20 @@ export default {
   components: {
     RoomsExpansion
   },
-  props: ['reservation', 'selectedRoom'],
+  props: {
+    reservation: {
+      type: Object,
+      default: function(){
+        return {}
+      }
+    },
+    selectedRoom: {
+      type: Object,
+      default: function(){
+        return {}
+      }
+    }, 
+  },
   data () {
     return {
 

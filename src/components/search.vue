@@ -1,21 +1,35 @@
 <template>
   <v-form>
     <v-container>
-      <v-layout row wrap>
-        <v-flex xs12 sm2>
+      <v-layout 
+        row 
+        wrap
+      >
+        <v-flex 
+          xs12 
+          sm2
+        >
           <v-select
             v-model="nowItem"
             :items="items"
-          ></v-select>
+          />
         </v-flex>
-        <v-flex xs10 sm2 v-if="nowItem === '予約' || nowItem === 'グループ'">
+        <v-flex 
+          v-if="nowItem === '予約' || nowItem === 'グループ'" 
+          xs10 
+          sm2
+        >
           <v-combobox
             v-model="Condition.traQID"
             :items="gettraQIDs()"
             label="traQID"
-          ></v-combobox>
+          />
         </v-flex>
-        <v-flex xs10 sm3 v-if="nowItem === '予約' || nowItem === '部屋'">
+        <v-flex 
+          v-if="nowItem === '予約' || nowItem === '部屋'" 
+          xs10 
+          sm3
+        >
           <v-menu
             ref="menuBegin"
             v-model="menuBegin"
@@ -35,16 +49,31 @@
                 prepend-icon="event"
                 readonly
                 v-on="on"
-              ></v-text-field>
+              />
             </template>
-            <v-date-picker v-model="Condition.dateBegin" no-title>
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menuBegin = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menuBegin.save(Condition.dateBegin)">OK</v-btn>
+            <v-date-picker 
+              v-model="Condition.dateBegin" 
+              no-title
+            >
+              <v-spacer/>
+              <v-btn 
+                flat 
+                color="primary" 
+                @click="menuBegin = false"
+              >Cancel</v-btn>
+              <v-btn 
+                flat 
+                color="primary" 
+                @click="$refs.menuBegin.save(Condition.dateBegin)"
+              >OK</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex xs10 sm3 v-if="nowItem === '予約' || nowItem === '部屋'">
+        <v-flex 
+          v-if="nowItem === '予約' || nowItem === '部屋'" 
+          xs10 
+          sm3
+        >
           <v-menu
             ref="menuEnd"
             v-model="menuEnd"
@@ -64,17 +93,34 @@
                 prepend-icon="event"
                 readonly
                 v-on="on"
-              ></v-text-field>
+              />
             </template>
-            <v-date-picker v-model="Condition.dateEnd" no-title>
-              <v-spacer></v-spacer>
-              <v-btn flat color="primary" @click="menuEnd = false">Cancel</v-btn>
-              <v-btn flat color="primary" @click="$refs.menuEnd.save(Condition.dateEnd)">OK</v-btn>
+            <v-date-picker 
+              v-model="Condition.dateEnd" 
+              no-title
+            >
+              <v-spacer/>
+              <v-btn 
+                flat 
+                color="primary" 
+                @click="menuEnd = false"
+              >Cancel</v-btn>
+              <v-btn 
+                flat 
+                color="primary" 
+                @click="$refs.menuEnd.save(Condition.dateEnd)"
+              >OK</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex xs2 sm1>
-          <v-btn icon @click="submit">
+        <v-flex 
+          xs2 
+          sm1
+        >
+          <v-btn 
+            icon 
+            @click="submit"
+          >
             <v-icon>search</v-icon>
           </v-btn>
         </v-flex>
@@ -104,8 +150,8 @@ export default {
     submit () {
       console.log(this.Condition.traQID, this.Condition.dateBegin, this.Condition.dateEnd)
       switch (this.nowItem) {
-        case '予約':
-          this.getReservations(this.Condition)
+      case '予約':
+        this.getReservations(this.Condition)
       }
     },
     ...mapActions(['getUsers', 'getReservations']),

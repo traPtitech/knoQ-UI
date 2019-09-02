@@ -15,6 +15,13 @@
 
 <script>
 export default {
-  props: ['rooms']
+  props: {
+    rooms: {
+      type: Array,
+      default: function(){
+        return []
+      }
+    }
+  }
 }
 </script>

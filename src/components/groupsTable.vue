@@ -7,8 +7,8 @@
     <template v-slot:items="props">
       <td :class="groupColor(props.item.id)">
         <span
-          @click="$router.push({ name: 'GroupDescription', params: { id: props.item.id } })"
           style="cursor: pointer;"
+          @click="$router.push({ name: 'GroupDescription', params: { id: props.item.id } })"
         >
           ◦{{ props.item.name }}
         </span>
@@ -18,9 +18,12 @@
         <v-avatar
           :size="24"
         >
-          <img :src="'https://q.trapti.tech/static/icon/' + props.item.created_by_refer + '/64.png'" alt="avatar">
+          <img 
+            :src="'https://q.trapti.tech/static/icon/' + props.item.created_by_refer + '/64.png'" 
+            alt="avatar"
+          >
         </v-avatar>
-        @{{props.item.created_by_refer}}
+        @{{ props.item.created_by_refer }}
       </td>
     </template>
   </v-data-table>
@@ -29,7 +32,14 @@
 <script>
 import color from '../tips/color'
 export default {
-  props: ['groups'],
+  props: {
+    groups: {
+      type: Array,
+      default: function(){
+        return []
+      }
+    },
+  },
   methods: {
     groupColor (groupID) {
       return color.GroupColors(groupID) + '--text'

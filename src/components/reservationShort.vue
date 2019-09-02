@@ -1,56 +1,94 @@
 <template>
-<v-card>
-  <v-card-text  style="font-size: 100%;">
-    <v-layout row wrap>
-      <v-flex hidden-xs-only sm4 class="font-weight-bold" overflow-hidden>
-        <span style="cursor: pointer"
-          @click="$router.push({ name: 'ReservationDescription', params: { id: reservation.id } })"
+  <v-card>
+    <v-card-text style="font-size: 100%;">
+      <v-layout 
+        row 
+        wrap
+      >
+        <v-flex 
+          hidden-xs-only 
+          sm4 
+          class="font-weight-bold" 
+          overflow-hidden
         >
-          {{reservation.name}}
-        </span>
-      </v-flex>
-      <v-flex hidden-xs-only sm3 :class="groupColor">
-        <span style="cursor: pointer"
-          @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
-        >
-          ◦{{reservation.group.name}}
-        </span>
-      </v-flex>
-      <v-flex hidden-sm-and-up xs5>
-          <div style="cursor: pointer;" class="font-weight-bold"
+          <span 
+            style="cursor: pointer"
             @click="$router.push({ name: 'ReservationDescription', params: { id: reservation.id } })"
           >
-            {{reservation.name}}
+            {{ reservation.name }}
+          </span>
+        </v-flex>
+        <v-flex 
+          :class="groupColor" 
+          hidden-xs-only 
+          sm3
+        >
+          <span 
+            style="cursor: pointer"
+            @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
+          >
+            ◦{{ reservation.group.name }}
+          </span>
+        </v-flex>
+        <v-flex 
+          hidden-sm-and-up 
+          xs5
+        >
+          <div 
+            style="cursor: pointer;" 
+            class="font-weight-bold"
+            @click="$router.push({ name: 'ReservationDescription', params: { id: reservation.id } })"
+          >
+            {{ reservation.name }}
           </div>
-        <span style="cursor: pointer;
+          <span 
+            :class="groupColor"
+            style="cursor: pointer;
             padding-left: 7px;
             font-size: 75%;"
-          :class="groupColor"
-          @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
+            @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
+          >
+            ◦{{ reservation.group.name }}
+          </span>
+        </v-flex>
+        <v-flex 
+          sm1 
+          text-xs-right
+          style="cursor: pointer;" 
+          @click="openClassinfo(reservation.room.place)"
         >
-          ◦{{reservation.group.name}}
-        </span>
-      </v-flex>
-      <v-flex sm1 text-xs-right
-        @click="openClassinfo(reservation.room.place)" style="cursor: pointer;"
-      >
-        <v-icon small>place</v-icon>{{reservation.room.place}}
-      </v-flex>
-      <v-flex hidden-xs-only sm2 text-xs-right>
-        {{date}}
-      </v-flex>
-      <v-flex hidden-xs-only sm2 text-xs-right>
-        {{reservation.time_start.slice(0,5)}} -{{reservation.time_end.slice(0,5)}}
-      </v-flex>
-      <v-flex hidden-sm-and-up xs3 text-xs-right>
-        <div>
-          {{date.slice(0,5)}}
-        </div>
-        <span style="font-size: 75%;" class="font-weight-bold">{{reservation.time_start.slice(0,5)}} -</span>
-      </v-flex>
-    </v-layout>
-  </v-card-text>
-</v-card>
+          <v-icon small>place</v-icon>{{ reservation.room.place }}
+        </v-flex>
+        <v-flex 
+          hidden-xs-only 
+          sm2 
+          text-xs-right
+        >
+          {{ date }}
+        </v-flex>
+        <v-flex 
+          hidden-xs-only 
+          sm2 
+          text-xs-right
+        >
+          {{ reservation.time_start.slice(0,5) }} -{{ reservation.time_end.slice(0,5) }}
+        </v-flex>
+        <v-flex 
+          hidden-sm-and-up 
+          xs3 
+          text-xs-right
+        >
+          <div>
+            {{ date.slice(0,5) }}
+          </div>
+          <span 
+            style="font-size: 75%;" 
+            class="font-weight-bold"
+          >{{ reservation.time_start.slice(0,5) }} -</span>
+        </v-flex>
+      </v-layout>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -58,13 +96,12 @@ import moment from 'moment'
 import color from '../tips/color'
 import TokyoTech from '../tips/TokyoTech'
 export default {
-  props: ['reservation'],
-  created () {
-  },
-  methods: {
-    openClassinfo: place => {
-      const classLink = TokyoTech.searchRoom(place)
-      window.open(classLink)
+  props: {
+    reservation: {
+      type: Object,
+      default: function(){
+        return {}
+      }
     }
   },
   computed: {
@@ -74,7 +111,15 @@ export default {
     date: function () {
       return moment(new Date(this.reservation.date)).format('MM/DD (ddd)')
     }
-  }
+  },
+  created () {
+  },
+  methods: {
+    openClassinfo: place => {
+      const classLink = TokyoTech.searchRoom(place)
+      window.open(classLink)
+    }
+  },
 
 }
 </script>

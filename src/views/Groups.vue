@@ -1,31 +1,46 @@
 <template>
   <v-form>
     <v-container>
-      <v-layout row wrap>
-        <v-flex xs10 sm3>
+      <v-layout 
+        row 
+        wrap
+      >
+        <v-flex 
+          xs10 
+          sm3
+        >
           <v-text-field
             v-model="Condition.name"
             label="name"
-          ></v-text-field>
+          />
         </v-flex>
-        <v-flex xs10 sm2>
+        <v-flex 
+          xs10 
+          sm2
+        >
           <v-combobox
             v-model="Condition.traQID"
             :items="gettraQIDs()"
             label="traQID"
-          ></v-combobox>
+          />
         </v-flex>
-        <v-flex xs2 sm1>
-          <v-btn icon @click="getGroups(Condition)">
+        <v-flex 
+          xs2 
+          sm1
+        >
+          <v-btn 
+            icon 
+            @click="getGroups(Condition)"
+          >
             <v-icon>search</v-icon>
           </v-btn>
         </v-flex>
       </v-layout>
     </v-container>
-     <v-container>
+    <v-container>
       <v-layout>
         <v-flex>
-          <GroupsTable :groups="groups"></GroupsTable>
+          <GroupsTable :groups="groups"/>
         </v-flex>
       </v-layout>
     </v-container>
