@@ -42,9 +42,12 @@
               xs3 
               sm4 
               text-xs-center
-              @click="openClassinfo(room.place)"
             >
-              <v-icon small>place</v-icon>{{ room.place }}
+              <span
+                @click="openClassinfo(room.place)"
+              >
+                <v-icon small>place</v-icon>{{ room.place }}
+              </span>
             </v-flex>
           </v-layout>
         </template>

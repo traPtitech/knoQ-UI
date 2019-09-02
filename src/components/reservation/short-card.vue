@@ -46,12 +46,14 @@
             <v-flex 
               xs6
               sm4
-              style="cursor: pointer;" 
-              @click="openClassinfo(reservation.room.place)"
             >
-              <v-icon small>place</v-icon>{{ reservation.room.place }}
+              <span
+                style="cursor: pointer;"
+                @click="openClassinfo(reservation.room.place)" 
+              >
+                <v-icon small>place</v-icon>{{ reservation.room.place }}
+              </span>
             </v-flex>
-
             <v-flex 
               xs6
               sm4
