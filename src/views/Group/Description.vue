@@ -26,46 +26,46 @@
             <span 
               class="subheading" 
               v-html="group.description"
-            >
-              <v-layout wrap>
-                <v-flex sm8>
-                  <v-btn
-                    v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
-                    flat
-                    @click="$router.push({ name: 'GroupEdit' })"
-                  >
-                    <v-icon>edit</v-icon>
-                    edit this
-                  </v-btn>
-                  <v-btn
-                    v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
-                    flat
-                    disabled
-                  >
-                    <v-icon>delete_forever</v-icon>
-                    delete this
-                  </v-btn>
-                </v-flex>
-                <v-flex 
-                  xs12 
-                  text-xs-right
+            />
+            <v-layout wrap>
+              <v-flex sm8>
+                <v-btn
+                  v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
+                  flat
+                  @click="$router.push({ name: 'GroupEdit' })"
                 >
-                  <span>Created by
-                    <span>
-                      <v-avatar
-                        :size="24"
+                  <v-icon>edit</v-icon>
+                  edit this
+                </v-btn>
+                <v-btn
+                  v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
+                  flat
+                  disabled
+                >
+                  <v-icon>delete_forever</v-icon>
+                  delete this
+                </v-btn>
+              </v-flex>
+              <v-flex 
+                xs12 
+                text-xs-right
+              >
+                <span>Created by
+                  <span>
+                    <v-avatar
+                      :size="24"
+                    >
+                      <img 
+                        :src="'https://q.trapti.tech/static/icon/' + group.created_by.traq_id + '/64.png'" 
+                        alt="avatar"
                       >
-                        <img 
-                          :src="'https://q.trapti.tech/static/icon/' + group.created_by.traq_id + '/64.png'" 
-                          alt="avatar"
-                        >
-                      </v-avatar>
-                    </span>
-                    @{{ group.created_by.traq_id }}
+                    </v-avatar>
                   </span>
-                </v-flex>
-              </v-layout>
-          </span></v-card-text>
+                  @{{ group.created_by.traq_id }}
+                </span>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
         </v-card>
       </v-flex>
     </v-container>
