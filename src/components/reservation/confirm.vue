@@ -46,7 +46,7 @@ export default {
       }
     },
     selectedRoom: {
-      type: Object,
+      type: Array,
       default: function(){
         return {}
       }

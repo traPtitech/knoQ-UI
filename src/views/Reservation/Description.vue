@@ -272,8 +272,7 @@ export default {
       link += '?text=' + this.reservation.name +
               '&dates=' + dateFormat.FormatGoogle(this.reservation.date, this.reservation.time_start) +
                 '/' + dateFormat.FormatGoogle(this.reservation.date, this.reservation.time_end) +
-              '&location=' + this.reservation.room.place +
-              '&details=' + this.reservation.description
+              '&location=' + this.reservation.room.place
       window.open(link)
     },
     openClassinfo: place => {
