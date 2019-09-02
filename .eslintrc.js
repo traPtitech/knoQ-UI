@@ -15,7 +15,7 @@ module.exports = {
   ],
   rules: {
     // タグの最後で改行
-    'vue/html-closing-bracket-newline': [2, {'singleline': 'never','multiline': 'always'}],
+    'vue/html-closing-bracket-newline': [2, {'singleline': 'never', 'multiline': 'always'}],
     // 不要なカッコは消す
     'no-extra-parens': 1,
     // 無駄なスペースは削除

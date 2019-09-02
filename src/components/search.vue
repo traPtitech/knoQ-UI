@@ -143,6 +143,11 @@ export default {
     menuBegin: false,
     menuEnd: false
   }),
+  watch: {
+    nowItem: function () {
+      this.Condition = {}
+    }
+  },
   created: function () {
     this.getUsers()
   },
@@ -157,10 +162,5 @@ export default {
     ...mapActions(['getUsers', 'getReservations']),
     ...mapGetters(['gettraQIDs'])
   },
-  watch: {
-    nowItem: function () {
-      this.Condition = {}
-    }
-  }
 }
 </script>
