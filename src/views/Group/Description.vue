@@ -186,8 +186,8 @@
 <script>
 import moment from 'moment'
 import marked from 'marked'
-import ReservationShort from '../../components/reservation/short'
-import { RepositoryFactory } from '../../repositories/RepositoryFactory'
+import ReservationShort from '@/components/reservation/short'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const GroupsRepository = RepositoryFactory.set('groups')
 const ReservationsRepository = RepositoryFactory.set('reservations')
 

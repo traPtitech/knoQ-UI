@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "babel-plugin-root-import": "^6.4.1",
     "marked": "^0.7.0",
     "moment": "^2.24.0",
     "vue": "^2.6.10",

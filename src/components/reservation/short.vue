@@ -93,8 +93,8 @@
 
 <script>
 import moment from 'moment'
-import color from '../../tips/color'
-import TokyoTech from '../../tips/TokyoTech'
+import color from '@/tips/color'
+import TokyoTech from '@/tips/TokyoTech'
 export default {
   props: {
     reservation: {

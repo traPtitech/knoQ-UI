@@ -41,10 +41,10 @@
 <script>
 import { mapActions } from 'vuex'
 import moment from 'moment'
-import roomsExpansion from '../components/room/expansion'
-import reservationCardShorts from '../components/reservation/card-short'
-import groupsTable from '../components/group/table'
-import { RepositoryFactory } from '../repositories/RepositoryFactory'
+import roomsExpansion from '@/components/room/expansion'
+import reservationCardShorts from '@/components/reservation/card-short'
+import groupsTable from '@/components/group/table'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const RoomsRepository = RepositoryFactory.set('rooms')
 const ReservationsRepo = RepositoryFactory.set('reservations')
 

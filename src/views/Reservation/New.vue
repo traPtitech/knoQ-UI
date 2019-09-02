@@ -393,10 +393,10 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import color from '../../tips/color'
-import RoomsExpansion from '../../components/room/expansion'
-import ReservationConfirm from '../../components/reservation/confirm'
-import { RepositoryFactory } from '../../repositories/RepositoryFactory'
+import color from '@/tips/color'
+import RoomsExpansion from '@/components/room/expansion'
+import ReservationConfirm from '@/components/reservation/confirm'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 const RoomsRepository = RepositoryFactory.set('rooms')
 export default {

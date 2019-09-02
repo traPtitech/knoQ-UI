@@ -87,9 +87,9 @@
 </template>
 
 <script>
-import reservationCardShorts from '../components/reservation/card-short'
-import groupsTable from '../components/group/table'
-import { RepositoryFactory } from '../repositories/RepositoryFactory'
+import reservationCardShorts from '@/components/reservation/card-short'
+import groupsTable from '@/components/group/table'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepo = RepositoryFactory.set('reservations')
 const GroupsRepo = RepositoryFactory.set('groups')
 

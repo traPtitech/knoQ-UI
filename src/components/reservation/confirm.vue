@@ -32,7 +32,7 @@
 
 <script>
 import marked from 'marked'
-import RoomsExpansion from '../../components/room/expansion'
+import RoomsExpansion from '@/components/room/expansion'
 
 export default {
   components: {
