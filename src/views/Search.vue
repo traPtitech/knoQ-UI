@@ -33,7 +33,7 @@
             <v-card-text>
               <v-flex mt-3>
                 <h3>所属メンバーから</h3>
-                <reservationCardShorts
+                <reservationShortCards
                   v-if="ReservationsBytraQID.length > 0"
                   :reservations="ReservationsBytraQID"
                 />
@@ -41,7 +41,7 @@
               </v-flex>
               <v-flex mt-5>
                 <h3>予約名から</h3>
-                <reservationCardShorts
+                <reservationShortCards
                   v-if="ReservationsByName.length > 0"
                   :reservations="ReservationsByName"
                 />
@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import reservationCardShorts from '@/components/reservation/card-short'
+import reservationShortCards from '@/components/reservation/short-cards'
 import groupsTable from '@/components/group/table'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepo = RepositoryFactory.set('reservations')
@@ -95,7 +95,7 @@ const GroupsRepo = RepositoryFactory.set('groups')
 
 export default {
   components: {
-    reservationCardShorts,
+    reservationShortCards,
     groupsTable
   },
   data () {

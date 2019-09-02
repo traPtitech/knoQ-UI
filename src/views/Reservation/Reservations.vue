@@ -123,21 +123,21 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <reservationCardShorts :reservations="reservations"/>
+    <reservationShortCards :reservations="reservations"/>
   </v-form>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import reservationShort from '@/components/reservation/short'
-import reservationCardShorts from '@/components/reservation/card-short'
+import reservationShort from '@/components/reservation/short-card'
+import reservationShortCards from '@/components/reservation/short-cards'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {
   components: {
     reservationShort,
-    reservationCardShorts
+    reservationShortCards
   },
   data () {
     return {

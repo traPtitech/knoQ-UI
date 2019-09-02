@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import reservationShort from '@/components/reservation/short'
+import reservationShort from '@/components/reservation/short-card'
 export default {
   components: {
     reservationShort

@@ -19,7 +19,7 @@
             <v-icon>add</v-icon>
           </v-btn>
         </h1>
-        <reservationCardShorts :reservations="$store.state.myReservations"/>
+        <reservationShortCards :reservations="$store.state.myReservations"/>
       </v-flex>
       <v-flex>
         <h1>
@@ -42,7 +42,7 @@
 import { mapActions } from 'vuex'
 import moment from 'moment'
 import roomsExpansion from '@/components/room/expansion'
-import reservationCardShorts from '@/components/reservation/card-short'
+import reservationShortCards from '@/components/reservation/short-cards'
 import groupsTable from '@/components/group/table'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const RoomsRepository = RepositoryFactory.set('rooms')
@@ -52,7 +52,7 @@ export default {
   components: {
     roomsExpansion,
     groupsTable,
-    reservationCardShorts
+    reservationShortCards
   },
   data () {
     return {
