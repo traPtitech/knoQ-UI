@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import './plugins/vuetify'
+import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import marked from 'marked'
 import moment from 'moment'
@@ -9,7 +9,9 @@ import store from './store'
 Vue.config.productionTip = false
 
 marked.setOptions({ breaks: true })
+
 new Vue({
+  vuetify,
   router,
   store,
   render: h => h(App)
