@@ -18,8 +18,8 @@
         <v-avatar
           :size="24"
         >
-          <img 
-            :src="'https://q.trapti.tech/static/icon/' + props.item.created_by_refer + '/64.png'" 
+          <img
+            :src="'https://q.trapti.tech/static/icon/' + props.item.created_by_refer + '/64.png'"
             alt="avatar"
           >
         </v-avatar>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import color from '@/tips/color'
+import color from '@/utils/color'
 export default {
   props: {
     groups: {

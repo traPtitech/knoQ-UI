@@ -1,12 +1,12 @@
 <template>
   <v-form>
     <v-container>
-      <v-layout 
-        row 
+      <v-layout
+        row
         wrap
       >
-        <v-flex 
-          xs10 
+        <v-flex
+          xs10
           sm3
         >
           <v-text-field
@@ -14,8 +14,8 @@
             label="name"
           />
         </v-flex>
-        <v-flex 
-          xs10 
+        <v-flex
+          xs10
           sm2
         >
           <v-combobox
@@ -24,8 +24,8 @@
             label="traQID"
           />
         </v-flex>
-        <v-flex 
-          xs10 
+        <v-flex
+          xs10
           sm3
         >
           <v-menu
@@ -49,26 +49,26 @@
                 v-on="on"
               />
             </template>
-            <v-date-picker 
-              v-model="Condition.dateBegin" 
+            <v-date-picker
+              v-model="Condition.dateBegin"
               no-title
             >
               <v-spacer/>
-              <v-btn 
-                flat 
-                color="primary" 
+              <v-btn
+                flat
+                color="primary"
                 @click="menuBegin = false"
               >Cancel</v-btn>
-              <v-btn 
-                flat 
-                color="primary" 
+              <v-btn
+                flat
+                color="primary"
                 @click="$refs.menuBegin.save(Condition.dateBegin)"
               >OK</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex 
-          xs10 
+        <v-flex
+          xs10
           sm3
         >
           <v-menu
@@ -92,30 +92,30 @@
                 v-on="on"
               />
             </template>
-            <v-date-picker 
-              v-model="Condition.dateEnd" 
+            <v-date-picker
+              v-model="Condition.dateEnd"
               no-title
             >
               <v-spacer/>
-              <v-btn 
-                flat 
-                color="primary" 
+              <v-btn
+                flat
+                color="primary"
                 @click="menuEnd = false"
               >Cancel</v-btn>
-              <v-btn 
-                flat 
-                color="primary" 
+              <v-btn
+                flat
+                color="primary"
                 @click="$refs.menuEnd.save(Condition.dateEnd)"
               >OK</v-btn>
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex 
-          xs2 
+        <v-flex
+          xs2
           sm1
         >
-          <v-btn 
-            icon 
+          <v-btn
+            icon
             @click="getReservations(Condition)"
           >
             <v-icon>search</v-icon>

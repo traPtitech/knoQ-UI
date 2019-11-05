@@ -26,8 +26,8 @@
         </v-tab>
 
         <v-tab-item>
-          <v-card 
-            v-if="!loading" 
+          <v-card
+            v-if="!loading"
             raised
           >
             <v-card-text>

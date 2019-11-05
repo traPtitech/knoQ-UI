@@ -20,8 +20,8 @@
         </v-flex>
       </v-container>
       <RoomsExpansion :rooms="selectedRoom"/>
-      <v-flex 
-        mt-3 
+      <v-flex
+        mt-3
         class="title"
       >
         {{ reservation.time_start }} - {{ reservation.time_end }}
@@ -50,7 +50,7 @@ export default {
       default: function(){
         return {}
       }
-    }, 
+    },
   },
   data () {
     return {

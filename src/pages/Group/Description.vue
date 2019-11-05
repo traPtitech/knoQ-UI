@@ -1,30 +1,30 @@
 <template>
   <v-form v-if="!loading">
-    <v-container 
-      fluid 
+    <v-container
+      fluid
       mt-3
     >
       <v-flex>
         <v-card>
-          <v-card-title 
-            id="rev-name-title" 
-            primary-title 
+          <v-card-title
+            id="rev-name-title"
+            primary-title
             class="display-1 font-weight-bold"
           >
             {{ group.name }}
             <v-spacer/>
-            <v-btn 
-              icon 
-              color="pink lighten-3" 
-              large 
+            <v-btn
+              icon
+              color="pink lighten-3"
+              large
               @click="$router.push({ name: 'ReservationNew',query: { group_id: group.id } })"
             >
               <v-icon>add</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <span 
-              class="subheading" 
+            <span
+              class="subheading"
               v-html="group.description"
             />
             <v-layout wrap>
@@ -46,8 +46,8 @@
                   delete this
                 </v-btn>
               </v-flex>
-              <v-flex 
-                xs12 
+              <v-flex
+                xs12
                 text-xs-right
               >
                 <span>Created by
@@ -55,8 +55,8 @@
                     <v-avatar
                       :size="24"
                     >
-                      <img 
-                        :src="'https://q.trapti.tech/static/icon/' + group.created_by.traq_id + '/64.png'" 
+                      <img
+                        :src="'https://q.trapti.tech/static/icon/' + group.created_by.traq_id + '/64.png'"
                         alt="avatar"
                       >
                     </v-avatar>
@@ -70,13 +70,13 @@
       </v-flex>
     </v-container>
     <v-container fluid>
-      <v-layout 
-        text-xs-center 
-        justify-center 
+      <v-layout
+        text-xs-center
+        justify-center
         wrap
       >
-        <v-flex 
-          xs12 
+        <v-flex
+          xs12
           md5
         >
           <v-card>
@@ -84,22 +84,22 @@
               <div>メンバー</div>
             </v-card-text>
             <v-card-text>
-              <v-container 
-                grid-list-md 
+              <v-container
+                grid-list-md
                 text-xs-left
               >
-                <v-layout 
-                  row 
+                <v-layout
+                  row
                   wrap
                 >
                   <v-flex xs12>
                     <p>Members</p>
                   </v-flex>
-                  <v-flex 
-                    v-for="member in group.members.slice((pageSelected-1) * 4, pageSelected * 4)" 
-                    :key="member.traq_id" 
-                    xs12 
-                    sm6 
+                  <v-flex
+                    v-for="member in group.members.slice((pageSelected-1) * 4, pageSelected * 4)"
+                    :key="member.traq_id"
+                    xs12
+                    sm6
                     md6
                   >
                     <v-card>
@@ -126,8 +126,8 @@
             </v-card-actions>
           </v-card>
         </v-flex>
-        <v-flex 
-          xs12 
+        <v-flex
+          xs12
           md7
         >
           <v-card>
@@ -135,21 +135,21 @@
               <div>予約情報</div>
             </v-card-text>
             <v-card-text>
-              <v-layout 
-                row 
-                wrap 
+              <v-layout
+                row
+                wrap
                 text-xs-left
               >
                 <v-flex xs12>
                   <h3>今後の予約</h3>
                   <v-container>
-                    <v-layout 
-                      row 
+                    <v-layout
+                      row
                       wrap
                     >
-                      <v-flex 
-                        v-for="reservation in futureReservations" 
-                        :key="reservation.id" 
+                      <v-flex
+                        v-for="reservation in futureReservations"
+                        :key="reservation.id"
                         xs12
                       >
                         <ReservationShort :reservation="reservation"/>
@@ -160,13 +160,13 @@
                 <v-flex>
                   <span>これまでの予約</span>
                   <v-container>
-                    <v-layout 
-                      row 
+                    <v-layout
+                      row
                       wrap
                     >
-                      <v-flex 
-                        v-for="reservation in previousReservations" 
-                        :key="reservation.id" 
+                      <v-flex
+                        v-for="reservation in previousReservations"
+                        :key="reservation.id"
                         xs12
                       >
                         <ReservationShort :reservation="reservation"/>

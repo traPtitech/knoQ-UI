@@ -1,14 +1,14 @@
 <template>
   <v-card>
     <v-card-text style="font-size: 100%;">
-      <v-layout 
-        row 
+      <v-layout
+        row
         wrap
       >
-        <v-flex 
-          xs5 
+        <v-flex
+          xs5
           sm7
-          class="font-weight-bold" 
+          class="font-weight-bold"
         >
           <v-layout
             wrap
@@ -26,7 +26,7 @@
               xs12
               sm5
             >
-              <span 
+              <span
                 style="cursor: pointer"
                 @click="$router.push({ name: 'GroupDescription', params: { id: reservation.group_id } })"
               >
@@ -43,24 +43,24 @@
             wrap
             text-xs-left
           >
-            <v-flex 
+            <v-flex
               xs6
               sm4
             >
               <span
                 style="cursor: pointer;"
-                @click="openClassinfo(reservation.room.place)" 
+                @click="openClassinfo(reservation.room.place)"
               >
                 <v-icon small>place</v-icon>{{ reservation.room.place }}
               </span>
             </v-flex>
-            <v-flex 
+            <v-flex
               xs6
               sm4
             >
               {{ date }}
             </v-flex>
-            <v-flex 
+            <v-flex
               xs12
               sm4
               class="font-weight-bold"
@@ -76,8 +76,8 @@
 
 <script>
 import moment from 'moment'
-import color from '@/tips/color'
-import TokyoTech from '@/tips/TokyoTech'
+import color from '@/utils/color'
+import TokyoTech from '@/utils/TokyoTech'
 export default {
   props: {
     reservation: {

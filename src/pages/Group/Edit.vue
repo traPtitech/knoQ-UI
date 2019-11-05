@@ -1,18 +1,18 @@
 <template>
-  <v-container 
-    fluid 
+  <v-container
+    fluid
     text-xs-center
   >
-    <v-layout 
-      row 
-      wrap 
+    <v-layout
+      row
+      wrap
       justify-center
     >
       <v-flex xs12>
         <h1>グループ編集</h1>
       </v-flex>
-      <v-flex 
-        xs12 
+      <v-flex
+        xs12
         mt-5
       >
         <v-card>
@@ -33,9 +33,9 @@
               </v-snackbar>
               <v-stepper v-model="e1">
                 <v-stepper-header>
-                  <v-stepper-step 
-                    :complete="e1 > 1" 
-                    :rules="[rules.step1]" 
+                  <v-stepper-step
+                    :complete="e1 > 1"
+                    :rules="[rules.step1]"
                     step="1"
                   >
                     step 1
@@ -44,8 +44,8 @@
 
                   <v-divider/>
 
-                  <v-stepper-step 
-                    :complete="e1 > 2" 
+                  <v-stepper-step
+                    :complete="e1 > 2"
                     step="2"
                   >step 2</v-stepper-step>
 
@@ -55,9 +55,9 @@
                 </v-stepper-header>
                 <v-stepper-items>
                   <v-stepper-content step="1">
-                    <v-text-field 
-                      v-model="group.name" 
-                      :rules="[rules.required(group.name)]" 
+                    <v-text-field
+                      v-model="group.name"
+                      :rules="[rules.required(group.name)]"
                       label="名前"
                     />
                     <v-textarea
@@ -82,20 +82,20 @@
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <v-container fluid>
-                      <v-container 
-                        fluid 
-                        grid-list-md 
+                      <v-container
+                        fluid
+                        grid-list-md
                         text-xs-left
                       >
-                        <v-layout 
-                          row 
+                        <v-layout
+                          row
                           wrap
                         >
-                          <v-flex 
-                            v-for="member in group.members.slice((pageSelected-1) * displaySelectedNum, pageSelected * displaySelectedNum)" 
-                            :key="member.traq_id" 
-                            xs12 
-                            sm6 
+                          <v-flex
+                            v-for="member in group.members.slice((pageSelected-1) * displaySelectedNum, pageSelected * displaySelectedNum)"
+                            :key="member.traq_id"
+                            xs12
+                            sm6
                             md4
                           >
                             <v-card>
@@ -121,19 +121,19 @@
                         v-model="ID"
                         label="traQID"
                       />
-                      <v-layout 
-                        row 
+                      <v-layout
+                        row
                         wrap
                       >
-                        <v-flex 
-                          v-for="member in targetMembers.slice((page-1) * displayMemberNum, page * displayMemberNum)" 
-                          :key="member.traq_id" 
-                          xs12 
-                          sm6 
+                        <v-flex
+                          v-for="member in targetMembers.slice((page-1) * displayMemberNum, page * displayMemberNum)"
+                          :key="member.traq_id"
+                          xs12
+                          sm6
                           md4
                         >
-                          <v-checkbox 
-                            v-model="group.members" 
+                          <v-checkbox
+                            v-model="group.members"
                             :value="member"
                           >
                             <template v-slot:label>
@@ -157,8 +157,8 @@
                     <v-btn @click="e1 = 1">
                       back
                     </v-btn>
-                    <v-btn 
-                      color="primary" 
+                    <v-btn
+                      color="primary"
                       @click="e1 = 3"
                     >
                       Continue
@@ -167,8 +167,8 @@
                   <v-stepper-content step="3">
                     <GroupConfirm :group="group"/>
                     <v-btn @click="e1 = 2">back</v-btn>
-                    <v-btn 
-                      color="info" 
+                    <v-btn
+                      color="info"
                       @click="patchGroup(group)"
                     >保存</v-btn>
                   </v-stepper-content>

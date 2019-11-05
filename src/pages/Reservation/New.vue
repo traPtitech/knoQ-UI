@@ -1,19 +1,19 @@
 <template>
-  <v-container 
-    text-xs-center 
+  <v-container
+    text-xs-center
     fluid
   >
-    <v-layout 
-      row 
-      wrap 
+    <v-layout
+      row
+      wrap
       justify-center
     >
       <v-flex xs12>
         <h1>予約追加</h1>
       </v-flex>
-      <v-flex 
-        xs12 
-        sm10 
+      <v-flex
+        xs12
+        sm10
         mt-3
       >
         <v-card>
@@ -34,9 +34,9 @@
               </v-snackbar>
               <v-stepper v-model="e1">
                 <v-stepper-header>
-                  <v-stepper-step 
-                    :complete="e1 > 1" 
-                    :rules="[rules.step1]" 
+                  <v-stepper-step
+                    :complete="e1 > 1"
+                    :rules="[rules.step1]"
                     step="1"
                   >
                     Determine name and details
@@ -45,8 +45,8 @@
 
                   <v-divider/>
 
-                  <v-stepper-step 
-                    :complete="e1 > 2" 
+                  <v-stepper-step
+                    :complete="e1 > 2"
                     step="2"
                   >
                     Select room and time
@@ -98,8 +98,8 @@
                         </v-autocomplete>
                       </v-flex>
                       <v-flex>
-                        <v-text-field 
-                          v-model="reservation.name" 
+                        <v-text-field
+                          v-model="reservation.name"
                           label="名前"
                         />
                       </v-flex>
@@ -136,8 +136,8 @@
                               label="範囲"
                             />
                           </v-flex>
-                          <v-flex 
-                            v-show="!Isrange" 
+                          <v-flex
+                            v-show="!Isrange"
                             xs10
                           >
                             <v-menu
@@ -160,20 +160,20 @@
                                   v-on="on"
                                 />
                               </template>
-                              <v-date-picker 
-                                v-model="date" 
-                                :allowed-dates="allowedDates" 
+                              <v-date-picker
+                                v-model="date"
+                                :allowed-dates="allowedDates"
                                 no-title
                               >
                                 <v-spacer/>
-                                <v-btn 
-                                  flat 
-                                  color="primary" 
+                                <v-btn
+                                  flat
+                                  color="primary"
                                   @click="dateMenu = false"
                                 >Cancel</v-btn>
-                                <v-btn 
-                                  flat 
-                                  color="primary" 
+                                <v-btn
+                                  flat
+                                  color="primary"
                                   @click="$refs.dateMenu.save(date); getDayRooms()"
                                 >OK</v-btn>
                               </v-date-picker>
@@ -203,20 +203,20 @@
                                       v-on="on"
                                     />
                                   </template>
-                                  <v-date-picker 
-                                    v-model="Condition.dateBegin" 
-                                    :allowed-dates="allowedDates" 
+                                  <v-date-picker
+                                    v-model="Condition.dateBegin"
+                                    :allowed-dates="allowedDates"
                                     no-title
                                   >
                                     <v-spacer/>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
+                                    <v-btn
+                                      flat
+                                      color="primary"
                                       @click="dateBeginMenu = false"
                                     >Cancel</v-btn>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
+                                    <v-btn
+                                      flat
+                                      color="primary"
                                       @click="$refs.dateBeginMenu.save(Condition.dateBegin); getRooms()"
                                     >OK</v-btn>
                                   </v-date-picker>
@@ -244,20 +244,20 @@
                                       v-on="on"
                                     />
                                   </template>
-                                  <v-date-picker 
-                                    v-model="Condition.dateEnd" 
-                                    :allowed-dates="allowedDates" 
+                                  <v-date-picker
+                                    v-model="Condition.dateEnd"
+                                    :allowed-dates="allowedDates"
                                     no-title
                                   >
                                     <v-spacer/>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
+                                    <v-btn
+                                      flat
+                                      color="primary"
                                       @click="dateEndMenu = false"
                                     >Cancel</v-btn>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
+                                    <v-btn
+                                      flat
+                                      color="primary"
                                       @click="$refs.dateEndMenu.save(Condition.dateEnd); getRooms()"
                                     >OK</v-btn>
                                   </v-date-picker>
@@ -268,20 +268,20 @@
                         </v-layout>
                       </v-flex>
                       <v-layout wrap>
-                        <v-flex 
-                          v-for="room in allowedRooms" 
-                          :key="room.id" 
+                        <v-flex
+                          v-for="room in allowedRooms"
+                          :key="room.id"
                           xs12
                         >
                           <v-layout row>
                             <v-flex xs1>
-                              <v-checkbox 
-                                v-model="reservation.room_id" 
+                              <v-checkbox
+                                v-model="reservation.room_id"
                                 :value="room.id"
                               />
                             </v-flex>
-                            <v-flex 
-                              xs11 
+                            <v-flex
+                              xs11
                               style="padding-top:9px"
                             >
                               <RoomsExpansion :rooms="[room]"/>
@@ -370,14 +370,14 @@
                     </v-btn>
                   </v-stepper-content>
                   <v-stepper-content step="3">
-                    <ReservationConfirm 
-                      :reservation="reservation" 
+                    <ReservationConfirm
+                      :reservation="reservation"
                       :selected-room="selectedRoom"
                     />
                     <v-btn @click="e1 = 2">back</v-btn>
-                    <v-btn 
-                      :loading="IsLoading" 
-                      color="info" 
+                    <v-btn
+                      :loading="IsLoading"
+                      color="info"
                       @click="postReservation(reservation)"
                     >send</v-btn>
                   </v-stepper-content>
@@ -393,7 +393,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import color from '@/tips/color'
+import color from '@/utils/color'
 import RoomsExpansion from '@/components/room/expansion'
 import ReservationConfirm from '@/components/reservation/confirm'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'

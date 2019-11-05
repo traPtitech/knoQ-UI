@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { RepositoryFactory } from './repositories/RepositoryFactory'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import moment from 'moment'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 const GroupsRepository = RepositoryFactory.set('groups')

@@ -1,12 +1,12 @@
 <template>
   <v-form>
     <v-container>
-      <v-layout 
-        row 
+      <v-layout
+        row
         wrap
       >
-        <v-flex 
-          xs10 
+        <v-flex
+          xs10
           sm3
         >
           <v-text-field
@@ -14,8 +14,8 @@
             label="name"
           />
         </v-flex>
-        <v-flex 
-          xs10 
+        <v-flex
+          xs10
           sm2
         >
           <v-combobox
@@ -24,12 +24,12 @@
             label="traQID"
           />
         </v-flex>
-        <v-flex 
-          xs2 
+        <v-flex
+          xs2
           sm1
         >
-          <v-btn 
-            icon 
+          <v-btn
+            icon
             @click="getGroups(Condition)"
           >
             <v-icon>search</v-icon>
