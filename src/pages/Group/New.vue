@@ -1,18 +1,18 @@
 <template>
-  <v-container 
-    fluid 
+  <v-container
+    fluid
     text-xs-center
   >
-    <v-layout 
-      row 
-      wrap 
+    <v-layout
+      row
+      wrap
       justify-center
     >
       <v-flex xs12>
-        <h1>グループ編集</h1>
+        <h1>グループ追加</h1>
       </v-flex>
-      <v-flex 
-        xs12 
+      <v-flex
+        xs12
         mt-5
       >
         <v-card>
@@ -33,31 +33,31 @@
               </v-snackbar>
               <v-stepper v-model="e1">
                 <v-stepper-header>
-                  <v-stepper-step 
-                    :complete="e1 > 1" 
-                    :rules="[rules.step1]" 
+                  <v-stepper-step
+                    :complete="e1 > 1"
+                    :rules="[rules.step1]"
                     step="1"
                   >
-                    step 1
+                    Determine name and details
                     <small>name is required</small>
                   </v-stepper-step>
 
                   <v-divider/>
 
-                  <v-stepper-step 
-                    :complete="e1 > 2" 
+                  <v-stepper-step
+                    :complete="e1 > 2"
                     step="2"
-                  >step 2</v-stepper-step>
+                  >Select members</v-stepper-step>
 
                   <v-divider/>
 
-                  <v-stepper-step step="3">step 3</v-stepper-step>
+                  <v-stepper-step step="3">Confirm request</v-stepper-step>
                 </v-stepper-header>
                 <v-stepper-items>
                   <v-stepper-content step="1">
-                    <v-text-field 
-                      v-model="group.name" 
-                      :rules="[rules.required(group.name)]" 
+                    <v-text-field
+                      v-model="group.name"
+                      :rules="[rules.required(group.name)]"
                       label="名前"
                     />
                     <v-textarea
@@ -82,20 +82,38 @@
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <v-container fluid>
-                      <v-container 
-                        fluid 
-                        grid-list-md 
+                      <v-flex text-xs-left>
+                        <details>
+                          <summary>一括追加</summary>
+                          <div>@traQID_1 @traQID_2 ...で追加出来ます</div>
+                          <v-textarea
+                            v-model="aIDs"
+                            box
+                            label="@traQID"
+                          />
+                          <v-flex text-xs-center>
+                            <v-btn @click="addAll">
+                              addAll
+                            </v-btn>
+                          </v-flex>
+
+                        </details>
+                      </v-flex>
+
+                      <v-container
+                        fluid
+                        grid-list-md
                         text-xs-left
                       >
-                        <v-layout 
-                          row 
+                        <v-layout
+                          row
                           wrap
                         >
-                          <v-flex 
-                            v-for="member in group.members.slice((pageSelected-1) * displaySelectedNum, pageSelected * displaySelectedNum)" 
-                            :key="member.traq_id" 
-                            xs12 
-                            sm6 
+                          <v-flex
+                            v-for="member in group.members.slice((pageSelected-1) * displaySelectedNum, pageSelected * displaySelectedNum)"
+                            :key="member.traq_id"
+                            xs12
+                            sm6
                             md4
                           >
                             <v-card>
@@ -121,19 +139,19 @@
                         v-model="ID"
                         label="traQID"
                       />
-                      <v-layout 
-                        row 
+                      <v-layout
+                        row
                         wrap
                       >
-                        <v-flex 
-                          v-for="member in targetMembers.slice((page-1) * displayMemberNum, page * displayMemberNum)" 
-                          :key="member.traq_id" 
-                          xs12 
-                          sm6 
+                        <v-flex
+                          v-for="member in targetMembers.slice((page-1) * displayMemberNum, page * displayMemberNum)"
+                          :key="member.traq_id"
+                          xs12
+                          sm6
                           md4
                         >
-                          <v-checkbox 
-                            v-model="group.members" 
+                          <v-checkbox
+                            v-model="group.members"
                             :value="member"
                           >
                             <template v-slot:label>
@@ -157,8 +175,8 @@
                     <v-btn @click="e1 = 1">
                       back
                     </v-btn>
-                    <v-btn 
-                      color="primary" 
+                    <v-btn
+                      color="primary"
                       @click="e1 = 3"
                     >
                       Continue
@@ -167,9 +185,9 @@
                   <v-stepper-content step="3">
                     <GroupConfirm :group="group"/>
                     <v-btn @click="e1 = 2">back</v-btn>
-                    <v-btn 
-                      color="info" 
-                      @click="patchGroup(group)"
+                    <v-btn
+                      color="info"
+                      @click="postGroup(group)"
                     >保存</v-btn>
                   </v-stepper-content>
                 </v-stepper-items>
@@ -184,7 +202,6 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import marked from 'marked'
 import GroupConfirm from '@/components/group/confirm'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const GroupsRepository = RepositoryFactory.set('groups')
@@ -196,6 +213,7 @@ export default {
   data () {
     return {
       ID: '',
+      aIDs: '',
       group: {
         name: '',
         members: []
@@ -212,11 +230,6 @@ export default {
       pageSelected: 1,
       snackbar: false,
       snackMessage: ''
-    }
-  },
-  computed: {
-    markedDescription: function () {
-      return marked(this.group.description)
     }
   },
   watch: {
@@ -237,12 +250,6 @@ export default {
     await this.getUsers()
     this.targetMembers = this.$store.state.allUsers
     this.group.members.push(this.$store.state.loginUser)
-
-    const { data } = await GroupsRepository.get({
-      id: this.$route.params.id
-    })
-    this.group = data[0]
-    console.log(this.group)
   },
   beforeRouteLeave (to, from, next) {
     // 空でない時
@@ -267,17 +274,45 @@ export default {
     nameIsRequired: function () {
       return this.group.name !== ''
     },
-    async patchGroup (group) {
+    async postGroup (group) {
       try {
-        const response = await GroupsRepository.patch(this.$route.params.id, group)
-        console.log(response)
+        const response = await GroupsRepository.post(group)
         this.snackMessage = response.statusText
         this.snackbar = true
+        this.group = {
+          name: '',
+          members: [
+            this.$store.state.loginUser
+          ]
+        }
         this.e1 = 1
       } catch (error) {
         this.snackMessage = error
         this.snackbar = true
       }
+    },
+    addAll: function () {
+      let traQIDArray = this.aIDs.split('@')
+      for (let traQID of traQIDArray) {
+        traQID = traQID.trim()
+        // Todo 高速化
+        for (let v of this.$store.state.allUsers) {
+          if (v.traq_id === traQID) {
+            let exist = false
+            for (let w of this.group.members) {
+              if (w.traq_id === v.traq_id) {
+                exist = true
+                break
+              }
+            }
+            if (!exist) {
+              this.group.members.push(v)
+            }
+            break
+          }
+        }
+      }
+      console.log(this.group)
     }
   },
 }

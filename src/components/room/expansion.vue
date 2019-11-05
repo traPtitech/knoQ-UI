@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div 
-      v-if="rooms.length > 1" 
+    <div
+      v-if="rooms.length > 1"
       class="d-flex justify-between align-center mb-3"
     >
       <v-btn @click="all">all</v-btn>
@@ -18,29 +18,29 @@
       >
         <template v-slot:header>
           <v-layout>
-            <v-flex 
-              sm4 
-              hidden-xs-only 
+            <v-flex
+              sm4
+              hidden-xs-only
               text-xs-left
             >
               {{ date(room) }}
             </v-flex>
-            <v-flex 
-              xs3 
+            <v-flex
+              xs3
               hidden-sm-and-up
             >
               {{ date(room).slice(5,16) }}
             </v-flex>
-            <v-flex 
-              xs6 
-              sm4 
+            <v-flex
+              xs6
+              sm4
               text-xs-left
             >
               {{ room.time_start.slice(0,5) }} - {{ room.time_end.slice(0,5) }}
             </v-flex>
-            <v-flex 
-              xs3 
-              sm4 
+            <v-flex
+              xs3
+              sm4
               text-xs-center
             >
               <span
@@ -52,13 +52,13 @@
           </v-layout>
         </template>
         <v-container v-show="!loading">
-          <v-layout 
-            row 
+          <v-layout
+            row
             wrap
           >
-            <v-flex 
-              v-for="reservation in room.reservations" 
-              :key="reservation.id" 
+            <v-flex
+              v-for="reservation in room.reservations"
+              :key="reservation.id"
               xs12
             >
               <ReservationShort :reservation="reservation"/>
@@ -72,10 +72,10 @@
         </v-container>
         <v-container v-show="loading">
           ろーど中
-          <v-progress-circular 
-            :indeterminate="true" 
-            :value="0" 
-            size="24" 
+          <v-progress-circular
+            :indeterminate="true"
+            :value="0"
+            size="24"
             class="ml-2"
           />
         </v-container>
@@ -86,7 +86,7 @@
 
 <script>
 import moment from 'moment'
-import TokyoTech from '@/tips/TokyoTech'
+import TokyoTech from '@/utils/TokyoTech'
 import ReservationShort from '@/components/reservation/short-card'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepo = RepositoryFactory.set('reservations')

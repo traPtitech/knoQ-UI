@@ -1,6 +1,6 @@
 <template>
-  <v-container 
-    fluid 
+  <v-container
+    fluid
     grid-list-xl
   >
     <v-layout column>
@@ -11,9 +11,9 @@
       <v-flex>
         <h1>
           あなたの予約
-          <v-btn 
-            icon 
-            large 
+          <v-btn
+            icon
+            large
             @click="$router.push({ name: 'ReservationNew' })"
           >
             <v-icon>add</v-icon>
@@ -24,9 +24,9 @@
       <v-flex>
         <h1>
           あなたのグループ
-          <v-btn 
-            icon 
-            large 
+          <v-btn
+            icon
+            large
             @click="$router.push({ name: 'GroupNew' })"
           >
             <v-icon>add</v-icon>

@@ -15,8 +15,8 @@
     </v-snackbar>
     <v-toolbar app>
       <v-toolbar-side-icon @click="drawer = !drawer"/>
-      <v-toolbar-title 
-        style="cursor: pointer" 
+      <v-toolbar-title
+        style="cursor: pointer"
         @click="$router.push({ name: 'Home' })"
       >
         <span>部屋管理</span>
@@ -29,8 +29,8 @@
       </v-flex>
       -->
       <v-spacer/>
-      <v-flex 
-        xs6 
+      <v-flex
+        xs6
         hidden-xs-only
       >
         <v-text-field
@@ -46,8 +46,8 @@
       </v-flex>
 
       <v-spacer/>
-      <v-flex 
-        hidden-sm-and-up 
+      <v-flex
+        hidden-sm-and-up
         text-xs-right
       >
         <v-dialog
@@ -95,8 +95,8 @@
       <v-avatar
         :size="32"
       >
-        <img 
-          :src="'https://q.trapti.tech/static/icon/' + traQID + '/64.png'" 
+        <img
+          :src="'https://q.trapti.tech/static/icon/' + traQID + '/64.png'"
           alt="avatar"
         >
       </v-avatar>
@@ -118,8 +118,8 @@
         </v-list-tile>
       </v-list>
 
-      <v-list 
-        class="pt-0" 
+      <v-list
+        class="pt-0"
         dense
       >
         <v-divider/>
@@ -150,8 +150,8 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile 
-          v-if="this.$store.state.loginUser.Admin" 
+        <v-list-tile
+          v-if="this.$store.state.loginUser.Admin"
           @click="roomsAll()"
         >
           <v-list-tile-action>
@@ -200,7 +200,7 @@
 </template>
 
 <script>
-import { RepositoryFactory } from './repositories/RepositoryFactory'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import { mapActions } from 'vuex'
 const RoomsRepository = RepositoryFactory.set('rooms')
 export default {

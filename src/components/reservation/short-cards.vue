@@ -1,12 +1,12 @@
 <template>
-  <v-layout 
-    row 
+  <v-layout
+    row
     wrap
   >
-    <v-flex 
-      v-for="i in reservations.length" 
-      :key="i" 
-      xs12 
+    <v-flex
+      v-for="i in reservations.length"
+      :key="i"
+      xs12
       xl6
     >
       <reservationShort :reservation="reservations[i-1]"/>
@@ -24,7 +24,7 @@ export default {
     reservations: {
       type: Array,
       default: function(){
-        return [] 
+        return []
       }
     }
   }

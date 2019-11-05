@@ -1,7 +1,7 @@
 <template>
   <v-form v-if="!loading">
-    <v-container 
-      fluid 
+    <v-container
+      fluid
       mt-3
     >
       <v-flex>
@@ -19,9 +19,9 @@
           </v-btn>
         </v-snackbar>
         <v-card>
-          <v-card-title 
-            id="rev-name-title" 
-            class="display-1 font-weight-bold" 
+          <v-card-title
+            id="rev-name-title"
+            class="display-1 font-weight-bold"
             primary-title
           >
             <div id="sampleCalender2">
@@ -33,15 +33,15 @@
             {{ reservation.name }}
           </v-card-title>
           <v-card-text>
-            <span 
-              class="subheading" 
+            <span
+              class="subheading"
               v-html="reservation.description"
             />
             <v-layout wrap>
               <v-flex sm8>
-                <v-btn 
-                  v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id" 
-                  flat 
+                <v-btn
+                  v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
+                  flat
                   disabled
                 >
                   <v-icon>edit</v-icon>
@@ -56,9 +56,9 @@
                   delete this
                 </v-btn>
               </v-flex>
-              <v-flex 
-                xs12 
-                sm4 
+              <v-flex
+                xs12
+                sm4
                 text-xs-right
               >
                 <span>Created by
@@ -66,8 +66,8 @@
                     <v-avatar
                       :size="24"
                     >
-                      <img 
-                        :src="'https://q.trapti.tech/static/icon/' + reservation.created_by.traq_id + '/64.png'" 
+                      <img
+                        :src="'https://q.trapti.tech/static/icon/' + reservation.created_by.traq_id + '/64.png'"
                         alt="avatar"
                       >
                     </v-avatar>
@@ -81,13 +81,13 @@
       </v-flex>
     </v-container>
     <v-container fluid>
-      <v-layout 
-        text-xs-center 
-        justify-center 
+      <v-layout
+        text-xs-center
+        justify-center
         wrap
       >
-        <v-flex 
-          xs12 
+        <v-flex
+          xs12
           md6
         >
           <v-card>
@@ -97,7 +97,7 @@
             <v-card-text>
               <p class="title">{{ date }}</p>
               <p>{{ timeStart }} ~ {{ timeEnd }}</p>
-              <p 
+              <p
                 style="cursor: pointer;"
                 @click="openClassinfo(reservation.room.place)"
               >
@@ -109,17 +109,17 @@
             </v-card-text>
             <v-card-actions>
               <v-flex>
-                <v-btn 
-                  flat 
-                  color="orange" 
+                <v-btn
+                  flat
+                  color="orange"
                   @click="AddGoogle()"
                 >AddGoogleCalendar</v-btn>
               </v-flex>
             </v-card-actions>
           </v-card>
         </v-flex>
-        <v-flex 
-          xs12 
+        <v-flex
+          xs12
           md6
         >
           <v-card>
@@ -128,8 +128,8 @@
             </v-card-text>
             <v-card-text>
               <v-layout text-xs-left>
-                <v-flex 
-                  xs6 
+                <v-flex
+                  xs6
                   class="title"
                 >
                   <p>{{ reservation.group.name }}</p>
@@ -140,22 +140,22 @@
                 </v-flex>
               </v-layout>
               <v-flex>
-                <v-container 
-                  grid-list-md 
+                <v-container
+                  grid-list-md
                   text-xs-left
                 >
-                  <v-layout 
-                    row 
+                  <v-layout
+                    row
                     wrap
                   >
                     <v-flex xs12>
                       <p>Members</p>
                     </v-flex>
-                    <v-flex 
-                      v-for="member in reservation.group.members.slice((pageSelected-1) * 2, pageSelected * 2)" 
-                      :key="member.traq_id" 
-                      xs12 
-                      sm6 
+                    <v-flex
+                      v-for="member in reservation.group.members.slice((pageSelected-1) * 2, pageSelected * 2)"
+                      :key="member.traq_id"
+                      xs12
+                      sm6
                       md6
                     >
                       <v-card>
@@ -189,8 +189,8 @@
 <script>
 import moment from 'moment'
 import marked from 'marked'
-import dateFormat from '@/tips/date'
-import TokyoTech from '@/tips/TokyoTech'
+import dateFormat from '@/utils/date'
+import TokyoTech from '@/utils/TokyoTech'
 import RoomsExpansion from '@/components/room/expansion'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')

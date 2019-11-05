@@ -12,27 +12,27 @@
             </v-flex>
           </v-layout>
           <h6>説明</h6>
-          <span 
-            class="text-xs-left" 
+          <span
+            class="text-xs-left"
             v-html="markedDescription"
           />
         </v-container>
       </v-card-text>
     </v-card>
-    <v-container 
-      fluid 
-      grid-list-md 
+    <v-container
+      fluid
+      grid-list-md
       text-xs-left
     >
-      <v-layout 
-        row 
+      <v-layout
+        row
         wrap
       >
-        <v-flex 
-          v-for="member in group.members.slice((pageSelected-1) * displayMemberNum, pageSelected * displayMemberNum)" 
-          :key="member.traq_id" 
-          xs12 
-          sm6 
+        <v-flex
+          v-for="member in group.members.slice((pageSelected-1) * displayMemberNum, pageSelected * displayMemberNum)"
+          :key="member.traq_id"
+          xs12
+          sm6
           md4
         >
           <v-card>
@@ -49,8 +49,8 @@
         </v-flex>
       </v-layout>
       <v-layout>
-        <v-flex 
-          xs12 
+        <v-flex
+          xs12
           text-xs-center
         >
           <v-pagination
