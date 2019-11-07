@@ -1,14 +1,8 @@
 <template>
   <v-form>
     <v-container>
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex
-          xs10
-          sm3
-        >
+      <v-layout row wrap>
+        <v-flex xs10 sm3>
           <v-menu
             ref="menuBegin"
             v-model="menuBegin"
@@ -30,28 +24,21 @@
                 v-on="on"
               />
             </template>
-            <v-date-picker
-              v-model="Condition.dateBegin"
-              no-title
-            >
-              <v-spacer/>
-              <v-btn
-                flat
-                color="primary"
-                @click="menuBegin = false"
-              >Cancel</v-btn>
+            <v-date-picker v-model="Condition.dateBegin" no-title>
+              <v-spacer />
+              <v-btn flat color="primary" @click="menuBegin = false"
+                >Cancel</v-btn
+              >
               <v-btn
                 flat
                 color="primary"
                 @click="$refs.menuBegin.save(Condition.dateBegin)"
-              >OK</v-btn>
+                >OK</v-btn
+              >
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex
-          xs10
-          sm3
-        >
+        <v-flex xs10 sm3>
           <v-menu
             ref="menuEnd"
             v-model="menuEnd"
@@ -73,32 +60,22 @@
                 v-on="on"
               />
             </template>
-            <v-date-picker
-              v-model="Condition.dateEnd"
-              no-title
-            >
-              <v-spacer/>
-              <v-btn
-                flat
-                color="primary"
-                @click="menuEnd = false"
-              >Cancel</v-btn>
+            <v-date-picker v-model="Condition.dateEnd" no-title>
+              <v-spacer />
+              <v-btn flat color="primary" @click="menuEnd = false"
+                >Cancel</v-btn
+              >
               <v-btn
                 flat
                 color="primary"
                 @click="$refs.menuEnd.save(Condition.dateEnd)"
-              >OK</v-btn>
+                >OK</v-btn
+              >
             </v-date-picker>
           </v-menu>
         </v-flex>
-        <v-flex
-          xs2
-          sm1
-        >
-          <v-btn
-            icon
-            @click="getRooms(Condition)"
-          >
+        <v-flex xs2 sm1>
+          <v-btn icon @click="getRooms(Condition)">
             <v-icon>search</v-icon>
           </v-btn>
         </v-flex>
@@ -107,7 +84,7 @@
     <v-container>
       <v-layout>
         <v-flex>
-          <RoomsExpansion :rooms="rooms"/>
+          <RoomsExpansion :rooms="rooms" />
         </v-flex>
       </v-layout>
     </v-container>
@@ -122,23 +99,22 @@ const ReservationsRepo = RepositoryFactory.set('reservations')
 
 export default {
   components: {
-    RoomsTable,
-    RoomsExpansion
+    RoomsExpansion,
   },
-  data () {
+  data() {
     return {
       rooms: [],
       reservations: [],
       Condition: {
         dateBegin: '',
-        dateEnd: ''
+        dateEnd: '',
       },
       menuBegin: false,
-      menuEnd: false
+      menuEnd: false,
     }
   },
   methods: {
-    async getRooms (payload) {
+    async getRooms(payload) {
       try {
         const response = await RoomsRepository.get(payload)
         for (let i = 0; i < response.data.length; i++) {
@@ -162,11 +138,10 @@ export default {
         console.log(error)
       }
     },
-    async getReservations (payload) {
+    async getReservations(payload) {
       const { data } = await ReservationsRepo.get(payload)
       this.reservations = data
-    }
-  }
+    },
+  },
 }
-
 </script>

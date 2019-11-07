@@ -1,20 +1,10 @@
 <template>
   <v-form v-if="!loading">
-    <v-container
-      fluid
-      mt-3
-    >
+    <v-container fluid mt-3>
       <v-flex>
-        <v-snackbar
-          v-model="snackbar"
-          top
-        >
+        <v-snackbar v-model="snackbar" top>
           {{ snackMessage }}
-          <v-btn
-            color="pink"
-            flat
-            @click="snackbar = false"
-          >
+          <v-btn color="pink" flat @click="snackbar = false">
             Close
           </v-btn>
         </v-snackbar>
@@ -33,14 +23,14 @@
             {{ reservation.name }}
           </v-card-title>
           <v-card-text>
-            <span
-              class="subheading"
-              v-html="reservation.description"
-            />
+            <span class="subheading" v-html="reservation.description" />
             <v-layout wrap>
               <v-flex sm8>
                 <v-btn
-                  v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
+                  v-if="
+                    $store.state.loginUser.traq_id ==
+                      reservation.created_by.traq_id
+                  "
                   flat
                   disabled
                 >
@@ -48,7 +38,10 @@
                   edit this
                 </v-btn>
                 <v-btn
-                  v-if="$store.state.loginUser.traq_id == reservation.created_by.traq_id"
+                  v-if="
+                    $store.state.loginUser.traq_id ==
+                      reservation.created_by.traq_id
+                  "
                   flat
                   @click="Delete()"
                 >
@@ -56,20 +49,19 @@
                   delete this
                 </v-btn>
               </v-flex>
-              <v-flex
-                xs12
-                sm4
-                text-xs-right
-              >
-                <span>Created by
+              <v-flex xs12 sm4 text-xs-right>
+                <span
+                  >Created by
                   <span>
-                    <v-avatar
-                      :size="24"
-                    >
+                    <v-avatar :size="24">
                       <img
-                        :src="'https://q.trapti.tech/static/icon/' + reservation.created_by.traq_id + '/64.png'"
+                        :src="
+                          'https://q.trapti.tech/static/icon/' +
+                            reservation.created_by.traq_id +
+                            '/64.png'
+                        "
                         alt="avatar"
-                      >
+                      />
                     </v-avatar>
                   </span>
                   @{{ reservation.created_by.traq_id }}
@@ -81,15 +73,8 @@
       </v-flex>
     </v-container>
     <v-container fluid>
-      <v-layout
-        text-xs-center
-        justify-center
-        wrap
-      >
-        <v-flex
-          xs12
-          md6
-        >
+      <v-layout text-xs-center justify-center wrap>
+        <v-flex xs12 md6>
           <v-card>
             <v-card-text class="title font-weight-bold">
               <div>日時と場所</div>
@@ -104,34 +89,26 @@
                 {{ reservation.room.place }}
               </p>
               <v-flex>
-                <RoomsExpansion :rooms="[reservation.room]"/>
+                <RoomsExpansion :rooms="[reservation.room]" />
               </v-flex>
             </v-card-text>
             <v-card-actions>
               <v-flex>
-                <v-btn
-                  flat
-                  color="orange"
-                  @click="AddGoogle()"
-                >AddGoogleCalendar</v-btn>
+                <v-btn flat color="orange" @click="AddGoogle()"
+                  >AddGoogleCalendar</v-btn
+                >
               </v-flex>
             </v-card-actions>
           </v-card>
         </v-flex>
-        <v-flex
-          xs12
-          md6
-        >
+        <v-flex xs12 md6>
           <v-card>
             <v-card-text class="title font-weight-bold">
               <div class="text-xs-center">グループ情報</div>
             </v-card-text>
             <v-card-text>
               <v-layout text-xs-left>
-                <v-flex
-                  xs6
-                  class="title"
-                >
+                <v-flex xs6 class="title">
                   <p>{{ reservation.group.name }}</p>
                 </v-flex>
                 <v-flex xs6>
@@ -140,19 +117,16 @@
                 </v-flex>
               </v-layout>
               <v-flex>
-                <v-container
-                  grid-list-md
-                  text-xs-left
-                >
-                  <v-layout
-                    row
-                    wrap
-                  >
+                <v-container grid-list-md text-xs-left>
+                  <v-layout row wrap>
                     <v-flex xs12>
                       <p>Members</p>
                     </v-flex>
                     <v-flex
-                      v-for="member in reservation.group.members.slice((pageSelected-1) * 2, pageSelected * 2)"
+                      v-for="member in reservation.group.members.slice(
+                        (pageSelected - 1) * 2,
+                        pageSelected * 2
+                      )"
                       :key="member.traq_id"
                       xs12
                       sm6
@@ -162,11 +136,17 @@
                         <v-card-text>
                           <v-avatar size="24">
                             <img
-                              :src="'https://q.trapti.tech/static/icon/' + member.traq_id + '/64.png'"
+                              :src="
+                                'https://q.trapti.tech/static/icon/' +
+                                  member.traq_id +
+                                  '/64.png'
+                              "
                               :alt="member.traq_id"
-                            >
+                            />
                           </v-avatar>
-                          <span style="margin-left:10px;">{{ member.traq_id }}</span>
+                          <span style="margin-left:10px;">{{
+                            member.traq_id
+                          }}</span>
                         </v-card-text>
                       </v-card>
                     </v-flex>
@@ -189,48 +169,48 @@
 <script>
 import moment from 'moment'
 import marked from 'marked'
-import dateFormat from '@/utils/date'
-import TokyoTech from '@/utils/TokyoTech'
+import dateFormat from '@/tips/date'
+import TokyoTech from '@/tips/TokyoTech'
 import RoomsExpansion from '@/components/room/expansion'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {
   components: {
-    RoomsExpansion
+    RoomsExpansion,
   },
-  data () {
+  data() {
     return {
       reservation: {},
       loading: true,
       pageSelected: 1,
       snackbar: false,
-      snackMessage: ''
+      snackMessage: '',
     }
   },
   computed: {
-    Month () {
+    Month() {
       const date = new Date(this.reservation.date)
       let month = date.getMonth()
       return dateFormat.formatEnglishMonths(month)
     },
-    day () {
+    day() {
       const date = new Date(this.reservation.date)
       let day = date.getDate()
       return dateFormat.formatEnglishDays(day)
     },
-    date () {
+    date() {
       const date = new Date(this.reservation.date)
       return moment(date).format('YYYY/MM/DD')
     },
-    timeStart () {
+    timeStart() {
       return this.reservation.time_start.slice(0, 5)
     },
-    timeEnd () {
+    timeEnd() {
       return this.reservation.time_end.slice(0, 5)
-    }
+    },
   },
-  created: async function () {
+  created: async function() {
     this.reservation.id = this.$route.params.id
     try {
       const response = await ReservationsRepository.get(this.reservation)
@@ -241,7 +221,9 @@ export default {
       console.log(error)
     }
 
-    const { data } = await ReservationsRepository.get({ roomID: this.reservation.room.id })
+    const { data } = await ReservationsRepository.get({
+      roomID: this.reservation.room.id,
+    })
     const targetRevs = data
     this.reservation.room.reservations = []
     for (let reservation of targetRevs) {
@@ -252,7 +234,7 @@ export default {
     this.loading = false
   },
   methods: {
-    Delete: async function () {
+    Delete: async function() {
       let message = '本当に削除してよろしいですか?\n(この操作は取り消せません)'
       let result = window.confirm(message)
       if (result) {
@@ -266,19 +248,30 @@ export default {
         }
       }
     },
-    AddGoogle: function () {
+    AddGoogle: function() {
       console.log(this.reservation)
       let link = 'https://calendar.google.com/calendar/r/eventedit'
-      link += '?text=' + this.reservation.name +
-              '&dates=' + dateFormat.FormatGoogle(this.reservation.date, this.reservation.time_start) +
-                '/' + dateFormat.FormatGoogle(this.reservation.date, this.reservation.time_end) +
-              '&location=' + this.reservation.room.place
+      link +=
+        '?text=' +
+        this.reservation.name +
+        '&dates=' +
+        dateFormat.FormatGoogle(
+          this.reservation.date,
+          this.reservation.time_start
+        ) +
+        '/' +
+        dateFormat.FormatGoogle(
+          this.reservation.date,
+          this.reservation.time_end
+        ) +
+        '&location=' +
+        this.reservation.room.place
       window.open(link)
     },
     openClassinfo: place => {
       const classLink = TokyoTech.searchRoom(place)
       window.open(classLink)
-    }
+    },
   },
 }
 </script>
@@ -289,50 +282,65 @@ export default {
 }
 
 #rev-name-title:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
   height: 7px;
-  background: -webkit-repeating-linear-gradient(-45deg, #c93a40, #c93a40 2px, #fff 2px, #fff 4px);
-  background: repeating-linear-gradient(-45deg,#c93a40, #c93a40 2px, #fff 2px, #fff 4px);
+  background: -webkit-repeating-linear-gradient(
+    -45deg,
+    #c93a40,
+    #c93a40 2px,
+    #fff 2px,
+    #fff 4px
+  );
+  background: repeating-linear-gradient(
+    -45deg,
+    #c93a40,
+    #c93a40 2px,
+    #fff 2px,
+    #fff 4px
+  );
 }
 
 div#sampleCalender2 {
-        height:100%;
-    }
-    div#sampleCalender2 .the_date {
-        float:left;
-        display:block;
-        width: 3em;
-        margin:0 10px; padding:0;
-        text-align:center;
-        overflow:hidden;
-    }
-    div#sampleCalender2 .blue {
-        background-color:#4096ee;
-    }
-    div#sampleCalender2 .pink {
-        background-color:#ff0084;
-    }
-    div#sampleCalender2 .orange {
-      background-color:#de9610;
-    }
-    div#sampleCalender2 .date_m {
-        display:block;
-        margin:3px 0; padding:0;
-        color:#fff;
-        font-weight:bold;
-        text-align:center;
-    }
-    div#sampleCalender2 .date_d {
-        display:block;
-        margin:5px; padding:5px 0;
-        background-color:#fff;
-        font-size:1.3em;
-        font-weight:bold;
-        text-align:center;
-        color:#666;
-    }
+  height: 100%;
+}
+div#sampleCalender2 .the_date {
+  float: left;
+  display: block;
+  width: 3em;
+  margin: 0 10px;
+  padding: 0;
+  text-align: center;
+  overflow: hidden;
+}
+div#sampleCalender2 .blue {
+  background-color: #4096ee;
+}
+div#sampleCalender2 .pink {
+  background-color: #ff0084;
+}
+div#sampleCalender2 .orange {
+  background-color: #de9610;
+}
+div#sampleCalender2 .date_m {
+  display: block;
+  margin: 3px 0;
+  padding: 0;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+div#sampleCalender2 .date_d {
+  display: block;
+  margin: 5px;
+  padding: 5px 0;
+  background-color: #fff;
+  font-size: 1.3em;
+  font-weight: bold;
+  text-align: center;
+  color: #666;
+}
 </style>

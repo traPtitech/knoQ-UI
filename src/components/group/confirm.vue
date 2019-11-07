@@ -12,24 +12,17 @@
             </v-flex>
           </v-layout>
           <h6>説明</h6>
-          <span
-            class="text-xs-left"
-            v-html="markedDescription"
-          />
+          <span class="text-xs-left" v-html="markedDescription" />
         </v-container>
       </v-card-text>
     </v-card>
-    <v-container
-      fluid
-      grid-list-md
-      text-xs-left
-    >
-      <v-layout
-        row
-        wrap
-      >
+    <v-container fluid grid-list-md text-xs-left>
+      <v-layout row wrap>
         <v-flex
-          v-for="member in group.members.slice((pageSelected-1) * displayMemberNum, pageSelected * displayMemberNum)"
+          v-for="member in group.members.slice(
+            (pageSelected - 1) * displayMemberNum,
+            pageSelected * displayMemberNum
+          )"
           :key="member.traq_id"
           xs12
           sm6
@@ -39,9 +32,13 @@
             <v-card-text>
               <v-avatar size="24">
                 <img
-                  :src="'https://q.trapti.tech/static/icon/' + member.traq_id + '/64.png'"
+                  :src="
+                    'https://q.trapti.tech/static/icon/' +
+                      member.traq_id +
+                      '/64.png'
+                  "
                   :alt="member.traq_id"
-                >
+                />
               </v-avatar>
               <span style="margin-left:10px;">{{ member.traq_id }}</span>
             </v-card-text>
@@ -49,10 +46,7 @@
         </v-flex>
       </v-layout>
       <v-layout>
-        <v-flex
-          xs12
-          text-xs-center
-        >
+        <v-flex xs12 text-xs-center>
           <v-pagination
             v-model="pageSelected"
             :length="Math.ceil(group.members.length / displayMemberNum)"
@@ -71,22 +65,22 @@ export default {
   props: {
     group: {
       type: Object,
-      default: function(){
+      default: function() {
         return {}
-      }
+      },
     },
   },
-  data () {
+  data() {
     return {
       pageSelected: 1,
-      displayMemberNum: 24
+      displayMemberNum: 24,
     }
   },
   computed: {
-    markedDescription: function () {
+    markedDescription: function() {
       if (typeof this.group.description === 'undefined') return ''
       return marked(this.group.description)
-    }
-  }
+    },
+  },
 }
 </script>

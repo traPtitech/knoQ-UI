@@ -4,26 +4,19 @@
       <v-container>
         <v-layout class="title">
           <v-flex>
-            <div class="text-xs-left">
-              予約: {{ reservation.name }}
-            </div>
+            <div class="text-xs-left">予約: {{ reservation.name }}</div>
           </v-flex>
           <v-flex>
-            <div class="text-xs-right">
-              グループ: {{ groupName }}
-            </div>
+            <div class="text-xs-right">グループ: {{ groupName }}</div>
           </v-flex>
         </v-layout>
         <h6>説明</h6>
         <v-flex class="text-xs-left">
-          <span v-html="markedDescription"/>
+          <span v-html="markedDescription" />
         </v-flex>
       </v-container>
-      <RoomsExpansion :rooms="selectedRoom"/>
-      <v-flex
-        mt-3
-        class="title"
-      >
+      <RoomsExpansion :rooms="selectedRoom" />
+      <v-flex mt-3 class="title">
         {{ reservation.time_start }} - {{ reservation.time_end }}
       </v-flex>
     </v-card-text>
@@ -36,29 +29,27 @@ import RoomsExpansion from '@/components/room/expansion'
 
 export default {
   components: {
-    RoomsExpansion
+    RoomsExpansion,
   },
   props: {
     reservation: {
       type: Object,
-      default: function(){
+      default: function() {
         return {}
-      }
+      },
     },
     selectedRoom: {
       type: Array,
-      default: function(){
+      default: function() {
         return {}
-      }
+      },
     },
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {}
   },
   computed: {
-    groupName: function () {
+    groupName: function() {
       console.log(this.reservation.group_id)
       let name = ''
       for (const group of this.$store.state.myGroups) {
@@ -69,10 +60,10 @@ export default {
       }
       return name
     },
-    markedDescription: function () {
+    markedDescription: function() {
       if (typeof this.reservation.description === 'undefined') return ''
       return marked(this.reservation.description)
-    }
-  }
+    },
+  },
 }
 </script>

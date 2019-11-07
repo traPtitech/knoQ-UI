@@ -18,10 +18,10 @@ export default {
   props: {
     rooms: {
       type: Array,
-      default: function(){
+      default: function() {
         return []
-      }
-    }
-  }
+      },
+    },
+  },
 }
 </script>

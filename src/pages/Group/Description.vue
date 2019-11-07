@@ -1,9 +1,6 @@
 <template>
   <v-form v-if="!loading">
-    <v-container
-      fluid
-      mt-3
-    >
+    <v-container fluid mt-3>
       <v-flex>
         <v-card>
           <v-card-title
@@ -12,25 +9,29 @@
             class="display-1 font-weight-bold"
           >
             {{ group.name }}
-            <v-spacer/>
+            <v-spacer />
             <v-btn
               icon
               color="pink lighten-3"
               large
-              @click="$router.push({ name: 'ReservationNew',query: { group_id: group.id } })"
+              @click="
+                $router.push({
+                  name: 'ReservationNew',
+                  query: { group_id: group.id },
+                })
+              "
             >
               <v-icon>add</v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <span
-              class="subheading"
-              v-html="group.description"
-            />
+            <span class="subheading" v-html="group.description" />
             <v-layout wrap>
               <v-flex sm8>
                 <v-btn
-                  v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
+                  v-if="
+                    $store.state.loginUser.traq_id == group.created_by.traq_id
+                  "
                   flat
                   @click="$router.push({ name: 'GroupEdit' })"
                 >
@@ -38,7 +39,9 @@
                   edit this
                 </v-btn>
                 <v-btn
-                  v-if="$store.state.loginUser.traq_id == group.created_by.traq_id"
+                  v-if="
+                    $store.state.loginUser.traq_id == group.created_by.traq_id
+                  "
                   flat
                   disabled
                 >
@@ -46,19 +49,19 @@
                   delete this
                 </v-btn>
               </v-flex>
-              <v-flex
-                xs12
-                text-xs-right
-              >
-                <span>Created by
+              <v-flex xs12 text-xs-right>
+                <span
+                  >Created by
                   <span>
-                    <v-avatar
-                      :size="24"
-                    >
+                    <v-avatar :size="24">
                       <img
-                        :src="'https://q.trapti.tech/static/icon/' + group.created_by.traq_id + '/64.png'"
+                        :src="
+                          'https://q.trapti.tech/static/icon/' +
+                            group.created_by.traq_id +
+                            '/64.png'
+                        "
                         alt="avatar"
-                      >
+                      />
                     </v-avatar>
                   </span>
                   @{{ group.created_by.traq_id }}
@@ -70,33 +73,23 @@
       </v-flex>
     </v-container>
     <v-container fluid>
-      <v-layout
-        text-xs-center
-        justify-center
-        wrap
-      >
-        <v-flex
-          xs12
-          md5
-        >
+      <v-layout text-xs-center justify-center wrap>
+        <v-flex xs12 md5>
           <v-card>
             <v-card-text class="title font-weight-bold">
               <div>メンバー</div>
             </v-card-text>
             <v-card-text>
-              <v-container
-                grid-list-md
-                text-xs-left
-              >
-                <v-layout
-                  row
-                  wrap
-                >
+              <v-container grid-list-md text-xs-left>
+                <v-layout row wrap>
                   <v-flex xs12>
                     <p>Members</p>
                   </v-flex>
                   <v-flex
-                    v-for="member in group.members.slice((pageSelected-1) * 4, pageSelected * 4)"
+                    v-for="member in group.members.slice(
+                      (pageSelected - 1) * 4,
+                      pageSelected * 4
+                    )"
                     :key="member.traq_id"
                     xs12
                     sm6
@@ -106,11 +99,17 @@
                       <v-card-text>
                         <v-avatar size="24">
                           <img
-                            :src="'https://q.trapti.tech/static/icon/' + member.traq_id + '/64.png'"
+                            :src="
+                              'https://q.trapti.tech/static/icon/' +
+                                member.traq_id +
+                                '/64.png'
+                            "
                             :alt="member.traq_id"
-                          >
+                          />
                         </v-avatar>
-                        <span style="margin-left:10px;">{{ member.traq_id }}</span>
+                        <span style="margin-left:10px;">{{
+                          member.traq_id
+                        }}</span>
                       </v-card-text>
                     </v-card>
                   </v-flex>
@@ -122,37 +121,27 @@
               />
             </v-card-text>
             <v-card-actions>
-              <v-flex/>
+              <v-flex />
             </v-card-actions>
           </v-card>
         </v-flex>
-        <v-flex
-          xs12
-          md7
-        >
+        <v-flex xs12 md7>
           <v-card>
             <v-card-text class="title font-weight-bold">
               <div>予約情報</div>
             </v-card-text>
             <v-card-text>
-              <v-layout
-                row
-                wrap
-                text-xs-left
-              >
+              <v-layout row wrap text-xs-left>
                 <v-flex xs12>
                   <h3>今後の予約</h3>
                   <v-container>
-                    <v-layout
-                      row
-                      wrap
-                    >
+                    <v-layout row wrap>
                       <v-flex
                         v-for="reservation in futureReservations"
                         :key="reservation.id"
                         xs12
                       >
-                        <ReservationShort :reservation="reservation"/>
+                        <ReservationShort :reservation="reservation" />
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -160,16 +149,13 @@
                 <v-flex>
                   <span>これまでの予約</span>
                   <v-container>
-                    <v-layout
-                      row
-                      wrap
-                    >
+                    <v-layout row wrap>
                       <v-flex
                         v-for="reservation in previousReservations"
                         :key="reservation.id"
                         xs12
                       >
-                        <ReservationShort :reservation="reservation"/>
+                        <ReservationShort :reservation="reservation" />
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -193,18 +179,18 @@ const ReservationsRepository = RepositoryFactory.set('reservations')
 
 export default {
   components: {
-    ReservationShort
+    ReservationShort,
   },
-  data () {
+  data() {
     return {
       group: {},
       futureReservations: [],
       previousReservations: [],
       loading: true,
-      pageSelected: 1
+      pageSelected: 1,
     }
   },
-  created: async function () {
+  created: async function() {
     this.group.id = this.$route.params.id
     // GET Group
     try {
@@ -220,7 +206,7 @@ export default {
     try {
       const response = await ReservationsRepository.get({
         groupID: this.group.id,
-        dateBegin: today
+        dateBegin: today,
       })
       this.futureReservations = response.data
       console.log(this.futureReservations)
@@ -229,11 +215,13 @@ export default {
     }
 
     // GET Previous reservation
-    const yesterday = moment().subtract(1, 'days').format('YYYY-MM-DD')
+    const yesterday = moment()
+      .subtract(1, 'days')
+      .format('YYYY-MM-DD')
     try {
       const response = await ReservationsRepository.get({
         groupID: this.group.id,
-        dateEnd: yesterday
+        dateEnd: yesterday,
       })
       this.previousReservations = response.data
     } catch (error) {
@@ -242,7 +230,7 @@ export default {
 
     this.group.description = marked(this.group.description)
     this.loading = false
-  }
+  },
 }
 </script>
 
@@ -252,13 +240,25 @@ export default {
 }
 
 #rev-name-title:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
   height: 7px;
-  background: -webkit-repeating-linear-gradient(-45deg, #c93a40, #c93a40 2px, #fff 2px, #fff 4px);
-  background: repeating-linear-gradient(-45deg,#c93a40, #c93a40 2px, #fff 2px, #fff 4px);
+  background: -webkit-repeating-linear-gradient(
+    -45deg,
+    #c93a40,
+    #c93a40 2px,
+    #fff 2px,
+    #fff 4px
+  );
+  background: repeating-linear-gradient(
+    -45deg,
+    #c93a40,
+    #c93a40 2px,
+    #fff 2px,
+    #fff 4px
+  );
 }
 </style>

@@ -3,7 +3,7 @@ import Repository from './Repository'
 const resource = '/reservations'
 
 export default {
-  get (payload) {
+  get(payload) {
     return Repository.get(`${resource}`, {
       params: {
         id: payload.id,
@@ -12,23 +12,23 @@ export default {
         groupid: payload.groupID,
         roomid: payload.roomID,
         date_begin: payload.dateBegin,
-        date_end: payload.dateEnd
-      }
+        date_end: payload.dateEnd,
+      },
     })
   },
 
-  post (payload) {
+  post(payload) {
     return Repository.post(`${resource}`, {
       name: payload.name,
       description: payload.description,
       group_id: parseInt(payload.group_id),
       room_id: parseInt(payload.room_id),
       time_start: payload.time_start,
-      time_end: payload.time_end
+      time_end: payload.time_end,
     })
   },
 
-  delete (id) {
+  delete(id) {
     return Repository.delete(`${resource}/${id}`)
-  }
+  },
 }

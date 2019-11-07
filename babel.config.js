@@ -1,11 +1,12 @@
 module.exports = {
-  presets: [
-    '@vue/app'
-  ],
+  presets: ['@vue/app'],
   plugins: [
-    ['babel-plugin-root-import', {
-      'rootPathPrefix': '@',
-      'rootPathSuffix': 'src'
-    }]
-  ]
+    [
+      'babel-plugin-root-import',
+      {
+        rootPathPrefix: '@',
+        rootPathSuffix: 'src',
+      },
+    ],
+  ],
 }

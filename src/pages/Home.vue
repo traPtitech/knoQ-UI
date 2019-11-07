@@ -1,38 +1,27 @@
 <template>
-  <v-container
-    fluid
-    grid-list-xl
-  >
+  <v-container fluid grid-list-xl>
     <v-layout column>
       <v-flex>
         <h1>今日の進捗部屋</h1>
-        <roomsExpansion :rooms="todayRooms"/>
+        <roomsExpansion :rooms="todayRooms" />
       </v-flex>
       <v-flex>
         <h1>
           あなたの予約
-          <v-btn
-            icon
-            large
-            @click="$router.push({ name: 'ReservationNew' })"
-          >
+          <v-btn icon large @click="$router.push({ name: 'ReservationNew' })">
             <v-icon>add</v-icon>
           </v-btn>
         </h1>
-        <reservationShortCards :reservations="$store.state.myReservations"/>
+        <reservationShortCards :reservations="$store.state.myReservations" />
       </v-flex>
       <v-flex>
         <h1>
           あなたのグループ
-          <v-btn
-            icon
-            large
-            @click="$router.push({ name: 'GroupNew' })"
-          >
+          <v-btn icon large @click="$router.push({ name: 'GroupNew' })">
             <v-icon>add</v-icon>
           </v-btn>
         </h1>
-        <groupsTable :groups="$store.state.myGroups"/>
+        <groupsTable :groups="$store.state.myGroups" />
       </v-flex>
     </v-layout>
   </v-container>
@@ -52,20 +41,20 @@ export default {
   components: {
     roomsExpansion,
     groupsTable,
-    reservationShortCards
+    reservationShortCards,
   },
-  data () {
+  data() {
     return {
-      todayRooms: []
+      todayRooms: [],
     }
   },
-  created: async function () {
+  created: async function() {
     await this.getUserMe()
     const today = moment(new Date()).format('YYYY-MM-DD')
 
     const condition = {
       dateBegin: today,
-      dateEnd: today
+      dateEnd: today,
     }
 
     const { data } = await RoomsRepository.get(condition)
@@ -90,7 +79,7 @@ export default {
     this.getMyReservations()
   },
   methods: {
-    ...mapActions(['getUserMe', 'getMyGroups', 'getMyReservations'])
-  }
+    ...mapActions(['getUserMe', 'getMyGroups', 'getMyReservations']),
+  },
 }
 </script>

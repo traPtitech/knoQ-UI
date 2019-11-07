@@ -8,20 +8,27 @@
       <td :class="groupColor(props.item.id)">
         <span
           style="cursor: pointer;"
-          @click="$router.push({ name: 'GroupDescription', params: { id: props.item.id } })"
+          @click="
+            $router.push({
+              name: 'GroupDescription',
+              params: { id: props.item.id },
+            })
+          "
         >
           ◦{{ props.item.name }}
         </span>
       </td>
       <td class="text-xs-left">{{ props.item.members.length }}</td>
       <td>
-        <v-avatar
-          :size="24"
-        >
+        <v-avatar :size="24">
           <img
-            :src="'https://q.trapti.tech/static/icon/' + props.item.created_by_refer + '/64.png'"
+            :src="
+              'https://q.trapti.tech/static/icon/' +
+                props.item.created_by_refer +
+                '/64.png'
+            "
             alt="avatar"
-          >
+          />
         </v-avatar>
         @{{ props.item.created_by_refer }}
       </td>
@@ -30,20 +37,20 @@
 </template>
 
 <script>
-import color from '@/utils/color'
+import color from '@/tips/color'
 export default {
   props: {
     groups: {
       type: Array,
-      default: function(){
+      default: function() {
         return []
-      }
+      },
     },
   },
   methods: {
-    groupColor (groupID) {
+    groupColor(groupID) {
       return color.GroupColors(groupID) + '--text'
-    }
-  }
+    },
+  },
 }
 </script>
