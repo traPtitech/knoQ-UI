@@ -56,7 +56,7 @@
     }
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "*.{ts,tsx,vue}": [
      "vue-cli-service lint --fix",
      "git add"
     ]
