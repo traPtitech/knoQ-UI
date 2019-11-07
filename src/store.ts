@@ -11,7 +11,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    loginUser: {},
+    loginUser: { traq_id: '', admin: false },
     allUsers: [],
     myReservations: [],
     revHeaders: [
