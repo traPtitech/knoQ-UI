@@ -382,7 +382,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import color from '@/tips/color'
+import color from '@/utils/color'
 import RoomsExpansion from '@/components/room/expansion'
 import ReservationConfirm from '@/components/reservation/confirm'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'

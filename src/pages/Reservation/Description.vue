@@ -169,8 +169,8 @@
 <script>
 import moment from 'moment'
 import marked from 'marked'
-import dateFormat from '@/tips/date'
-import TokyoTech from '@/tips/TokyoTech'
+import dateFormat from '@/utils/date'
+import TokyoTech from '@/utils/TokyoTech'
 import RoomsExpansion from '@/components/room/expansion'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepository = RepositoryFactory.set('reservations')
