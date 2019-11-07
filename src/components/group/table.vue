@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import color from '@/tips/color'
+import color from '@/utils/color'
 export default {
   props: {
     groups: {

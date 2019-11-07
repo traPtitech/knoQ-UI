@@ -61,7 +61,7 @@
 
 <script>
 import moment from 'moment'
-import TokyoTech from '@/tips/TokyoTech'
+import TokyoTech from '@/utils/TokyoTech'
 import ReservationShort from '@/components/reservation/short-card'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const ReservationsRepo = RepositoryFactory.set('reservations')
