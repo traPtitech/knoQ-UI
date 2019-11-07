@@ -14,22 +14,15 @@
         slider-color="yellow"
         fixed-tabs
       >
-        <v-tab
-          ripple
-        >
+        <v-tab ripple>
           reservation
         </v-tab>
-        <v-tab
-          ripple
-        >
+        <v-tab ripple>
           group
         </v-tab>
 
         <v-tab-item>
-          <v-card 
-            v-if="!loading" 
-            raised
-          >
+          <v-card v-if="!loading" raised>
             <v-card-text>
               <v-flex mt-3>
                 <h3>所属メンバーから</h3>
@@ -56,7 +49,6 @@
             color="purple"
             indeterminate
           />
-
         </v-tab-item>
 
         <v-tab-item>
@@ -96,26 +88,26 @@ const GroupsRepo = RepositoryFactory.set('groups')
 export default {
   components: {
     reservationShortCards,
-    groupsTable
+    groupsTable,
   },
-  data () {
+  data() {
     return {
       active: '',
       loading: false,
       ReservationsBytraQID: [],
       ReservationsByName: [],
       GroupsBytraQID: [],
-      GroupsByName: []
+      GroupsByName: [],
     }
   },
   watch: {
-    '$route': 'FetchData'
+    $route: 'FetchData',
   },
-  created: async function () {
+  created: async function() {
     await this.FetchData()
   },
   methods: {
-    FetchData: async function () {
+    FetchData: async function() {
       this.loading = true
       const query = this.$route.query.q
       let condition = { traQID: { traQID: query }, name: { name: query } }
@@ -130,7 +122,7 @@ export default {
       response = await GroupsRepo.get(condition['name'])
       this.GroupsByName = response.data
       this.loading = false
-    }
+    },
   },
 }
 </script>

@@ -1,58 +1,37 @@
 <template>
-  <v-container 
-    text-xs-center 
-    fluid
-  >
-    <v-layout 
-      row 
-      wrap 
-      justify-center
-    >
+  <v-container text-xs-center fluid>
+    <v-layout row wrap justify-center>
       <v-flex xs12>
         <h1>予約追加</h1>
       </v-flex>
-      <v-flex 
-        xs12 
-        sm10 
-        mt-3
-      >
+      <v-flex xs12 sm10 mt-3>
         <v-card>
           <v-card-text>
             <v-form>
-              <v-snackbar
-                v-model="snackbar"
-                top
-              >
+              <v-snackbar v-model="snackbar" top>
                 {{ snackMessage }}
-                <v-btn
-                  color="pink"
-                  flat
-                  @click="snackbar = false"
-                >
+                <v-btn color="pink" flat @click="snackbar = false">
                   Close
                 </v-btn>
               </v-snackbar>
               <v-stepper v-model="e1">
                 <v-stepper-header>
-                  <v-stepper-step 
-                    :complete="e1 > 1" 
-                    :rules="[rules.step1]" 
+                  <v-stepper-step
+                    :complete="e1 > 1"
+                    :rules="[rules.step1]"
                     step="1"
                   >
                     Determine name and details
                     <small>name is required</small>
                   </v-stepper-step>
 
-                  <v-divider/>
+                  <v-divider />
 
-                  <v-stepper-step 
-                    :complete="e1 > 2" 
-                    step="2"
-                  >
+                  <v-stepper-step :complete="e1 > 2" step="2">
                     Select room and time
                   </v-stepper-step>
 
-                  <v-divider/>
+                  <v-divider />
 
                   <v-stepper-step step="3">
                     Confirm request
@@ -74,11 +53,14 @@
                         >
                           <template v-slot:item="data">
                             <template v-if="typeof data.item !== 'object'">
-                              <v-list-tile-content v-text="data.item"/>
+                              <v-list-tile-content v-text="data.item" />
                             </template>
                             <template v-else>
                               <v-list-tile-content>
-                                <v-list-tile-title :class="groupColor(data.item.id)">◦{{ data.item.name }}</v-list-tile-title>
+                                <v-list-tile-title
+                                  :class="groupColor(data.item.id)"
+                                  >◦{{ data.item.name }}</v-list-tile-title
+                                >
                               </v-list-tile-content>
                             </template>
                           </template>
@@ -91,17 +73,16 @@
                                 <v-icon>add</v-icon>
                               </v-list-tile-action>
                               <v-list-tile-content>
-                                <v-list-tile-title>グループを追加する</v-list-tile-title>
+                                <v-list-tile-title
+                                  >グループを追加する</v-list-tile-title
+                                >
                               </v-list-tile-content>
                             </v-list-tile>
                           </template>
                         </v-autocomplete>
                       </v-flex>
                       <v-flex>
-                        <v-text-field 
-                          v-model="reservation.name" 
-                          label="名前"
-                        />
+                        <v-text-field v-model="reservation.name" label="名前" />
                       </v-flex>
                       <v-flex>
                         <v-textarea
@@ -113,9 +94,7 @@
                         />
                       </v-flex>
                     </v-layout>
-                    <v-btn
-                      @click="$router.push({ name: 'Home' })"
-                    >
+                    <v-btn @click="$router.push({ name: 'Home' })">
                       Cancel
                     </v-btn>
                     <v-btn
@@ -131,15 +110,9 @@
                       <v-flex xs12>
                         <v-layout row>
                           <v-flex xs3>
-                            <v-checkbox
-                              v-model="Isrange"
-                              label="範囲"
-                            />
+                            <v-checkbox v-model="Isrange" label="範囲" />
                           </v-flex>
-                          <v-flex 
-                            v-show="!Isrange" 
-                            xs10
-                          >
+                          <v-flex v-show="!Isrange" xs10>
                             <v-menu
                               ref="dateMenu"
                               v-model="dateMenu"
@@ -160,22 +133,27 @@
                                   v-on="on"
                                 />
                               </template>
-                              <v-date-picker 
-                                v-model="date" 
-                                :allowed-dates="allowedDates" 
+                              <v-date-picker
+                                v-model="date"
+                                :allowed-dates="allowedDates"
                                 no-title
                               >
-                                <v-spacer/>
-                                <v-btn 
-                                  flat 
-                                  color="primary" 
+                                <v-spacer />
+                                <v-btn
+                                  flat
+                                  color="primary"
                                   @click="dateMenu = false"
-                                >Cancel</v-btn>
-                                <v-btn 
-                                  flat 
-                                  color="primary" 
-                                  @click="$refs.dateMenu.save(date); getDayRooms()"
-                                >OK</v-btn>
+                                  >Cancel</v-btn
+                                >
+                                <v-btn
+                                  flat
+                                  color="primary"
+                                  @click="
+                                    $refs.dateMenu.save(date)
+                                    getDayRooms()
+                                  "
+                                  >OK</v-btn
+                                >
                               </v-date-picker>
                             </v-menu>
                           </v-flex>
@@ -203,22 +181,29 @@
                                       v-on="on"
                                     />
                                   </template>
-                                  <v-date-picker 
-                                    v-model="Condition.dateBegin" 
-                                    :allowed-dates="allowedDates" 
+                                  <v-date-picker
+                                    v-model="Condition.dateBegin"
+                                    :allowed-dates="allowedDates"
                                     no-title
                                   >
-                                    <v-spacer/>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
+                                    <v-spacer />
+                                    <v-btn
+                                      flat
+                                      color="primary"
                                       @click="dateBeginMenu = false"
-                                    >Cancel</v-btn>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
-                                      @click="$refs.dateBeginMenu.save(Condition.dateBegin); getRooms()"
-                                    >OK</v-btn>
+                                      >Cancel</v-btn
+                                    >
+                                    <v-btn
+                                      flat
+                                      color="primary"
+                                      @click="
+                                        $refs.dateBeginMenu.save(
+                                          Condition.dateBegin
+                                        )
+                                        getRooms()
+                                      "
+                                      >OK</v-btn
+                                    >
                                   </v-date-picker>
                                 </v-menu>
                               </v-flex>
@@ -244,22 +229,29 @@
                                       v-on="on"
                                     />
                                   </template>
-                                  <v-date-picker 
-                                    v-model="Condition.dateEnd" 
-                                    :allowed-dates="allowedDates" 
+                                  <v-date-picker
+                                    v-model="Condition.dateEnd"
+                                    :allowed-dates="allowedDates"
                                     no-title
                                   >
-                                    <v-spacer/>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
+                                    <v-spacer />
+                                    <v-btn
+                                      flat
+                                      color="primary"
                                       @click="dateEndMenu = false"
-                                    >Cancel</v-btn>
-                                    <v-btn 
-                                      flat 
-                                      color="primary" 
-                                      @click="$refs.dateEndMenu.save(Condition.dateEnd); getRooms()"
-                                    >OK</v-btn>
+                                      >Cancel</v-btn
+                                    >
+                                    <v-btn
+                                      flat
+                                      color="primary"
+                                      @click="
+                                        $refs.dateEndMenu.save(
+                                          Condition.dateEnd
+                                        )
+                                        getRooms()
+                                      "
+                                      >OK</v-btn
+                                    >
                                   </v-date-picker>
                                 </v-menu>
                               </v-flex>
@@ -268,23 +260,20 @@
                         </v-layout>
                       </v-flex>
                       <v-layout wrap>
-                        <v-flex 
-                          v-for="room in allowedRooms" 
-                          :key="room.id" 
+                        <v-flex
+                          v-for="room in allowedRooms"
+                          :key="room.id"
                           xs12
                         >
                           <v-layout row>
                             <v-flex xs1>
-                              <v-checkbox 
-                                v-model="reservation.room_id" 
+                              <v-checkbox
+                                v-model="reservation.room_id"
                                 :value="room.id"
                               />
                             </v-flex>
-                            <v-flex 
-                              xs11 
-                              style="padding-top:9px"
-                            >
-                              <RoomsExpansion :rooms="[room]"/>
+                            <v-flex xs11 style="padding-top:9px">
+                              <RoomsExpansion :rooms="[room]" />
                             </v-flex>
                           </v-layout>
                         </v-flex>
@@ -315,10 +304,12 @@
                               v-model="reservation.time_start"
                               :allowed-minutes="FiveMinutes"
                               :min="selectedRoom[0].time_start.slice(0, 5)"
-                              :max="selectedRoom[0].time_end.slice(0,5)"
+                              :max="selectedRoom[0].time_end.slice(0, 5)"
                               format="24hr"
                               full-width
-                              @click:minute="$refs.refStartMenu.save(reservation.time_start)"
+                              @click:minute="
+                                $refs.refStartMenu.save(reservation.time_start)
+                              "
                             />
                           </v-menu>
                         </v-flex>
@@ -348,38 +339,36 @@
                               v-model="reservation.time_end"
                               :allowed-minutes="FiveMinutes"
                               :min="selectedRoom[0].time_start.slice(0, 5)"
-                              :max="selectedRoom[0].time_end.slice(0,5)"
+                              :max="selectedRoom[0].time_end.slice(0, 5)"
                               format="24hr"
                               full-width
-                              @click:minute="$refs.refEndMenu.save(reservation.time_end)"
+                              @click:minute="
+                                $refs.refEndMenu.save(reservation.time_end)
+                              "
                             />
                           </v-menu>
                         </v-flex>
                       </v-layout>
                     </v-layout>
-                    <v-btn
-                      @click="e1 = 1"
-                    >
+                    <v-btn @click="e1 = 1">
                       back
                     </v-btn>
-                    <v-btn
-                      color="primary"
-                      @click="e1 = 3"
-                    >
+                    <v-btn color="primary" @click="e1 = 3">
                       Continue
                     </v-btn>
                   </v-stepper-content>
                   <v-stepper-content step="3">
-                    <ReservationConfirm 
-                      :reservation="reservation" 
+                    <ReservationConfirm
+                      :reservation="reservation"
                       :selected-room="selectedRoom"
                     />
                     <v-btn @click="e1 = 2">back</v-btn>
-                    <v-btn 
-                      :loading="IsLoading" 
-                      color="info" 
+                    <v-btn
+                      :loading="IsLoading"
+                      color="info"
                       @click="postReservation(reservation)"
-                    >send</v-btn>
+                      >send</v-btn
+                    >
                   </v-stepper-content>
                 </v-stepper-items>
               </v-stepper>
@@ -402,11 +391,17 @@ const RoomsRepository = RepositoryFactory.set('rooms')
 export default {
   components: {
     RoomsExpansion,
-    ReservationConfirm
+    ReservationConfirm,
   },
-  data () {
+  data() {
     return {
-      reservation: { name: '', group_id: 0, room_id: '', time_start: '', time_end: '' },
+      reservation: {
+        name: '',
+        group_id: 0,
+        room_id: '',
+        time_start: '',
+        time_end: '',
+      },
       date: '',
       Condition: {},
       dateMenu: false,
@@ -419,35 +414,35 @@ export default {
       e1: 0,
       rules: {
         required: value => !!value || 'Required',
-        step1: this.nameIsRequired
+        step1: this.nameIsRequired,
       },
       snackbar: false,
       snackMessage: '',
       selectedRoom: [{ time_start: '', time_end: '' }],
-      allowedRooms: []
+      allowedRooms: [],
     }
   },
   watch: {
-    Isrange: function () {
+    Isrange: function() {
       this.reservation.room_id = 0
       this.allowedRooms = []
     },
-    'reservation.room_id': async function () {
+    'reservation.room_id': async function() {
       await this.SelectRoom()
       this.reservation.time_start = this.selectedRoom[0].time_start.slice(0, 5)
       this.reservation.time_end = this.selectedRoom[0].time_end.slice(0, 5)
-    }
+    },
   },
-  created: async function () {
+  created: async function() {
     await this.getUserMe()
     await this.getMyGroups()
     this.reservation.group_id = parseInt(this.$route.query.group_id)
     console.log(this.reservation)
-    window.addEventListener('beforeunload', function () {
+    window.addEventListener('beforeunload', function() {
       // event.returnValue = 'true'
     })
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave(to, from, next) {
     // 空でない時
     if (Object.keys(this.reservation).length) {
       let message = '変更は保存されませんがよろしいですか?'
@@ -463,10 +458,10 @@ export default {
   },
   methods: {
     FiveMinutes: m => m % 5 === 0,
-    save: function () {
+    save: function() {
       console.log(this.reservation)
     },
-    async postReservation (payload) {
+    async postReservation(payload) {
       try {
         this.IsLoading = true
         const response = await ReservationsRepository.post(payload)
@@ -481,24 +476,27 @@ export default {
         this.snackbar = true
       }
     },
-    groupColor: function (groupID) {
+    groupColor: function(groupID) {
       return color.GroupColors(groupID) + '--text'
     },
-    nameIsRequired: function () {
+    nameIsRequired: function() {
       return this.reservation.name !== ''
     },
     allowedDates: val => {
       const date = new Date(val)
       return date.getTime() > new Date().getTime() - 86400000
     },
-    SelectRoom: async function () {
+    SelectRoom: async function() {
       this.selectedRoom = [{ time_start: '', time_end: '' }]
-      if (this.reservation.room_id === '' || this.reservation.room_id === null) return
+      if (this.reservation.room_id === '' || this.reservation.room_id === null)
+        return
       console.log(this.reservation.room_id)
-      const { data } = await RoomsRepository.get({ id: this.reservation.room_id })
+      const { data } = await RoomsRepository.get({
+        id: this.reservation.room_id,
+      })
       this.selectedRoom = data
     },
-    getRooms: async function () {
+    getRooms: async function() {
       let { data } = await RoomsRepository.get(this.Condition)
       this.allowedRooms = data
 
@@ -517,15 +515,15 @@ export default {
         }
       }
     },
-    getDayRooms: function () {
+    getDayRooms: function() {
       this.Condition = {
         dateBegin: this.date,
-        dateEnd: this.date
+        dateEnd: this.date,
       }
       this.getRooms()
     },
     ...mapActions(['getMyGroups', 'getUserMe']),
-    ...mapGetters(['getGroupIDs'])
+    ...mapGetters(['getGroupIDs']),
   },
 }
 </script>

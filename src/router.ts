@@ -19,52 +19,52 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
     },
     {
       path: '/rooms',
       name: 'Rooms',
-      component: Rooms
+      component: Rooms,
     },
     {
       path: '/reservaions',
       name: 'Reservations',
-      component: Reservations
+      component: Reservations,
     },
     {
       path: '/reservations/:id',
       name: 'ReservationDescription',
-      component: ReservationDescription
+      component: ReservationDescription,
     },
     {
       path: '/reservaions/new',
       name: 'ReservationNew',
-      component: ReservationNew
+      component: ReservationNew,
     },
     {
       path: '/groups',
       name: 'Groups',
-      component: Groups
+      component: Groups,
     },
     {
       path: '/groups/new',
       name: 'GroupNew',
-      component: GroupsNew
+      component: GroupsNew,
     },
     {
       path: '/groups/:id',
       name: 'GroupDescription',
-      component: GroupDescription
+      component: GroupDescription,
     },
     {
       path: '/groups/:id/edit',
       name: 'GroupEdit',
-      component: GroupEdit
+      component: GroupEdit,
     },
     {
       path: '/search',
       name: 'Search',
-      component: Search
-    }
-  ]
+      component: Search,
+    },
+  ],
 })

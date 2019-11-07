@@ -3,11 +3,11 @@ import Repository from './Repository'
 const resource = '/users'
 
 export default {
-  get () {
+  get() {
     return Repository.get(`${resource}`)
   },
 
-  getMe () {
+  getMe() {
     return Repository.get(`${resource}/me`)
-  }
+  },
 }

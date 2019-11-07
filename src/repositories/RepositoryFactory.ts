@@ -7,9 +7,9 @@ const repositories = {
   users: UsersRepository,
   reservations: ReservationsRepository,
   groups: GroupsRepository,
-  rooms: RoomsRepository
+  rooms: RoomsRepository,
 }
 
 export const RepositoryFactory = {
-  set: name => repositories[name]
+  set: name => repositories[name],
 }

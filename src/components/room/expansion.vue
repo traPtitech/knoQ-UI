@@ -1,67 +1,42 @@
 <template>
   <div>
-    <div 
-      v-if="rooms.length > 1" 
+    <div
+      v-if="rooms.length > 1"
       class="d-flex justify-between align-center mb-3"
     >
       <v-btn @click="all">all</v-btn>
       <v-btn @click="none">none</v-btn>
     </div>
 
-    <v-expansion-panel
-      v-model="panel"
-      expand
-    >
-      <v-expansion-panel-content
-        v-for="room in rooms"
-        :key="room.id"
-      >
+    <v-expansion-panel v-model="panel" expand>
+      <v-expansion-panel-content v-for="room in rooms" :key="room.id">
         <template v-slot:header>
           <v-layout>
-            <v-flex 
-              sm4 
-              hidden-xs-only 
-              text-xs-left
-            >
+            <v-flex sm4 hidden-xs-only text-xs-left>
               {{ date(room) }}
             </v-flex>
-            <v-flex 
-              xs3 
-              hidden-sm-and-up
-            >
-              {{ date(room).slice(5,16) }}
+            <v-flex xs3 hidden-sm-and-up>
+              {{ date(room).slice(5, 16) }}
             </v-flex>
-            <v-flex 
-              xs6 
-              sm4 
-              text-xs-left
-            >
-              {{ room.time_start.slice(0,5) }} - {{ room.time_end.slice(0,5) }}
+            <v-flex xs6 sm4 text-xs-left>
+              {{ room.time_start.slice(0, 5) }} -
+              {{ room.time_end.slice(0, 5) }}
             </v-flex>
-            <v-flex 
-              xs3 
-              sm4 
-              text-xs-center
-            >
-              <span
-                @click="openClassinfo(room.place)"
-              >
+            <v-flex xs3 sm4 text-xs-center>
+              <span @click="openClassinfo(room.place)">
                 <v-icon small>place</v-icon>{{ room.place }}
               </span>
             </v-flex>
           </v-layout>
         </template>
         <v-container v-show="!loading">
-          <v-layout 
-            row 
-            wrap
-          >
-            <v-flex 
-              v-for="reservation in room.reservations" 
-              :key="reservation.id" 
+          <v-layout row wrap>
+            <v-flex
+              v-for="reservation in room.reservations"
+              :key="reservation.id"
               xs12
             >
-              <ReservationShort :reservation="reservation"/>
+              <ReservationShort :reservation="reservation" />
             </v-flex>
           </v-layout>
           <v-layout v-if="typeof room.reservations === 'undefined'">
@@ -72,10 +47,10 @@
         </v-container>
         <v-container v-show="loading">
           ろーど中
-          <v-progress-circular 
-            :indeterminate="true" 
-            :value="0" 
-            size="24" 
+          <v-progress-circular
+            :indeterminate="true"
+            :value="0"
+            size="24"
             class="ml-2"
           />
         </v-container>
@@ -93,47 +68,47 @@ const ReservationsRepo = RepositoryFactory.set('reservations')
 
 export default {
   components: {
-    ReservationShort
+    ReservationShort,
   },
   props: {
     rooms: {
       type: Array,
-      default: function(){
+      default: function() {
         return []
-      }
-    }
+      },
+    },
   },
-  data () {
+  data() {
     return {
       panel: [],
       targetRevs: [],
-      loading: false
+      loading: false,
     }
   },
   computed: {
-    date: function () {
-      return function (room) {
+    date: function() {
+      return function(room) {
         return moment(new Date(room.date)).format('YYYY/MM/DD (ddd)')
       }
-    }
+    },
   },
   watch: {
-    rooms: async function () {
+    rooms: async function() {
       this.none()
-    }
+    },
   },
   methods: {
     // Create an array the length of our items
     // with all values as true
-    all () {
+    all() {
       this.panel = [...Array(this.rooms.length).keys()].map(() => true)
       // console.log(this.panel)
     },
     // Reset the panel
-    none () {
+    none() {
       this.panel = [...Array(this.rooms.length).keys()].map(() => false)
     },
-    async getReservations (payload) {
+    async getReservations(payload) {
       try {
         const { data } = await ReservationsRepo.get(payload)
         this.reservations = data
@@ -142,10 +117,10 @@ export default {
         console.log(error)
       }
     },
-    openClassinfo (place) {
+    openClassinfo(place) {
       const classLink = TokyoTech.searchRoom(place)
       window.open(classLink)
-    }
+    },
   },
 }
 </script>
