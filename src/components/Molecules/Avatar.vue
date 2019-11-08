@@ -1,7 +1,7 @@
 <template>
   <v-avatar :size="size">
     <img
-      :src="`https://q.trapti.tech/static/icon/${traqId}/64.png`"
+      :src="`https://q.trap.jp/api/1.0/public/icon/${traqId}`"
       alt="avatar"
     />
   </v-avatar>
