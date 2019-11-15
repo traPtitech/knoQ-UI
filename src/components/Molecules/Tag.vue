@@ -1,5 +1,5 @@
 <template>
-  <v-chip @click="search"> # {{ name }} </v-chip>
+  <v-chip @click="search" class="mr-3"> # {{ name }} </v-chip>
 </template>
 
 <script lang="ts">
