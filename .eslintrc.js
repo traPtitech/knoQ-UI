@@ -6,5 +6,5 @@ module.exports = {
   rules: {},
   parserOptions: {
     parser: '@typescript-eslint/parser',
-  }
+  },
 }
