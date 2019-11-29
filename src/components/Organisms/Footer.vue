@@ -1,5 +1,5 @@
 <template>
-  <v-footer color="grey lighten-2" absolute>
+  <v-footer color="grey lighten-2">
     <v-container>
       <v-row justify="center">
         <v-btn

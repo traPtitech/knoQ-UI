@@ -1,11 +1,11 @@
 <template>
-  <v-app-bar app>
+  <v-app-bar app color="orange">
     <v-toolbar-title
-      class="headline font-weight-bold"
+      class="headline font-weight-bold white--text"
       style="cursor: pointer"
       @click="$router.push({ name: 'Home' })"
     >
-      Room
+      QonnPass
     </v-toolbar-title>
     <v-spacer />
     <Avatar :size="32" :traq-id="'wasabi'" />
