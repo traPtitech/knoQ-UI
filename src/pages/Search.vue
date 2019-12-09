@@ -82,8 +82,8 @@
 import reservationShortCards from '@/components/reservation/short-cards'
 import groupsTable from '@/components/group/table'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-const ReservationsRepo = RepositoryFactory.set('reservations')
-const GroupsRepo = RepositoryFactory.set('groups')
+const ReservationsRepo = RepositoryFactory.get('reservations')
+const GroupsRepo = RepositoryFactory.get('groups')
 
 export default {
   components: {

@@ -386,8 +386,8 @@ import color from '@/utils/color'
 import RoomsExpansion from '@/components/room/expansion'
 import ReservationConfirm from '@/components/reservation/confirm'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-const ReservationsRepository = RepositoryFactory.set('reservations')
-const RoomsRepository = RepositoryFactory.set('rooms')
+const ReservationsRepository = RepositoryFactory.get('reservations')
+const RoomsRepository = RepositoryFactory.get('rooms')
 export default {
   components: {
     RoomsExpansion,

@@ -100,7 +100,7 @@ import { mapActions, mapGetters } from 'vuex'
 import reservationShort from '@/components/reservation/short-card'
 import reservationShortCards from '@/components/reservation/short-cards'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-const ReservationsRepository = RepositoryFactory.set('reservations')
+const ReservationsRepository = RepositoryFactory.get('reservations')
 
 export default {
   components: {

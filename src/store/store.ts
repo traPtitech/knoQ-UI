@@ -2,10 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import moment from 'moment'
-const ReservationsRepository = RepositoryFactory.set('reservations')
-const GroupsRepository = RepositoryFactory.set('groups')
-const UsersRepository = RepositoryFactory.set('users')
-// const RoomsRepository = RepositoryFactory.set('rooms')
+const ReservationsRepository = RepositoryFactory.get('reservations')
+const GroupsRepository = RepositoryFactory.get('groups')
+const UsersRepository = RepositoryFactory.get('users')
+// const RoomsRepository = RepositoryFactory.get('rooms')
 
 Vue.use(Vuex)
 

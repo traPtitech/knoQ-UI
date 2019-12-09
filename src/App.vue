@@ -20,7 +20,7 @@ import Footer from '@/components/Organisms/Footer'
 import { RepositoryFactory } from './repositories/RepositoryFactory'
 import { mapActions } from 'vuex'
 
-const RoomsRepository = RepositoryFactory.set('rooms')
+const RoomsRepository = RepositoryFactory.get('rooms')
 export default {
   name: 'App',
   components: {
