@@ -10,6 +10,9 @@ const repositories = {
   rooms: RoomsRepository,
 }
 
+type Repositories = typeof repositories
+type RepoName = keyof Repositories
+
 export const RepositoryFactory = {
-  set: name => repositories[name],
+  get: <T extends RepoName>(name: T): Repositories[T] => repositories[name],
 }

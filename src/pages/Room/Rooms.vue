@@ -94,8 +94,8 @@
 import RoomsTable from '@/components/room/table'
 import RoomsExpansion from '@/components/room/expansion'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-const RoomsRepository = RepositoryFactory.set('rooms')
-const ReservationsRepo = RepositoryFactory.set('reservations')
+const RoomsRepository = RepositoryFactory.get('rooms')
+const ReservationsRepo = RepositoryFactory.get('reservations')
 
 export default {
   components: {

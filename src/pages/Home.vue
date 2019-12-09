@@ -34,8 +34,8 @@ import roomsExpansion from '@/components/room/expansion'
 import reservationShortCards from '@/components/reservation/short-cards'
 import groupsTable from '@/components/group/table'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-const RoomsRepository = RepositoryFactory.set('rooms')
-const ReservationsRepo = RepositoryFactory.set('reservations')
+const RoomsRepository = RepositoryFactory.get('rooms')
+const ReservationsRepo = RepositoryFactory.get('reservations')
 
 export default {
   components: {

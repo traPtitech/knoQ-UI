@@ -173,7 +173,7 @@ import dateFormat from '@/utils/date'
 import TokyoTech from '@/utils/TokyoTech'
 import RoomsExpansion from '@/components/room/expansion'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-const ReservationsRepository = RepositoryFactory.set('reservations')
+const ReservationsRepository = RepositoryFactory.get('reservations')
 
 export default {
   components: {

@@ -179,7 +179,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import GroupConfirm from '@/components/group/confirm'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-const GroupsRepository = RepositoryFactory.set('groups')
+const GroupsRepository = RepositoryFactory.get('groups')
 
 export default {
   components: {
