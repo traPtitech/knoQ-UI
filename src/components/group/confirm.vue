@@ -12,7 +12,7 @@
             </v-flex>
           </v-layout>
           <h6>説明</h6>
-          <span class="text-xs-left" v-html="markedDescription" />
+          <span class="text-xs-left" v-html="renderedDescription" />
         </v-container>
       </v-card-text>
     </v-card>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import marked from 'marked'
+import { render } from '@/utils/markdown-it'
 
 export default {
   props: {
@@ -77,9 +77,9 @@ export default {
     }
   },
   computed: {
-    markedDescription: function() {
+    renderedDescription: function() {
       if (typeof this.group.description === 'undefined') return ''
-      return marked(this.group.description)
+      return render(this.group.description)
     },
   },
 }

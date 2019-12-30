@@ -171,9 +171,9 @@
 
 <script>
 import moment from 'moment'
-import marked from 'marked'
 import ReservationShort from '@/components/reservation/short-card'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import { render } from '@/utils/markdown-it'
 const GroupsRepository = RepositoryFactory.get('groups')
 const ReservationsRepository = RepositoryFactory.get('reservations')
 
@@ -228,7 +228,7 @@ export default {
       console.log(error)
     }
 
-    this.group.description = marked(this.group.description)
+    this.group.description = render(this.group.description)
     this.loading = false
   },
 }

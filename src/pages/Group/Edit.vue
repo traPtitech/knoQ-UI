@@ -164,7 +164,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import marked from 'marked'
+import { render } from '@/utils/markdown-it'
 import GroupConfirm from '@/components/group/confirm'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 const GroupsRepository = RepositoryFactory.get('groups')
@@ -195,8 +195,8 @@ export default {
     }
   },
   computed: {
-    markedDescription: function() {
-      return marked(this.group.description)
+    renderedDescription: function() {
+      return render(this.group.description)
     },
   },
   watch: {

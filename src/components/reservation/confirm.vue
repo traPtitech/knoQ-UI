@@ -12,7 +12,7 @@
         </v-layout>
         <h6>説明</h6>
         <v-flex class="text-xs-left">
-          <span v-html="markedDescription" />
+          <span v-html="renderedDescription" />
         </v-flex>
       </v-container>
       <RoomsExpansion :rooms="selectedRoom" />
@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import marked from 'marked'
 import RoomsExpansion from '@/components/room/expansion'
+import { render } from '@/utils/markdown-it'
 
 export default {
   components: {
@@ -60,9 +60,9 @@ export default {
       }
       return name
     },
-    markedDescription: function() {
+    renderedDescription: function() {
       if (typeof this.reservation.description === 'undefined') return ''
-      return marked(this.reservation.description)
+      return render(this.reservation.description)
     },
   },
 }

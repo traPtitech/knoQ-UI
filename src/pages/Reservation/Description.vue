@@ -168,7 +168,7 @@
 
 <script>
 import moment from 'moment'
-import marked from 'marked'
+import { render } from '@/utils/markdown-it'
 import dateFormat from '@/utils/date'
 import TokyoTech from '@/utils/TokyoTech'
 import RoomsExpansion from '@/components/room/expansion'
@@ -230,7 +230,7 @@ export default {
       this.reservation.room.reservations.push(reservation)
     }
 
-    this.reservation.description = marked(this.reservation.description)
+    this.reservation.description = render(this.reservation.description)
     this.loading = false
   },
   methods: {

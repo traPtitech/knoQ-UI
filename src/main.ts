@@ -1,14 +1,11 @@
 import Vue from 'vue'
 import vuetify from './plugins/vuetify'
 import App from './App.vue'
-import marked from 'marked'
 import moment from 'moment'
 import router from '@/router/router'
 import store from '@/store/store'
 
 Vue.config.productionTip = false
-
-marked.setOptions({ breaks: true })
 
 new Vue({
   vuetify,
