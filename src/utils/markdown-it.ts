@@ -5,4 +5,4 @@ const md = new MarkdownIt({
   linkify: true,
 })
 
-export const render = md.render
+export const render = (src: string) => md.render(src, {})

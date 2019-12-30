@@ -1,64 +1,48 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12" lg="8">
-        <v-card tile elevation="7" class="py-11 px-12 mb-3">
-          <v-row class="px-3">
-            <h1 class="mb-3">Reactもくもく会</h1>
-          </v-row>
-          <v-row>
+  <v-container class="py-2 py-sm-7">
+    <v-row justify="center">
+      <v-col sm="9" cols="12">
+        <v-row align="center" justify-sm="space-between">
+          <v-col class="mx-n1" sm="7" cols="12">
+            <h1 class="mb-3 display-1 font-weight-bold">{{ title }}</h1>
             <Tag v-for="(tag, i) in tags" :key="i" :name="tag" />
-          </v-row>
-          <v-row>
-            <v-img
-              max-height="150"
-              contain
-              class="my-9"
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
-            />
-          </v-row>
-          <v-row>
-            <v-col cols="12" sm="2">
-              Date
-            </v-col>
-            <v-col cols="12" sm="10">
-              2019-11-15 Fri 17:00 ~ 20:00
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" sm="2">
-              Place
-            </v-col>
-            <v-col cols="12" sm="10">
-              W933
-            </v-col>
-          </v-row>
-        </v-card>
-        <v-card tile elevation="7" class="py-7 px-12">
-          <div class="mb-5">Description</div>
-          Reactを題材としてもくもく会を開催します！
-          <ul>
-            <li>React Hooks</li>
-            <li>React Native</li>
-          </ul>
-        </v-card>
-      </v-col>
-      <v-col cols="12" lg="4">
-        <v-card tile elevation="7">
-          <v-row align="center" class="px-9 py-5">
-            <v-col cols="3">
-              <v-avatar color="orange" size="62">SA</v-avatar>
-            </v-col>
-            <v-col>
-              SysAd
-            </v-col>
-          </v-row>
-          <v-row justify="center">
-            <v-btn class="mb-8">
+          </v-col>
+          <v-col sm="3" cols="12">
+            <v-btn>
               Join
             </v-btn>
-          </v-row>
-        </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-img max-height="150" contain class="my-9" :src="img" />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" sm="2">
+            Date
+          </v-col>
+          <v-col cols="12" sm="10">
+            {{ formattedSpan }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" sm="2">
+            Place
+          </v-col>
+          <v-col cols="12" sm="10">
+            {{ place }}
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" sm="2">
+            Group
+          </v-col>
+          <v-col cols="12" sm="10">
+            {{ group }}
+          </v-col>
+        </v-row>
+        <MarkdownField class="mt-10" :src="description" />
       </v-col>
     </v-row>
   </v-container>
@@ -67,14 +51,46 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
+import moment from 'moment'
 import Tag from '@/components/Molecules/Tag.vue'
+import MarkdownField from '@/components/shared/MarkdownField.vue'
 
 @Component({
   components: {
     Tag,
+    MarkdownField,
   },
 })
 export default class EventDetail extends Vue {
-  tags: string[] = ['react', 'ts', 'frontend']
+  title = 'Vueもくもく会'
+
+  tags = ['vue', 'ts', 'frontend']
+
+  img =
+    'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K'
+
+  description = [
+    '## Vueもくもく会　開催決定!',
+    '自分だけの最強のVueコンポーネントをつくろう!!',
+    '- Vue初心者',
+    '- Vue強者',
+    '',
+    '参加をお待ちしてます!!',
+  ].join('\n')
+
+  date = '2020-01-01'
+
+  time_start = '17:00'
+  time_end = '20:00'
+
+  place = 'W933'
+
+  group = 'SysAd'
+
+  get formattedSpan(): string {
+    const start = moment(`${this.date} ${this.time_start}`).format('lll')
+    const end = moment(`${this.date} ${this.time_end}`).format('lll')
+    return `${start} ~ ${end}`
+  }
 }
 </script>
