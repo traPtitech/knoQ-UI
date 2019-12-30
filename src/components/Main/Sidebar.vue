@@ -1,8 +1,12 @@
 <template>
-  <v-navigation-drawer v-model="drawer" app mobile-break-point="991">
+  <v-navigation-drawer
+    v-model="drawer"
+    app
+    :mobile-break-point="$vuetify.breakpoint.thresholds.sm"
+  >
     <Header />
 
-    <v-list nav dense>
+    <v-list nav>
       <NavLink v-for="nav in navs" :key="nav.title" v-bind="nav" />
     </v-list>
 
@@ -30,6 +34,10 @@ export default class Sidebar extends Vue {
   drawer: boolean | null = null
 
   navs = _navs
+
+  toggleDrawer(): void {
+    this.drawer = !this.drawer
+  }
 }
 
 const _navs = [

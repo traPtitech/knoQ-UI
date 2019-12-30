@@ -6,19 +6,17 @@
         Close
       </v-btn>
     </v-snackbar>
-    <Sidebar />
-    <Header />
+    <Sidebar ref="sidebar" />
+    <NavBar @toggleDrawer="toggleDrawer" />
     <v-content>
       <router-view />
     </v-content>
-    <Footer />
   </v-app>
 </template>
 
 <script>
-import Header from '@/components/Organisms/Header'
-import Footer from '@/components/Organisms/Footer'
-import Sidebar from '@/components/Main/Sidebar/Sidebar'
+import Sidebar from '@/components/Main/Sidebar'
+import NavBar from '@/components/Main/NavBar'
 import { RepositoryFactory } from './repositories/RepositoryFactory'
 import { mapActions } from 'vuex'
 
@@ -26,9 +24,8 @@ const RoomsRepository = RepositoryFactory.get('rooms')
 export default {
   name: 'App',
   components: {
-    Header,
-    Footer,
     Sidebar,
+    NavBar,
   },
   data() {
     return {
@@ -51,6 +48,9 @@ export default {
     await this.getUserMe()
   },
   methods: {
+    toggleDrawer: function() {
+      this.$refs.sidebar.toggleDrawer()
+    },
     roomsAll: async function() {
       try {
         const response = await RoomsRepository.postAll()
