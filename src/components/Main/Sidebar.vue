@@ -47,7 +47,7 @@ const _navs = [
     link: '/',
   },
   {
-    icon: 'mdi-calender',
+    icon: 'mdi-calendar',
     title: 'Events',
     link: '/events',
   },
@@ -57,7 +57,7 @@ const _navs = [
     link: '/rooms',
   },
   {
-    icon: 'mdi-accound-group',
+    icon: 'mdi-account-group',
     title: 'Groups',
     link: '/groups',
   },

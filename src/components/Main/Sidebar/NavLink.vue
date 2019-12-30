@@ -1,15 +1,11 @@
 <template>
   <v-list-item link>
-    <v-list-item-icon>
+    <v-btn depressed rounded block @click="onClick()">
       <v-icon>{{ icon }}</v-icon>
-    </v-list-item-icon>
-    <v-list-item-content>
-      <router-link :to="link">
-        <v-list-item-title>
-          {{ title }}
-        </v-list-item-title>
-      </router-link>
-    </v-list-item-content>
+      <v-list-item-title>
+        {{ title }}
+      </v-list-item-title>
+    </v-btn>
   </v-list-item>
 </template>
 
@@ -27,5 +23,9 @@ export default class NavLink extends Vue {
 
   @Prop()
   icon!: string
+
+  onClick() {
+    this.$router.push(this.link)
+  }
 }
 </script>
