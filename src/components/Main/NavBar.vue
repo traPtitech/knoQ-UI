@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app v-if="$vuetify.breakpoint.smAndDown">
     <v-app-bar-nav-icon @click="onClickNavIcon" />
-    <v-toolbar-title>
+    <v-toolbar-title class="headline font-weight-bold">
       Room
     </v-toolbar-title>
   </v-app-bar>
