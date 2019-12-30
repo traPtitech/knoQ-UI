@@ -1,5 +1,5 @@
 <template>
-  <v-container class="py-2 py-sm-7">
+  <v-container class="mx-4 py-2 py-sm-7">
     <v-row justify="center">
       <v-col sm="9" cols="12">
         <v-row align="center" justify-sm="space-between">
