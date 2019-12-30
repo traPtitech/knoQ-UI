@@ -1,0 +1,57 @@
+<template>
+  <v-navigation-drawer v-model="drawer" app mobile-break-point="991">
+    <Header />
+
+    <v-list nav dense>
+      <NavLink v-for="nav in navs" :key="nav.title" v-bind="nav" />
+    </v-list>
+
+    <template v-slot:append>
+      <Footer />
+    </template>
+  </v-navigation-drawer>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+import Header from '@/components/Main/Sidebar/Header.vue'
+import NavLink from '@/components/Main/Sidebar/NavLink.vue'
+import Footer from '@/components/Main/Sidebar/Footer.vue'
+
+@Component({
+  components: {
+    Header,
+    NavLink,
+    Footer,
+  },
+})
+export default class Sidebar extends Vue {
+  drawer: boolean | null = null
+
+  navs = _navs
+}
+
+const _navs = [
+  {
+    icon: 'mdi-view-dashboard',
+    title: 'Dashboard',
+    link: '/',
+  },
+  {
+    icon: 'mdi-calender',
+    title: 'Events',
+    link: '/events',
+  },
+  {
+    icon: 'mdi-map-marker',
+    title: 'Rooms',
+    link: '/rooms',
+  },
+  {
+    icon: 'mdi-accound-group',
+    title: 'Groups',
+    link: '/groups',
+  },
+]
+</script>

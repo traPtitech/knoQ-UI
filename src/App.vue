@@ -6,6 +6,7 @@
         Close
       </v-btn>
     </v-snackbar>
+    <Sidebar />
     <Header />
     <v-content>
       <router-view />
@@ -17,6 +18,7 @@
 <script>
 import Header from '@/components/Organisms/Header'
 import Footer from '@/components/Organisms/Footer'
+import Sidebar from '@/components/Main/Sidebar/Sidebar'
 import { RepositoryFactory } from './repositories/RepositoryFactory'
 import { mapActions } from 'vuex'
 
@@ -26,6 +28,7 @@ export default {
   components: {
     Header,
     Footer,
+    Sidebar,
   },
   data() {
     return {
