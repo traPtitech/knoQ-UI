@@ -1,12 +1,16 @@
 <template>
-  <v-card flat class="px-7">
+  <v-card flat class="px-7 mt-n5 mb-5">
     <v-row>
-      <v-col cols="1" class="pt-8">
+      <v-col lg="2" cols="12" class="pt-8 mb-n7">
         <span class="title">{{ formattedDate }}</span>
       </v-col>
       <v-col>
         <v-list>
-          <v-list-item-content v-for="(event, i) in events" :key="i">
+          <v-list-item-content
+            v-for="(event, i) in events"
+            :key="i"
+            class="mb-n2"
+          >
             <EventTape v-bind="event" />
           </v-list-item-content>
         </v-list>

@@ -1,5 +1,5 @@
 <template>
-  <v-list>
+  <v-list class="overflow-y-auto" max-height="85vh">
     <EventDateSegment
       v-for="[date, events] in eventsSplittedByDate"
       :key="date"
@@ -44,7 +44,7 @@ export default class EventList extends Vue {
       timeStart: '12:00',
       timeEnd: '16:30',
       place: 'place5',
-      title: 'event5',
+      title: 'event5555555555555555555',
     },
     {
       id: 4,

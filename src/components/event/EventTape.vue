@@ -1,7 +1,7 @@
 <template>
-  <v-card flat class="px-6" color="grey lighten-4" @click="onClick">
-    <v-row align="center" justify="space-between">
-      <v-col cols="2">
+  <v-card flat class="px-3 px-md-6" color="grey lighten-4" @click="onClick">
+    <v-row align="center">
+      <v-col cols="2" style="min-width: 4em">
         <div class="mb-4">
           {{ timeStart }}
         </div>
@@ -9,10 +9,10 @@
           {{ timeEnd }}
         </div>
       </v-col>
-      <v-col>
+      <v-col class="text-truncate">
         <span class="title">{{ title }}</span>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="2" style="min-width: 5em">
         {{ place }}
       </v-col>
     </v-row>
