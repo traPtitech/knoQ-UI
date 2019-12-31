@@ -12,6 +12,7 @@ import GroupsNew from '@/pages/Group/New.vue'
 import Search from '@/pages/Search.vue'
 import EventDetail from '@/pages/Event/Detail.vue'
 import NotFound from '@/pages/NotFound.vue'
+import Events from '@/pages/Event/Events.vue'
 
 Vue.use(Router)
 
@@ -67,6 +68,11 @@ export default new Router({
       path: '/search',
       name: 'Search',
       component: Search,
+    },
+    {
+      path: '/events',
+      name: 'Events',
+      component: Events,
     },
     {
       path: '/events/:id',
