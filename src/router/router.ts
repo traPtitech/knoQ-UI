@@ -11,6 +11,7 @@ import GroupEdit from '@/pages/Group/Edit.vue'
 import GroupsNew from '@/pages/Group/New.vue'
 import Search from '@/pages/Search.vue'
 import EventDetail from '@/pages/Event/Detail.vue'
+import NotFound from '@/pages/NotFound.vue'
 
 Vue.use(Router)
 
@@ -71,6 +72,11 @@ export default new Router({
       path: '/events/:id',
       name: 'EventDetail',
       component: EventDetail,
+    },
+    {
+      path: '*',
+      name: 'NotFound',
+      component: NotFound,
     },
   ],
 })
