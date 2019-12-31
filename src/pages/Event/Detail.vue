@@ -1,62 +1,60 @@
 <template>
-  <v-container class="mx-4 py-2 py-sm-7">
-    <v-row justify="center">
-      <v-col sm="9" cols="12">
-        <v-row align="center" justify-sm="space-between">
-          <v-col class="mx-n1" sm="7" cols="12">
-            <h1 class="mb-3 display-1 font-weight-bold">{{ title }}</h1>
-            <Tag v-for="(tag, i) in tags" :key="i" :name="tag" />
-          </v-col>
-          <v-col sm="3" cols="12">
-            <v-btn>
-              Join
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-img max-height="150" contain class="my-9" :src="img" />
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="2">
-            Date
-          </v-col>
-          <v-col cols="12" sm="10">
-            {{ formattedSpan }}
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="2">
-            Place
-          </v-col>
-          <v-col cols="12" sm="10">
-            {{ place }}
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="2">
-            Group
-          </v-col>
-          <v-col cols="12" sm="10">
-            {{ group }}
-          </v-col>
-        </v-row>
-        <MarkdownField class="mt-10" :src="description" />
+  <Layout>
+    <v-row align="center" justify-sm="space-between">
+      <v-col class="mx-n1" sm="7" cols="12">
+        <h1 class="mb-3 display-1 font-weight-bold">{{ title }}</h1>
+        <Tag v-for="(tag, i) in tags" :key="i" :name="tag" />
+      </v-col>
+      <v-col sm="3" cols="12">
+        <v-btn>
+          Join
+        </v-btn>
       </v-col>
     </v-row>
-  </v-container>
+    <v-row>
+      <v-col>
+        <v-img max-height="150" contain class="my-9" :src="img" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="2">
+        Date
+      </v-col>
+      <v-col cols="12" sm="10">
+        {{ formattedSpan }}
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="2">
+        Place
+      </v-col>
+      <v-col cols="12" sm="10">
+        {{ place }}
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="12" sm="2">
+        Group
+      </v-col>
+      <v-col cols="12" sm="10">
+        {{ group }}
+      </v-col>
+    </v-row>
+    <MarkdownField class="mt-10" :src="description" />
+  </Layout>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
+import Layout from '@/components/shared/Layout.vue'
 import Tag from '@/components/Molecules/Tag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 
 @Component({
   components: {
+    Layout,
     Tag,
     MarkdownField,
   },
