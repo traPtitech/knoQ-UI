@@ -10,9 +10,10 @@ import GroupDescription from '@/pages/Group/Description.vue'
 import GroupEdit from '@/pages/Group/Edit.vue'
 import GroupsNew from '@/pages/Group/New.vue'
 import Search from '@/pages/Search.vue'
-import EventDetail from '@/pages/Event/Detail.vue'
-import NotFound from '@/pages/NotFound.vue'
 import Events from '@/pages/Event/Events.vue'
+import EventDetail from '@/pages/Event/Detail.vue'
+import EventNew from '@/pages/Event/New.vue'
+import NotFound from '@/pages/NotFound.vue'
 
 Vue.use(Router)
 
@@ -73,6 +74,11 @@ export default new Router({
       path: '/events',
       name: 'Events',
       component: Events,
+    },
+    {
+      path: '/events/new',
+      name: 'EventNew',
+      component: EventNew,
     },
     {
       path: '/events/:id',
