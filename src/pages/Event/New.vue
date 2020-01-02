@@ -8,11 +8,11 @@
         </v-stepper-step>
         <v-divider />
         <v-stepper-step :complete="step > 2" step="2">
-          Room
+          Set schedule and place
         </v-stepper-step>
         <v-divider />
         <v-stepper-step :complete="step > 3" step="3">
-          Confirm
+          Confirmation
         </v-stepper-step>
       </v-stepper-header>
 
@@ -20,22 +20,40 @@
 
       <v-stepper-items class="pb-1">
         <v-stepper-content step="1">
-          <EventContentForm v-model="valid" v-bind.sync="event" />
+          <EventContentForm v-model="valid1" v-bind.sync="event" />
           <v-btn
             color="primary"
             rounded
             depressed
-            :disabled="!valid"
+            :disabled="!valid1"
             @click="step = 2"
           >
             Continue
           </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <h2>Step 2</h2>
+          <EventReservationForm v-model="valid2" v-bind.sync="event" />
+          <v-btn rounded depressed @click="step = 1" class="mr-2">
+            Back
+          </v-btn>
+          <v-btn
+            color="primary"
+            rounded
+            depressed
+            :disabled="!valid2"
+            @click="step = 3"
+          >
+            Continue
+          </v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
-          <h2>Step 3</h2>
+          <EventFormSummary v-bind="event" />
+          <v-btn rounded depressed @click="step = 2" class="mr-2">
+            Back
+          </v-btn>
+          <v-btn color="primary" rounded depressed @click="submitNewEvent()">
+            Submit
+          </v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -47,23 +65,33 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Layout from '@/components/shared/Layout.vue'
 import EventContentForm from '@/components/event/EventContentForm.vue'
+import EventReservationForm from '@/components/event/EventReservationForm.vue'
+import EventFormSummary from '@/components/event/EventFormSummary.vue'
 
 @Component({
   components: {
     Layout,
     EventContentForm,
+    EventReservationForm,
+    EventFormSummary,
   },
 })
 export default class New extends Vue {
   step = 1
 
-  valid = false
+  valid1 = false
+  valid2 = false
 
   event = {
     name: '',
     group: '',
+    room: '',
     tags: [],
     description: '',
+  }
+
+  submitNewEvent() {
+    alert(JSON.stringify(this.event))
   }
 }
 </script>

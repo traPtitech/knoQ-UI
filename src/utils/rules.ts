@@ -5,4 +5,5 @@ export default {
   ],
   eventName: [v => !!v || 'Name is required'],
   eventGroup: [v => !!v || 'Group is required'],
+  eventRoom: [v => !!v || 'Room is required'],
 }

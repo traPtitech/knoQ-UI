@@ -33,7 +33,11 @@
       v-model="_tags"
       :items="tagList"
       class="mb-2"
-    />
+    >
+      <template v-slot:selection="data">
+        <Tag :key="data.item" :name="data.item" class="mt-3" />
+      </template>
+    </v-combobox>
     <v-textarea
       filled
       rows="15"
@@ -48,9 +52,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
+import Tag from '@/components/Molecules/Tag.vue'
 import Rules from '@/utils/rules'
 
-@Component
+@Component({
+  components: {
+    Tag,
+  },
+})
 export default class EventContentForm extends Vue {
   @Prop()
   value: boolean
