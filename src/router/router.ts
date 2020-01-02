@@ -1,19 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/pages/Home.vue'
-import Rooms from '@/pages/Room/Rooms.vue'
-import Reservations from '@/pages/Reservation/Reservations.vue'
-import ReservationDescription from '@/pages/Reservation/Description.vue'
-import ReservationNew from '@/pages/Reservation/New.vue'
-import Groups from '@/pages/Group/Groups.vue'
-import GroupDescription from '@/pages/Group/Description.vue'
-import GroupEdit from '@/pages/Group/Edit.vue'
-import GroupsNew from '@/pages/Group/New.vue'
-import Search from '@/pages/Search.vue'
 import Events from '@/pages/Event/Events.vue'
 import EventDetail from '@/pages/Event/Detail.vue'
 import EventNew from '@/pages/Event/New.vue'
+import GroupsNew from '@/pages/Group/New.vue'
 import NotFound from '@/pages/NotFound.vue'
+import WIP from '@/pages/WIP.vue'
 
 Vue.use(Router)
 
@@ -23,32 +15,17 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home,
+      component: WIP,
     },
     {
       path: '/rooms',
       name: 'Rooms',
-      component: Rooms,
-    },
-    {
-      path: '/reservaions',
-      name: 'Reservations',
-      component: Reservations,
-    },
-    {
-      path: '/reservations/:id',
-      name: 'ReservationDescription',
-      component: ReservationDescription,
-    },
-    {
-      path: '/reservaions/new',
-      name: 'ReservationNew',
-      component: ReservationNew,
+      component: WIP,
     },
     {
       path: '/groups',
       name: 'Groups',
-      component: Groups,
+      component: WIP,
     },
     {
       path: '/groups/new',
@@ -58,17 +35,12 @@ export default new Router({
     {
       path: '/groups/:id',
       name: 'GroupDescription',
-      component: GroupDescription,
+      component: WIP,
     },
     {
       path: '/groups/:id/edit',
       name: 'GroupEdit',
-      component: GroupEdit,
-    },
-    {
-      path: '/search',
-      name: 'Search',
-      component: Search,
+      component: WIP,
     },
     {
       path: '/events',
