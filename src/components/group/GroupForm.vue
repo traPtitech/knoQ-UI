@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="_valid">
+  <v-form v-model="valid">
     <v-text-field
       filled
       label="name"
@@ -47,7 +47,7 @@ export default class GroupForm extends Vue {
   joinFreely: boolean
 
   @Prop()
-  valid: boolean
+  value: boolean
 
   membersList = ['fuji', 'you10', 'wasabi']
 
@@ -86,11 +86,11 @@ export default class GroupForm extends Vue {
     this.$emit('update:joinFreely', value)
   }
 
-  private get _valid(): boolean {
-    return this.valid
+  private get valid(): boolean {
+    return this.value
   }
 
-  private set _valid(value: boolean) {
+  private set valid(value: boolean) {
     this.$emit('input', value)
   }
 }
