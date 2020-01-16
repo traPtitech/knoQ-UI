@@ -6,6 +6,7 @@ import EventNew from '@/pages/Event/New.vue'
 import GroupsNew from '@/pages/Group/New.vue'
 import NotFound from '@/pages/NotFound.vue'
 import WIP from '@/pages/WIP.vue'
+import PathStorage from '@/utils/PathStorage'
 
 Vue.use(Router)
 
@@ -60,7 +61,7 @@ export default new Router({
     {
       path: '/callback',
       name: 'Callback',
-      component: () => import('@/pages/NotFound.vue'),
+      beforeEnter: (to, from, next) => next(PathStorage.getSavedPath() || '/'),
     },
     {
       path: '*',

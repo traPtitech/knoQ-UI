@@ -1,4 +1,5 @@
 import axios from 'axios'
+import PathStorage from '@/utils/PathStorage'
 
 const baseURL =
   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '/api'
@@ -12,6 +13,7 @@ api.interceptors.response.use(null, async err => {
   if (err.response.status === 401) {
     // if unauthorized
     const codes = await fetchAuthParams()
+    PathStorage.saveCurrentPath()
     redirectToAuthPage(codes)
   }
   return Promise.reject(err)
