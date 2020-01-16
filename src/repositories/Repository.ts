@@ -1,13 +1,42 @@
 import axios from 'axios'
 
-let baseURL = '/api'
+const baseURL =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '/api'
+const traQAPIBaseURL = 'https://q.trap.jp/api/1.0'
 
-// buildするとproductionが入る
-if (process.env.NODE_ENV === 'development') {
-  baseURL = 'http://localhost:3000/api'
-  // baseURL = 'http://192.168.11.4:3000/api'
-}
-
-export default axios.create({
+const api = axios.create({
   baseURL,
 })
+
+api.interceptors.response.use(null, async err => {
+  if (err.response.status === 401) {
+    // if unauthorized
+    const codes = await fetchAuthParams()
+    redirectToAuthPage(codes)
+  }
+  return Promise.reject(err)
+})
+
+export default api
+
+interface AuthParams {
+  state: string
+  code_challenge: string
+  client_id: string
+}
+
+const fetchAuthParams = async (): Promise<AuthParams> => {
+  const res = await api.post('/authParams')
+  return res.data
+}
+
+const redirectToAuthPage = (codes: AuthParams) => {
+  const authEndpointURL = new URL(`${traQAPIBaseURL}/oauth/authorize`)
+  authEndpointURL.searchParams.set('response_type', 'code')
+  authEndpointURL.searchParams.set('client_id', codes.client_id)
+  authEndpointURL.searchParams.set('state', codes.state)
+  authEndpointURL.searchParams.set('code_challenge', codes.code_challenge)
+  authEndpointURL.searchParams.set('code_challenge_method', 'S256')
+
+  window.location.assign(authEndpointURL.href)
+}

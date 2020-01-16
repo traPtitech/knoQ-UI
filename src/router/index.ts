@@ -58,6 +58,11 @@ export default new Router({
       component: EventDetail,
     },
     {
+      path: '/callback',
+      name: 'Callback',
+      component: () => import('@/pages/NotFound.vue'),
+    },
+    {
       path: '*',
       name: 'NotFound',
       component: NotFound,
