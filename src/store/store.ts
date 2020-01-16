@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import moment from 'moment'
-const ReservationsRepository = RepositoryFactory.get('reservations')
+
 const GroupsRepository = RepositoryFactory.get('groups')
 const UsersRepository = RepositoryFactory.get('users')
 // const RoomsRepository = RepositoryFactory.get('rooms')
@@ -85,24 +84,6 @@ export default new Vuex.Store({
         const response = await GroupsRepository.get({ traQID: traQID })
         console.log(response)
         commit('changeMyGroups', response.data)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async getMyReservations({ commit }) {
-      const payload = {
-        traQID: this.state.loginUser.traq_id,
-        dateBegin: moment(new Date()).format('YYYY-MM-DD'),
-      }
-      try {
-        let response = await ReservationsRepository.get(payload)
-        console.log(response)
-        for (let i = 0; i < response.data.length; i++) {
-          let date
-          date = new Date(response.data[i].date)
-          response.data[i].date = date
-        }
-        commit('changeMyReservations', response.data)
       } catch (error) {
         console.log(error)
       }
