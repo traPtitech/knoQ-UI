@@ -64,9 +64,9 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Layout from '@/components/shared/Layout.vue'
-import EventContentForm from '@/components/event/EventContentForm.vue'
-import EventReservationForm from '@/components/event/EventReservationForm.vue'
-import EventFormSummary from '@/components/event/EventFormSummary.vue'
+import EventContentForm from '@/components/event/EventForm/EventContentForm.vue'
+import EventReservationForm from '@/components/event/EventForm/EventReservationForm.vue'
+import EventFormSummary from '@/components/event/EventForm/EventFormSummary.vue'
 
 @Component({
   components: {

@@ -45,7 +45,7 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import Avatar from '@/components/Molecules/Avatar.vue'
+import Avatar from '@/components/shared/Avatar.vue'
 import { render } from '@/utils/markdown-it'
 
 @Component({
@@ -54,7 +54,7 @@ import { render } from '@/utils/markdown-it'
     Avatar,
   },
 })
-export default class GroupFormSummary extends Vue {
+export default class GroupEventFormSummary extends Vue {
   @Prop()
   name: string
 

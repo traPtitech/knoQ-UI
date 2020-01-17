@@ -19,9 +19,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import Header from '@/components/Main/Sidebar/Header.vue'
-import NavLink from '@/components/Main/Sidebar/NavLink.vue'
-import Footer from '@/components/Main/Sidebar/Footer.vue'
+import Header from '@/components/main/Sidebar/Header.vue'
+import NavLink from '@/components/main/Sidebar/NavLink.vue'
+import Footer from '@/components/main/Sidebar/Footer.vue'
 
 @Component({
   components: {

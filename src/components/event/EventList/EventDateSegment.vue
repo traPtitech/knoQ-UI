@@ -23,7 +23,7 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
-import EventTape from '@/components/event/EventTape.vue'
+import EventTape from '@/components/event/EventList/EventTape.vue'
 
 @Component({
   components: {

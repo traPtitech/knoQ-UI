@@ -52,7 +52,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import Tag from '@/components/Molecules/Tag.vue'
+import Tag from '@/components/shared/Tag.vue'
 import Rules from '@/utils/rules'
 
 @Component({

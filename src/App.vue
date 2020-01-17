@@ -11,8 +11,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import Sidebar from '@/components/Main/Sidebar.vue'
-import NavBar from '@/components/Main/NavBar.vue'
+import Sidebar from '@/components/main/Sidebar/Sidebar.vue'
+import NavBar from '@/components/main/NavBar/NavBar.vue'
 import { RepositoryFactory } from './repositories/RepositoryFactory'
 
 @Component({

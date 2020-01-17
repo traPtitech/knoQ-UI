@@ -9,7 +9,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Layout from '@/components/shared/Layout.vue'
-import EventList from '@/components/event/EventList.vue'
+import EventList from '@/components/event/EventList/EventList.vue'
 
 @Component({
   components: {

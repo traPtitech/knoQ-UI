@@ -48,8 +48,8 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Layout from '@/components/shared/Layout.vue'
-import GroupForm from '@/components/group/GroupForm.vue'
-import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
+import GroupForm from '@/components/group/GroupForm/GroupForm.vue'
+import GroupFormSummary from '@/components/group/GroupForm/GroupFormSummary.vue'
 import Rules from '@/utils/rules'
 
 @Component({

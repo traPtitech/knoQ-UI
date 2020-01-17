@@ -49,7 +49,7 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
 import Layout from '@/components/shared/Layout.vue'
-import Tag from '@/components/Molecules/Tag.vue'
+import Tag from '@/components/shared/Tag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 
 @Component({

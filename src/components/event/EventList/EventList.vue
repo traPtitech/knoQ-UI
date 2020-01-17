@@ -12,7 +12,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import EventDateSegment from '@/components/event/EventDateSegment.vue'
+import EventDateSegment from '@/components/event/EventList/EventDateSegment.vue'
 import { groupBy } from '@/utils/arrayUtil'
 
 @Component({

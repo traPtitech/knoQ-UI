@@ -36,7 +36,7 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import Tag from '@/components/Molecules/Tag.vue'
+import Tag from '@/components/shared/Tag.vue'
 
 @Component({
   components: {
