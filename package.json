@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-plugin-root-import": "^6.4.1",
+    "direct-vuex": "^0.9.9",
     "eslint-plugin-vue": "^6.0.0",
     "markdown-it": "^10.0.0",
     "moment": "^2.24.0",
