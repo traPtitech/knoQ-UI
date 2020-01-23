@@ -1,23 +1,44 @@
-import Repository from './Repository'
+import { AxiosPromise } from 'axios'
+import Repository from '@/repositories/Repository'
 
 const resource = '/groups'
 
 export default {
-  get(payload) {
-    return Repository.get(`${resource}`, {
-      params: {
-        id: payload.id,
-        name: payload.name,
-        traQID: payload.traQID,
+  get(): AxiosPromise<API.Groups.Get.Responses.$200> {
+    return Repository.get(resource)
+  },
+
+  post(
+    body: API.Groups.Post.RequestBody
+  ): AxiosPromise<API.Groups.Post.Responses.$201> {
+    return Repository.post(resource, body)
+  },
+
+  $groupId: (groupId: string) => ({
+    get(): AxiosPromise<API.Groups.$GroupId.Get.Responses.$200> {
+      return Repository.get(`${resource}/${groupId}`)
+    },
+
+    put(
+      body: API.Groups.$GroupId.Put.RequestBody
+    ): AxiosPromise<API.Groups.$GroupId.Put.Responses.$200> {
+      return Repository.put(`${resource}/${groupId}`, body)
+    },
+
+    delete(): AxiosPromise<void> {
+      return Repository.delete(`${resource}/${groupId}`)
+    },
+
+    members: {
+      me: {
+        put(): AxiosPromise<API.Groups.$GroupId.Members.Me.Put.Responses.$200> {
+          return Repository.put(`${resource}/${groupId}/members/me`)
+        },
+
+        delete(): AxiosPromise<void> {
+          return Repository.delete(`${resource}/${groupId}/members/me`)
+        },
       },
-    })
-  },
-
-  post(payload) {
-    return Repository.post(`${resource}`, payload)
-  },
-
-  patch(id, payload) {
-    return Repository.patch(`${resource}/${id}`, payload)
-  },
+    },
+  }),
 }
