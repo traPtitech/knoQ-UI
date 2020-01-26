@@ -60,7 +60,7 @@ declare namespace Schemas {
 
   export interface Me {
     userId: string
-    admin: string
+    admin: boolean
   }
 
   export interface Image {
