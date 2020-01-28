@@ -69,7 +69,7 @@ export default new Vuex.Store({
     getUserMe: async function({ commit }) {
       if (!Object.keys(this.state.loginUser).length) {
         try {
-          const response = await UsersRepository.getMe()
+          const response = await UsersRepository.me.get()
           console.log(response)
           await commit('setLoginUser', response.data)
         } catch (error) {
@@ -81,7 +81,7 @@ export default new Vuex.Store({
       const traQID = this.state.loginUser.traq_id
       console.log(traQID)
       try {
-        const response = await GroupsRepository.get({ traQID: traQID })
+        const response = await UsersRepository.me.groups.get()
         console.log(response)
         commit('changeMyGroups', response.data)
       } catch (error) {
