@@ -61,7 +61,7 @@ export default new Router({
     {
       path: '/callback',
       name: 'Callback',
-      beforeEnter: (to, from, next) => next(PathStorage.getSavedPath() || '/'),
+      redirect: PathStorage.getSavedPath() || '/',
     },
     {
       path: '*',
