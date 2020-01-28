@@ -73,8 +73,8 @@ const router = new Router({
 })
 
 router.beforeEach(async (_to, _from, next) => {
-  if (!store.state.loginUser.traq_id) {
-    await store.dispatch('getUserMe')
+  if (!store.state.me) {
+    await store.dispatch.getMe()
   }
   next()
 })

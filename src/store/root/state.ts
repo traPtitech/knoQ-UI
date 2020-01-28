@@ -1,5 +1,5 @@
 export interface State {
-  me: Schemas.Me
+  me: Schemas.Me | null
 }
 
 export const state = (): State => ({
