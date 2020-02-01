@@ -23,8 +23,8 @@ export default api
 
 interface AuthParams {
   state: string
-  code_challenge: string
-  client_id: string
+  codeChallenge: string
+  clientId: string
 }
 
 const fetchAuthParams = async (): Promise<AuthParams> => {
@@ -35,9 +35,9 @@ const fetchAuthParams = async (): Promise<AuthParams> => {
 const redirectToAuthPage = (codes: AuthParams) => {
   const authEndpointURL = new URL(`${traQAPIBaseURL}/oauth/authorize`)
   authEndpointURL.searchParams.set('response_type', 'code')
-  authEndpointURL.searchParams.set('client_id', codes.client_id)
+  authEndpointURL.searchParams.set('client_id', codes.clientId)
   authEndpointURL.searchParams.set('state', codes.state)
-  authEndpointURL.searchParams.set('code_challenge', codes.code_challenge)
+  authEndpointURL.searchParams.set('code_challenge', codes.codeChallenge)
   authEndpointURL.searchParams.set('code_challenge_method', 'S256')
 
   window.location.assign(authEndpointURL.href)
