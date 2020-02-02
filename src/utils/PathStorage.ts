@@ -2,7 +2,7 @@ const pathKey = 'path'
 
 export default {
   saveCurrentPath(): void {
-    sessionStorage.setItem(pathKey, location.pathname)
+    sessionStorage.setItem(pathKey, window.location.pathname)
   },
 
   getSavedPath(): string {
