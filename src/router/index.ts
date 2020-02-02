@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
 import Events from '@/pages/Event/Events.vue'
 import EventDetail from '@/pages/Event/Detail.vue'
 import EventNew from '@/pages/Event/New.vue'
@@ -10,7 +11,7 @@ import PathStorage from '@/utils/PathStorage'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   routes: [
     {
@@ -70,3 +71,12 @@ export default new Router({
     },
   ],
 })
+
+router.beforeEach(async (_to, _from, next) => {
+  if (!store.state.loginUser.traq_id) {
+    await store.dispatch('getUserMe')
+  }
+  next()
+})
+
+export default router

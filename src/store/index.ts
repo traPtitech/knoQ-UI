@@ -67,14 +67,12 @@ export default new Vuex.Store({
   },
   actions: {
     getUserMe: async function({ commit }) {
-      if (!Object.keys(this.state.loginUser).length) {
-        try {
-          const response = await UsersRepository.me.get()
-          console.log(response)
-          await commit('setLoginUser', response.data)
-        } catch (error) {
-          console.error(error)
-        }
+      try {
+        const response = await UsersRepository.me.get()
+        console.log(response)
+        commit('setLoginUser', response.data)
+      } catch (error) {
+        console.error(error)
       }
     },
     getMyGroups: async function({ commit }) {
