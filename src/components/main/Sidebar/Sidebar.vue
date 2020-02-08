@@ -4,10 +4,12 @@
     app
     :mobile-break-point="$vuetify.breakpoint.thresholds.sm"
   >
-    <Header />
+    <template v-slot:prepend>
+      <Header />
+    </template>
 
-    <v-list nav>
-      <NavLink v-for="nav in navs" :key="nav.title" v-bind="nav" />
+    <v-list rounded>
+      <NavLink v-for="(nav, i) in navs" :key="i" v-bind="nav" />
     </v-list>
 
     <template v-slot:append>
@@ -33,14 +35,16 @@ import Footer from '@/components/main/Sidebar/Footer.vue'
 export default class Sidebar extends Vue {
   drawer: boolean | null = null
 
-  navs = _navs
+  get navs() {
+    return navs
+  }
 
-  toggleDrawer(): void {
+  toggleDrawer() {
     this.drawer = !this.drawer
   }
 }
 
-const _navs = [
+const navs = [
   {
     icon: 'mdi-view-dashboard',
     title: 'Dashboard',
