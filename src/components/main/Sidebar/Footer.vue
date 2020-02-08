@@ -2,7 +2,7 @@
   <v-row class="mx-2 mb-3" justify="space-between" align="center">
     <v-col> Room {{ version }} </v-col>
     <v-col class="flex-grow-0">
-      <v-btn icon title="help" :href="helpPageURL" target="_blank">
+      <v-btn icon title="help" :href="helpPageURL">
         <v-icon> mdi-help </v-icon>
       </v-btn>
     </v-col>
