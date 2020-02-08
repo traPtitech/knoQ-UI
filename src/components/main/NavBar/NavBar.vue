@@ -14,6 +14,6 @@ import { Component, Emit } from 'vue-property-decorator'
 @Component
 export default class NavBar extends Vue {
   @Emit('toggleDrawer')
-  onClickNavIcon(): void {}
+  onClickNavIcon() {}
 }
 </script>
