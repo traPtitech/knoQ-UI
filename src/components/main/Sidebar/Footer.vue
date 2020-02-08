@@ -15,7 +15,9 @@ import { Component } from 'vue-property-decorator'
 
 @Component
 export default class Footer extends Vue {
-  version = 'ver0.0.1'
+  get version(): string {
+    return process.env.__APP_VERSION__
+  }
 
   openHelpPage() {
     window.open(helpPageURL)
