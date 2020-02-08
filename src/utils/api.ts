@@ -19,7 +19,7 @@ export const fetchAuthParams = (): AxiosPromise<AuthParams> => {
 }
 
 export const redirectToAuthPage = (codes: AuthParams) => {
-  const authEndpointURL = new URL(`${traQAPIBaseURL}/oauth/authorize`)
+  const authEndpointURL = new URL(`${traQAPIBaseURL}/oauth2/authorize`)
   authEndpointURL.searchParams.set('response_type', 'code')
   authEndpointURL.searchParams.set('client_id', codes.clientId)
   authEndpointURL.searchParams.set('state', codes.state)
