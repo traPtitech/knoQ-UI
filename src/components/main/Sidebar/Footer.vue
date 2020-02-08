@@ -1,10 +1,10 @@
 <template>
-  <v-row class="mx-2 mb-3" align="center">
-    <v-col cols="9">
-      <span class="body">Room {{ version }}</span>
-    </v-col>
-    <v-col cols="3">
-      <v-icon class="body" @click="openHelpPage">mdi-help</v-icon>
+  <v-row class="mx-2 mb-3" justify="space-between" align="center">
+    <v-col> Room {{ version }} </v-col>
+    <v-col class="flex-grow-0">
+      <v-btn icon title="help" :href="helpPageURL" target="_blank">
+        <v-icon> mdi-help </v-icon>
+      </v-btn>
     </v-col>
   </v-row>
 </template>
@@ -19,8 +19,8 @@ export default class Footer extends Vue {
     return process.env.__APP_VERSION__
   }
 
-  openHelpPage() {
-    window.open(helpPageURL)
+  get helpPageURL() {
+    return helpPageURL
   }
 }
 
