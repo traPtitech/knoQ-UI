@@ -7,7 +7,7 @@ const api = axios.create({
 })
 
 api.interceptors.response.use(null, async err => {
-  if (err.response.status === 401) {
+  if (err.response && err.response.status === 401) {
     // if unauthorized
     const { data: authParams } = await fetchAuthParams()
     PathStorage.saveCurrentPath()
