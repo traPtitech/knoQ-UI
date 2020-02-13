@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :style="{ background }">
     <Sidebar ref="sidebar" />
     <NavBar @toggleDrawer="toggleDrawer" />
     <v-content>
@@ -24,6 +24,10 @@ import { RepositoryFactory } from './repositories/RepositoryFactory'
 export default class App extends Vue {
   toggleDrawer() {
     ;(this.$refs.sidebar as Sidebar).toggleDrawer()
+  }
+
+  get background() {
+    return this.$vuetify.theme.themes.light.background
   }
 }
 </script>

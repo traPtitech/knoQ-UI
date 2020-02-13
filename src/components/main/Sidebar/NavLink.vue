@@ -1,5 +1,5 @@
 <template>
-  <v-list-item link :to="link" color="teal">
+  <v-list-item link :to="link" color="primary">
     <v-list-item-icon>
       <v-icon> {{ icon }} </v-icon>
     </v-list-item-icon>
