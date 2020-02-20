@@ -29,67 +29,25 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, PropSync } from 'vue-property-decorator'
 import Rules from '@/utils/rules'
 
 @Component
 export default class GroupForm extends Vue {
-  @Prop()
-  name: string
-
-  @Prop()
-  description: string
-
-  @Prop()
-  members: string[]
-
-  @Prop()
-  joinFreely: boolean
-
-  @Prop()
-  value: boolean
+  @PropSync('name') _name: string
+  @PropSync('description') _description: string
+  @PropSync('members') _members: string[]
+  @PropSync('joinFreely') _joinFreely: boolean
+  @Prop() value: boolean
 
   membersList = ['fuji', 'you10', 'wasabi']
 
   groupNameRules = Rules.groupNameRules
   groupMembersRules = Rules.groupMembersRules
 
-  private get _name(): string {
-    return this.name
-  }
-
-  private set _name(value: string) {
-    this.$emit('update:name', value)
-  }
-
-  private get _description(): string {
-    return this.description
-  }
-
-  private set _description(value: string) {
-    this.$emit('update:description', value)
-  }
-
-  private get _members(): string[] {
-    return this.members
-  }
-
-  private set _members(value: string[]) {
-    this.$emit('update:members', value)
-  }
-
-  private get _joinFreely(): boolean {
-    return this.joinFreely
-  }
-
-  private set _joinFreely(value: boolean) {
-    this.$emit('update:joinFreely', value)
-  }
-
   private get valid(): boolean {
     return this.value
   }
-
   private set valid(value: boolean) {
     this.$emit('input', value)
   }

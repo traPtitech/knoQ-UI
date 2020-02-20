@@ -25,16 +25,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, PropSync } from 'vue-property-decorator'
 import Rules from '@/utils/rules'
 
 @Component
 export default class EventReservationForm extends Vue {
-  @Prop()
-  value: boolean
-
-  @Prop()
-  room: string
+  @Prop() value: boolean
+  @PropSync('room') _room: string
 
   date: string[] = []
 
@@ -45,17 +42,8 @@ export default class EventReservationForm extends Vue {
   private get valid(): boolean {
     return this.value
   }
-
   private set valid(value: boolean) {
     this.$emit('input', value)
-  }
-
-  private get _room(): string {
-    return this.room
-  }
-
-  private set _room(value: string) {
-    this.$emit('update:room', value)
   }
 
   eventRoomRules = Rules.eventRoom

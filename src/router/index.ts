@@ -74,7 +74,7 @@ const router = new Router({
 
 router.beforeEach(async (_to, _from, next) => {
   if (!store.state.me) {
-    await store.dispatch.getMe()
+    store.dispatch.getMe()
   }
   next()
 })

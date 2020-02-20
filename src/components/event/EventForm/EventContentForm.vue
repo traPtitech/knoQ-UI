@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, PropSync } from 'vue-property-decorator'
 import Tag from '@/components/shared/Tag.vue'
 import Rules from '@/utils/rules'
 
@@ -61,20 +61,11 @@ import Rules from '@/utils/rules'
   },
 })
 export default class EventContentForm extends Vue {
-  @Prop()
-  value: boolean
-
-  @Prop()
-  name: string
-
-  @Prop()
-  group: string
-
-  @Prop()
-  tags: string[]
-
-  @Prop()
-  description: string
+  @Prop() value: boolean
+  @PropSync('name') _name: string
+  @PropSync('group') _group: string
+  @PropSync('tags') _tags: string[]
+  @PropSync('description') _description: string
 
   groupList = Array.from({ length: 5 }, (v, i) => `group${i}`)
   tagList = Array.from({ length: 5 }, (_, i) => `tag${i}`)
@@ -86,41 +77,8 @@ export default class EventContentForm extends Vue {
   private get valid(): boolean {
     return this.value
   }
-
   private set valid(value: boolean) {
     this.$emit('input', value)
-  }
-
-  private get _name(): string {
-    return this.name
-  }
-
-  private set _name(value: string) {
-    this.$emit('update:name', value)
-  }
-
-  private get _group(): string {
-    return this.group
-  }
-
-  private set _group(value: string) {
-    this.$emit('update:group', value)
-  }
-
-  private get _tags(): string[] {
-    return this.tags
-  }
-
-  private set _tags(value: string[]) {
-    this.$emit('update:tags', value)
-  }
-
-  private get _description(): string {
-    return this.description
-  }
-
-  private set _description(value: string) {
-    this.$emit('update:description', value)
   }
 
   eventNameRules = Rules.eventName
