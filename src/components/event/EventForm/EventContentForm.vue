@@ -16,12 +16,7 @@
         :rules="$rules.eventGroup"
         class="flex-grow-1"
       />
-      <v-btn
-        depressed
-        rounded
-        class="mt-3 ml-3 flex-grow-0"
-        @click="goToGroupNewPage()"
-      >
+      <v-btn to="/groups/new" depressed rounded class="mt-3 ml-3 flex-grow-0">
         Create new group
       </v-btn>
     </div>
@@ -68,10 +63,6 @@ export default class EventContentForm extends Vue {
 
   groupList = Array.from({ length: 5 }, (v, i) => `group${i}`)
   tagList = Array.from({ length: 5 }, (_, i) => `tag${i}`)
-
-  goToGroupNewPage() {
-    this.$router.push({ path: '/groups/new' })
-  }
 
   private get valid(): boolean {
     return this.value
