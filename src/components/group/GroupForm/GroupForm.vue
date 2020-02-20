@@ -4,7 +4,7 @@
       filled
       label="name"
       v-model="_name"
-      :rules="groupNameRules"
+      :rules="$rules.groupName"
       class="mb-2"
     />
     <v-checkbox v-model="_joinFreely" label="Join freely" class="mt-0" />
@@ -13,7 +13,7 @@
       multiple
       label="members"
       :items="membersList"
-      :rules="groupMembersRules"
+      :rules="$rules.groupMembers"
       v-model="_members"
     />
     <v-textarea
@@ -30,7 +30,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
-import Rules from '@/utils/rules'
 
 @Component
 export default class GroupForm extends Vue {
@@ -41,9 +40,6 @@ export default class GroupForm extends Vue {
   @Prop() value: boolean
 
   membersList = ['fuji', 'you10', 'wasabi']
-
-  groupNameRules = Rules.groupNameRules
-  groupMembersRules = Rules.groupMembersRules
 
   private get valid(): boolean {
     return this.value

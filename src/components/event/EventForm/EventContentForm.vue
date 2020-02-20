@@ -4,7 +4,7 @@
       filled
       label="name"
       v-model="_name"
-      :rules="eventNameRules"
+      :rules="$rules.eventName"
       class="mb-2"
     />
     <div class="d-flex">
@@ -13,7 +13,7 @@
         label="group"
         v-model="_group"
         :items="groupList"
-        :rules="eventGroupRules"
+        :rules="$rules.eventGroup"
         class="flex-grow-1"
       />
       <v-btn
@@ -53,7 +53,6 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import Tag from '@/components/shared/Tag.vue'
-import Rules from '@/utils/rules'
 
 @Component({
   components: {
@@ -80,8 +79,5 @@ export default class EventContentForm extends Vue {
   private set valid(value: boolean) {
     this.$emit('input', value)
   }
-
-  eventNameRules = Rules.eventName
-  eventGroupRules = Rules.eventGroup
 }
 </script>

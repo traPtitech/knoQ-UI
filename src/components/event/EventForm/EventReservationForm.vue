@@ -17,7 +17,7 @@
       v-model="_room"
       :loading="loading"
       :items="roomsList"
-      :rules="eventRoomRules"
+      :rules="$rules.eventRoom"
       class="mb-5"
     />
   </v-form>
@@ -26,7 +26,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
-import Rules from '@/utils/rules'
 
 @Component
 export default class EventReservationForm extends Vue {
@@ -45,7 +44,5 @@ export default class EventReservationForm extends Vue {
   private set valid(value: boolean) {
     this.$emit('input', value)
   }
-
-  eventRoomRules = Rules.eventRoom
 }
 </script>

@@ -1,9 +1,9 @@
 export default {
-  groupNameRules: [v => !!v || 'Group name is required'],
-  groupMembersRules: [
-    v => v.length > 0 || 'You must specify one or more members',
+  groupName: [(v: string) => !!v || 'Group name is required'],
+  groupMembers: [
+    (v: string) => v.length > 0 || 'You must specify one or more members',
   ],
-  eventName: [v => !!v || 'Name is required'],
-  eventGroup: [v => !!v || 'Group is required'],
-  eventRoom: [v => !!v || 'Room is required'],
+  eventName: [(v: string) => !!v || 'Name is required'],
+  eventGroup: [(v: string) => !!v || 'Group is required'],
+  eventRoom: [(v: string) => !!v || 'Room is required'],
 }
