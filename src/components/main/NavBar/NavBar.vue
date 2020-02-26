@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app v-if="$vuetify.breakpoint.smAndDown">
+  <v-app-bar v-if="$vuetify.breakpoint.smAndDown" app>
     <v-app-bar-nav-icon @click="onClickNavIcon" />
     <v-toolbar-title class="headline font-weight-bold">
       Room

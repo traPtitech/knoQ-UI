@@ -1,28 +1,28 @@
 <template>
   <v-form v-model="valid">
     <v-text-field
+      v-model="_name"
       filled
       label="name"
-      v-model="_name"
       :rules="$rules.groupName"
       class="mb-2"
     />
     <v-checkbox v-model="_joinFreely" label="Join freely" class="mt-0" />
     <v-autocomplete
+      v-model="_members"
       filled
       multiple
       label="members"
       :items="membersList"
       :rules="$rules.groupMembers"
-      v-model="_members"
     />
     <v-textarea
+      v-model="_description"
       filled
       rows="5"
       label="description"
       no-resize
       placeholder="# You can write markdown here"
-      v-model="_description"
     />
   </v-form>
 </template>

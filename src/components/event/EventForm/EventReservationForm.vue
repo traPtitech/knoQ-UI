@@ -12,9 +12,9 @@
       />
     </div>
     <v-autocomplete
+      v-model="_room"
       label="room"
       placeholder="available rooms"
-      v-model="_room"
       :loading="loading"
       :items="roomsList"
       :rules="$rules.eventRoom"

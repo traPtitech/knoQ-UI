@@ -1,17 +1,17 @@
 <template>
   <v-form v-model="valid">
     <v-text-field
+      v-model="_name"
       filled
       label="name"
-      v-model="_name"
       :rules="$rules.eventName"
       class="mb-2"
     />
     <div class="d-flex">
       <v-autocomplete
+        v-model="_group"
         filled
         label="group"
-        v-model="_group"
         :items="groupList"
         :rules="$rules.eventGroup"
         class="flex-grow-1"
@@ -21,11 +21,11 @@
       </v-btn>
     </div>
     <v-combobox
+      v-model="_tags"
       filled
       multiple
       label="tags"
       placeholder="Select tags or add new one"
-      v-model="_tags"
       :items="tagList"
       class="mb-2"
     >
@@ -34,10 +34,10 @@
       </template>
     </v-combobox>
     <v-textarea
+      v-model="_description"
       filled
       rows="15"
       no-resize
-      v-model="_description"
       label="description"
       :placeholder="'# You can write markdown here'"
     />

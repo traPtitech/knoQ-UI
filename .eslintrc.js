@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ['plugin:vue/essential', '@vue/prettier', '@vue/typescript'],
+  extends: ['plugin:vue/recommended', '@vue/prettier', '@vue/typescript'],
   plugins: ['@typescript-eslint'],
   env: { node: true, es6: true },
   rules: {},

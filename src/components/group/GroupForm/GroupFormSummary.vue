@@ -26,7 +26,7 @@
           :key="member"
           class="ml-0 mr-1"
         >
-          <Avatar size="32" :traqId="member" />
+          <Avatar size="32" :traq-id="member" />
         </v-list-item-avatar>
       </v-list>
     </div>

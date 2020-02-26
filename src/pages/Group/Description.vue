@@ -25,6 +25,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <span class="subheading" v-html="group.description" />
             <v-layout wrap>
               <v-flex sm8>

@@ -33,7 +33,7 @@
         </v-stepper-content>
         <v-stepper-content step="2">
           <EventReservationForm v-model="valid2" v-bind.sync="event" />
-          <v-btn rounded depressed @click="step = 1" class="mr-2">
+          <v-btn rounded depressed class="mr-2" @click="step = 1">
             Back
           </v-btn>
           <v-btn
@@ -48,7 +48,7 @@
         </v-stepper-content>
         <v-stepper-content step="3">
           <EventFormSummary v-bind="event" />
-          <v-btn rounded depressed @click="step = 2" class="mr-2">
+          <v-btn rounded depressed class="mr-2" @click="step = 2">
             Back
           </v-btn>
           <v-btn color="primary" rounded depressed @click="submitNewEvent()">

@@ -15,7 +15,7 @@
     <div class="mb-5">
       <div class="font-weight-medium mb-1">tags</div>
       <div v-if="tags.length === 0">none</div>
-      <Tag v-else v-for="tag in tags" :key="tag" :name="tag" class="mr-3" />
+      <Tag v-for="tag in tags" v-else :key="tag" :name="tag" class="mr-3" />
     </div>
     <div class="mb-5">
       <div class="font-weight-medium">description</div>

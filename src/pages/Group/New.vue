@@ -32,7 +32,7 @@
 
         <v-stepper-content step="2">
           <GroupFormSummary v-bind="group" />
-          <v-btn rounded depressed @click="step = 1" class="mr-3">
+          <v-btn rounded depressed class="mr-3" @click="step = 1">
             Back
           </v-btn>
           <v-btn color="primary" rounded depressed>
