@@ -18,46 +18,55 @@ const router = new Router({
       path: '/',
       name: 'Home',
       component: WIP,
+      meta: { headerTitle: 'Dashboard' },
     },
     {
       path: '/rooms',
       name: 'Rooms',
       component: WIP,
+      meta: { headerTitle: 'Rooms' },
     },
     {
       path: '/groups',
       name: 'Groups',
       component: WIP,
+      meta: { headerTitle: 'Groups' },
     },
     {
       path: '/groups/new',
       name: 'GroupNew',
       component: GroupsNew,
+      meta: { headerTitle: 'Create new group' },
     },
     {
       path: '/groups/:id',
       name: 'GroupDescription',
       component: WIP,
+      meta: { headerTitle: 'Group detail' },
     },
     {
       path: '/groups/:id/edit',
       name: 'GroupEdit',
       component: WIP,
+      meta: { headerTitle: 'Edit group detail' },
     },
     {
       path: '/events',
       name: 'Events',
       component: Events,
+      meta: { headerTitle: 'Events' },
     },
     {
       path: '/events/new',
       name: 'EventNew',
       component: EventNew,
+      meta: { headerTitle: 'Create new event' },
     },
     {
       path: '/events/:id',
       name: 'EventDetail',
       component: EventDetail,
+      meta: { headerTitle: 'Event detail' },
     },
     {
       path: '/callback',
@@ -68,6 +77,7 @@ const router = new Router({
       path: '*',
       name: 'NotFound',
       component: NotFound,
+      meta: { headerTitle: '' },
     },
   ],
 })
