@@ -1,6 +1,5 @@
 <template>
   <Layout>
-    <h1 class="mb-5 display-1 font-weight-bold">Events</h1>
     <EventList :events="events" />
   </Layout>
 </template>

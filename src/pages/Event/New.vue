@@ -1,6 +1,5 @@
 <template>
   <Layout>
-    <h1 class="mb-5 display-1 font-weight-bold">Create new event</h1>
     <v-stepper v-model="step" class="elevation-0">
       <v-stepper-header class="elevation-0">
         <v-stepper-step :complete="step > 1" step="1">
