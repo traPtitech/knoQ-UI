@@ -29,7 +29,7 @@
       :items="tagList"
       class="mb-2"
     >
-      <template v-slot:selection="data">
+      <template #selection="data">
         <Tag :key="data.item" :name="data.item" class="mt-3" />
       </template>
     </v-combobox>

@@ -4,7 +4,7 @@
     app
     :mobile-break-point="$vuetify.breakpoint.thresholds.sm"
   >
-    <template v-slot:prepend>
+    <template #prepend>
       <Header />
     </template>
 
@@ -12,7 +12,7 @@
       <NavLink v-for="(nav, i) in navs" :key="i" v-bind="nav" />
     </v-list>
 
-    <template v-slot:append>
+    <template #append>
       <Footer />
     </template>
   </v-navigation-drawer>

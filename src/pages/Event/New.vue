@@ -50,7 +50,7 @@
           <v-btn rounded depressed class="mr-2" @click="step = 2">
             Back
           </v-btn>
-          <v-btn color="primary" rounded depressed @click="submitNewEvent()">
+          <v-btn color="primary" rounded depressed @click="submitNewEvent">
             Submit
           </v-btn>
         </v-stepper-content>
