@@ -1,13 +1,13 @@
 <template>
-  <v-container>
-    <slot />
-  </v-container>
+  <v-content>
+    <router-view />
+  </v-content>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
 @Component
-export default class Layout extends Vue {}
+export default class MainView extends Vue {}
 </script>

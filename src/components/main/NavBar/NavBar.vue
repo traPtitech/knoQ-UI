@@ -27,7 +27,7 @@ import Avatar from '@/components/shared/Avatar.vue'
   },
 })
 export default class NavBar extends Vue {
-  @Emit('toggleDrawer')
+  @Emit('click-nav-icon')
   onClickNavIcon() {}
 
   get color(): string {
