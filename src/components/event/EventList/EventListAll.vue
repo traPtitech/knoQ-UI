@@ -1,12 +1,12 @@
 <template>
-  <v-list class="overflow-y-auto" max-height="85vh">
+  <v-list class="overflow-y-auto" max-height="85vh" color="transparent">
     <template v-for="(event, i) in filteredEvents">
       <v-list-item v-if="isDateBorder(i)" :key="event.date" class="mt-4 mb-n2">
         <span class="title">{{ formatDateStr(event.date) }}</span>
       </v-list-item>
       <v-list-item :key="i">
         <v-list-item-content>
-          <EventTape v-bind="event" />
+          <EventListItem v-bind="event" />
         </v-list-item-content>
       </v-list-item>
     </template>
@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import EventTape from '@/components/event/EventList/EventTape.vue'
+import EventListItem from '@/components/event/EventList/EventListItem.vue'
 import { momentify, compareDateStr } from '@/utils/date'
 
 interface Event {
@@ -30,7 +30,7 @@ interface Event {
 
 @Component({
   components: {
-    EventTape,
+    EventListItem,
   },
 })
 export default class EventList extends Vue {

@@ -12,18 +12,18 @@
 
     <v-spacer />
 
-    <Avatar size="36" :traq-id="me" />
+    <TrapAvatar size="36" :traq-id="me" />
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Emit } from 'vue-property-decorator'
-import Avatar from '@/components/shared/Avatar.vue'
+import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 
 @Component({
   components: {
-    Avatar,
+    TrapAvatar,
   },
 })
 export default class NavBar extends Vue {

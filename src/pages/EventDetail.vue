@@ -1,9 +1,9 @@
 <template>
-  <Layout>
+  <v-container>
     <v-row align="center" justify-sm="space-between">
       <v-col class="mx-n1" sm="7" cols="12">
         <h1 class="mb-3 display-1 font-weight-bold">{{ title }}</h1>
-        <Tag v-for="(tag, i) in tags" :key="i" :name="tag" />
+        <EventTag v-for="(tag, i) in tags" :key="i" :name="tag" />
       </v-col>
       <v-col sm="3" cols="12">
         <v-btn>
@@ -41,21 +41,19 @@
       </v-col>
     </v-row>
     <MarkdownField class="mt-10" :src="description" />
-  </Layout>
+  </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import moment from 'moment'
-import Layout from '@/components/shared/Layout.vue'
-import Tag from '@/components/shared/Tag.vue'
+import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 
 @Component({
   components: {
-    Layout,
-    Tag,
+    EventTag,
     MarkdownField,
   },
 })

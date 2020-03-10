@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <v-container>
     <v-stepper v-model="step" class="elevation-0">
       <v-stepper-header class="elevation-0">
         <v-stepper-step :complete="step > 1" step="1">
@@ -56,20 +56,18 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-  </Layout>
+  </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import Layout from '@/components/shared/Layout.vue'
 import EventContentForm from '@/components/event/EventForm/EventContentForm.vue'
 import EventReservationForm from '@/components/event/EventForm/EventReservationForm.vue'
 import EventFormSummary from '@/components/event/EventForm/EventFormSummary.vue'
 
 @Component({
   components: {
-    Layout,
     EventContentForm,
     EventReservationForm,
     EventFormSummary,

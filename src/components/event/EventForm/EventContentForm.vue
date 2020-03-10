@@ -30,7 +30,7 @@
       class="mb-2"
     >
       <template #selection="data">
-        <Tag :key="data.item" :name="data.item" class="mt-3" />
+        <EventTag :key="data.item" :name="data.item" class="mt-3" />
       </template>
     </v-combobox>
     <v-textarea
@@ -47,11 +47,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
-import Tag from '@/components/shared/Tag.vue'
+import EventTag from '@/components/shared/EventTag.vue'
 
 @Component({
   components: {
-    Tag,
+    EventTag,
   },
 })
 export default class EventContentForm extends Vue {

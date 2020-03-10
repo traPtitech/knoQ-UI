@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <v-container>
     <v-stepper v-model="step" flat class="elevation-0">
       <v-stepper-header class="elevation-0">
         <v-stepper-step :complete="step > 1" step="1">
@@ -38,20 +38,18 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-  </Layout>
+  </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import Layout from '@/components/shared/Layout.vue'
 import GroupForm from '@/components/group/GroupForm/GroupForm.vue'
 import GroupFormSummary from '@/components/group/GroupForm/GroupFormSummary.vue'
 import Rules from '@/utils/rules'
 
 @Component({
   components: {
-    Layout,
     GroupForm,
     GroupFormSummary,
   },

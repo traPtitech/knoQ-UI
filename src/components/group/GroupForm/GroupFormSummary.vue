@@ -26,7 +26,7 @@
           :key="member"
           class="ml-0 mr-1"
         >
-          <Avatar size="32" :traq-id="member" />
+          <TrapAvatar size="32" :traq-id="member" />
         </v-list-item-avatar>
       </v-list>
     </div>
@@ -45,13 +45,13 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import Avatar from '@/components/shared/Avatar.vue'
+import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import { render } from '@/utils/markdown-it'
 
 @Component({
   components: {
     MarkdownField,
-    Avatar,
+    TrapAvatar,
   },
 })
 export default class GroupEventFormSummary extends Vue {
