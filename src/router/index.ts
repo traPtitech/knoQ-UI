@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-import Events from '@/pages/Event/Events.vue'
-import EventDetail from '@/pages/Event/Detail.vue'
-import EventNew from '@/pages/Event/New.vue'
-import GroupsNew from '@/pages/Group/New.vue'
-import NotFound from '@/pages/NotFound.vue'
-import WIP from '@/pages/WIP.vue'
 import PathStorage from '@/utils/PathStorage'
+
+const Dashboard = () => import('@/pages/Dashboard.vue')
+const EventSearch = () => import('@/pages/EventSearch.vue')
+const EventDetail = () => import('@/pages/EventDetail.vue')
+const EventNew = () => import('@/pages/EventNew.vue')
+const GroupNew = () => import('@/pages/GroupNew.vue')
+const NotFound = () => import('@/pages/NotFound.vue')
+const WIP = () => import('@/pages/WIP.vue')
 
 Vue.use(Router)
 
@@ -17,7 +19,7 @@ const router = new Router({
     {
       path: '/',
       name: 'Home',
-      component: WIP,
+      component: Dashboard,
       meta: { headerTitle: 'Dashboard' },
     },
     {
@@ -35,7 +37,7 @@ const router = new Router({
     {
       path: '/groups/new',
       name: 'GroupNew',
-      component: GroupsNew,
+      component: GroupNew,
       meta: { headerTitle: 'Create new group' },
     },
     {
@@ -53,7 +55,7 @@ const router = new Router({
     {
       path: '/events',
       name: 'Events',
-      component: Events,
+      component: EventSearch,
       meta: { headerTitle: 'Events' },
     },
     {
