@@ -7,7 +7,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import EventListAll from '@/components/event/EventList/EventListAll.vue'
+import EventListAll from '@/components/event/EventListAll.vue'
 
 @Component({
   components: {

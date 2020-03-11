@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import EventListItem from '@/components/event/EventList/EventListItem.vue'
+import EventListItem from '@/components/event/EventListItem.vue'
 import { momentify, compareDateStr } from '@/utils/date'
 
 interface Event {

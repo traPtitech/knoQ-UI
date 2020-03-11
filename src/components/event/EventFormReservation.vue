@@ -28,7 +28,7 @@ import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 
 @Component
-export default class EventReservationForm extends Vue {
+export default class EventFormReservation extends Vue {
   @Prop() value: boolean
   @PropSync('room') _room: string
 

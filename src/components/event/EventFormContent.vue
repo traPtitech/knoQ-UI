@@ -54,7 +54,7 @@ import EventTag from '@/components/shared/EventTag.vue'
     EventTag,
   },
 })
-export default class EventContentForm extends Vue {
+export default class EventFormContent extends Vue {
   @Prop() value: boolean
   @PropSync('name') _name: string
   @PropSync('group') _group: string

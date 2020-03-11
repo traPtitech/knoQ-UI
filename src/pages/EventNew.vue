@@ -19,7 +19,7 @@
 
       <v-stepper-items class="pb-1">
         <v-stepper-content step="1">
-          <EventContentForm v-model="valid1" v-bind.sync="event" />
+          <EventFormContent v-model="valid1" v-bind.sync="event" />
           <v-btn
             color="primary"
             rounded
@@ -31,7 +31,7 @@
           </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <EventReservationForm v-model="valid2" v-bind.sync="event" />
+          <EventFormReservation v-model="valid2" v-bind.sync="event" />
           <v-btn rounded depressed class="mr-2" @click="step = 1">
             Back
           </v-btn>
@@ -62,14 +62,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import EventContentForm from '@/components/event/EventForm/EventContentForm.vue'
-import EventReservationForm from '@/components/event/EventForm/EventReservationForm.vue'
-import EventFormSummary from '@/components/event/EventForm/EventFormSummary.vue'
+import EventFormContent from '@/components/event/EventFormContent.vue'
+import EventFormReservation from '@/components/event/EventFormReservation.vue'
+import EventFormSummary from '@/components/event/EventFormSummary.vue'
 
 @Component({
   components: {
-    EventContentForm,
-    EventReservationForm,
+    EventFormContent,
+    EventFormReservation,
     EventFormSummary,
   },
 })
