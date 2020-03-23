@@ -1,39 +1,35 @@
 <template>
   <div>
-    <div class="mb-5">
-      <div class="font-weight-medium">name</div>
-      <div>{{ name }}</div>
+    <div class="mb-7">
+      <div class="text--secondary">New Event</div>
+      <div class="display-1 mb-1">{{ name }}</div>
+      <EventTag v-for="tag in tags" :key="tag" :name="tag" class="mr-1" />
     </div>
-    <div class="mb-5">
-      <div class="font-weight-medium">group</div>
-      <div>{{ group }}</div>
+    <div class="mb-7">
+      <div class="text--secondary">Group</div>
+      <div class="headline">{{ group }}</div>
     </div>
-    <div class="mb-5">
-      <div class="font-weight-medium">room</div>
-      <div>{{ room }}</div>
+    <div class="mb-7">
+      <div class="text--secondary">Date Time</div>
+      <div class="headline">
+        {{ date }}: {{ timeStart }}
+        <v-icon>mdi-chevron-right</v-icon>
+        {{ timeEnd }}
+      </div>
     </div>
-    <div class="mb-5">
-      <div class="font-weight-medium mb-1">tags</div>
-      <div v-if="tags.length === 0">none</div>
-      <EventTag
-        v-for="tag in tags"
-        v-else
-        :key="tag"
-        :name="tag"
-        class="mr-3"
-      />
+    <div class="mb-7">
+      <div class="text--secondary">Place</div>
+      <div class="headline mb-1">{{ place }}</div>
+      <div v-if="!isPrivate">
+        <v-icon :color="sharedRoomIcon.color" class="mr-2">
+          {{ sharedRoomIcon.icon }}
+        </v-icon>
+        <span class="text--secondary body-2">{{ sharedRoomString }}</span>
+      </div>
     </div>
-    <div class="mb-5">
-      <div class="font-weight-medium">description</div>
-      <v-card
-        v-if="description"
-        flat
-        color="grey lighten-4"
-        class="px-5 py-3 mb-5"
-      >
-        <MarkdownField :src="description" />
-      </v-card>
-      <div v-else>none</div>
+    <div class="mb-7">
+      <div class="text--secondary">Description</div>
+      <MarkdownField :src="description" />
     </div>
   </div>
 </template>
@@ -51,19 +47,25 @@ import EventTag from '@/components/shared/EventTag.vue'
   },
 })
 export default class EventFormSummary extends Vue {
-  @Prop()
-  name: string
+  @Prop() name: string
+  @Prop() group: string
+  @Prop() tags: string[]
+  @Prop() description: string
+  @Prop() isPrivate: boolean
+  @Prop() place: string
+  @Prop() date: string
+  @Prop() timeStart: string
+  @Prop() timeEnd: string
+  @Prop() sharedRoom: boolean
 
-  @Prop()
-  group: string
+  get sharedRoomString(): string {
+    return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
+  }
 
-  @Prop()
-  tags: string[]
-
-  @Prop()
-  room: string
-
-  @Prop()
-  description: string
+  get sharedRoomIcon() {
+    return this.sharedRoom
+      ? { icon: 'mdi-door-open', color: 'success' }
+      : { icon: 'mdi-door-closed-lock', color: 'error' }
+  }
 }
 </script>

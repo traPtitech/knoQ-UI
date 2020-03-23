@@ -1,33 +1,35 @@
 <template>
   <v-form v-model="valid">
-    <v-text-field
-      v-model="_name"
-      filled
-      label="name"
-      :rules="$rules.eventName"
-      class="mb-2"
-    />
-    <div class="d-flex">
-      <v-autocomplete
-        v-model="_group"
-        filled
-        label="group"
-        :items="groupList"
-        :rules="$rules.eventGroup"
-        class="flex-grow-1"
-      />
-      <v-btn to="/groups/new" depressed rounded class="mt-3 ml-3 flex-grow-0">
-        Create new group
+    <div class="mb-3">
+      <span class="text--secondary caption">
+        ※イベントを作るには主催するグループが必要です
+      </span>
+      <v-btn small text color="primary" to="/groups/new" class="mb-1">
+        新しくグループを作る
       </v-btn>
     </div>
+    <v-text-field
+      v-model="_name"
+      outlined
+      label="イベント名"
+      placeholder="Some event"
+      :rules="$rules.eventName"
+    />
+    <v-autocomplete
+      v-model="_group"
+      outlined
+      label="主催グループ"
+      placeholder="traP"
+      :items="groupList"
+      :rules="$rules.eventGroup"
+    />
     <v-combobox
       v-model="_tags"
-      filled
+      outlined
       multiple
-      label="tags"
-      placeholder="Select tags or add new one"
+      label="タグ"
+      placeholder="vue, narou, ..."
       :items="tagList"
-      class="mb-2"
     >
       <template #selection="data">
         <EventTag :key="data.item" :name="data.item" class="mt-3" />
@@ -35,8 +37,8 @@
     </v-combobox>
     <v-textarea
       v-model="_description"
-      filled
-      rows="15"
+      outlined
+      rows="25"
       no-resize
       label="description"
       :placeholder="'# You can write markdown here'"
@@ -58,17 +60,28 @@ export default class EventFormContent extends Vue {
   @Prop() value: boolean
   @PropSync('name') _name: string
   @PropSync('group') _group: string
-  @PropSync('tags') _tags: string[]
+  @Prop() tags: string[]
   @PropSync('description') _description: string
 
   groupList = Array.from({ length: 5 }, (v, i) => `group${i}`)
-  tagList = Array.from({ length: 5 }, (_, i) => `tag${i}`)
+  tagList = ['react', 'vue', 'angular', 'svelte', 'riot']
 
   private get valid(): boolean {
     return this.value
   }
   private set valid(value: boolean) {
     this.$emit('input', value)
+  }
+
+  private get _tags(): string[] {
+    return this.tags
+  }
+  private set _tags(tags: string[]) {
+    // lower-cased alphanumeric characters only
+    this.$emit(
+      'update:tags',
+      tags.map(v => v.replace(/[^a-z0-9]/gi, '').toLowerCase()).filter(v => !!v)
+    )
   }
 }
 </script>

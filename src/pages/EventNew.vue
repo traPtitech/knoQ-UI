@@ -1,28 +1,25 @@
 <template>
   <v-container>
-    <v-stepper v-model="step" class="elevation-0">
-      <v-stepper-header class="elevation-0">
+    <v-stepper v-model="step">
+      <v-stepper-header>
         <v-stepper-step :complete="step > 1" step="1">
-          Describe new event content
+          イベント内容
         </v-stepper-step>
         <v-divider />
         <v-stepper-step :complete="step > 2" step="2">
-          Set schedule and place
+          日時・場所
         </v-stepper-step>
         <v-divider />
         <v-stepper-step :complete="step > 3" step="3">
-          Confirmation
+          確認
         </v-stepper-step>
       </v-stepper-header>
 
-      <v-divider />
-
       <v-stepper-items class="pb-1">
         <v-stepper-content step="1">
-          <EventFormContent v-model="valid1" v-bind.sync="event" />
+          <EventFormContent v-model="valid1" v-bind.sync="content" />
           <v-btn
             color="primary"
-            rounded
             depressed
             :disabled="!valid1"
             @click="step = 2"
@@ -31,13 +28,25 @@
           </v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <EventFormReservation v-model="valid2" v-bind.sync="event" />
-          <v-btn rounded depressed class="mr-2" @click="step = 1">
+          <v-checkbox
+            v-model="isPrivate"
+            label="traPが予約していない場所で開催する"
+          />
+          <EventFormReservationPublic
+            v-show="!isPrivate"
+            v-model="validPublic"
+            v-bind.sync="reservationPublic"
+          />
+          <EventFormReservationPrivate
+            v-show="isPrivate"
+            v-model="validPrivate"
+            v-bind.sync="reservationPrivate"
+          />
+          <v-btn depressed class="mr-2" @click="step = 1">
             Back
           </v-btn>
           <v-btn
             color="primary"
-            rounded
             depressed
             :disabled="!valid2"
             @click="step = 3"
@@ -47,10 +56,10 @@
         </v-stepper-content>
         <v-stepper-content step="3">
           <EventFormSummary v-bind="event" />
-          <v-btn rounded depressed class="mr-2" @click="step = 2">
+          <v-btn depressed class="mr-2" @click="step = 2">
             Back
           </v-btn>
-          <v-btn color="primary" rounded depressed @click="submitNewEvent">
+          <v-btn color="primary" depressed @click="submitNewEvent">
             Submit
           </v-btn>
         </v-stepper-content>
@@ -63,13 +72,15 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import EventFormContent from '@/components/event/EventFormContent.vue'
-import EventFormReservation from '@/components/event/EventFormReservation.vue'
+import EventFormReservationPublic from '@/components/event/EventFormReservationPublic.vue'
+import EventFormReservationPrivate from '@/components/event/EventFormReservationPrivate.vue'
 import EventFormSummary from '@/components/event/EventFormSummary.vue'
 
 @Component({
   components: {
     EventFormContent,
-    EventFormReservation,
+    EventFormReservationPublic,
+    EventFormReservationPrivate,
     EventFormSummary,
   },
 })
@@ -77,18 +88,55 @@ export default class New extends Vue {
   step = 1
 
   valid1 = false
-  valid2 = false
-
-  event = {
+  content = {
     name: '',
-    group: '',
-    room: '',
     tags: [],
     description: '',
+    group: null,
   }
 
-  submitNewEvent() {
-    alert(JSON.stringify(this.event))
+  isPrivate = false
+  validPublic = false
+  validPrivate = false
+  get valid2(): boolean {
+    return (
+      (!this.isPrivate && this.validPublic) ||
+      (this.isPrivate && this.validPrivate)
+    )
   }
+  reservationPublic = {
+    room: null,
+    timeStart: '',
+    timeEnd: '',
+    sharedRoom: true,
+  }
+  reservationPrivate = {
+    place: '',
+    date: '',
+    timeStart: '',
+    timeEnd: '',
+  }
+
+  // TODO: make more readable
+  get event() {
+    const reservation = this.isPrivate
+      ? this.reservationPrivate
+      : this.reservationPublic
+    return {
+      ...this.content,
+      isPrivate: this.isPrivate,
+      timeStart: reservation.timeStart,
+      timeEnd: reservation.timeEnd,
+      place: this.isPrivate
+        ? this.reservationPrivate.place
+        : this.reservationPublic.room && this.reservationPublic.room.place,
+      date: this.isPrivate
+        ? this.reservationPrivate.date
+        : this.reservationPublic.room && this.reservationPublic.room.date,
+      sharedRoom: this.isPrivate ? null : this.reservationPublic.sharedRoom,
+    }
+  }
+
+  submitNewEvent() {}
 }
 </script>
