@@ -1,17 +1,15 @@
 <template>
   <div>
-    <div class="mb-7">
-      <div class="text--secondary">Group</div>
-      <div class="display-1 mb-1">{{ name }}</div>
-      <div>
-        <v-icon :color="openIcon.color" class="mr-3">
-          {{ openIcon.icon }}
-        </v-icon>
-        <span class="text--secondary body-2">{{ openString }}</span>
-      </div>
-    </div>
-    <div class="mb-7">
-      <div class="text--secondary">Members</div>
+    <SummaryItem>
+      <SummaryItemCaption>New Group</SummaryItemCaption>
+      <SummaryItemMain>{{ name }}</SummaryItemMain>
+      <SummaryItemSubtext>
+        <v-icon :color="openIcon.color">{{ openIcon.icon }}</v-icon>
+        {{ openString }}
+      </SummaryItemSubtext>
+    </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Members</SummaryItemCaption>
       <TrapAvatar
         v-for="member in members"
         :key="member"
@@ -19,11 +17,11 @@
         size="36"
         class="mr-2"
       />
-    </div>
-    <div class="mb-7">
-      <div class="text--secondary">Description</div>
+    </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Description</SummaryItemCaption>
       <MarkdownField :src="description" />
-    </div>
+    </SummaryItem>
   </div>
 </template>
 
@@ -32,12 +30,19 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
-import { render } from '@/utils/markdown-it'
+import SummaryItem from '@/components/shared/SummaryItem.vue'
+import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
+import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
+import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 
 @Component({
   components: {
     MarkdownField,
     TrapAvatar,
+    SummaryItem,
+    SummaryItemCaption,
+    SummaryItemMain,
+    SummaryItemSubtext,
   },
 })
 export default class GroupEventFormSummary extends Vue {
@@ -45,10 +50,6 @@ export default class GroupEventFormSummary extends Vue {
   @Prop() description: string
   @Prop() members: string[]
   @Prop() open: boolean
-
-  get renderedDescription(): string {
-    return render(this.description)
-  }
 
   get openString(): string {
     return this.open

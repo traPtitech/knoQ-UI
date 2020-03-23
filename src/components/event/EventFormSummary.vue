@@ -1,36 +1,36 @@
 <template>
   <div>
-    <div class="mb-7">
-      <div class="text--secondary">New Event</div>
-      <div class="display-1 mb-1">{{ name }}</div>
-      <EventTag v-for="tag in tags" :key="tag" :name="tag" class="mr-1" />
-    </div>
-    <div class="mb-7">
-      <div class="text--secondary">Group</div>
-      <div class="headline">{{ group }}</div>
-    </div>
-    <div class="mb-7">
-      <div class="text--secondary">Date Time</div>
-      <div class="headline">
+    <SummaryItem>
+      <SummaryItemCaption>New Event</SummaryItemCaption>
+      <SummaryItemMain>{{ name }}</SummaryItemMain>
+      <EventTag v-for="tag in tags" :key="tag" :name="tag" class="mr-3" />
+    </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Group</SummaryItemCaption>
+      <SummaryItemText>{{ group }}</SummaryItemText>
+    </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Date Time</SummaryItemCaption>
+      <SummaryItemText>
         {{ date }}: {{ timeStart }}
         <v-icon>mdi-chevron-right</v-icon>
         {{ timeEnd }}
-      </div>
-    </div>
-    <div class="mb-7">
-      <div class="text--secondary">Place</div>
-      <div class="headline mb-1">{{ place }}</div>
-      <div v-if="!isPrivate">
-        <v-icon :color="sharedRoomIcon.color" class="mr-2">
+      </SummaryItemText>
+    </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Place</SummaryItemCaption>
+      <SummaryItemText>{{ place }}</SummaryItemText>
+      <SummaryItemSubtext v-if="!isPrivate">
+        <v-icon :color="sharedRoomIcon.color">
           {{ sharedRoomIcon.icon }}
         </v-icon>
-        <span class="text--secondary body-2">{{ sharedRoomString }}</span>
-      </div>
-    </div>
-    <div class="mb-7">
-      <div class="text--secondary">Description</div>
+        {{ sharedRoomString }}
+      </SummaryItemSubtext>
+    </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Description</SummaryItemCaption>
       <MarkdownField :src="description" />
-    </div>
+    </SummaryItem>
   </div>
 </template>
 
@@ -39,11 +39,21 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventTag from '@/components/shared/EventTag.vue'
+import SummaryItem from '@/components/shared/SummaryItem.vue'
+import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
+import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
+import SummaryItemText from '@/components/shared/SummaryItemText.vue'
+import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 
 @Component({
   components: {
     MarkdownField,
     EventTag,
+    SummaryItem,
+    SummaryItemCaption,
+    SummaryItemMain,
+    SummaryItemText,
+    SummaryItemSubtext,
   },
 })
 export default class EventFormSummary extends Vue {
