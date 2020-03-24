@@ -14,19 +14,19 @@
       <v-stepper-items>
         <v-stepper-content step="1">
           <GroupFormContent v-model="valid" v-bind.sync="group" />
-          <v-btn color="primary" depressed :disabled="!valid" @click="step = 2">
+          <FormNextButton :disabled="!valid" @click="step = 2">
             Continue
-          </v-btn>
+          </FormNextButton>
         </v-stepper-content>
 
         <v-stepper-content step="2">
           <GroupFormSummary v-bind="group" />
-          <v-btn depressed class="mr-3" @click="step = 1">
+          <FormBackButton class="mr-3" @click="step = 1">
             Back
-          </v-btn>
-          <v-btn color="primary" depressed @click="onSubmit">
+          </FormBackButton>
+          <FormNextButton @click="onSubmit">
             Submit
-          </v-btn>
+          </FormNextButton>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -38,11 +38,15 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import GroupFormContent from '@/components/group/GroupFormContent.vue'
 import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
+import FormNextButton from '@/components/shared/FormNextButton.vue'
+import FormBackButton from '@/components/shared/FormBackButton.vue'
 
 @Component({
   components: {
     GroupFormContent,
     GroupFormSummary,
+    FormNextButton,
+    FormBackButton,
   },
 })
 export default class New extends Vue {

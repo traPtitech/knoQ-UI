@@ -18,14 +18,9 @@
       <v-stepper-items class="pb-1">
         <v-stepper-content step="1">
           <EventFormContent v-model="valid1" v-bind.sync="content" />
-          <v-btn
-            color="primary"
-            depressed
-            :disabled="!valid1"
-            @click="step = 2"
-          >
+          <FormNextButton :disabled="!valid1" @click="step = 2">
             Continue
-          </v-btn>
+          </FormNextButton>
         </v-stepper-content>
         <v-stepper-content step="2">
           <v-checkbox
@@ -42,26 +37,21 @@
             v-model="validPrivate"
             v-bind.sync="reservationPrivate"
           />
-          <v-btn depressed class="mr-2" @click="step = 1">
+          <FormBackButton class="mr-2" @click="step = 1">
             Back
-          </v-btn>
-          <v-btn
-            color="primary"
-            depressed
-            :disabled="!valid2"
-            @click="step = 3"
-          >
+          </FormBackButton>
+          <FormNextButton :disabled="!valid2" @click="step = 3">
             Continue
-          </v-btn>
+          </FormNextButton>
         </v-stepper-content>
         <v-stepper-content step="3">
           <EventFormSummary v-bind="event" />
-          <v-btn depressed class="mr-2" @click="step = 2">
+          <FormBackButton class="mr-2" @click="step = 2">
             Back
-          </v-btn>
-          <v-btn color="primary" depressed @click="submitNewEvent">
+          </FormBackButton>
+          <FormNextButton @click="submitNewEvent">
             Submit
-          </v-btn>
+          </FormNextButton>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -75,6 +65,8 @@ import EventFormContent from '@/components/event/EventFormContent.vue'
 import EventFormReservationPublic from '@/components/event/EventFormReservationPublic.vue'
 import EventFormReservationPrivate from '@/components/event/EventFormReservationPrivate.vue'
 import EventFormSummary from '@/components/event/EventFormSummary.vue'
+import FormNextButton from '@/components/shared/FormNextButton.vue'
+import FormBackButton from '@/components/shared/FormBackButton.vue'
 
 @Component({
   components: {
@@ -82,6 +74,8 @@ import EventFormSummary from '@/components/event/EventFormSummary.vue'
     EventFormReservationPublic,
     EventFormReservationPrivate,
     EventFormSummary,
+    FormNextButton,
+    FormBackButton,
   },
 })
 export default class New extends Vue {
