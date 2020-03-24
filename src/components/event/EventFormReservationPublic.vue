@@ -13,6 +13,7 @@
           v-model="_room"
           outlined
           label="進捗部屋"
+          :disabled="!dateList.length"
           :items="availableRoomsList"
           :item-value="r => r"
           :item-text="
@@ -24,17 +25,17 @@
           v-model="_timeStart"
           label="開始時刻"
           :rules="$rules.eventTimeStart"
-          :disabled="!room"
-          :min="room && room.timeStart"
-          :max="room && room.timeEnd"
+          :disabled="!_room"
+          :min="startMin"
+          :max="startMax"
         />
         <TimePicker
           v-model="_timeEnd"
           label="終了時刻"
           :rules="$rules.eventTimeEnd"
-          :disabled="!_timeStart"
-          :min="_timeStart"
-          :max="room && room.timeEnd"
+          :disabled="!_room"
+          :min="endMin"
+          :max="endMax"
         />
       </v-col>
     </v-row>
@@ -74,6 +75,25 @@ export default class EventFormReservationPublic extends Vue {
     timeStart: '17:00',
     timeEnd: '20:00',
   }))
+
+  get startMin(): string {
+    return this._room && this._room.timeStart
+  }
+  get startMax(): string {
+    if (this._room && this._room.timeEnd < this._timeEnd) {
+      return this._room.timeEnd
+    }
+    return this._timeEnd
+  }
+  get endMin(): string {
+    if (this._room && this._room.timeStart > this._timeStart) {
+      return this._room.timeStart
+    }
+    return this._timeStart
+  }
+  get endMax(): string {
+    return this._room && this._room.timeEnd
+  }
 
   get availableRoomsList() {
     return this.roomsList.filter(v => this.dateList.includes(v.date))
