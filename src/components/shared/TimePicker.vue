@@ -4,10 +4,8 @@
       <v-text-field
         v-model="time"
         outlined
-        :label="label"
         readonly
-        :rules="rules"
-        :disabled="disabled"
+        v-bind="$attrs"
         v-on="on"
       />
     </template>
@@ -15,8 +13,7 @@
       v-model="time"
       format="24hr"
       :allowed-minutes="v => !(v % 5)"
-      :min="min"
-      :max="max"
+      v-bind="$attrs"
     />
   </v-dialog>
 </template>
@@ -28,11 +25,6 @@ import { Component, Prop } from 'vue-property-decorator'
 @Component
 export default class TimePicker extends Vue {
   @Prop() value: string
-  @Prop() label: string
-  @Prop({ default: [] }) rules: ((v: string) => boolean | string)[]
-  @Prop({ default: false }) disabled: boolean
-  @Prop({ default: '' }) min: string
-  @Prop({ default: '' }) max: string
 
   get time(): string {
     return this.value
