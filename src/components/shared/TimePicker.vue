@@ -13,9 +13,10 @@
     </template>
     <v-time-picker
       v-model="time"
+      format="24hr"
       :allowed-minutes="v => !(v % 5)"
-      :min="min || ''"
-      :max="max || ''"
+      :min="min"
+      :max="max"
     />
   </v-dialog>
 </template>
@@ -30,8 +31,8 @@ export default class TimePicker extends Vue {
   @Prop() label: string
   @Prop({ default: [] }) rules: ((v: string) => boolean | string)[]
   @Prop({ default: false }) disabled: boolean
-  @Prop() min: string
-  @Prop() max: string
+  @Prop({ default: '' }) min: string
+  @Prop({ default: '' }) max: string
 
   get time(): string {
     return this.value
