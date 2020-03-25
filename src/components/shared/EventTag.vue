@@ -1,5 +1,5 @@
 <template>
-  <v-chip small label>
+  <v-chip small label v-bind="$attrs" v-on="$listeners">
     <span class="text--secondary">{{ name }}</span>
   </v-chip>
 </template>

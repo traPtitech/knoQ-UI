@@ -1,9 +1,16 @@
 <template>
-  <v-list color="transparent">
-    <v-list-item v-for="event in events" :key="event.id" class="px-0 mb-5">
-      <EventListItem v-bind="event" />
-    </v-list-item>
-  </v-list>
+  <div>
+    <span v-if="!events.length" class="text--secondary headline">
+      No events today!!
+    </span>
+    <EventListItem
+      v-for="event in events"
+      v-else
+      :key="event.id"
+      class="mb-5"
+      v-bind="event"
+    />
+  </div>
 </template>
 
 <script lang="ts">
