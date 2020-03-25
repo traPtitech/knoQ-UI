@@ -10,11 +10,12 @@ import { render } from '@/utils/markdown-it'
 
 @Component
 export default class MarkdownField extends Vue {
-  @Prop()
-  src!: string
+  @Prop() src!: string
 
   get rendered(): string {
     return render(this.src)
   }
 }
 </script>
+
+<style src="highlightjs/styles/atom-one-light.css" />
