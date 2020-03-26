@@ -7,6 +7,7 @@ const Dashboard = () => import('@/pages/Dashboard.vue')
 const EventSearch = () => import('@/pages/EventSearch.vue')
 const EventDetail = () => import('@/pages/EventDetail.vue')
 const EventNew = () => import('@/pages/EventNew.vue')
+const GroupDetail = () => import('@/pages/GroupDetail.vue')
 const GroupNew = () => import('@/pages/GroupNew.vue')
 const NotFound = () => import('@/pages/NotFound.vue')
 const WIP = () => import('@/pages/WIP.vue')
@@ -43,7 +44,7 @@ const router = new Router({
     {
       path: '/groups/:id',
       name: 'GroupDescription',
-      component: WIP,
+      component: GroupDetail,
       meta: { headerTitle: 'Group detail' },
     },
     {

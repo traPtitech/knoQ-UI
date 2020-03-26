@@ -1,5 +1,5 @@
 <template>
-  <v-avatar :size="size">
+  <v-avatar :size="size" :title="traqId">
     <img
       :src="`https://q.trap.jp/api/1.0/public/icon/${traqId}`"
       :alt="traqId"
