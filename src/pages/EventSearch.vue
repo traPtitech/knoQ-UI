@@ -1,33 +1,25 @@
 <template>
   <v-container>
-    <v-card class="mb-7">
-      <v-tabs v-model="tab" background-color="#fff">
-        <v-tab class="text-capitalize">Coming Events</v-tab>
-        <v-tab class="text-capitalize">All Events</v-tab>
-      </v-tabs>
-    </v-card>
-    <v-tabs-items v-model="tab" style="background-color: transparent;">
-      <v-tab-item>
-        <EventList :events="sortedEvents" :event-filter="isComingEvent" />
-      </v-tab-item>
-      <v-tab-item>
-        <v-autocomplete
-          v-model="filterTags"
-          :items="tags"
-          placeholder="Filters"
-          chips
-          clearable
-          multiple
-          solo
-          prepend-inner-icon="mdi-filter"
-        >
-          <template #selection="{ item }">
-            <EventTag close :name="item" @click:close="removeFilterTag(item)" />
-          </template>
-        </v-autocomplete>
-        <EventList :events="sortedEvents" :event-filter="customFilter" />
-      </v-tab-item>
-    </v-tabs-items>
+    <v-autocomplete
+      v-model="filterTags"
+      :items="tags"
+      placeholder="Filter by tags"
+      chips
+      clearable
+      multiple
+      solo
+      prepend-inner-icon="mdi-filter"
+    >
+      <template #selection="{ item }">
+        <EventTag close :name="item" @click:close="removeFilterTag(item)" />
+      </template>
+    </v-autocomplete>
+    <v-checkbox
+      v-model="showFinished"
+      label="過去のイベントも表示"
+      class="mt-n6"
+    />
+    <EventList :events="sortedEvents" :event-filter="filterFn" />
   </v-container>
 </template>
 
@@ -44,16 +36,16 @@ import { compareDateStr } from '@/utils/date'
     EventTag,
   },
 })
-export default class Events extends Vue {
-  tab = null
+export default class EventSearch extends Vue {
   filterTags: string[] = []
+  showFinished = false
 
-  get isComingEvent() {
-    return e => compareDateStr(e.date) >= 0
-  }
-
-  get customFilter() {
-    return e => this.filterTags.every(t => e.tags.includes(t))
+  get filterFn() {
+    return e =>
+      [
+        e => this.showFinished || compareDateStr(e.date) >= 0,
+        e => this.filterTags.every(t => e.tags.includes(t)),
+      ].every(p => p(e))
   }
 
   removeFilterTag(name: string) {
@@ -81,7 +73,7 @@ export default class Events extends Vue {
       place: 'place2',
       description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
       title: 'event2',
-      tags: ['react', 'haskell', 'purescript'],
+      tags: ['react', 'vue', 'purescript'],
     },
     {
       id: 4,

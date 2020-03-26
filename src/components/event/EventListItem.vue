@@ -2,7 +2,9 @@
   <v-card elevation="4" style="width: 100%;" class="px-3 py-1">
     <v-card-title class="headline">{{ title }}</v-card-title>
     <v-card-subtitle>
-      {{ place }}: {{ timeStart }} - {{ timeEnd }}
+      {{ place }}: {{ timeStart }}
+      <v-icon small style="margin-bottom: 3px;">mdi-chevron-right</v-icon>
+      {{ timeEnd }}
     </v-card-subtitle>
     <v-card-text class="text-truncate">{{ description }}</v-card-text>
     <v-card-actions class="px-4">

@@ -29,11 +29,6 @@ export default class EventList extends Vue {
   @Prop() events!: any[]
   @Prop() eventFilter?: (e: any) => boolean
 
-  @Watch('eventFilter')
-  onFilterChange() {
-    console.log(this.eventFilter)
-  }
-
   get filteredEvents() {
     return this.events.filter(this.eventFilter || (_ => true))
   }
