@@ -7,6 +7,7 @@ const Dashboard = () => import('@/pages/Dashboard.vue')
 const EventSearch = () => import('@/pages/EventSearch.vue')
 const EventDetail = () => import('@/pages/EventDetail.vue')
 const EventNew = () => import('@/pages/EventNew.vue')
+const EventEdit = () => import('@/pages/EventEdit.vue')
 const GroupDetail = () => import('@/pages/GroupDetail.vue')
 const GroupNew = () => import('@/pages/GroupNew.vue')
 const NotFound = () => import('@/pages/NotFound.vue')
@@ -64,6 +65,12 @@ const router = new Router({
       name: 'EventNew',
       component: EventNew,
       meta: { headerTitle: 'Create new event' },
+    },
+    {
+      path: '/events/edit/:id',
+      name: 'EventEdit',
+      component: EventEdit,
+      meta: { headerTitle: 'Edit/Delete event' },
     },
     {
       path: '/events/:id',

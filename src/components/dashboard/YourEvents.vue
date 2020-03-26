@@ -11,7 +11,9 @@
               {{ event.name }}
             </v-col>
             <v-col class="flex-grow-0">
-              <v-btn small outlined color="primary">EDIT</v-btn>
+              <v-btn small outlined color="primary" :to="`/events/edit/${i}`">
+                EDIT
+              </v-btn>
             </v-col>
           </v-row>
         </v-list-item>
@@ -19,7 +21,7 @@
       </template>
       <v-list-item>
         <v-list-item-content>
-          <v-btn depressed color="primary">
+          <v-btn depressed color="primary" to="/events/new">
             <v-icon small>mdi-plus</v-icon>
             CREATE NEW EVENT
           </v-btn>
