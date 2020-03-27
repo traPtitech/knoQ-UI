@@ -13,7 +13,6 @@ declare namespace API {
     namespace Post {
       export interface RequestBody {
         place: string
-        date: string
         timeStart: string
         timeEnd: string
       }
@@ -31,10 +30,9 @@ declare namespace API {
     }
 
     namespace Private {
-      namespace Get {
+      namespace Post {
         export interface RequestBody {
           place: string
-          date: string
           timeStart: string
           timeEnd: string
         }
@@ -56,11 +54,11 @@ declare namespace API {
   namespace Events {
     namespace Get {
       export interface Params {
-        name: string
-        groupId: string
-        roomId: string
-        dateBegin: string
-        dateEnd: string
+        name?: string
+        groupId?: string
+        roomId?: string
+        dateBegin?: string
+        dateEnd?: string
       }
       namespace Responses {
         export type $200 = Schemas.Event[]
@@ -74,7 +72,6 @@ declare namespace API {
         sharedRoom: boolean
         timeStart: string
         timeEnd: string
-        imageId: boolean
         roomId: boolean
         groupId: boolean
         tags: {
@@ -100,12 +97,10 @@ declare namespace API {
           sharedRoom: boolean
           timeStart: string
           timeEnd: string
-          imageId: boolean
           roomId: boolean
           groupId: boolean
           tags: {
             name: string
-            locked: boolean
           }[]
         }
         namespace Responses {
@@ -113,18 +108,10 @@ declare namespace API {
         }
       }
 
-      namespace Favorite {
-        namespace Put {
-          namespace Responses {
-            export type $200 = Schemas.Event
-          }
-        }
-      }
-
       namespace Tags {
         namespace Post {
           export interface RequestBody {
-            id: string
+            name: string
           }
           namespace Responses {
             export type $200 = Schemas.Event
@@ -145,7 +132,6 @@ declare namespace API {
       export interface RequestBody {
         name: string
         description: string
-        imageId: string
         open: string
         member: string[]
       }
@@ -165,7 +151,6 @@ declare namespace API {
         export interface RequestBody {
           name: string
           description: string
-          imageId: string
           open: string
           member: string[]
         }
@@ -189,13 +174,13 @@ declare namespace API {
   namespace Users {
     namespace Get {
       namespace Responses {
-        export type $200 = Schemas.User
+        export type $200 = Schemas.User[]
       }
     }
     namespace Me {
       namespace Get {
         namespace Responses {
-          export type $200 = Schemas.Me
+          export type $200 = Schemas.User
         }
       }
       namespace Events {
@@ -222,14 +207,12 @@ declare namespace API {
         export type $200 = Schemas.Tag[]
       }
     }
+  }
 
+  namespace AuthParams {
     namespace Post {
-      export interface RequestBody {
-        name: string
-      }
-
       namespace Response {
-        export type $200 = Schemas.Tag
+        export type $200 = Schemas.AuthParams
       }
     }
   }

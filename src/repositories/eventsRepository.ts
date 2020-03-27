@@ -31,16 +31,6 @@ export default {
       return Repository.delete(`${resource}/${eventId}`)
     },
 
-    favorite: {
-      put(): AxiosPromise<API.Events.$EventId.Favorite.Put.Responses.$200> {
-        return Repository.put(`${resource}/${eventId}/favorite`)
-      },
-
-      delete(): AxiosPromise<void> {
-        return Repository.delete(`${resource}/${eventId}/favorite`)
-      },
-    },
-
     tags: {
       post(
         body: API.Events.$EventId.Tags.Post.RequestBody

@@ -1,5 +1,5 @@
 export interface State {
-  me: Schemas.Me | null
+  me: Schemas.User | null
 }
 
 export const state = (): State => ({

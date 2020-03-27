@@ -2,7 +2,6 @@ declare namespace Schemas {
   export interface Room {
     roomId: string
     place: string
-    date: string
     timeStart: string
     timeEnd: string
     public: boolean
@@ -19,17 +18,12 @@ declare namespace Schemas {
     eventId: string
     name: string
     description: string
-    private: boolean
+    sharedRoom: boolean
     timeStart: string
     timeEnd: string
-    imageId: string
     roomId: string
     groupId: string
-    favorite: boolean
-    tags: {
-      name: string
-      locked: boolean
-    }[]
+    tags: { name: string }[]
     createdBy: string
     createdAt: string
     updatedAt: string
@@ -39,7 +33,6 @@ declare namespace Schemas {
     groupId: string
     name: string
     description: string
-    imageId: string
     open: string
     members: string[]
     isTraQGroup: boolean
@@ -50,20 +43,17 @@ declare namespace Schemas {
 
   export interface Tag {
     name: string
-    official: true
   }
 
   export interface User {
-    userId: string
+    id: string
+    admin: boolean
     name: string
   }
 
-  export interface Me {
-    userId: string
-    admin: boolean
-  }
-
-  export interface Image {
-    imageId: string
+  export interface AuthParams {
+    clientId: string
+    state: string
+    codeChallenge: string
   }
 }
