@@ -784,17 +784,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/highlight.js@*":
+"@types/highlight.js@^9.12.3":
   version "9.12.3"
   resolved "https://registry.yarnpkg.com/@types/highlight.js/-/highlight.js-9.12.3.tgz#b672cfaac25cbbc634a0fd92c515f66faa18dbca"
   integrity sha512-pGF/zvYOACZ/gLGWdQH8zSwteQS1epp68yRcVLJMgUck/MjEn/FBYmPub9pXT8C1e4a8YZfHo1CKyV8q1vKUnQ==
-
-"@types/highlightjs@^9.12.0":
-  version "9.12.0"
-  resolved "https://registry.yarnpkg.com/@types/highlightjs/-/highlightjs-9.12.0.tgz#2d41f689f63b3746e882dc795cbebe07ab6eaf27"
-  integrity sha512-MmUcjkDtCBfx2BPeLLTtJ5mFmGgWk9nAgZmNesixaGHOr0tCecsTU2iUgYvhRsWJSts2WbcpAtVPuIzZ0ybJ1A==
-  dependencies:
-    "@types/highlight.js" "*"
 
 "@types/json-schema@^7.0.3":
   version "7.0.3"
@@ -4549,15 +4542,15 @@ hex-color-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/hex-color-regex/-/hex-color-regex-1.1.0.tgz#4c06fccb4602fe2602b3c93df82d7e7dbf1a8a8e"
   integrity sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==
 
+highlight.js@^9.18.1:
+  version "9.18.1"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.18.1.tgz#ed21aa001fe6252bb10a3d76d47573c6539fe13c"
+  integrity sha512-OrVKYz70LHsnCgmbXctv/bfuvntIKDz177h0Co37DQ5jamGZLVmoCVMtjMtNZY3X9DrCcKfklHPNeA0uPZhSJg==
+
 highlight.js@^9.6.0:
   version "9.15.10"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.15.10.tgz#7b18ed75c90348c045eef9ed08ca1319a2219ad2"
   integrity sha512-RoV7OkQm0T3os3Dd2VHLNMoaoDVx77Wygln3n9l5YV172XonWG6rgQD3XnF/BuFFZw9A0TJgmMSO8FEWQgvcXw==
-
-highlightjs@^9.16.2:
-  version "9.16.2"
-  resolved "https://registry.yarnpkg.com/highlightjs/-/highlightjs-9.16.2.tgz#07ea6cc7c93340fc440734fb7abf28558f1f0fe1"
-  integrity sha512-FK1vmMj8BbEipEy8DLIvp71t5UsC7n2D6En/UfM/91PCwmOpj6f2iu0Y0coRC62KSRHHC+dquM2xMULV/X7NFg==
 
 hmac-drbg@^1.0.0:
   version "1.0.1"

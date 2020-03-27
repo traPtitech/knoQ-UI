@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it'
-import hljs from 'highlightjs'
+import hljs from 'highlight.js'
 
 function highlight(code: string, lang: string): string {
   const result = hljs.getLanguage(lang)

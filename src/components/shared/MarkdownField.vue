@@ -18,4 +18,4 @@ export default class MarkdownField extends Vue {
 }
 </script>
 
-<style src="highlightjs/styles/atom-one-light.css" />
+<style src="highlight.js/styles/atom-one-light.css" />
