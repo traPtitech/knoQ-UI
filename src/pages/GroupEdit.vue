@@ -86,7 +86,7 @@ const GroupsRepo = RepositoryFactory.get('groups')
     FormBackButton,
   },
 })
-export default class New extends Vue {
+export default class GroupEdit extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
   dialog = false
   valid = false
@@ -100,9 +100,9 @@ export default class New extends Vue {
 
   async fetchGroupData() {
     this.status = 'loading'
-    const id = this.$route.params.id
+    const groupId = this.$route.params.id
     try {
-      this.group = (await GroupsRepo.$groupId(id).get()).data
+      this.group = (await GroupsRepo.$groupId(groupId).get()).data
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
@@ -110,17 +110,19 @@ export default class New extends Vue {
   }
 
   async submitGroup() {
+    const groupId = this.$route.params.id
     try {
-      const { data } = await GroupsRepo.post(this.group)
-      this.$router.push(`/groups/${data.groupId}`)
+      await GroupsRepo.post(this.group)
+      this.$router.push(`/groups/${groupId}`)
     } catch (__) {
       alert('Failed to submit...')
     }
   }
 
   async deleteGroup() {
+    const groupId = this.$route.params.id
     try {
-      await GroupsRepo.$groupId(this.group.groupId).delete()
+      await GroupsRepo.$groupId(groupId).delete()
       this.dialog = false
     } catch (__) {
       alert('Failed to submit...')
