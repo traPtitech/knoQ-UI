@@ -151,7 +151,7 @@ declare namespace API {
         export interface RequestBody {
           name: string
           description: string
-          open: string
+          open: boolean
           members: string[]
         }
         namespace Responses {
