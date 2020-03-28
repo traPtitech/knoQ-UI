@@ -33,7 +33,7 @@ declare namespace Schemas {
     groupId: string
     name: string
     description: string
-    open: string
+    open: boolean
     members: string[]
     isTraQGroup: boolean
     createdBy: string

@@ -15,7 +15,9 @@
       multiple
       label="メンバー"
       placeholder="trapyojo, ..."
-      :items="membersList"
+      :items="allMembers"
+      item-text="name"
+      item-value="id"
       :rules="$rules.groupMembers"
     >
       <template #item="{ item }">
@@ -57,7 +59,11 @@ export default class GroupFormContent extends Vue {
   @PropSync('open') _open: boolean
   @Prop() value: boolean
 
-  membersList = ['fuji', 'you10', 'wasabi']
+  get allMembers(): Schemas.User[] {
+    const usersMap = this.$store.direct.state.usersCache.users
+    if (!usersMap) return []
+    return [...usersMap.values()]
+  }
 
   private get valid(): boolean {
     return this.value

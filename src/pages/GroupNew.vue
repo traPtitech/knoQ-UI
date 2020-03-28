@@ -24,7 +24,7 @@
           <FormBackButton class="mr-3" @click="step = 1">
             Back
           </FormBackButton>
-          <FormNextButton @click="onSubmit">
+          <FormNextButton @click="submitGroup">
             Submit
           </FormNextButton>
         </v-stepper-content>
@@ -40,6 +40,9 @@ import GroupFormContent from '@/components/group/GroupFormContent.vue'
 import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+
+const GroupsRepo = RepositoryFactory.get('groups')
 
 @Component({
   components: {
@@ -53,14 +56,20 @@ export default class New extends Vue {
   valid = false
   step = 1
 
-  group = {
+  group: API.Groups.Post.RequestBody = {
     name: '',
     description: '',
     members: [],
     open: false,
   }
 
-  onSubmit() {
+  async submitGroup() {
+    try {
+      await GroupsRepo.post(this.group)
+    } catch (__) {
+      alert('Failed to submit...')
+      return
+    }
     this.$router.push('/events/new')
   }
 }

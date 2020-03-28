@@ -132,8 +132,8 @@ declare namespace API {
       export interface RequestBody {
         name: string
         description: string
-        open: string
-        member: string[]
+        open: boolean
+        members: string[]
       }
       namespace Responses {
         export type $201 = Schemas.Group
@@ -152,7 +152,7 @@ declare namespace API {
           name: string
           description: string
           open: string
-          member: string[]
+          members: string[]
         }
         namespace Responses {
           export type $200 = Schemas.Group
