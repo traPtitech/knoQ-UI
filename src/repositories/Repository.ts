@@ -4,6 +4,7 @@ import PathStorage from '@/utils/PathStorage'
 
 const api = axios.create({
   baseURL,
+  withCredentials: true,
 })
 
 api.interceptors.response.use(null, async err => {
