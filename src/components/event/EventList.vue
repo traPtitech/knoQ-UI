@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!filteredEvents.length" class="text-center">
+    <div v-if="!filteredEvents.length">
       <span class="text--secondary headline">
         There is no event...
       </span>

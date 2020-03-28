@@ -1,43 +1,47 @@
 <template>
   <v-container>
-    <v-card class="pa-9">
+    <ProgressCircular v-if="status === 'loading'" />
+    <LoadFailedText v-else-if="status === 'error'" />
+    <v-card v-else class="pa-9">
       <div class="mb-7">
-        <h1 class="display-1 d-inline mr-5">{{ name }}</h1>
-        <v-btn
-          v-if="!joining"
-          small
-          depressed
-          color="primary"
-          class="mb-3"
-          @click="joining = true"
-        >
-          JOIN
-        </v-btn>
-        <v-btn
-          v-else
-          small
-          outlined
-          color="primary"
-          class="mb-3"
-          @click="joining = false"
-        >
-          JOINING
-        </v-btn>
+        <h1 class="display-1 d-inline mr-5">{{ group.name }}</h1>
+        <template v-if="group.open">
+          <v-btn
+            v-if="!joining"
+            small
+            depressed
+            color="primary"
+            class="mb-3"
+            @click="joinGroup"
+          >
+            JOIN
+          </v-btn>
+          <v-btn
+            v-else
+            small
+            outlined
+            color="primary"
+            class="mb-3"
+            @click="leaveGroup"
+          >
+            JOINING
+          </v-btn>
+        </template>
       </div>
-      <MarkdownField :src="description" class="mb-7" />
+      <MarkdownField :src="group.description" class="mb-7" />
       <div class="mb-7">
         <div class="text--secondary">Members</div>
         <v-expansion-panels>
           <v-expansion-panel>
             <v-expansion-panel-header class="pa-0">
-              <span class="headline"> {{ members.length }} members </span>
+              <span class="headline">{{ group.members.length }} members</span>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <TrapAvatar
-                v-for="member in members"
-                :key="member"
+                v-for="memberName in memberNames"
+                :key="memberName"
                 size="36"
-                :traq-id="member"
+                :traq-id="memberName"
                 class="mr-3 mb-2"
               />
             </v-expansion-panel-content>
@@ -58,51 +62,74 @@ import { Component } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventList from '@/components/event/EventList.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import ProgressCircular from '@/components/shared/ProgressCircular.vue'
+import LoadFailedText from '@/components/shared/LoadFailedText.vue'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+
+const GroupsRepo = RepositoryFactory.get('groups')
+const EventsRepo = RepositoryFactory.get('events')
 
 @Component({
   components: {
     MarkdownField,
     EventList,
     TrapAvatar,
+    ProgressCircular,
+    LoadFailedText,
   },
 })
 export default class Detail extends Vue {
-  joining = false
-  name = 'Room.dev'
-  description = '# Hello, vue developer'
-  members = ['fuji', 'you10', 'wasabi']
-  events = [
-    {
-      id: 1,
-      date: '2019-12-31',
-      timeStart: '3:00 pm',
-      timeEnd: '8:00 pm',
-      place: 'place1',
-      title: 'event1',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      tags: ['react', 'haskell', 'purescript'],
-    },
-    {
-      id: 2,
-      date: '2019-12-31',
-      timeStart: '5:00 pm',
-      timeEnd: '8:00 pm',
-      place: 'place2',
-      title: 'event2',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      tags: ['react', 'vue', 'angular'],
-    },
-    {
-      id: 4,
-      date: '2020-12-31',
-      timeStart: '5:00 pm',
-      timeEnd: '8:00 pm',
-      place: 'place3',
-      title: 'event3',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      tags: ['react', 'haskell', 'purescript'],
-    },
-  ]
+  status: 'loading' | 'loaded' | 'error' = 'loading'
+  group: Schemas.Group | null = null
+  events: Schemas.Event[] | null = null
+
+  created() {
+    this.fetchGroupData()
+  }
+
+  async fetchGroupData() {
+    this.status = 'loading'
+    const groupId = this.$route.params.id
+    try {
+      ;[{ data: this.group }, { data: this.events }] = await Promise.all([
+        GroupsRepo.$groupId(groupId).get(),
+        EventsRepo.get({ groupId }),
+      ])
+      this.status = 'loaded'
+    } catch (__) {
+      this.status = 'error'
+    }
+  }
+
+  async joinGroup() {
+    const groupId = this.$route.params.id
+    try {
+      this.group = (await GroupsRepo.$groupId(groupId).members.me.put()).data
+    } catch (__) {
+      alert('Failed to join...')
+    }
+  }
+
+  async leaveGroup() {
+    const groupId = this.$route.params.id
+    try {
+      await GroupsRepo.$groupId(groupId).members.me.delete()
+      this.group = (await GroupsRepo.$groupId(groupId).get()).data
+    } catch (__) {
+      alert('Failed to leave...')
+    }
+  }
+
+  get joining(): boolean {
+    const me = this.$store.direct.state.me
+    if (!me || !this.group) return false
+    return this.group.members.includes(me.id)
+  }
+
+  get memberNames(): string[] {
+    const nameById = this.$store.direct.getters.usersCache.nameById
+    return this.group.members.map(nameById)
+  }
 }
 </script>
 
