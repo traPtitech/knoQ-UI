@@ -40,7 +40,7 @@ export default class NavBar extends Vue {
 
   get me(): string {
     const me = this.$store.direct.state.me
-    return me ? me.id : null
+    return me ? me.userId : null
   }
 }
 </script>

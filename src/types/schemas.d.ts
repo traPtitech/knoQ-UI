@@ -46,7 +46,7 @@ declare namespace Schemas {
   }
 
   export interface User {
-    id: string
+    userId: string
     admin: boolean
     name: string
   }

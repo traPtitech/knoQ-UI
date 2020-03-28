@@ -32,7 +32,7 @@ const getters = defineGetters<State>()({
 const mutations = defineMutations<State>()({
   SET_USERS(state, users: Schemas.User[]): void {
     const usersMap = new Map<string, Schemas.User>()
-    users.forEach(user => usersMap.set(user.id, user))
+    users.forEach(user => usersMap.set(user.userId, user))
     // Next line triggers re-rendering since this simply updates
     // one field of object.
     state.users = usersMap
