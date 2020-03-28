@@ -61,8 +61,7 @@ export default class GroupFormContent extends Vue {
 
   get allMembers(): Schemas.User[] {
     const usersMap = this.$store.direct.state.usersCache.users
-    if (!usersMap) return []
-    return [...usersMap.values()]
+    return !usersMap ? [] : [...usersMap.values()]
   }
 
   private get valid(): boolean {

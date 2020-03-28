@@ -7,6 +7,7 @@ import {
   localActionContext,
 } from 'direct-vuex'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import { isUser } from '@/utils/isUser'
 
 const UsersRepo = RepositoryFactory.get('users')
 
@@ -32,7 +33,9 @@ const getters = defineGetters<State>()({
 const mutations = defineMutations<State>()({
   SET_USERS(state, users: Schemas.User[]): void {
     const usersMap = new Map<string, Schemas.User>()
-    users.forEach(user => usersMap.set(user.userId, user))
+    users.forEach(user => {
+      if (isUser(user.name)) usersMap.set(user.userId, user)
+    })
     // Next line triggers re-rendering since this simply updates
     // one field of object.
     state.users = usersMap

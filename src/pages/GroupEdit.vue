@@ -112,7 +112,7 @@ export default class GroupEdit extends Vue {
   async submitGroup() {
     const groupId = this.$route.params.id
     try {
-      await GroupsRepo.post(this.group)
+      await GroupsRepo.$groupId(groupId).put(this.group)
       this.$router.push(`/groups/${groupId}`)
     } catch (__) {
       alert('Failed to submit...')
@@ -124,6 +124,7 @@ export default class GroupEdit extends Vue {
     try {
       await GroupsRepo.$groupId(groupId).delete()
       this.dialog = false
+      this.$router.push('/')
     } catch (__) {
       alert('Failed to submit...')
     }

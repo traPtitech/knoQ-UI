@@ -1,4 +1,4 @@
-export default {
+const rules = {
   groupName: [(v: string) => !!v || 'Group name is required'],
   groupMembers: [
     (v: string[]) => !!v.length || 'You must specify one or more members',
@@ -11,3 +11,5 @@ export default {
   eventTimeStart: [(v: string) => !!v || 'TimeStart is required'],
   eventTimeEnd: [(v: string) => !!v || 'TimeEnd is required'],
 }
+
+export default rules

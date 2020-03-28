@@ -52,7 +52,7 @@ const GroupsRepo = RepositoryFactory.get('groups')
     FormBackButton,
   },
 })
-export default class New extends Vue {
+export default class GroupNew extends Vue {
   valid = false
   step = 1
 
