@@ -17,16 +17,16 @@
       placeholder="trapyojo, ..."
       :items="allMembers"
       item-text="name"
-      item-value="id"
+      item-value="userId"
       :rules="$rules.groupMembers"
     >
       <template #item="{ item }">
         <v-list-item-avatar>
-          <TrapAvatar size="36" :traq-id="item" />
+          <TrapAvatar size="36" :traq-id="item.name" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
-            {{ item }}
+            {{ item.name }}
           </v-list-item-title>
         </v-list-item-content>
       </template>

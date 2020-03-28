@@ -11,9 +11,9 @@
     <SummaryItem>
       <SummaryItemCaption>Members</SummaryItemCaption>
       <TrapAvatar
-        v-for="member in members"
-        :key="member"
-        :traq-id="member"
+        v-for="name in memberNames"
+        :key="name"
+        :traq-id="name"
         size="36"
         class="mr-2"
       />
@@ -55,6 +55,11 @@ export default class GroupEventFormSummary extends Vue {
     return this.open
       ? '自由参加可能なグループです'
       : '自由参加できないグループです'
+  }
+
+  get memberNames(): string[] {
+    const nameById = this.$store.direct.getters.usersCache.nameById
+    return this.members.map(nameById)
   }
 
   get openIcon() {
