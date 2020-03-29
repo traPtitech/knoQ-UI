@@ -18,7 +18,7 @@
           v-on="on"
         />
       </template>
-      <v-date-picker v-model="_date" show-current />
+      <v-date-picker v-model="_date" show-current :min="dateMin" />
     </v-dialog>
     <TimePicker
       v-model="_timeStart"
@@ -39,6 +39,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
+import moment from 'moment'
 
 @Component({
   components: {
@@ -51,6 +52,10 @@ export default class EventFormReservationPrivate extends Vue {
   @PropSync('timeStart') _timeStart: string
   @PropSync('timeEnd') _timeEnd: string
   @Prop() value: boolean
+
+  get dateMin(): string {
+    return moment().format('YYYY-MM-DD')
+  }
 
   get _valid(): boolean {
     return this.value
