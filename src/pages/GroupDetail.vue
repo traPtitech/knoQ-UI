@@ -78,7 +78,7 @@ const EventsRepo = RepositoryFactory.get('events')
     LoadFailedText,
   },
 })
-export default class Detail extends Vue {
+export default class GroupDetail extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
   group: Schemas.Group | null = null
   events: Schemas.Event[] | null = null
@@ -104,7 +104,8 @@ export default class Detail extends Vue {
   async joinGroup() {
     const groupId = this.$route.params.id
     try {
-      this.group = (await GroupsRepo.$groupId(groupId).members.me.put()).data
+      await GroupsRepo.$groupId(groupId).members.me.put()
+      this.group = (await GroupsRepo.$groupId(groupId).get()).data
     } catch (__) {
       alert('Failed to join...')
     }
@@ -123,7 +124,7 @@ export default class Detail extends Vue {
   get joining(): boolean {
     const me = this.$store.direct.state.me
     if (!me || !this.group) return false
-    return this.group.members.includes(me.id)
+    return this.group.members.includes(me.userId)
   }
 
   get memberNames(): string[] {

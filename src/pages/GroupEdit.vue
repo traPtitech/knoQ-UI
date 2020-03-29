@@ -1,13 +1,7 @@
 <template>
   <v-container>
-    <div v-if="status === 'loading'">
-      <v-progress-circular indeterminate color="primary" class="mr-3" />
-      <span class="text--secondary headline">Loading...</span>
-    </div>
-    <div v-else-if="status === 'error'">
-      <v-icon large color="error" class="mr-3">mdi-alert-circle</v-icon>
-      <span class="text--secondary headline">Could not load data</span>
-    </div>
+    <ProgressCircular v-if="status === 'loading'" />
+    <LoadFailedText v-else-if="status === 'error'" />
     <template v-else>
       <v-stepper v-model="step" class="mb-5">
         <v-stepper-header>
@@ -74,6 +68,8 @@ import GroupFormContent from '@/components/group/GroupFormContent.vue'
 import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
+import ProgressCircular from '@/components/shared/ProgressCircular.vue'
+import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
@@ -84,6 +80,8 @@ const GroupsRepo = RepositoryFactory.get('groups')
     GroupFormSummary,
     FormNextButton,
     FormBackButton,
+    ProgressCircular,
+    LoadFailedText,
   },
 })
 export default class GroupEdit extends Vue {

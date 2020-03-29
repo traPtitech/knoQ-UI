@@ -12,7 +12,7 @@
 
     <v-spacer />
 
-    <TrapAvatar size="36" :traq-id="me" />
+    <TrapAvatar v-if="me" size="36" :traq-id="me" />
   </v-app-bar>
 </template>
 
