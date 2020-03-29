@@ -78,15 +78,15 @@ import FormBackButton from '@/components/shared/FormBackButton.vue'
     FormBackButton,
   },
 })
-export default class New extends Vue {
+export default class EventNew extends Vue {
   step = 1
 
   valid1 = false
   content = {
     name: '',
-    tags: [],
+    tags: [] as string[],
     description: '',
-    group: null,
+    group: null as Schemas.Group,
   }
 
   isPrivate = false

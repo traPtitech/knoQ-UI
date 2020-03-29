@@ -7,7 +7,7 @@
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Group</SummaryItemCaption>
-      <SummaryItemText>{{ group }}</SummaryItemText>
+      <SummaryItemText>{{ group.name }}</SummaryItemText>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Date Time</SummaryItemCaption>
@@ -58,7 +58,7 @@ import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 })
 export default class EventFormSummary extends Vue {
   @Prop() name: string
-  @Prop() group: string
+  @Prop() group: Schemas.Group
   @Prop() tags: string[]
   @Prop() description: string
   @Prop() isPrivate: boolean

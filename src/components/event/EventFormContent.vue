@@ -20,19 +20,30 @@
       outlined
       label="主催グループ"
       placeholder="traP"
-      :items="groupList"
+      :items="allGroups"
+      item-text="name"
+      :item-value="v => v"
       :rules="$rules.eventGroup"
     />
     <v-combobox
       v-model="_tags"
       outlined
       multiple
+      clearable
       label="タグ"
-      placeholder="vue, narou, ..."
-      :items="tagList"
+      placeholder="Vue, なろう講習会, ..."
+      :items="allTags"
+      item-text="name"
+      :item-value="v => v"
     >
-      <template #selection="data">
-        <EventTag :key="data.item" :name="data.item" class="mt-3" />
+      <template #selection="{ item }">
+        <EventTag
+          :key="item"
+          :name="item"
+          close
+          class="mt-3"
+          @click:close="removeTag(item)"
+        />
       </template>
     </v-combobox>
     <v-textarea
@@ -50,6 +61,11 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import EventTag from '@/components/shared/EventTag.vue'
+import { removeCtrlChars } from '@/utils/removeCtrlChars'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+
+const GroupsRepo = RepositoryFactory.get('groups')
+const TagsRepo = RepositoryFactory.get('tags')
 
 @Component({
   components: {
@@ -63,8 +79,23 @@ export default class EventFormContent extends Vue {
   @Prop() tags: string[]
   @PropSync('description') _description: string
 
-  groupList = Array.from({ length: 5 }, (v, i) => `group${i}`)
-  tagList = ['react', 'vue', 'angular', 'svelte', 'riot']
+  allGroups: Schemas.Group[] = []
+  allTags: Schemas.Tag[] = []
+
+  created() {
+    Promise.all([this.fetchGroups(), this.fetchTags()])
+  }
+  async fetchGroups() {
+    this.allGroups = (await GroupsRepo.get()).data
+  }
+  async fetchTags() {
+    this.allTags = (await TagsRepo.get()).data
+  }
+
+  removeTag(tag: string) {
+    const index = this._tags.indexOf(tag)
+    if (index >= 0) this._tags.splice(index, 1)
+  }
 
   private get valid(): boolean {
     return this.value
@@ -77,11 +108,7 @@ export default class EventFormContent extends Vue {
     return this.tags
   }
   private set _tags(tags: string[]) {
-    // lower-cased alphanumeric characters only
-    this.$emit(
-      'update:tags',
-      tags.map(v => v.replace(/[^a-z0-9]/gi, '').toLowerCase()).filter(v => !!v)
-    )
+    this.$emit('update:tags', tags.map(removeCtrlChars).filter(v => !!v))
   }
 }
 </script>
