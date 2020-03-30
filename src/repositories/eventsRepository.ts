@@ -38,9 +38,9 @@ export default {
         return Repository.post(`${resource}/${eventId}/tags`, body)
       },
 
-      $tagId: (tagId: string) => ({
+      $tagName: (tagName: string) => ({
         delete(): AxiosPromise<void> {
-          return Repository.delete(`${resource}/${eventId}/tags/${tagId}`)
+          return Repository.delete(`${resource}/${eventId}/tags/${tagName}`)
         },
       }),
     },

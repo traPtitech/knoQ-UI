@@ -1,14 +1,16 @@
 <template>
   <v-container>
-    <v-card class="pa-9">
+    <ProgressCircular v-if="status === 'loading'" />
+    <LoadFailedText v-else-if="status === 'error'" />
+    <v-card v-else class="pa-9">
       <div class="mb-12">
         <h1 class="mb-1 display-1">{{ event.name }}</h1>
         <div class="mb-3">
           <template v-if="!isTagEditting">
             <EventTag
-              v-for="(tag, i) in eventTags"
-              :key="i"
-              :name="tag"
+              v-for="tag in event.tags"
+              :key="tag.name"
+              :name="tag.name"
               class="mr-3"
             />
             <v-btn x-small icon title="Edit tags" @click="isTagEditting = true">
@@ -17,14 +19,17 @@
           </template>
           <v-combobox
             v-else
-            v-model="eventTags"
+            v-model="editedTags"
+            :loading="tagLoading"
             :items="tags"
+            item-text="name"
             autofocus
             dense
+            outlined
             chips
             clearable
             multiple
-            solo
+            @focus="onTagEditStart"
             @blur="onTagEditEnd"
           >
             <template #selection="{ item }">
@@ -47,15 +52,15 @@
       <div class="mb-5">
         <div class="text--secondary mb-n1">Date</div>
         <div class="headline">
-          {{ formattedTimeStart }}
+          {{ formatTime(event.timeStart) }}
           <v-icon>mdi-chevron-right</v-icon>
-          {{ formattedTimeEnd }}
+          {{ formatTime(event.timeEnd) }}
         </div>
       </div>
       <div class="mb-5">
         <div class="text--secondary mb-n1">Place</div>
         <div class="headline">{{ room.place }}</div>
-        <div class="text--secondary body-2">
+        <div v-if="room.public" class="text--secondary body-2">
           <v-icon :color="sharedRoomIcon.color">
             {{ sharedRoomIcon.icon }}
           </v-icon>
@@ -72,68 +77,61 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
+import ProgressCircular from '@/components/shared/ProgressCircular.vue'
+import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import { momentify } from '@/utils/date'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import moment from 'moment'
+
+const EventsRepo = RepositoryFactory.get('events')
+const RoomsRepo = RepositoryFactory.get('rooms')
+const GroupsRepo = RepositoryFactory.get('groups')
+const TagsRepo = RepositoryFactory.get('tags')
 
 @Component({
   components: {
+    ProgressCircular,
+    LoadFailedText,
     EventTag,
     MarkdownField,
   },
 })
 export default class EventDetail extends Vue {
+  status: 'loading' | 'loaded' | 'error' = 'loading'
   isTagEditting = false
-  tags = ['react', 'vue', 'ts', 'frontend', 'angular', 'haskell', 'monad']
 
-  event = {
-    eventId: 1,
-    roomId: 1,
-    groupId: 2,
-    name: 'Vueもくもく会',
-    tags: ['vue', 'ts', 'frontend'],
-    description: [
-      '## Vueもくもく会　開催決定!',
-      '自分だけの最強のVueコンポーネントをつくろう!!',
-      '- Vue初心者',
-      '- Vue強者',
-      '',
-      '参加をお待ちしてます!!',
-    ].join('\n'),
-    timeStart: '17:00',
-    timeEnd: '20:00',
-    sharedRoom: true,
-  }
+  event: Schemas.Event = null
+  room: Schemas.Room = null
+  group: Schemas.Group = null
+  tags: Schemas.Tag[] = []
+  tagLoading = false
 
-  get eventTags(): string[] {
-    return this.event.tags
-  }
-  set eventTags(value: string[]) {
-    this.event.tags = value
-  }
+  editedTags: string[] = []
 
-  room = {
-    place: 'W933',
-    date: '2020-01-01',
-  }
-
-  group = {
-    name: 'SysAd',
+  async created() {
+    const eventId = this.$route.params.id
+    this.status = 'loading'
+    try {
+      this.event = (await EventsRepo.$eventId(eventId).get()).data
+      ;[{ data: this.room }, { data: this.group }] = await Promise.all([
+        RoomsRepo.$roomId(this.event.roomId).get(),
+        GroupsRepo.$groupId(this.event.groupId).get(),
+      ])
+      this.status = 'loaded'
+    } catch (__) {
+      this.status = 'error'
+    }
   }
 
   removeTag(name: string) {
-    const index = this.event.tags.indexOf(name)
-    if (index >= 0) this.event.tags.splice(index, 1)
+    const index = this.editedTags.indexOf(name)
+    if (index >= 0) this.editedTags.splice(index, 1)
   }
 
-  get formattedTimeStart(): string {
-    return momentify(this.room.date, this.event.timeStart).format(
-      'MMM D, h:mma'
-    )
-  }
-
-  get formattedTimeEnd(): string {
-    return momentify(this.room.date, this.event.timeEnd).format('MMM D, h:mma')
+  get formatTime() {
+    return date => moment(date).format('MMM D, h:mma')
   }
 
   get sharedRoomString(): string {
@@ -146,9 +144,37 @@ export default class EventDetail extends Vue {
       : { icon: 'mdi-door-closed-lock', color: 'error' }
   }
 
-  onTagEditEnd() {
-    this.isTagEditting = false
-    alert(this.event.tags)
+  async onTagEditStart() {
+    if (!this.tags.length) {
+      this.tagLoading = true
+      this.tags = (await TagsRepo.get()).data
+      this.tagLoading = false
+    }
+    this.editedTags = this.event.tags.map(({ name }) => name)
   }
+
+  async onTagEditEnd() {
+    const tagNames = this.event.tags.map(({ name }) => name)
+    const added = difference(this.editedTags, tagNames)
+    const deleted = difference(tagNames, this.editedTags)
+    const eventId = this.$route.params.id
+    await Promise.all(
+      added.map(name => EventsRepo.$eventId(eventId).tags.post({ name }))
+    )
+    await Promise.all(
+      deleted.map(name =>
+        EventsRepo.$eventId(eventId)
+          .tags.$tagName(name)
+          .delete()
+      )
+    )
+    this.event = (await EventsRepo.$eventId(eventId).get()).data
+    this.isTagEditting = false
+    this.editedTags = []
+  }
+}
+
+function difference<T>(xs: T[], ys: T[]): T[] {
+  return xs.filter(x => !ys.includes(x))
 }
 </script>
