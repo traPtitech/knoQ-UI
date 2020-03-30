@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
-import PathStorage from '@/utils/PathStorage'
+import PathStorage from '@/workers/PathStorage'
 
 const Dashboard = () => import('@/pages/Dashboard.vue')
 const EventSearch = () => import('@/pages/EventSearch.vue')

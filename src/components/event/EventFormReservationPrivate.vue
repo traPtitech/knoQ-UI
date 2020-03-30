@@ -39,7 +39,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
-import { todayStr } from '@/utils/date'
+import { todayStr } from '@/workers/date'
 
 @Component({
   components: {

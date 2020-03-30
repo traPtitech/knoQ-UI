@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { baseURL, fetchAuthParams, redirectToAuthPage } from '@/utils/api'
-import PathStorage from '@/utils/PathStorage'
+import { baseURL, fetchAuthParams, redirectToAuthPage } from '@/workers/api'
+import PathStorage from '@/workers/PathStorage'
 
 const api = axios.create({
   baseURL,

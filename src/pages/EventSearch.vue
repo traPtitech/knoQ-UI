@@ -28,7 +28,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import EventList from '@/components/event/EventList.vue'
 import EventTag from '@/components/shared/EventTag.vue'
-import { compareDateStr } from '@/utils/date'
+import { compareDateStr } from '@/workers/date'
 
 @Component({
   components: {

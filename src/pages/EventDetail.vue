@@ -81,7 +81,7 @@ import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import { momentify } from '@/utils/date'
+import { momentify } from '@/workers/date'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import moment from 'moment'
 

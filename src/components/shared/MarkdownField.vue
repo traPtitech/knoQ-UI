@@ -6,7 +6,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { render } from '@/utils/markdown-it'
+import { render } from '@/workers/markdown-it'
 
 @Component
 export default class MarkdownField extends Vue {

@@ -7,7 +7,7 @@ import {
   localActionContext,
 } from 'direct-vuex'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import { isUser } from '@/utils/isUser'
+import { isUser } from '@/workers/isUser'
 
 const UsersRepo = RepositoryFactory.get('users')
 

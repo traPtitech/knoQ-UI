@@ -51,8 +51,8 @@ import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import { calcAvailableRooms, AvailableRoom } from '@/utils/availableRooms'
-import { todayStr } from '@/utils/date'
+import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
+import { todayStr } from '@/workers/date'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
 const EventsRepo = RepositoryFactory.get('events')

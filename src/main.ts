@@ -3,7 +3,7 @@ import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import router from '@/router'
 import store from '@/store'
-import rules from '@/utils/rules'
+import rules from '@/workers/rules'
 
 Vue.config.productionTip = false
 Vue.prototype.$rules = rules

@@ -18,7 +18,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
-import { momentify } from '@/utils/date'
+import { momentify } from '@/workers/date'
 
 @Component({
   components: {

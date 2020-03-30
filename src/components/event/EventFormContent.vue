@@ -59,7 +59,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import EventTag from '@/components/shared/EventTag.vue'
-import { removeCtrlChars } from '@/utils/removeCtrlChars'
+import { removeCtrlChars } from '@/workers/removeCtrlChars'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
