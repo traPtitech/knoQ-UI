@@ -1,11 +1,13 @@
-const pathKey = 'path'
+const PATH_KEY = 'PATH_KEY'
 
-export default {
+const PathStorage = {
   saveCurrentPath(): void {
-    sessionStorage.setItem(pathKey, window.location.pathname)
+    sessionStorage.setItem(PATH_KEY, window.location.pathname)
   },
 
   getSavedPath(): string {
-    return sessionStorage.getItem(pathKey)
+    return sessionStorage.getItem(PATH_KEY)
   },
 }
+
+export default PathStorage

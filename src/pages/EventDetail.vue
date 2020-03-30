@@ -81,9 +81,9 @@ import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import { momentify } from '@/workers/date'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import moment from 'moment'
+import { getDateStr, getTimeStr, DISP_FORMAT } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -131,7 +131,7 @@ export default class EventDetail extends Vue {
   }
 
   get formatTime() {
-    return date => moment(date).format('MMM D, h:mma')
+    return (date: string) => moment(date).format(DISP_FORMAT)
   }
 
   get sharedRoomString(): string {

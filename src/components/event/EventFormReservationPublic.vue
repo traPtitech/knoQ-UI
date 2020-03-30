@@ -52,7 +52,8 @@ import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
-import { todayStr } from '@/workers/date'
+import moment from 'moment'
+import { getDateStr, getIso8601, getTimeStr } from '@/workers/date'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
 const EventsRepo = RepositoryFactory.get('events')
@@ -72,17 +73,24 @@ export default class EventFormReservationPublic extends Vue {
   dates: string[] = []
   allRooms: Schemas.Room[] = []
   allEvents: Schemas.Event[] = []
-  calcAvailableRooms: (dates: string[], sharedRoom: boolean) => AvailableRoom[]
+  calcAvailableRooms: (
+    dates: string[],
+    sharedRoom: boolean
+  ) => AvailableRoom[] = null
 
-  created() {
-    Promise.all([this.fetchRooms(), this.fetchEvents()])
+  async created() {
+    await Promise.all([this.fetchRooms(), this.fetchEvents()])
     this.calcAvailableRooms = calcAvailableRooms(this.allRooms, this.allEvents)
   }
   async fetchRooms() {
-    this.allRooms = (await RoomsRepo.get({ dateBegin: todayStr })).data
+    this.allRooms = (await RoomsRepo.get({
+      dateBegin: moment().format(),
+    })).data
   }
   async fetchEvents() {
-    this.allEvents = (await EventsRepo.get({ dateBegin: todayStr })).data
+    this.allEvents = (await EventsRepo.get({
+      dateBegin: moment().format(),
+    })).data
   }
 
   @Watch('_sharedRoom')
@@ -94,30 +102,30 @@ export default class EventFormReservationPublic extends Vue {
   }
 
   get _timeStart(): string {
-    return this.timeStart.slice(11, 16)
+    return getTimeStr(this.timeStart)
   }
   set _timeStart(value: string) {
     this.$emit(
       'update:timeStart',
       value && this._room
-        ? `${this._room.timeStart.slice(0, 10)}T${value}:00+09:00`
+        ? getIso8601(getDateStr(this._room.timeStart), value)
         : ''
     )
   }
   get _timeEnd(): string {
-    return this.timeEnd.slice(11, 16)
+    return getTimeStr(this.timeEnd)
   }
   set _timeEnd(value: string) {
     this.$emit(
       'update:timeEnd',
       value && this._room
-        ? `${this._room.timeEnd.slice(0, 10)}T${value}:00+09:00`
+        ? getIso8601(getDateStr(this._room.timeEnd), value)
         : ''
     )
   }
 
   get dateMin(): string {
-    return todayStr
+    return moment().format()
   }
   get startMin(): string {
     // return this._room?.timeStart

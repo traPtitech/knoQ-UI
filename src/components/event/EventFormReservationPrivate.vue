@@ -39,7 +39,8 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
-import { todayStr } from '@/workers/date'
+import moment from 'moment'
+import { getDateStr, getTimeStr, getIso8601 } from '@/workers/date'
 
 @Component({
   components: {
@@ -59,9 +60,9 @@ export default class EventFormReservationPrivate extends Vue {
   @Watch('_timeStart')
   @Watch('_timeEnd')
   private onTimePropChange() {
-    this.dateMem = this._timeStart.slice(0, 10)
-    this.timeStartMem = this._timeStart.slice(11, 16)
-    this.timeEndMem = this._timeEnd.slice(11, 16)
+    this.dateMem = getDateStr(this._timeStart)
+    this.timeStartMem = getTimeStr(this._timeStart)
+    this.timeEndMem = getTimeStr(this._timeEnd)
   }
 
   @Watch('dateMem')
@@ -69,15 +70,15 @@ export default class EventFormReservationPrivate extends Vue {
   @Watch('timeEndMem')
   private onTimeMemChange() {
     if (this.dateMem && this.timeStartMem) {
-      this._timeStart = `${this.dateMem}T${this.timeStartMem}:00+09:00`
+      this._timeStart = getIso8601(this.dateMem, this.timeStartMem)
     }
     if (this.dateMem && this.timeEndMem) {
-      this._timeEnd = `${this.dateMem}T${this.timeEndMem}:00+09:00`
+      this._timeEnd = getIso8601(this.dateMem, this.timeEndMem)
     }
   }
 
   get dateMin(): string {
-    return todayStr
+    return moment().format()
   }
 
   get _valid(): boolean {

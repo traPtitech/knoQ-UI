@@ -1,14 +1,18 @@
-interface TimeRange {
+import { getDateStr } from './date'
+
+interface TimeSpan {
   timeStart: string
   timeEnd: string
 }
 
-type DateRoomIdMap<T> = Map</* date */ string, Map</* roomId */ string, T>>
-type RoomMap = DateRoomIdMap<Schemas.Room>
-type EventMap = DateRoomIdMap<{
-  shared: Schemas.Event[]
-  notShared: Schemas.Event[]
-}>
+type DateStr = string
+type RoomId = string
+
+// 'events' are being held at 'room'
+interface RoomEventTable {
+  room: Schemas.Room
+  events: Schemas.Event[]
+}
 
 export interface AvailableRoom {
   roomId: string
@@ -17,9 +21,8 @@ export interface AvailableRoom {
   timeEnd: string
 }
 
-// Remove time range 't2' from 't1'
-// TODO: Make more readable
-function differenceTimeRange(t1: TimeRange, t2: TimeRange): TimeRange[] {
+// Remove time span 't2' from 't1'
+function differenceTimeSpan(t1: TimeSpan, t2: TimeSpan): TimeSpan[] {
   /* t1 and t2 have no intersection
    *   t1 s###t
    *           &        ->  s###t
@@ -67,70 +70,73 @@ function differenceTimeRange(t1: TimeRange, t2: TimeRange): TimeRange[] {
   }
 }
 
-function calcAvailableTimeRanges(
-  notUsed: TimeRange[],
-  used: TimeRange[]
-): TimeRange[] {
-  return used.reduce(
-    (prev, t2) => prev.flatMap(t1 => differenceTimeRange(t1, t2)),
-    notUsed
-  )
+function createRoomEventTables(
+  rooms: Schemas.Room[],
+  events: Schemas.Event[]
+): Map<DateStr, Map<RoomId, RoomEventTable>> {
+  const roomEventMap = new Map<DateStr, Map<RoomId, RoomEventTable>>()
+  for (const room of rooms) {
+    const date = getDateStr(room.timeStart)
+    if (!roomEventMap.has(date)) {
+      roomEventMap.set(date, new Map())
+    }
+    roomEventMap.get(date).set(room.roomId, { room, events: [] })
+  }
+  for (const event of events) {
+    // roomEventMap
+    //   ?.get(getDateStr(event.timeStart))
+    //   ?.get(event.roomId)
+    //   .events.push(event)
+    const subMap = roomEventMap.get(getDateStr(event.timeStart))
+    if (!subMap) {
+      continue
+    }
+    const table = subMap.get(event.roomId)
+    if (!table) {
+      continue
+    }
+    table.events.push(event)
+  }
+  return roomEventMap
 }
 
-function createRoomMap(rooms: Schemas.Room[]): RoomMap {
-  const roomMap: RoomMap = new Map()
-  rooms.forEach(room => {
-    // Expected date format: YYYY-MM-DDTHH:mm:ssZ (ISO8601)
-    const date = room.timeStart.slice(0, 10)
-    if (!roomMap.has(date)) {
-      roomMap.set(date, new Map())
+function calcAvailableTimeSpansOfRoom(
+  { room, events }: RoomEventTable,
+  sharedRoom: boolean
+): TimeSpan[] {
+  let availableTSs: TimeSpan[] = [
+    { timeStart: room.timeStart, timeEnd: room.timeEnd },
+  ]
+  for (const event of events) {
+    if (sharedRoom && event.sharedRoom) {
+      continue
     }
-    roomMap.get(date).set(room.roomId, room)
-  })
-  return roomMap
-}
-
-function createEventMap(events: Schemas.Event[]): EventMap {
-  const eventMap: EventMap = new Map()
-  events.forEach(event => {
-    // Expected date format: YYYY-MM-DDTHH:mm:ssZ (ISO8601)
-    const date = event.timeStart.slice(0, 10)
-    if (!eventMap.has(date)) {
-      eventMap.set(
-        date,
-        new Map([[event.roomId, { shared: [], notShared: [] }]])
-      )
-    }
-    eventMap
-      .get(date)
-      .get(event.roomId)
-      [event.sharedRoom ? 'shared' : 'notShared'].push(event)
-  })
-  return eventMap
+    availableTSs = availableTSs.flatMap(t1 =>
+      differenceTimeSpan(t1, {
+        timeStart: event.timeStart,
+        timeEnd: event.timeEnd,
+      })
+    )
+  }
+  return availableTSs
 }
 
 function calcAvailableRooms(rooms: Schemas.Room[], events: Schemas.Event[]) {
-  const roomMap = createRoomMap(rooms)
-  const eventMap = createEventMap(events)
+  const roomEventTables = createRoomEventTables(rooms, events)
 
   return (dates: string[], sharedRoom: boolean): AvailableRoom[] => {
-    function calcAvailableRoomsOnDate(date: string): AvailableRoom[] {
-      const roomsOnDate = roomMap.get(date)
-      const eventsOnDate = eventMap.get(date)
-
-      // Return empty if we have no room on given date
-      if (!roomsOnDate) return []
-      return [...roomsOnDate.values()].flatMap(room => {
-        // Return room if we have no event at given room on given date
-        if (!eventsOnDate) return room
-        const { shared, notShared } = eventsOnDate.get(room.roomId)
-        const availableTRs = sharedRoom
-          ? calcAvailableTimeRanges([room], notShared)
-          : calcAvailableTimeRanges([room], [...shared, ...notShared])
-        return availableTRs.map(timeRange => ({ ...room, ...timeRange }))
-      })
-    }
-    return dates.flatMap(calcAvailableRoomsOnDate)
+    const roomEventsOnDates = dates.flatMap(date => {
+      const tables = roomEventTables.get(date)
+      return tables ? [...tables.values()] : []
+    })
+    return roomEventsOnDates.flatMap(tables => {
+      const availableTSs = calcAvailableTimeSpansOfRoom(tables, sharedRoom)
+      return availableTSs.map(timeSpan => ({
+        ...timeSpan,
+        roomId: tables.room.roomId,
+        place: tables.room.place,
+      }))
+    })
   }
 }
 

@@ -149,9 +149,9 @@ export default class EventNew extends Vue {
         ...this.content,
         groupId: this.content.group.groupId,
         roomId,
-        sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
-        timeStart: jstToUtc(reservation.timeStart),
-        timeEnd: jstToUtc(reservation.timeEnd),
+        sharedRoom: this.isPrivate ? true : this.reservationPublic.sharedRoom,
+        timeStart: reservation.timeStart,
+        timeEnd: reservation.timeEnd,
       })).data
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
