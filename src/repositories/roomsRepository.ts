@@ -5,7 +5,7 @@ const resource = '/rooms'
 
 export default {
   get(
-    params: API.Rooms.Get.Params
+    params: API.Rooms.Get.Params = {}
   ): AxiosPromise<API.Rooms.Get.Responses.$200> {
     return Repository.get(resource, { params })
   },

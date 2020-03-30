@@ -5,7 +5,13 @@
         <div class="text--secondary caption">
           イベントを開催する日付の候補を選んでください
         </div>
-        <v-date-picker v-model="dateList" show-current multiple class="mb-5" />
+        <v-date-picker
+          v-model="dates"
+          show-current
+          multiple
+          :min="dateMin"
+          class="mb-5"
+        />
       </v-col>
       <v-col>
         <v-checkbox v-model="_sharedRoom" label="部屋の共用を許可する" />
@@ -13,12 +19,10 @@
           v-model="_room"
           outlined
           label="進捗部屋"
-          :disabled="!dateList.length"
+          :disabled="!dates.length"
           :items="availableRoomsList"
           :item-value="r => r"
-          :item-text="
-            r => `${r.place}: ${r.date} ${r.timeStart} ~ ${r.timeEnd}`
-          "
+          :item-text="r => `${r.place}: ${r.timeStart} ~ ${r.timeEnd}`"
           :rules="$rules.eventRoom"
         />
         <TimePicker
@@ -46,6 +50,12 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import { calcAvailableRooms, AvailableRoom } from '@/utils/availableRooms'
+import { todayStr } from '@/utils/date'
+
+const RoomsRepo = RepositoryFactory.get('rooms')
+const EventsRepo = RepositoryFactory.get('events')
 
 @Component({
   components: {
@@ -59,44 +69,62 @@ export default class EventFormReservationPublic extends Vue {
   @PropSync('timeEnd') _timeEnd: string
   @PropSync('sharedRoom') _sharedRoom: boolean
 
+  dates: string[] = []
+  allRooms: Schemas.Room[] = []
+  allEvents: Schemas.Event[] = []
+  calcAvailableRooms: (dates: string[], sharedRoom: boolean) => AvailableRoom[]
+
+  created() {
+    Promise.all([this.fetchRooms(), this.fetchEvents()])
+    this.calcAvailableRooms = calcAvailableRooms(this.allRooms, this.allEvents)
+  }
+  async fetchRooms() {
+    this.allRooms = (await RoomsRepo.get()).data
+  }
+  async fetchEvents() {
+    this.allEvents = (await EventsRepo.get({ dateBegin: todayStr })).data
+  }
+
   @Watch('_sharedRoom')
-  @Watch('dateList')
+  @Watch('dates')
   onQueryChange() {
     this._room = null
     this._timeStart = ''
     this._timeEnd = ''
   }
 
-  dateList: string[] = []
-  roomsList = Array.from({ length: 9 }, (_, i) => ({
-    roomId: i,
-    place: 'S512',
-    date: `2020-03-0${i + 1}`,
-    timeStart: '17:00',
-    timeEnd: '20:00',
-  }))
-
+  get dateMin(): string {
+    return todayStr
+  }
   get startMin(): string {
+    // return this._room?.timeStart
     return this._room && this._room.timeStart
   }
   get startMax(): string {
+    // if (this._room?.timeEnd < time._timeEnd) {
     if (this._room && this._room.timeEnd < this._timeEnd) {
       return this._room.timeEnd
     }
     return this._timeEnd
   }
   get endMin(): string {
+    // if (this._room?.timeStart < time._timeStart) {
     if (this._room && this._room.timeStart > this._timeStart) {
       return this._room.timeStart
     }
     return this._timeStart
   }
   get endMax(): string {
+    // this._room?.timeEnd
     return this._room && this._room.timeEnd
   }
 
   get availableRoomsList() {
-    return this.roomsList.filter(v => this.dateList.includes(v.date))
+    return (
+      // this.calcAvailableRooms?.(this.dates, this._sharedRoom)
+      this.calcAvailableRooms &&
+      this.calcAvailableRooms(this.dates, this._sharedRoom)
+    )
   }
 
   get _valid(): boolean {

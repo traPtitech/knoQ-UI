@@ -1,5 +1,7 @@
 import moment from 'moment'
 
+export const todayStr = moment().format()
+
 // Expected format:
 //   date: YYYY-MM-DD
 //   time: HH:mm:ss

@@ -124,10 +124,9 @@ function calcAvailableRooms(rooms: Schemas.Room[], events: Schemas.Event[]) {
         // Return room if we have no event at given room on given date
         if (!eventsOnDate) return room
         const { shared, notShared } = eventsOnDate.get(room.roomId)
-        let availableTRs = calcAvailableTimeRanges([room], notShared)
-        if (!sharedRoom) {
-          availableTRs = calcAvailableTimeRanges(availableTRs, shared)
-        }
+        const availableTRs = sharedRoom
+          ? calcAvailableTimeRanges([room], notShared)
+          : calcAvailableTimeRanges([room], [...shared, ...notShared])
         return availableTRs.map(timeRange => ({ ...room, ...timeRange }))
       })
     }

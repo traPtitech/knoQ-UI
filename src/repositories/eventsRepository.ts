@@ -5,7 +5,7 @@ const resource = '/events'
 
 export default {
   get(
-    params: API.Events.Get.Params
+    params: API.Events.Get.Params = {}
   ): AxiosPromise<API.Events.Get.Responses.$200> {
     return Repository.get(resource, { params })
   },
