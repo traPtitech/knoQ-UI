@@ -95,7 +95,7 @@ const router = new Router({
 
 router.beforeEach(async (_to, _from, next) => {
   if (!store.state.me) {
-    store.dispatch.getMe()
+    await store.dispatch.getMe()
   }
   if (!store.state.usersCache.users) {
     store.dispatch.usersCache.getUsers()

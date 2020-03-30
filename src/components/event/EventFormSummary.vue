@@ -3,16 +3,21 @@
     <SummaryItem>
       <SummaryItemCaption>New Event</SummaryItemCaption>
       <SummaryItemMain>{{ name }}</SummaryItemMain>
-      <EventTag v-for="tag in tags" :key="tag" :name="tag" class="mr-3" />
+      <EventTag
+        v-for="tag in tags"
+        :key="tag.name"
+        :name="tag.name"
+        class="mr-3"
+      />
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Group</SummaryItemCaption>
-      <SummaryItemText>{{ group.name }}</SummaryItemText>
+      <SummaryItemText>{{ group && group.name }}</SummaryItemText>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Date Time</SummaryItemCaption>
       <SummaryItemText>
-        {{ date }}: {{ timeStart }}
+        {{ timeStart }}
         <v-icon>mdi-chevron-right</v-icon>
         {{ timeEnd }}
       </SummaryItemText>
@@ -59,11 +64,10 @@ import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 export default class EventFormSummary extends Vue {
   @Prop() name: string
   @Prop() group: Schemas.Group
-  @Prop() tags: string[]
+  @Prop() tags: { name: string }[]
   @Prop() description: string
   @Prop() isPrivate: boolean
   @Prop() place: string
-  @Prop() date: string
   @Prop() timeStart: string
   @Prop() timeEnd: string
   @Prop() sharedRoom: boolean

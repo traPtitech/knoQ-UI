@@ -33,8 +33,6 @@
       label="タグ"
       placeholder="Vue, なろう講習会, ..."
       :items="allTags"
-      item-text="name"
-      :item-value="v => v"
     >
       <template #selection="{ item }">
         <EventTag
@@ -76,11 +74,11 @@ export default class EventFormContent extends Vue {
   @Prop() value: boolean
   @PropSync('name') _name: string
   @PropSync('group') _group: string
-  @Prop() tags: string[]
+  @Prop() tags: { name: string }[]
   @PropSync('description') _description: string
 
   allGroups: Schemas.Group[] = []
-  allTags: Schemas.Tag[] = []
+  allTags: string[] = []
 
   created() {
     Promise.all([this.fetchGroups(), this.fetchTags()])
@@ -89,12 +87,11 @@ export default class EventFormContent extends Vue {
     this.allGroups = (await GroupsRepo.get()).data
   }
   async fetchTags() {
-    this.allTags = (await TagsRepo.get()).data
+    this.allTags = (await TagsRepo.get()).data.map(({ name }) => name)
   }
 
   removeTag(tag: string) {
-    const index = this._tags.indexOf(tag)
-    if (index >= 0) this._tags.splice(index, 1)
+    this._tags = this._tags.filter(_tag => _tag !== tag)
   }
 
   private get valid(): boolean {
@@ -105,10 +102,14 @@ export default class EventFormContent extends Vue {
   }
 
   private get _tags(): string[] {
-    return this.tags
+    return this.tags.map(tag => tag.name)
   }
   private set _tags(tags: string[]) {
-    this.$emit('update:tags', tags.map(removeCtrlChars).filter(v => !!v))
+    const newTags = tags.flatMap(tag => {
+      const name = removeCtrlChars(tag)
+      return name ? { name } : []
+    })
+    this.$emit('update:tags', newTags)
   }
 }
 </script>

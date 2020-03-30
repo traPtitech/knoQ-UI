@@ -10,7 +10,7 @@
     <v-dialog width="290px">
       <template #activator="{ on }">
         <v-text-field
-          v-model="_date"
+          v-model="dateMem"
           outlined
           label="開催日"
           readonly
@@ -18,28 +18,28 @@
           v-on="on"
         />
       </template>
-      <v-date-picker v-model="_date" show-current :min="dateMin" />
+      <v-date-picker v-model="dateMem" show-current :min="dateMin" />
     </v-dialog>
     <TimePicker
-      v-model="_timeStart"
+      v-model="timeStartMem"
       label="開始時刻"
       :rules="$rules.eventTimeStart"
-      :max="_timeEnd"
+      :max="timeEndMem"
     />
     <TimePicker
-      v-model="_timeEnd"
+      v-model="timeEndMem"
       label="終了時刻"
       :rules="$rules.eventTimeEnd"
-      :min="_timeStart"
+      :min="timeStartMem"
     />
   </v-form>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop, PropSync } from 'vue-property-decorator'
+import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
-import moment from 'moment'
+import { todayStr } from '@/utils/date'
 
 @Component({
   components: {
@@ -48,13 +48,36 @@ import moment from 'moment'
 })
 export default class EventFormReservationPrivate extends Vue {
   @PropSync('place') _place: string
-  @PropSync('date') _date: string
   @PropSync('timeStart') _timeStart: string
   @PropSync('timeEnd') _timeEnd: string
   @Prop() value: boolean
 
+  private dateMem = ''
+  private timeStartMem = ''
+  private timeEndMem = ''
+
+  @Watch('_timeStart')
+  @Watch('_timeEnd')
+  private onTimePropChange() {
+    this.dateMem = this._timeStart.slice(0, 10)
+    this.timeStartMem = this._timeStart.slice(11, 16)
+    this.timeEndMem = this._timeEnd.slice(11, 16)
+  }
+
+  @Watch('dateMem')
+  @Watch('timeStartMem')
+  @Watch('timeEndMem')
+  private onTimeMemChange() {
+    if (this.dateMem && this.timeStartMem) {
+      this._timeStart = `${this.dateMem}T${this.timeStartMem}:00+09:00`
+    }
+    if (this.dateMem && this.timeEndMem) {
+      this._timeEnd = `${this.dateMem}T${this.timeEndMem}:00+09:00`
+    }
+  }
+
   get dateMin(): string {
-    return moment().format('YYYY-MM-DD')
+    return todayStr
   }
 
   get _valid(): boolean {

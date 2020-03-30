@@ -22,3 +22,13 @@ export const compareDateStr = (d1: string, d2?: string) => {
   const m2 = d2 ? momentify(d2) : moment()
   return m1.valueOf() - m2.valueOf()
 }
+
+export const utcToJst = (date: string) =>
+  moment(date)
+    .add(9, 'h')
+    .format()
+export const jstToUtc = (date: string) =>
+  moment(date)
+    .subtract(9, 'h')
+    .utc()
+    .format()

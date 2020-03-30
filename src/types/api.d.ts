@@ -72,8 +72,8 @@ declare namespace API {
         sharedRoom: boolean
         timeStart: string
         timeEnd: string
-        roomId: boolean
-        groupId: boolean
+        roomId: string
+        groupId: string
         tags: {
           name: string
         }[]
@@ -97,8 +97,8 @@ declare namespace API {
           sharedRoom: boolean
           timeStart: string
           timeEnd: string
-          roomId: boolean
-          groupId: boolean
+          roomId: string
+          groupId: string
           tags: {
             name: string
           }[]

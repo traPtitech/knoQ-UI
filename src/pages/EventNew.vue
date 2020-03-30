@@ -49,7 +49,7 @@
           <FormBackButton class="mr-2" @click="step = 2">
             Back
           </FormBackButton>
-          <FormNextButton @click="submitNewEvent">
+          <FormNextButton @click="submitEvent">
             Submit
           </FormNextButton>
         </v-stepper-content>
@@ -67,6 +67,12 @@ import EventFormReservationPrivate from '@/components/event/EventFormReservation
 import EventFormSummary from '@/components/event/EventFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
+import { AvailableRoom } from '@/utils/availableRooms'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import { jstToUtc } from '@/utils/date'
+
+const RoomsRepo = RepositoryFactory.get('rooms')
+const EventsRepo = RepositoryFactory.get('events')
 
 @Component({
   components: {
@@ -84,7 +90,7 @@ export default class EventNew extends Vue {
   valid1 = false
   content = {
     name: '',
-    tags: [] as string[],
+    tags: [] as { name: string }[],
     description: '',
     group: null as Schemas.Group,
   }
@@ -99,14 +105,13 @@ export default class EventNew extends Vue {
     )
   }
   reservationPublic = {
-    room: null,
+    room: null as Schemas.Room,
     timeStart: '',
     timeEnd: '',
     sharedRoom: true,
   }
   reservationPrivate = {
     place: '',
-    date: '',
     timeStart: '',
     timeEnd: '',
   }
@@ -124,13 +129,34 @@ export default class EventNew extends Vue {
       place: this.isPrivate
         ? this.reservationPrivate.place
         : this.reservationPublic.room && this.reservationPublic.room.place,
-      date: this.isPrivate
-        ? this.reservationPrivate.date
-        : this.reservationPublic.room && this.reservationPublic.room.date,
       sharedRoom: this.isPrivate ? null : this.reservationPublic.sharedRoom,
     }
   }
 
-  submitNewEvent() {}
+  async submitEvent() {
+    try {
+      let roomId: string
+      if (this.isPrivate) {
+        roomId = (await RoomsRepo.private.post(this.reservationPrivate)).data
+          .roomId
+      } else {
+        roomId = this.reservationPublic.room.roomId
+      }
+      const reservation = this.isPrivate
+        ? this.reservationPrivate
+        : this.reservationPublic
+      const { eventId } = (await EventsRepo.post({
+        ...this.content,
+        groupId: this.content.group.groupId,
+        roomId,
+        sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
+        timeStart: jstToUtc(reservation.timeStart),
+        timeEnd: jstToUtc(reservation.timeEnd),
+      })).data
+      this.$router.push(`/events/${eventId}`)
+    } catch (__) {
+      alert('Failed to submit...')
+    }
+  }
 }
 </script>

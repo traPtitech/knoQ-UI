@@ -64,9 +64,9 @@ const EventsRepo = RepositoryFactory.get('events')
 })
 export default class EventFormReservationPublic extends Vue {
   @Prop() value: boolean
-  @PropSync('room') _room: any
-  @PropSync('timeStart') _timeStart: string
-  @PropSync('timeEnd') _timeEnd: string
+  @PropSync('room') _room: Schemas.Room
+  @Prop() timeStart: string
+  @Prop() timeEnd: string
   @PropSync('sharedRoom') _sharedRoom: boolean
 
   dates: string[] = []
@@ -79,7 +79,7 @@ export default class EventFormReservationPublic extends Vue {
     this.calcAvailableRooms = calcAvailableRooms(this.allRooms, this.allEvents)
   }
   async fetchRooms() {
-    this.allRooms = (await RoomsRepo.get()).data
+    this.allRooms = (await RoomsRepo.get({ dateBegin: todayStr })).data
   }
   async fetchEvents() {
     this.allEvents = (await EventsRepo.get({ dateBegin: todayStr })).data
@@ -91,6 +91,29 @@ export default class EventFormReservationPublic extends Vue {
     this._room = null
     this._timeStart = ''
     this._timeEnd = ''
+  }
+
+  get _timeStart(): string {
+    return this.timeStart.slice(11, 16)
+  }
+  set _timeStart(value: string) {
+    this.$emit(
+      'update:timeStart',
+      value && this._room
+        ? `${this._room.timeStart.slice(0, 10)}T${value}:00+09:00`
+        : ''
+    )
+  }
+  get _timeEnd(): string {
+    return this.timeEnd.slice(11, 16)
+  }
+  set _timeEnd(value: string) {
+    this.$emit(
+      'update:timeEnd',
+      value && this._room
+        ? `${this._room.timeEnd.slice(0, 10)}T${value}:00+09:00`
+        : ''
+    )
   }
 
   get dateMin(): string {
@@ -108,7 +131,7 @@ export default class EventFormReservationPublic extends Vue {
     return this._timeEnd
   }
   get endMin(): string {
-    // if (this._room?.timeStart < time._timeStart) {
+    // if (this._room?.timeStart > time._timeStart) {
     if (this._room && this._room.timeStart > this._timeStart) {
       return this._room.timeStart
     }
