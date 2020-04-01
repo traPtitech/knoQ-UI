@@ -50,7 +50,7 @@
       </div>
       <div>
         <div class="text--secondary">Events</div>
-        <EventList :events="events" />
+        <EventList :events="allEventData" />
       </div>
     </v-card>
   </v-container>
@@ -67,7 +67,7 @@ import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
-const EventsRepo = RepositoryFactory.get('events')
+const RoomsRepo = RepositoryFactory.get('rooms')
 
 @Component({
   components: {
@@ -82,43 +82,61 @@ export default class GroupDetail extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
   group: Schemas.Group | null = null
   events: Schemas.Event[] | null = null
+  rooms: Map<string, Schemas.Room> | null = null
 
-  created() {
-    this.fetchGroupData()
-  }
-
-  async fetchGroupData() {
+  async created() {
     this.status = 'loading'
-    const groupId = this.$route.params.id
     try {
-      ;[{ data: this.group }, { data: this.events }] = await Promise.all([
-        GroupsRepo.$groupId(groupId).get(),
-        EventsRepo.get({ groupId }),
+      await Promise.all([
+        this.fetchGroup(),
+        this.fetchEvents(),
+        this.fetchRooms(),
       ])
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
   }
+  async fetchGroup() {
+    this.group = (await GroupsRepo.$groupId(this.groupId).get()).data
+  }
+  async fetchEvents() {
+    this.events = (await GroupsRepo.$groupId(this.groupId).events.get()).data
+  }
+  async fetchRooms() {
+    const rooms = new Map<string, Schemas.Room>()
+    const { data } = await RoomsRepo.get()
+    data.forEach(room => rooms.set(room.roomId, room))
+    this.rooms = rooms
+  }
 
   async joinGroup() {
-    const groupId = this.$route.params.id
     try {
-      await GroupsRepo.$groupId(groupId).members.me.put()
-      this.group = (await GroupsRepo.$groupId(groupId).get()).data
+      await GroupsRepo.$groupId(this.groupId).members.me.put()
+      this.group = (await GroupsRepo.$groupId(this.groupId).get()).data
     } catch (__) {
       alert('Failed to join...')
     }
   }
 
   async leaveGroup() {
-    const groupId = this.$route.params.id
     try {
-      await GroupsRepo.$groupId(groupId).members.me.delete()
-      this.group = (await GroupsRepo.$groupId(groupId).get()).data
+      await GroupsRepo.$groupId(this.groupId).members.me.delete()
+      this.group = (await GroupsRepo.$groupId(this.groupId).get()).data
     } catch (__) {
       alert('Failed to leave...')
     }
+  }
+
+  get groupId(): string {
+    return this.$route.params.id
+  }
+
+  get allEventData() {
+    if (!this.events || !this.rooms) return []
+    return this.events
+      .sort((e1, e2) => (e1.timeStart < e2.timeStart ? -1 : 1))
+      .map(event => ({ ...event, place: this.rooms.get(event.roomId).place }))
   }
 
   get joining(): boolean {

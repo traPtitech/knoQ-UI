@@ -83,7 +83,7 @@ import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import moment from 'moment'
-import { getDateStr, getTimeStr, DISP_FORMAT } from '@/workers/date'
+import { getDateStr, getTimeStr, DATETIME_FORMAT } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -131,7 +131,7 @@ export default class EventDetail extends Vue {
   }
 
   get formatTime() {
-    return (date: string) => moment(date).format(DISP_FORMAT)
+    return (date: string) => moment(date).format(DATETIME_FORMAT)
   }
 
   get sharedRoomString(): string {

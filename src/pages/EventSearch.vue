@@ -1,25 +1,34 @@
 <template>
   <v-container>
-    <v-autocomplete
-      v-model="filterTags"
-      :items="tags"
-      placeholder="Filter by tags"
-      chips
-      clearable
-      multiple
-      solo
-      prepend-inner-icon="mdi-filter"
-    >
-      <template #selection="{ item }">
-        <EventTag close :name="item" @click:close="removeFilterTag(item)" />
-      </template>
-    </v-autocomplete>
-    <v-checkbox
-      v-model="showFinished"
-      label="過去のイベントも表示"
-      class="mt-n6"
-    />
-    <EventList :events="sortedEvents" :event-filter="filterFn" />
+    <ProgressCircular v-if="status === 'loading'" />
+    <LoadFailed v-else-if="status === 'error'" />
+    <template v-else>
+      <v-autocomplete
+        v-model="filterTags"
+        :items="tags"
+        item-text="name"
+        placeholder="Filter by tags"
+        chips
+        clearable
+        multiple
+        solo
+        prepend-inner-icon="mdi-filter"
+      >
+        <template #selection="{ item }">
+          <EventTag
+            close
+            :name="item.name"
+            @click:close="removeFilterTag(item.name)"
+          />
+        </template>
+      </v-autocomplete>
+      <v-checkbox
+        v-model="showFinished"
+        label="過去のイベントも表示"
+        class="mt-n6"
+      />
+      <EventList :events="allEventData" :event-filter="filterFn" />
+    </template>
   </v-container>
 </template>
 
@@ -28,24 +37,66 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import EventList from '@/components/event/EventList.vue'
 import EventTag from '@/components/shared/EventTag.vue'
-import { compareDateStr } from '@/workers/date'
+import ProgressCircular from '@/components/shared/ProgressCircular.vue'
+import LoadFailedText from '@/components/shared/LoadFailedText.vue'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import moment from 'moment'
+
+const EventsRepo = RepositoryFactory.get('events')
+const RoomsRepo = RepositoryFactory.get('rooms')
+const TagsRepo = RepositoryFactory.get('tags')
 
 @Component({
   components: {
     EventList,
     EventTag,
+    ProgressCircular,
+    LoadFailedText,
   },
 })
 export default class EventSearch extends Vue {
+  status: 'loading' | 'loaded' | 'error' = 'loading'
   filterTags: string[] = []
   showFinished = false
 
+  events: Schemas.Event[] | null = null
+  rooms: Map<string, Schemas.Room> | null = null
+  tags: Schemas.Tag[] | null = null
+
+  async created() {
+    this.status = 'loading'
+    try {
+      await Promise.all([
+        this.fetchEvents(),
+        this.fetchRooms(),
+        this.fetchTags(),
+      ])
+      this.status = 'loaded'
+    } catch (__) {
+      this.status = 'error'
+    }
+  }
+  async fetchEvents() {
+    this.events = (await EventsRepo.get()).data
+  }
+  async fetchRooms() {
+    const rooms = new Map<string, Schemas.Room>()
+    const { data } = await RoomsRepo.get()
+    data.forEach(room => rooms.set(room.roomId, room))
+    this.rooms = rooms
+  }
+  async fetchTags() {
+    this.tags = (await TagsRepo.get()).data
+  }
+
   get filterFn() {
-    return e =>
-      [
-        e => this.showFinished || compareDateStr(e.date) >= 0,
-        e => this.filterTags.every(t => e.tags.includes(t)),
-      ].every(p => p(e))
+    return (e: Schemas.Event) => {
+      const isFinished = moment().format() > moment(e.timeStart).format()
+      const hasTags = this.filterTags.every(t =>
+        e.tags.some(({ name }) => name === t)
+      )
+      return (this.showFinished || !isFinished) && hasTags
+    }
   }
 
   removeFilterTag(name: string) {
@@ -53,112 +104,11 @@ export default class EventSearch extends Vue {
     if (index >= 0) this.filterTags.splice(index, 1)
   }
 
-  tags = ['react', 'vue', 'angular', 'haskell', 'purescript', 'riot']
-  events = [
-    {
-      id: 1,
-      date: '2020-03-05',
-      timeStart: '15:00',
-      timeEnd: '20:00',
-      place: 'place1',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event1',
-      tags: ['react', 'haskell', 'purescript', 'vue'],
-    },
-    {
-      id: 2,
-      date: '2020-03-27',
-      timeStart: '17:00',
-      timeEnd: '20:00',
-      place: 'place2',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event2',
-      tags: ['react', 'vue', 'purescript'],
-    },
-    {
-      id: 4,
-      date: '2020-03-31',
-      timeStart: '17:00',
-      timeEnd: '20:00',
-      place: 'place3',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event3',
-      tags: ['react', 'haskell', 'purescript'],
-    },
-    {
-      id: 7,
-      date: '2020-1-3',
-      timeStart: '15:00',
-      timeEnd: '20:00',
-      place: 'place7',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event7',
-      tags: ['react', 'haskell', 'purescript'],
-    },
-    {
-      id: 3,
-      date: '2020-1-1',
-      timeStart: '03:00',
-      timeEnd: '16:30',
-      place: 'place5',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event5',
-      tags: ['react', 'haskell'],
-    },
-    {
-      id: 6,
-      date: '2020-1-1',
-      timeStart: '15:00',
-      timeEnd: '20:00',
-      place: 'place6',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event6',
-      tags: ['react', 'haskell', 'purescript'],
-    },
-    {
-      id: 9,
-      date: '2020-1-1',
-      timeStart: '9:00',
-      timeEnd: '03:00',
-      place: 'place4',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event4',
-      tags: ['react', 'haskell', 'riot'],
-    },
-    {
-      id: 5,
-      date: '2020-1-3',
-      timeStart: '18:00',
-      timeEnd: '20:00',
-      place: 'place9',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event9',
-      tags: ['react', 'haskell', 'purescript'],
-    },
-    {
-      id: 8,
-      date: '2020-1-3',
-      timeStart: '17:00',
-      timeEnd: '20:00',
-      place: 'place8',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event8',
-      tags: ['react', 'haskell', 'purescript'],
-    },
-    {
-      id: 10,
-      date: '2020-1-3',
-      timeStart: '18:30',
-      timeEnd: '20:00',
-      place: 'place10',
-      description: 'ハローキティ！できたてのポップコーンはいかが？'.repeat(10),
-      title: 'event10',
-      tags: ['react', 'haskell', 'purescript', 'riot'],
-    },
-  ]
-
-  get sortedEvents() {
-    return this.events.sort((e1, e2) => compareDateStr(e1.date, e2.date))
+  get allEventData() {
+    if (!this.events || !this.rooms) return []
+    return this.events
+      .sort((e1, e2) => (e1.timeStart < e2.timeStart ? -1 : 1))
+      .map(event => ({ ...event, place: this.rooms.get(event.roomId).place }))
   }
 }
 </script>

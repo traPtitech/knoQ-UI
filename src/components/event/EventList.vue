@@ -7,7 +7,7 @@
     </div>
     <template v-for="(event, i) in filteredEvents" v-else>
       <div v-if="isDateBorder(i)" :key="event.date" class="mb-1 headline">
-        {{ formatDateStr(event.date) }}
+        {{ formatDateStr(event.timeStart) }}
       </div>
       <EventListItem :key="event.id" v-bind="event" class="mb-5" />
     </template>
@@ -18,7 +18,12 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
-import { momentify } from '@/workers/date'
+import { getDateStr, DATE_FORMAT } from '@/workers/date'
+import moment from 'moment'
+
+interface EventData extends Schemas.Event {
+  place: string
+}
 
 @Component({
   components: {
@@ -26,7 +31,7 @@ import { momentify } from '@/workers/date'
   },
 })
 export default class EventList extends Vue {
-  @Prop() events!: any[]
+  @Prop() events!: EventData[]
   @Prop() eventFilter?: (e: any) => boolean
 
   get filteredEvents() {
@@ -34,14 +39,19 @@ export default class EventList extends Vue {
   }
 
   get isDateBorder() {
-    return (i: number) =>
-      !(
-        i > 0 && this.filteredEvents[i - 1].date === this.filteredEvents[i].date
+    return (i: number) => {
+      if (i === 0) return true
+      const e1 = this.filteredEvents[i - 1]
+      const e2 = this.filteredEvents[i]
+      return (
+        moment(e1.timeStart).format('YYYYMMDD') !==
+        moment(e2.timeStart).format('YYYYMMDD')
       )
+    }
   }
 
   get formatDateStr() {
-    return (date: string) => momentify(date).format('ll')
+    return (date: string) => moment(date).format(DATE_FORMAT)
   }
 }
 </script>

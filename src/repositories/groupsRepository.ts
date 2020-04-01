@@ -29,6 +29,12 @@ export default {
       return Repository.delete(`${resource}/${groupId}`)
     },
 
+    events: {
+      get(): AxiosPromise<API.Groups.$GroupId.Events.Get.Resposes.$200> {
+        return Repository.get(`${resource}/${groupId}/events`)
+      },
+    },
+
     members: {
       me: {
         put(): AxiosPromise<API.Groups.$GroupId.Members.Me.Put.Responses.$200> {

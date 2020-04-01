@@ -54,9 +54,6 @@ declare namespace API {
   namespace Events {
     namespace Get {
       export interface Params {
-        name?: string
-        groupId?: string
-        roomId?: string
         dateBegin?: string
         dateEnd?: string
       }
@@ -156,6 +153,14 @@ declare namespace API {
         }
         namespace Responses {
           export type $200 = Schemas.Group
+        }
+      }
+
+      namespace Events {
+        namespace Get {
+          namespace Resposes {
+            export type $200 = Schemas.Event[]
+          }
         }
       }
 
