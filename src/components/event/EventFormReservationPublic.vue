@@ -52,8 +52,7 @@ import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
-import moment from 'moment'
-import { getDateStr, getIso8601, getTimeStr } from '@/workers/date'
+import { today, getDateStr, getIso8601, getTimeStr } from '@/workers/date'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
 const EventsRepo = RepositoryFactory.get('events')
@@ -83,16 +82,12 @@ export default class EventFormReservationPublic extends Vue {
     this.calcAvailableRooms = calcAvailableRooms(this.allRooms, this.allEvents)
   }
   async fetchRooms() {
-    this.allRooms = (
-      await RoomsRepo.get({
-        dateBegin: moment().format(),
-      })
-    ).data
+    this.allRooms = (await RoomsRepo.get({ dateBegin: today() })).data
   }
   async fetchEvents() {
     this.allEvents = (
       await EventsRepo.get({
-        dateBegin: moment().format(),
+        dateBegin: today(),
       })
     ).data
   }
@@ -129,7 +124,7 @@ export default class EventFormReservationPublic extends Vue {
   }
 
   get dateMin(): string {
-    return moment().format()
+    return today()
   }
   get startMin(): string {
     return this._room?.timeStart

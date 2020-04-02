@@ -7,7 +7,7 @@
     </div>
     <template v-for="(event, i) in filteredEvents" v-else>
       <div v-if="isDateBorder(i)" :key="event.date" class="mb-1 headline">
-        {{ formatDateStr(event.timeStart) }}
+        {{ formatDate(event.timeStart) }}
       </div>
       <EventListItem :key="event.id" v-bind="event" class="mb-5" />
     </template>
@@ -18,8 +18,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
-import { getDateStr, DATE_FORMAT } from '@/workers/date'
-import moment from 'moment'
+import { formatDate, getDateStr, DATE_DISPLAY_FORMAT } from '@/workers/date'
 
 interface EventData extends Schemas.Event {
   place: string
@@ -43,15 +42,12 @@ export default class EventList extends Vue {
       if (i === 0) return true
       const e1 = this.filteredEvents[i - 1]
       const e2 = this.filteredEvents[i]
-      return (
-        moment(e1.timeStart).format('YYYYMMDD') !==
-        moment(e2.timeStart).format('YYYYMMDD')
-      )
+      return getDateStr(e1.timeStart) !== getDateStr(e2.timeStart)
     }
   }
 
-  get formatDateStr() {
-    return (date: string) => moment(date).format(DATE_FORMAT)
+  get formatDate() {
+    return formatDate(DATE_DISPLAY_FORMAT)
   }
 }
 </script>

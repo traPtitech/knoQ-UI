@@ -17,9 +17,9 @@
     <SummaryItem>
       <SummaryItemCaption>Date</SummaryItemCaption>
       <SummaryItemText>
-        {{ formatTime(timeStart) }}
+        {{ formatDate(timeStart) }}
         <v-icon>mdi-chevron-right</v-icon>
-        {{ formatTime(timeEnd) }}
+        {{ formatDate(timeEnd) }}
       </SummaryItemText>
     </SummaryItem>
     <SummaryItem>
@@ -52,8 +52,7 @@ import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
 import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
 import SummaryItemText from '@/components/shared/SummaryItemText.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
-import { DATETIME_FORMAT } from '@/workers/date'
-import moment from 'moment'
+import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 
 @Component({
   components: {
@@ -87,8 +86,8 @@ export default class EventFormSummary extends Vue {
       : { icon: 'mdi-door-closed-lock', color: 'error' }
   }
 
-  get formatTime() {
-    return (date: string) => moment(date).format(DATETIME_FORMAT)
+  get formatDate() {
+    return formatDate(DATETIME_DISPLAY_FORMAT)
   }
 }
 </script>

@@ -40,7 +40,7 @@ import EventTag from '@/components/shared/EventTag.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import moment from 'moment'
+import { today, formatDate } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -91,7 +91,7 @@ export default class EventSearch extends Vue {
 
   get filterFn() {
     return (e: Schemas.Event) => {
-      const isFinished = moment().format() > moment(e.timeStart).format()
+      const isFinished = today() > formatDate()(e.timeStart)
       const hasTags = this.filterTags.every(t =>
         e.tags.some(({ name }) => name === t)
       )

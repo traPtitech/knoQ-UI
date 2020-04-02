@@ -52,9 +52,9 @@
       <div class="mb-5">
         <div class="text--secondary mb-n1">Date</div>
         <div class="headline">
-          {{ formatTime(event.timeStart) }}
+          {{ formatDate(event.timeStart) }}
           <v-icon>mdi-chevron-right</v-icon>
-          {{ formatTime(event.timeEnd) }}
+          {{ formatDate(event.timeEnd) }}
         </div>
       </div>
       <div class="mb-5">
@@ -82,8 +82,12 @@ import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import moment from 'moment'
-import { getDateStr, getTimeStr, DATETIME_FORMAT } from '@/workers/date'
+import {
+  formatDate,
+  getDateStr,
+  getTimeStr,
+  DATETIME_DISPLAY_FORMAT,
+} from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -130,8 +134,8 @@ export default class EventDetail extends Vue {
     if (index >= 0) this.editedTags.splice(index, 1)
   }
 
-  get formatTime() {
-    return (date: string) => moment(date).format(DATETIME_FORMAT)
+  get formatDate() {
+    return formatDate(DATETIME_DISPLAY_FORMAT)
   }
 
   get sharedRoomString(): string {

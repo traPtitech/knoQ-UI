@@ -35,8 +35,7 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import EventTag from '@/components/shared/EventTag.vue'
-import { DATETIME_FORMAT } from '@/workers/date'
-import moment from 'moment'
+import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 
 @Component({
   components: {
@@ -54,7 +53,7 @@ export default class EventListItem extends Vue {
   @Prop() tags: { name: string }[]
 
   get formatDate() {
-    return (date: string) => moment(date).format(DATETIME_FORMAT)
+    return formatDate(DATETIME_DISPLAY_FORMAT)
   }
 }
 </script>

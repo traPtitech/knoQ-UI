@@ -1,13 +1,20 @@
 import moment from 'moment'
 
-export const GCAL_FORMAT = 'YYYYMMDDTHHmmssZ'
-export const DATETIME_FORMAT = 'ddd M/D, h:mma'
-export const DATE_FORMAT = 'ddd M/D, YYYY'
+export const today = () =>
+  moment()
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .format()
 
-export const getDateStr = (iso8601: string) => iso8601.slice(0, 10)
-export const getTimeStr = (iso8601: string) => iso8601.slice(11, 16)
+export const formatDate = (fmt?: string) => (date: string) =>
+  moment(date).format(fmt)
+
+export const GOOGLE_CALENDER_URL_FORMAT = 'YYYYMMDDTHHmmssZ'
+export const DATETIME_DISPLAY_FORMAT = 'ddd M/D, h:mma'
+export const DATE_DISPLAY_FORMAT = 'ddd M/D, YYYY'
+
+export const getDateStr = formatDate('YYYY-MM-DD')
+export const getTimeStr = formatDate('HH:mm')
 export const getIso8601 = (date: string, time: string) =>
-  `${date}T${time}:00+09:00`
-
-export const utcToJst = (date: string) => moment(date).format()
-export const jstToUtc = (date: string) => moment(date).format()
+  moment(date + time, 'YYYY-MM-DDHH:mm').format()

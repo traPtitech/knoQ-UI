@@ -98,7 +98,7 @@ import FormBackButton from '@/components/shared/FormBackButton.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import moment from 'moment'
+import { formatDate } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -157,8 +157,8 @@ export default class EventEdit extends Vue {
       this.reservationPublic.sharedRoom = this.event.sharedRoom
     } else {
       this.reservationPrivate.place = this.room.place
-      this.reservationPrivate.timeStart = moment(this.room.timeStart).format()
-      this.reservationPrivate.timeEnd = moment(this.room.timeEnd).format()
+      this.reservationPrivate.timeStart = formatDate()(this.room.timeStart)
+      this.reservationPrivate.timeEnd = formatDate()(this.room.timeEnd)
     }
   }
 

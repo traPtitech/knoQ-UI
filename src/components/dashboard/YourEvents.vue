@@ -46,7 +46,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import moment from 'moment'
+import { formatDate, today } from '@/workers/date'
 
 const UsersRepo = RepositoryFactory.get('users')
 
@@ -66,7 +66,9 @@ export default class YourEvents extends Vue {
   }
 
   async fetchEvents() {
-    this.events = (await UsersRepo.me.events.get()).data
+    this.events = (await UsersRepo.me.events.get()).data.filter(event => {
+      return today() <= event.timeStart
+    })
   }
 
   get allEventData() {
@@ -74,7 +76,7 @@ export default class YourEvents extends Vue {
     return this.events.map(event => ({
       eventId: event.eventId,
       name: event.name,
-      date: moment(event.timeStart).format('MM/DD'),
+      date: formatDate('MM/DD')(event.timeStart),
     }))
   }
 }

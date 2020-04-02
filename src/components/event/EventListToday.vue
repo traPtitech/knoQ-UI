@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span class="text--secondary headline">
+    <span class="text--secondary">
       <template v-if="status === 'loading'">
         読み込み中...
       </template>
@@ -8,7 +8,7 @@
         データを読み込めませんでした...
       </template>
       <template v-else-if="!allEventData.length">
-        イベントがありません...
+        今日のイベントがありません
       </template>
     </span>
     <template v-if="!!allEventData.length">
@@ -27,7 +27,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import moment from 'moment'
+import { today } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -53,18 +53,19 @@ export default class EventListToday extends Vue {
   }
 
   async fetchEvents() {
-    const today = moment().format()
     this.events = (
       await EventsRepo.get({
-        dateBegin: today,
-        dateEnd: today,
+        dateBegin: today(),
+        dateEnd: today(),
       })
     ).data
   }
   async fetchRooms() {
     const rooms = new Map<string, Schemas.Room>()
-    const today = moment().format()
-    const { data } = await RoomsRepo.get({ dateBegin: today, dateEnd: today })
+    const { data } = await RoomsRepo.get({
+      dateBegin: today(),
+      dateEnd: today(),
+    })
     data.forEach(room => rooms.set(room.roomId, room))
     this.rooms = rooms
   }
@@ -73,7 +74,7 @@ export default class EventListToday extends Vue {
     if (!this.events || !this.rooms) return []
     return this.events
       .sort((e1, e2) => (e1.timeStart < e2.timeStart ? -1 : 1))
-      .map(event => ({ ...event, place: this.rooms.get(event.roomId).place }))
+      .map(event => ({ ...event, place: this.rooms.get(event.roomId)?.place }))
   }
 }
 </script>

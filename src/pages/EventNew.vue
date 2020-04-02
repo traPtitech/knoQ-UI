@@ -69,7 +69,6 @@ import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 import { AvailableRoom } from '@/workers/availableRooms'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
-import { jstToUtc } from '@/workers/date'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
 const EventsRepo = RepositoryFactory.get('events')

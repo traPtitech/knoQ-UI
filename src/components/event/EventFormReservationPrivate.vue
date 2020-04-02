@@ -39,8 +39,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
-import moment from 'moment'
-import { getDateStr, getTimeStr, getIso8601 } from '@/workers/date'
+import { getDateStr, getTimeStr, getIso8601, today } from '@/workers/date'
 
 @Component({
   components: {
@@ -78,7 +77,7 @@ export default class EventFormReservationPrivate extends Vue {
   }
 
   get dateMin(): string {
-    return moment().format()
+    return today()
   }
 
   get _valid(): boolean {
