@@ -4,7 +4,7 @@
     <LoadFailedText v-else-if="status === 'error'" />
     <v-card v-else class="pa-9">
       <div class="mb-7">
-        <h1 class="display-1 d-inline mr-5">{{ group.name }}</h1>
+        <h1 class="display-1 d-inline mr-5">{{ group && group.name }}</h1>
         <template v-if="group.open">
           <v-btn
             v-if="!joining"
@@ -34,7 +34,7 @@
         <v-expansion-panels>
           <v-expansion-panel>
             <v-expansion-panel-header class="pa-0">
-              <span class="headline">{{ group.members.length }} members</span>
+              <span class="headline">{{ memberNames.length }} members</span>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <TrapAvatar
@@ -147,7 +147,7 @@ export default class GroupDetail extends Vue {
 
   get memberNames(): string[] {
     const nameById = this.$store.direct.getters.usersCache.nameById
-    return this.group.members.map(nameById)
+    return this.group.members.map(nameById).filter(v => v)
   }
 }
 </script>

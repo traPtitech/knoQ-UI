@@ -11,17 +11,21 @@
     <v-row>
       <v-col md="6" cols="12">
         <DashboardItem>
-          <DashboardItemTitle>あなたのイベント</DashboardItemTitle>
+          <DashboardItemTitle>あなたの作成したイベント</DashboardItemTitle>
           <YourEvents />
         </DashboardItem>
       </v-col>
       <v-col md="6" cols="12">
         <DashboardItem>
-          <DashboardItemTitle>通知</DashboardItemTitle>
-          <NotificationList />
+          <DashboardItemTitle>あなたの作成したグループ</DashboardItemTitle>
+          <YourGroups />
         </DashboardItem>
       </v-col>
     </v-row>
+    <DashboardItem>
+      <DashboardItemTitle>通知</DashboardItemTitle>
+      <NotificationList />
+    </DashboardItem>
   </v-container>
 </template>
 
@@ -33,6 +37,7 @@ import DashboardItemTitle from '@/components/dashboard/DashboardItemTitle.vue'
 import EventListToday from '@/components/event/EventListToday.vue'
 import RoomList from '@/components/dashboard/RoomList.vue'
 import YourEvents from '@/components/dashboard/YourEvents.vue'
+import YourGroups from '@/components/dashboard/YourGroups.vue'
 import NotificationList from '@/components/dashboard/NotificationList.vue'
 
 @Component({
@@ -42,6 +47,7 @@ import NotificationList from '@/components/dashboard/NotificationList.vue'
     RoomList,
     EventListToday,
     YourEvents,
+    YourGroups,
     NotificationList,
   },
 })

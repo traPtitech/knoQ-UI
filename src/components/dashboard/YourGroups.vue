@@ -7,26 +7,23 @@
   </div>
   <v-card v-else class="px-3">
     <v-list>
-      <v-list-item v-if="!events.length">
+      <v-list-item v-if="!groups.length">
         <span class="text--secondary">
-          あなたの作成したイベントはありません
+          あなたの作成したグループはありません
         </span>
       </v-list-item>
-      <template v-for="(event, i) in allEventData">
-        <v-list-item :key="event.eventId">
+      <template v-for="(group, i) in groups">
+        <v-list-item :key="group.groupId">
           <v-row align="center" style="width: 100%;">
-            <v-col class="flex-grow-0 text-no-wrap text--secondary">
-              {{ event.date }}
-            </v-col>
             <v-col class="text-truncate">
-              {{ event.name }}
+              {{ group.name }}
             </v-col>
             <v-col class="flex-grow-0">
               <v-btn
                 small
                 outlined
                 color="primary"
-                :to="`/events/edit/${event.eventId}`"
+                :to="`/groups/edit/${group.groupId}`"
               >
                 EDIT
               </v-btn>
@@ -39,7 +36,7 @@
         <v-list-item-content>
           <v-btn depressed color="primary" to="/events/new">
             <v-icon small>mdi-plus</v-icon>
-            新しいイベントを作成
+            新しいグループを作成
           </v-btn>
         </v-list-item-content>
       </v-list-item>
@@ -53,36 +50,32 @@ import { Component } from 'vue-property-decorator'
 import { RepositoryFactory } from '@/repositories/RepositoryFactory'
 import { formatDate, today } from '@/workers/date'
 
+const GroupsRepo = RepositoryFactory.get('groups')
 const UsersRepo = RepositoryFactory.get('users')
 
 @Component
-export default class YourEvents extends Vue {
+export default class YourGroups extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  events: Schemas.Event[] | null = null
+  groups: Schemas.Group[] | null = null
 
   async created() {
     this.status = 'loading'
     try {
-      await this.fetchEvents()
+      await this.fetchGroups()
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
   }
 
-  async fetchEvents() {
-    this.events = (await UsersRepo.me.events.get()).data.filter(event => {
-      return today() <= event.timeStart
-    })
-  }
-
-  get allEventData() {
-    if (!this.events) return []
-    return this.events.map(event => ({
-      eventId: event.eventId,
-      name: event.name,
-      date: formatDate('MM/DD')(event.timeStart),
-    }))
+  async fetchGroups() {
+    const [{ data: groups }, { data: groupIds }] = await Promise.all([
+      GroupsRepo.get(),
+      UsersRepo.me.groups.get(),
+    ])
+    this.groups = groups
+      .filter(group => groupIds.includes(group.groupId))
+      .filter(group => group.createdBy === this.$store.direct.state.me?.userId)
   }
 }
 </script>
