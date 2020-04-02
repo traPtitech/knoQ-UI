@@ -59,7 +59,18 @@
       </div>
       <div class="mb-5">
         <div class="text--secondary mb-n1">Place</div>
-        <div class="headline">{{ room.place }}</div>
+        <div class="headline">
+          <span class="mr-3">{{ room.place }}</span>
+          <v-btn
+            v-if="isTitechRoom(room.place)"
+            x-small
+            outlined
+            color="primary"
+            :href="calcRoomPdfUrl(room.place)"
+          >
+            LEARN MORE
+          </v-btn>
+        </div>
         <div v-if="room.public" class="text--secondary body-2">
           <v-icon :color="sharedRoomIcon.color">
             {{ sharedRoomIcon.icon }}
@@ -88,6 +99,7 @@ import {
   getTimeStr,
   DATETIME_DISPLAY_FORMAT,
 } from '@/workers/date'
+import { isTitechRoom, calcRoomPdfUrl } from '@/workers/TokyoTech'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -175,6 +187,14 @@ export default class EventDetail extends Vue {
     this.event = (await EventsRepo.$eventId(eventId).get()).data
     this.isTagEditting = false
     this.editedTags = []
+  }
+
+  get isTitechRoom() {
+    return isTitechRoom
+  }
+
+  get calcRoomPdfUrl() {
+    return calcRoomPdfUrl
   }
 }
 
