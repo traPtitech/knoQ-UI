@@ -15,11 +15,11 @@
       <SummaryItemText>{{ group && group.name }}</SummaryItemText>
     </SummaryItem>
     <SummaryItem>
-      <SummaryItemCaption>Date Time</SummaryItemCaption>
+      <SummaryItemCaption>Date</SummaryItemCaption>
       <SummaryItemText>
-        {{ timeStart }}
+        {{ formatTime(timeStart) }}
         <v-icon>mdi-chevron-right</v-icon>
-        {{ timeEnd }}
+        {{ formatTime(timeEnd) }}
       </SummaryItemText>
     </SummaryItem>
     <SummaryItem>
@@ -34,7 +34,10 @@
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Description</SummaryItemCaption>
-      <MarkdownField :src="description" />
+      <div v-if="!description" class="text--secondary">
+        説明はありません
+      </div>
+      <MarkdownField v-else :src="description" />
     </SummaryItem>
   </div>
 </template>
@@ -49,6 +52,8 @@ import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
 import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
 import SummaryItemText from '@/components/shared/SummaryItemText.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
+import { DATETIME_FORMAT } from '@/workers/date'
+import moment from 'moment'
 
 @Component({
   components: {
@@ -80,6 +85,10 @@ export default class EventFormSummary extends Vue {
     return this.sharedRoom
       ? { icon: 'mdi-door-open', color: 'success' }
       : { icon: 'mdi-door-closed-lock', color: 'error' }
+  }
+
+  get formatTime() {
+    return (date: string) => moment(date).format(DATETIME_FORMAT)
   }
 }
 </script>

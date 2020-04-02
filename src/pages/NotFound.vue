@@ -1,9 +1,8 @@
 <template>
   <v-container>
-    <h1 class="display-1 font-weight-bold">
+    <p class="display-1 text--secondary">
       404 - File not found
-      <v-icon class="display-1 mt-n2">mdi-emoticon-cry-outline</v-icon>
-    </h1>
+    </p>
   </v-container>
 </template>
 

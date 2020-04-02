@@ -2,13 +2,13 @@
   <div>
     <span class="text--secondary headline">
       <template v-if="status === 'loading'">
-        Loading...
+        読み込み中...
       </template>
       <template v-else-if="status === 'error'">
-        Could not load data...
+        データを読み込めませんでした...
       </template>
       <template v-else-if="!allEventData.length">
-        No events today!!
+        イベントがありません...
       </template>
     </span>
     <template v-if="!!allEventData.length">

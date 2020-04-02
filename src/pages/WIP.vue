@@ -1,9 +1,10 @@
 <template>
   <v-container>
-    <p class="text-center display-1">
-      Sorry, now work in progress...
+    <p class="display-1 text--secondary">
+      工事中だなも...
+      <v-icon x-large>mdi-leaf</v-icon>
     </p>
-    <p class="text-center">
+    <p>
       <v-icon size="10rem">mdi-worker</v-icon>
     </p>
   </v-container>

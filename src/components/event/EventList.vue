@@ -2,7 +2,7 @@
   <div>
     <div v-if="!filteredEvents.length">
       <span class="text--secondary headline">
-        There is no event...
+        イベントがありません...
       </span>
     </div>
     <template v-for="(event, i) in filteredEvents" v-else>
