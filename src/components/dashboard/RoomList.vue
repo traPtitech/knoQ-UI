@@ -1,5 +1,14 @@
 <template>
-  <v-row>
+  <div v-if="status === 'loading'" class="text--secondary">
+    読み込み中...
+  </div>
+  <div v-else-if="status === 'error'" class="text--secondary">
+    読み込めませんでした...
+  </div>
+  <div v-else-if="!rooms.length" class="text--secondary">
+    今日の進捗部屋はありません
+  </div>
+  <v-row v-else>
     <v-col v-for="(room, i) in rooms" :key="i" sm="4" cols="12">
       <RoomListItem v-bind="room" />
     </v-col>
@@ -10,6 +19,10 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import RoomListItem from '@/components/dashboard/RoomListItem.vue'
+import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import moment from 'moment'
+
+const RoomsRepo = RepositoryFactory.get('rooms')
 
 @Component({
   components: {
@@ -17,22 +30,23 @@ import RoomListItem from '@/components/dashboard/RoomListItem.vue'
   },
 })
 export default class RoomList extends Vue {
-  rooms = [
-    {
-      place: 'S512',
-      timeStart: '9:00 am',
-      timeEnd: '8:00 pm',
-    },
-    {
-      place: 'S514',
-      timeStart: '4:00 pm',
-      timeEnd: '8:00 pm',
-    },
-    {
-      place: 'H101',
-      timeStart: '5:00 pm',
-      timeEnd: '8:00 pm',
-    },
-  ]
+  status: 'loading' | 'loaded' | 'error' = 'loading'
+  rooms: Schemas.Room[] | null = null
+
+  async created() {
+    this.status = 'loading'
+    try {
+      await this.fetchRooms()
+      this.status = 'loaded'
+    } catch (__) {
+      this.status = 'error'
+    }
+  }
+  async fetchRooms() {
+    const today = moment().format()
+    this.rooms = (
+      await RoomsRepo.get({ dateBegin: today, dateEnd: today })
+    ).data.filter(room => room.public)
+  }
 }
 </script>
