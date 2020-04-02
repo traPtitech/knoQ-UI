@@ -145,14 +145,16 @@ export default class EventNew extends Vue {
       const reservation = this.isPrivate
         ? this.reservationPrivate
         : this.reservationPublic
-      const { eventId } = (await EventsRepo.post({
-        ...this.content,
-        groupId: this.content.group.groupId,
-        roomId,
-        sharedRoom: this.isPrivate ? true : this.reservationPublic.sharedRoom,
-        timeStart: reservation.timeStart,
-        timeEnd: reservation.timeEnd,
-      })).data
+      const { eventId } = (
+        await EventsRepo.post({
+          ...this.content,
+          groupId: this.content.group.groupId,
+          roomId,
+          sharedRoom: this.isPrivate ? true : this.reservationPublic.sharedRoom,
+          timeStart: reservation.timeStart,
+          timeEnd: reservation.timeEnd,
+        })
+      ).data
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')

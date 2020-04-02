@@ -76,21 +76,25 @@ export default class EventFormReservationPublic extends Vue {
   calcAvailableRooms: (
     dates: string[],
     sharedRoom: boolean
-  ) => AvailableRoom[] = null
+  ) => AvailableRoom[] | null = null
 
   async created() {
     await Promise.all([this.fetchRooms(), this.fetchEvents()])
     this.calcAvailableRooms = calcAvailableRooms(this.allRooms, this.allEvents)
   }
   async fetchRooms() {
-    this.allRooms = (await RoomsRepo.get({
-      dateBegin: moment().format(),
-    })).data
+    this.allRooms = (
+      await RoomsRepo.get({
+        dateBegin: moment().format(),
+      })
+    ).data
   }
   async fetchEvents() {
-    this.allEvents = (await EventsRepo.get({
-      dateBegin: moment().format(),
-    })).data
+    this.allEvents = (
+      await EventsRepo.get({
+        dateBegin: moment().format(),
+      })
+    ).data
   }
 
   @Watch('_sharedRoom')
@@ -128,34 +132,26 @@ export default class EventFormReservationPublic extends Vue {
     return moment().format()
   }
   get startMin(): string {
-    // return this._room?.timeStart
-    return this._room && this._room.timeStart
+    return this._room?.timeStart
   }
   get startMax(): string {
-    // if (this._room?.timeEnd < time._timeEnd) {
-    if (this._room && this._room.timeEnd < this._timeEnd) {
+    if (this._room?.timeEnd < this._timeEnd) {
       return this._room.timeEnd
     }
     return this._timeEnd
   }
   get endMin(): string {
-    // if (this._room?.timeStart > time._timeStart) {
-    if (this._room && this._room.timeStart > this._timeStart) {
+    if (this._room?.timeStart > this._timeStart) {
       return this._room.timeStart
     }
     return this._timeStart
   }
   get endMax(): string {
-    // this._room?.timeEnd
-    return this._room && this._room.timeEnd
+    return this._room?.timeEnd
   }
 
   get availableRoomsList() {
-    return (
-      // this.calcAvailableRooms?.(this.dates, this._sharedRoom)
-      this.calcAvailableRooms &&
-      this.calcAvailableRooms(this.dates, this._sharedRoom)
-    )
+    return this.calcAvailableRooms?.(this.dates, this._sharedRoom)
   }
 
   get _valid(): boolean {

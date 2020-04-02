@@ -53,7 +53,7 @@ const UsersRepo = RepositoryFactory.get('users')
 @Component
 export default class YourEvents extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  events: Schemas.Event[] | null = []
+  events: Schemas.Event[] | null = null
 
   async created() {
     this.status = 'loading'
@@ -70,6 +70,7 @@ export default class YourEvents extends Vue {
   }
 
   get allEventData() {
+    if (!this.events) return []
     return this.events.map(event => ({
       eventId: event.eventId,
       name: event.name,

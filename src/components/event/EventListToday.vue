@@ -54,10 +54,12 @@ export default class EventListToday extends Vue {
 
   async fetchEvents() {
     const today = moment().format()
-    this.events = (await EventsRepo.get({
-      dateBegin: today,
-      dateEnd: today,
-    })).data
+    this.events = (
+      await EventsRepo.get({
+        dateBegin: today,
+        dateEnd: today,
+      })
+    ).data
   }
   async fetchRooms() {
     const rooms = new Map<string, Schemas.Room>()

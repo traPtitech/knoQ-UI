@@ -31,11 +31,11 @@ interface EventData extends Schemas.Event {
   },
 })
 export default class EventList extends Vue {
-  @Prop() events!: EventData[]
+  @Prop() events: EventData[]
   @Prop() eventFilter?: (e: any) => boolean
 
   get filteredEvents() {
-    return this.events.filter(this.eventFilter || (_ => true))
+    return this.events.filter(this.eventFilter ?? (_ => true))
   }
 
   get isDateBorder() {

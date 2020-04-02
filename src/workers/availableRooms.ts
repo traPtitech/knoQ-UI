@@ -83,19 +83,10 @@ function createRoomEventTables(
     roomEventMap.get(date).set(room.roomId, { room, events: [] })
   }
   for (const event of events) {
-    // roomEventMap
-    //   ?.get(getDateStr(event.timeStart))
-    //   ?.get(event.roomId)
-    //   .events.push(event)
-    const subMap = roomEventMap.get(getDateStr(event.timeStart))
-    if (!subMap) {
-      continue
-    }
-    const table = subMap.get(event.roomId)
-    if (!table) {
-      continue
-    }
-    table.events.push(event)
+    roomEventMap
+      .get(getDateStr(event.timeStart))
+      ?.get(event.roomId)
+      ?.events.push(event)
   }
   return roomEventMap
 }
@@ -125,10 +116,9 @@ function calcAvailableRooms(rooms: Schemas.Room[], events: Schemas.Event[]) {
   const roomEventTables = createRoomEventTables(rooms, events)
 
   return (dates: string[], sharedRoom: boolean): AvailableRoom[] => {
-    const roomEventsOnDates = dates.flatMap(date => {
-      const tables = roomEventTables.get(date)
-      return tables ? [...tables.values()] : []
-    })
+    const roomEventsOnDates = dates.flatMap(date => [
+      ...(roomEventTables.get(date)?.values() ?? []),
+    ])
     return roomEventsOnDates.flatMap(tables => {
       const availableTSs = calcAvailableTimeSpansOfRoom(tables, sharedRoom)
       return availableTSs.map(timeSpan => ({
