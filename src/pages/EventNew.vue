@@ -49,9 +49,36 @@
           <FormBackButton class="mr-2" @click="step = 2">
             Back
           </FormBackButton>
-          <FormNextButton @click="submitEvent">
+          <FormNextButton v-if="!isPrivate" @click="submitEvent">
             Submit
           </FormNextButton>
+          <v-dialog v-else v-model="dialog" width="500">
+            <template #activator="{ on }">
+              <FormNextButton v-on="on">
+                Submit
+              </FormNextButton>
+            </template>
+            <v-card>
+              <v-card-title>
+                確認
+              </v-card-title>
+              <v-card-text>
+                <div>
+                  traPが予約していない場所でイベントを開催しようとしています
+                </div>
+                <div>
+                  そこでイベントを開催できるのかを確認した上でフォームを提出してください
+                </div>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn text color="secondary" @click="dialog = false">
+                  CANCEL
+                </v-btn>
+                <v-btn text color="primary" @click="submitEvent">SUBMIT</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -85,6 +112,7 @@ const EventsRepo = RepositoryFactory.get('events')
 })
 export default class EventNew extends Vue {
   step = 1
+  dialog = false
 
   valid1 = false
   content = {
@@ -154,6 +182,7 @@ export default class EventNew extends Vue {
           timeEnd: reservation.timeEnd,
         })
       ).data
+      this.dialog = false
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')

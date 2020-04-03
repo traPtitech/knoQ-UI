@@ -52,14 +52,43 @@
             <FormBackButton class="mr-2" @click="step = 2">
               Back
             </FormBackButton>
-            <FormNextButton @click="submitEvent">
+            <FormNextButton v-if="!isPrivate" @click="submitEvent">
               Submit
             </FormNextButton>
+            <v-dialog v-else v-model="dialog" width="500">
+              <template #activator="{ on }">
+                <FormNextButton v-on="on">
+                  Submit
+                </FormNextButton>
+              </template>
+              <v-card>
+                <v-card-title>
+                  確認
+                </v-card-title>
+                <v-card-text>
+                  <div>
+                    traPが予約していない場所でイベントを開催しようとしています
+                  </div>
+                  <div>
+                    そこでイベントを開催できるのかを確認した上でフォームを提出してください
+                  </div>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer />
+                  <v-btn text color="secondary" @click="dialog = false">
+                    Cancel
+                  </v-btn>
+                  <v-btn text color="primary" @click="submitEvent">
+                    Submit
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
 
-      <v-dialog v-model="dialog" width="500">
+      <v-dialog v-model="dialog2" width="500">
         <template #activator="{ on }">
           <v-card class="px-5 pt-5 pb-3">
             <span class="headline mr-3">Delete this event</span>
@@ -77,7 +106,9 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn text color="secondary" @click="dialog = false">CANCEL</v-btn>
+            <v-btn text color="secondary" @click="dialog2 = false">
+              CANCEL
+            </v-btn>
             <v-btn text color="error" @click="deleteEvent">DELETE</v-btn>
           </v-card-actions>
         </v-card>
@@ -119,6 +150,7 @@ const GroupsRepo = RepositoryFactory.get('groups')
 export default class EventEdit extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
   dialog = false
+  dialog2 = false
   step = 1
 
   event: Schemas.Event = null
@@ -231,6 +263,7 @@ export default class EventEdit extends Vue {
         timeStart: reservation.timeStart,
         timeEnd: reservation.timeEnd,
       })
+      this.dialog = false
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')
@@ -241,7 +274,7 @@ export default class EventEdit extends Vue {
     const eventId = this.$route.params.id
     try {
       await EventsRepo.$eventId(eventId).delete()
-      this.dialog = false
+      this.dialog2 = false
       this.$router.push('/')
     } catch (__) {
       alert('Failed to submit...')
