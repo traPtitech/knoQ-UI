@@ -22,10 +22,6 @@
         </DashboardItem>
       </v-col>
     </v-row>
-    <DashboardItem>
-      <DashboardItemTitle>通知</DashboardItemTitle>
-      <NotificationList />
-    </DashboardItem>
   </v-container>
 </template>
 
@@ -38,7 +34,6 @@ import EventListToday from '@/components/event/EventListToday.vue'
 import RoomList from '@/components/dashboard/RoomList.vue'
 import YourEvents from '@/components/dashboard/YourEvents.vue'
 import YourGroups from '@/components/dashboard/YourGroups.vue'
-import NotificationList from '@/components/dashboard/NotificationList.vue'
 
 @Component({
   components: {
@@ -48,7 +43,6 @@ import NotificationList from '@/components/dashboard/NotificationList.vue'
     EventListToday,
     YourEvents,
     YourGroups,
-    NotificationList,
   },
 })
 export default class Dashboard extends Vue {}
