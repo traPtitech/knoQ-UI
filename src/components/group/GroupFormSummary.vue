@@ -46,10 +46,10 @@ import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
   },
 })
 export default class GroupEventFormSummary extends Vue {
-  @Prop() name: string
-  @Prop() description: string
-  @Prop() members: string[]
-  @Prop() open: boolean
+  @Prop() name!: string
+  @Prop() description!: string
+  @Prop() members!: string[]
+  @Prop() open!: boolean
 
   get openString(): string {
     return this.open

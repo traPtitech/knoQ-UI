@@ -44,13 +44,13 @@ import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
   },
 })
 export default class EventListItem extends Vue {
-  @Prop() eventId: number
-  @Prop() name: string
-  @Prop() timeStart: string
-  @Prop() timeEnd: string
-  @Prop() place: string
-  @Prop() description: string
-  @Prop() tags: { name: string }[]
+  @Prop() eventId!: number
+  @Prop() name!: string
+  @Prop() timeStart!: string
+  @Prop() timeEnd!: string
+  @Prop() place!: string
+  @Prop() description!: string
+  @Prop() tags!: { name: string }[]
 
   get formatDate() {
     return formatDate(DATETIME_DISPLAY_FORMAT)

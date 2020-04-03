@@ -66,15 +66,15 @@ import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
   },
 })
 export default class EventFormSummary extends Vue {
-  @Prop() name: string
-  @Prop() group: Schemas.Group
-  @Prop() tags: { name: string }[]
-  @Prop() description: string
-  @Prop() isPrivate: boolean
-  @Prop() place: string
-  @Prop() timeStart: string
-  @Prop() timeEnd: string
-  @Prop() sharedRoom: boolean
+  @Prop() name!: string
+  @Prop() group!: Schemas.Group
+  @Prop() tags!: { name: string }[]
+  @Prop() description!: string
+  @Prop() isPrivate!: boolean
+  @Prop() place!: string
+  @Prop() timeStart!: string
+  @Prop() timeEnd!: string
+  @Prop() sharedRoom!: boolean
 
   get sharedRoomString(): string {
     return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'

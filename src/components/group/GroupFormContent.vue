@@ -1,16 +1,16 @@
 <template>
   <v-form v-model="valid" class="pt-2">
     <v-text-field
-      v-model="_name"
+      v-model="nameSync"
       outlined
       label="グループ名"
       placeholder="Some group"
       :rules="$rules.groupName"
       class="mb-n6"
     />
-    <v-checkbox v-model="_open" label="自由参加可能なグループ" />
+    <v-checkbox v-model="openSync" label="自由参加可能なグループ" />
     <v-autocomplete
-      v-model="_members"
+      v-model="membersSync"
       outlined
       multiple
       label="メンバー"
@@ -32,7 +32,7 @@
       </template>
     </v-autocomplete>
     <v-textarea
-      v-model="_description"
+      v-model="descriptionSync"
       outlined
       rows="10"
       label="説明"
@@ -53,11 +53,11 @@ import TrapAvatar from '@/components/shared/TrapAvatar.vue'
   },
 })
 export default class GroupFormContent extends Vue {
-  @PropSync('name') _name: string
-  @PropSync('description') _description: string
-  @PropSync('members') _members: string[]
-  @PropSync('open') _open: boolean
-  @Prop() value: boolean
+  @PropSync('name') nameSync!: string
+  @PropSync('description') descriptionSync!: string
+  @PropSync('members') membersSync!: string[]
+  @PropSync('open') openSync!: boolean
+  @Prop() value!: boolean
 
   get allMembers(): Schemas.User[] {
     return [...(this.$store.direct.state.usersCache.users?.values() ?? [])]

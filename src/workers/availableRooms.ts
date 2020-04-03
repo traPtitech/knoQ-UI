@@ -1,4 +1,4 @@
-import { getDateStr } from './date'
+import { getDate } from './date'
 
 interface TimeSpan {
   timeStart: string
@@ -76,7 +76,7 @@ function createRoomEventTables(
 ): Map<DateStr, Map<RoomId, RoomEventTable>> {
   const roomEventMap = new Map<DateStr, Map<RoomId, RoomEventTable>>()
   for (const room of rooms) {
-    const date = getDateStr(room.timeStart)
+    const date = getDate(room.timeStart)
     if (!roomEventMap.has(date)) {
       roomEventMap.set(date, new Map())
     }
@@ -84,7 +84,7 @@ function createRoomEventTables(
   }
   for (const event of events) {
     roomEventMap
-      .get(getDateStr(event.timeStart))
+      .get(getDate(event.timeStart))
       ?.get(event.roomId)
       ?.events.push(event)
   }

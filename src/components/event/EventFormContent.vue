@@ -9,14 +9,14 @@
       </v-btn>
     </div>
     <v-text-field
-      v-model="_name"
+      v-model="nameSync"
       outlined
       label="イベント名"
       placeholder="Some event"
       :rules="$rules.eventName"
     />
     <v-autocomplete
-      v-model="_group"
+      v-model="groupSync"
       outlined
       label="主催グループ"
       placeholder="traP"
@@ -26,7 +26,7 @@
       :rules="$rules.eventGroup"
     />
     <v-combobox
-      v-model="_tags"
+      v-model="tagNames"
       outlined
       multiple
       clearable
@@ -45,7 +45,7 @@
       </template>
     </v-combobox>
     <v-textarea
-      v-model="_description"
+      v-model="descriptionSync"
       outlined
       rows="25"
       no-resize
@@ -59,7 +59,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import EventTag from '@/components/shared/EventTag.vue'
-import { removeCtrlChars } from '@/workers/removeCtrlChars'
+import { rmCtrlChar } from '@/workers/rmCtrlChar'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
@@ -72,11 +72,11 @@ const TagsRepo = RepositoryFactory.get('tags')
   },
 })
 export default class EventFormContent extends Vue {
-  @Prop() value: boolean
-  @PropSync('name') _name: string
-  @PropSync('group') _group: string
-  @Prop() tags: { name: string }[]
-  @PropSync('description') _description: string
+  @Prop() value!: boolean
+  @PropSync('name') nameSync!: string
+  @PropSync('group') groupSync!: string
+  @PropSync('tags') tagsSync!: { name: string }[]
+  @PropSync('description') descriptionSync!: string
 
   allGroups: Schemas.Group[] = []
   allTags: string[] = []
@@ -95,8 +95,8 @@ export default class EventFormContent extends Vue {
     this.allTags = (await TagsRepo.get()).data.map(({ name }) => name)
   }
 
-  removeTag(tag: string) {
-    this._tags = this._tags.filter(_tag => _tag !== tag)
+  removeTag(tag1: string) {
+    this.tagNames = this.tagNames.filter(tag2 => tag1 !== tag2)
   }
 
   private get valid(): boolean {
@@ -106,15 +106,14 @@ export default class EventFormContent extends Vue {
     this.$emit('input', value)
   }
 
-  private get _tags(): string[] {
-    return this.tags.map(tag => tag.name)
+  private get tagNames(): string[] {
+    return this.tagsSync.map(tag => tag.name)
   }
-  private set _tags(tags: string[]) {
-    const newTags = tags.flatMap(tag => {
-      const name = removeCtrlChars(tag)
-      return name ? { name } : []
-    })
-    this.$emit('update:tags', newTags)
+  private set tagNames(tags: string[]) {
+    this.tagsSync = tags
+      .map(rmCtrlChar)
+      .filter(name => !!name)
+      .map(name => ({ name }))
   }
 }
 </script>

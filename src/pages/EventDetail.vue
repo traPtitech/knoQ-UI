@@ -21,9 +21,7 @@
             v-else
             v-model="editedTags"
             :loading="tagLoading"
-            :items="tags"
-            item-text="name"
-            item-value="name"
+            :items="tagNames"
             autofocus
             dense
             outlined
@@ -34,11 +32,7 @@
             @blur="onTagEditEnd"
           >
             <template #selection="{ item }">
-              <EventTag
-                close
-                :name="item.name"
-                @click:close="removeTag(item)"
-              />
+              <EventTag close :name="item" @click:close="removeTag(item)" />
             </template>
           </v-combobox>
         </div>
@@ -89,7 +83,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
@@ -97,8 +91,8 @@ import MarkdownField from '@/components/shared/MarkdownField.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import {
   formatDate,
-  getDateStr,
-  getTimeStr,
+  getDate,
+  getTime,
   DATETIME_DISPLAY_FORMAT,
 } from '@/workers/date'
 import { isTitechRoom, calcRoomPdfUrl } from '@/workers/TokyoTech'
@@ -126,7 +120,7 @@ export default class EventDetail extends Vue {
   tags: Schemas.Tag[] = []
   tagLoading = false
 
-  editedTags: { name: string }[] = []
+  editedTags: string[] = []
 
   async created() {
     const eventId = this.$route.params.id
@@ -143,8 +137,8 @@ export default class EventDetail extends Vue {
     }
   }
 
-  removeTag(tag: { name: string }) {
-    this.editedTags = this.editedTags.filter(({ name }) => name !== tag.name)
+  removeTag(tag1: string) {
+    this.editedTags = this.editedTags.filter(tag2 => tag1 !== tag2)
   }
 
   get formatDate() {
@@ -161,20 +155,23 @@ export default class EventDetail extends Vue {
       : { icon: 'mdi-door-closed-lock', color: 'error' }
   }
 
+  get tagNames(): string[] {
+    return this.tags.map(({ name }) => name)
+  }
+
   async onTagEditStart() {
     if (!this.tags.length) {
       this.tagLoading = true
       this.tags = (await TagsRepo.get()).data
       this.tagLoading = false
     }
-    this.editedTags = this.event.tags
+    this.editedTags = this.event.tags.map(({ name }) => name)
   }
 
   async onTagEditEnd() {
-    const tagNames = this.event.tags.map(({ name }) => name)
-    const editedTagNames = this.editedTags.map(({ name }) => name)
-    const added = difference(editedTagNames, tagNames)
-    const deleted = difference(tagNames, editedTagNames)
+    const prevTagNames = this.event.tags.map(({ name }) => name)
+    const added = difference(this.editedTags, prevTagNames)
+    const deleted = difference(prevTagNames, this.editedTags)
     const eventId = this.$route.params.id
     await Promise.all(
       added.map(name => EventsRepo.$eventId(eventId).tags.post({ name }))

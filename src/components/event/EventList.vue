@@ -18,7 +18,7 @@
 import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
-import { formatDate, getDateStr, DATE_DISPLAY_FORMAT } from '@/workers/date'
+import { formatDate, getDate, DATE_DISPLAY_FORMAT } from '@/workers/date'
 
 interface EventData extends Schemas.Event {
   place: string
@@ -30,7 +30,7 @@ interface EventData extends Schemas.Event {
   },
 })
 export default class EventList extends Vue {
-  @Prop() events: EventData[]
+  @Prop() events!: EventData[]
   @Prop() eventFilter?: (e: any) => boolean
 
   get filteredEvents() {
@@ -42,7 +42,7 @@ export default class EventList extends Vue {
       if (i === 0) return true
       const e1 = this.filteredEvents[i - 1]
       const e2 = this.filteredEvents[i]
-      return getDateStr(e1.timeStart) !== getDateStr(e2.timeStart)
+      return getDate(e1.timeStart) !== getDate(e2.timeStart)
     }
   }
 

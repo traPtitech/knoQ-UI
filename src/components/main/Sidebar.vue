@@ -31,7 +31,7 @@ import SidebarFooter from '@/components/main/SidebarFooter.vue'
   },
 })
 export default class Sidebar extends Vue {
-  @Prop() value: boolean | null
+  @Prop() value!: boolean | null
 
   get drawer(): boolean | null {
     return this.value

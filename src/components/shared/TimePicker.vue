@@ -24,7 +24,7 @@ import { Component, Prop } from 'vue-property-decorator'
 
 @Component
 export default class TimePicker extends Vue {
-  @Prop() value: string
+  @Prop() value!: string
 
   get time(): string {
     return this.value

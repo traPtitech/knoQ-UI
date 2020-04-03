@@ -14,9 +14,9 @@
         />
       </v-col>
       <v-col>
-        <v-checkbox v-model="_sharedRoom" label="部屋の共用を許可する" />
+        <v-checkbox v-model="sharedRoomSync" label="部屋の共用を許可する" />
         <v-autocomplete
-          v-model="_room"
+          v-model="roomSync"
           outlined
           label="進捗部屋"
           :disabled="!dates.length"
@@ -29,7 +29,7 @@
           v-model="_timeStart"
           label="開始時刻"
           :rules="$rules.eventTimeStart"
-          :disabled="!_room"
+          :disabled="!roomSync"
           :min="startMin"
           :max="startMax"
         />
@@ -37,7 +37,7 @@
           v-model="_timeEnd"
           label="終了時刻"
           :rules="$rules.eventTimeEnd"
-          :disabled="!_room"
+          :disabled="!roomSync"
           :min="endMin"
           :max="endMax"
         />
@@ -52,7 +52,8 @@ import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
-import { today, getDateStr, getIso8601, getTimeStr } from '@/workers/date'
+import { today, getDate, getIso8601, getTime } from '@/workers/date'
+import { strMax, strMin } from '@/workers/strCmp'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
 const EventsRepo = RepositoryFactory.get('events')
@@ -64,10 +65,10 @@ const EventsRepo = RepositoryFactory.get('events')
 })
 export default class EventFormReservationPublic extends Vue {
   @Prop() value: boolean
-  @PropSync('room') _room: Schemas.Room
-  @Prop() timeStart: string
-  @Prop() timeEnd: string
-  @PropSync('sharedRoom') _sharedRoom: boolean
+  @PropSync('room') roomSync: Schemas.Room
+  @PropSync('timeStart') timeStartSync: string
+  @PropSync('timeEnd') timeEndSync: string
+  @PropSync('sharedRoom') sharedRoomSync: boolean
 
   dates: string[] = []
   allRooms: Schemas.Room[] = []
@@ -92,61 +93,49 @@ export default class EventFormReservationPublic extends Vue {
     ).data
   }
 
-  @Watch('_sharedRoom')
+  @Watch('sharedRoomSync')
   @Watch('dates')
   onQueryChange() {
-    this._room = null
+    this.roomSync = null
     this._timeStart = ''
     this._timeEnd = ''
   }
 
   get _timeStart(): string {
-    return getTimeStr(this.timeStart)
+    return getTime(this.timeStartSync)
   }
-  set _timeStart(value: string) {
-    this.$emit(
-      'update:timeStart',
-      value && this._room
-        ? getIso8601(getDateStr(this._room.timeStart), value)
-        : ''
-    )
+  set _timeStart(time: string) {
+    if (this.roomSync) {
+      this.timeStartSync = getIso8601(getDate(this.roomSync.timeStart), time)
+    }
   }
   get _timeEnd(): string {
-    return getTimeStr(this.timeEnd)
+    return getTime(this.timeEndSync)
   }
-  set _timeEnd(value: string) {
-    this.$emit(
-      'update:timeEnd',
-      value && this._room
-        ? getIso8601(getDateStr(this._room.timeEnd), value)
-        : ''
-    )
+  set _timeEnd(time: string) {
+    if (this.roomSync) {
+      this.timeEndSync = getIso8601(getDate(this.roomSync.timeEnd), time)
+    }
   }
 
   get dateMin(): string {
     return today()
   }
   get startMin(): string {
-    return this._room?.timeStart
+    return this.roomSync?.timeStart
   }
   get startMax(): string {
-    if (this._room?.timeEnd < this._timeEnd) {
-      return this._room.timeEnd
-    }
-    return this._timeEnd
+    return strMin(this.roomSync?.timeEnd, this._timeEnd)
   }
   get endMin(): string {
-    if (this._room?.timeStart > this._timeStart) {
-      return this._room.timeStart
-    }
-    return this._timeStart
+    return strMax(this.roomSync?.timeStart, this._timeStart)
   }
   get endMax(): string {
-    return this._room?.timeEnd
+    return this.roomSync?.timeEnd
   }
 
   get availableRoomsList() {
-    return this.calcAvailableRooms?.(this.dates, this._sharedRoom)
+    return this.calcAvailableRooms?.(this.dates, this.sharedRoomSync)
   }
 
   get _valid(): boolean {

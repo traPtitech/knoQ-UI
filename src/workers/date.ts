@@ -20,7 +20,7 @@ export const GOOGLE_CALENDER_URL_FORMAT = 'YYYYMMDDTHHmmssZ'
 export const DATETIME_DISPLAY_FORMAT = 'ddd M/D, h:mma'
 export const DATE_DISPLAY_FORMAT = 'ddd M/D, YYYY'
 
-export const getDateStr = formatDate('YYYY-MM-DD')
-export const getTimeStr = formatDate('HH:mm')
+export const getDate = formatDate('YYYY-MM-DD')
+export const getTime = formatDate('HH:mm')
 export const getIso8601 = (date: string, time: string) =>
   moment(date + time, 'YYYY-MM-DDHH:mm').format()

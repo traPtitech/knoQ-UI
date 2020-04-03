@@ -1,7 +1,7 @@
 <template>
   <v-form v-model="_valid">
     <v-text-field
-      v-model="_place"
+      v-model="placeSync"
       outlined
       label="場所"
       placeholder="チズケ2階"
@@ -39,7 +39,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
-import { getDateStr, getTimeStr, getIso8601, today } from '@/workers/date'
+import { getDate, getTime, getIso8601, today } from '@/workers/date'
 
 @Component({
   components: {
@@ -47,21 +47,21 @@ import { getDateStr, getTimeStr, getIso8601, today } from '@/workers/date'
   },
 })
 export default class EventFormReservationPrivate extends Vue {
-  @PropSync('place') _place: string
-  @PropSync('timeStart') _timeStart: string
-  @PropSync('timeEnd') _timeEnd: string
-  @Prop() value: boolean
+  @PropSync('place') placeSync!: string
+  @PropSync('timeStart') timeStartSync!: string
+  @PropSync('timeEnd') timeEndSync!: string
+  @Prop() value!: boolean
 
   private dateMem = ''
   private timeStartMem = ''
   private timeEndMem = ''
 
-  @Watch('_timeStart')
-  @Watch('_timeEnd')
+  @Watch('timeStartSync')
+  @Watch('timeEndSync')
   private onTimePropChange() {
-    this.dateMem = getDateStr(this._timeStart)
-    this.timeStartMem = getTimeStr(this._timeStart)
-    this.timeEndMem = getTimeStr(this._timeEnd)
+    this.dateMem = getDate(this.timeStartSync)
+    this.timeStartMem = getTime(this.timeStartSync)
+    this.timeEndMem = getTime(this.timeEndSync)
   }
 
   @Watch('dateMem')
@@ -69,10 +69,10 @@ export default class EventFormReservationPrivate extends Vue {
   @Watch('timeEndMem')
   private onTimeMemChange() {
     if (this.dateMem && this.timeStartMem) {
-      this._timeStart = getIso8601(this.dateMem, this.timeStartMem)
+      this.timeStartSync = getIso8601(this.dateMem, this.timeStartMem)
     }
     if (this.dateMem && this.timeEndMem) {
-      this._timeEnd = getIso8601(this.dateMem, this.timeEndMem)
+      this.timeEndSync = getIso8601(this.dateMem, this.timeEndMem)
     }
   }
 
