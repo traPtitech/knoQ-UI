@@ -151,11 +151,13 @@ export default class EventEdit extends Vue {
     this.content.tags = this.event.tags
     this.content.group = this.group
     if (this.room.public) {
+      this.isPrivate = false
       this.reservationPublic.room = this.room
       this.reservationPublic.timeStart = this.event.timeStart
       this.reservationPublic.timeEnd = this.event.timeEnd
       this.reservationPublic.sharedRoom = this.event.sharedRoom
     } else {
+      this.isPrivate = true
       this.reservationPrivate.place = this.room.place
       this.reservationPrivate.timeStart = formatDate()(this.room.timeStart)
       this.reservationPrivate.timeEnd = formatDate()(this.room.timeEnd)
@@ -220,16 +222,15 @@ export default class EventEdit extends Vue {
       const reservation = this.isPrivate
         ? this.reservationPrivate
         : this.reservationPublic
-      const { eventId } = (
-        await EventsRepo.post({
-          ...this.content,
-          groupId: this.content.group.groupId,
-          roomId,
-          sharedRoom: this.isPrivate ? true : this.reservationPublic.sharedRoom,
-          timeStart: reservation.timeStart,
-          timeEnd: reservation.timeEnd,
-        })
-      ).data
+      const eventId = this.$route.params.id
+      await EventsRepo.$eventId(eventId).put({
+        ...this.content,
+        groupId: this.content.group.groupId,
+        roomId,
+        sharedRoom: this.isPrivate ? true : this.reservationPublic.sharedRoom,
+        timeStart: reservation.timeStart,
+        timeEnd: reservation.timeEnd,
+      })
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')

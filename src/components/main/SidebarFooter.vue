@@ -6,6 +6,7 @@
         icon
         title="help"
         href="https://md.trapti.tech/0spW8adnSyCUaV_wioVlWA"
+        target="_blank"
       >
         <v-icon>mdi-help</v-icon>
       </v-btn>

@@ -23,6 +23,7 @@
             :loading="tagLoading"
             :items="tags"
             item-text="name"
+            item-value="name"
             autofocus
             dense
             outlined
@@ -33,20 +34,21 @@
             @blur="onTagEditEnd"
           >
             <template #selection="{ item }">
-              <EventTag close :name="item" @click:close="removeTag(item)" />
+              <EventTag
+                close
+                :name="item.name"
+                @click:close="removeTag(item)"
+              />
             </template>
           </v-combobox>
         </div>
         <div class="text--secondary">
-          <span class="mr-3">by {{ group.name }}</span>
-          <v-btn
-            x-small
-            outlined
-            color="primary"
-            :to="`/groups/${event.groupId}`"
-          >
-            Learn more
-          </v-btn>
+          <span class="mr-3">
+            by
+            <router-link :to="`/groups/${event.groupId}`">
+              {{ group.name }}
+            </router-link>
+          </span>
         </div>
       </div>
       <div class="mb-5">
@@ -60,16 +62,16 @@
       <div class="mb-5">
         <div class="text--secondary mb-n1">Place</div>
         <div class="headline">
-          <span class="mr-3">{{ room.place }}</span>
-          <v-btn
+          <a
             v-if="isTitechRoom(room.place)"
-            x-small
-            outlined
-            color="primary"
             :href="calcRoomPdfUrl(room.place)"
+            target="_blank"
+            rel="noreferer noopener"
+            class="mr-3"
           >
-            LEARN MORE
-          </v-btn>
+            {{ room.place }}
+          </a>
+          <span v-else class="mr-3">{{ room.place }}</span>
         </div>
         <div v-if="room.public" class="text--secondary body-2">
           <v-icon :color="sharedRoomIcon.color">
@@ -124,7 +126,7 @@ export default class EventDetail extends Vue {
   tags: Schemas.Tag[] = []
   tagLoading = false
 
-  editedTags: string[] = []
+  editedTags: { name: string }[] = []
 
   async created() {
     const eventId = this.$route.params.id
@@ -141,9 +143,8 @@ export default class EventDetail extends Vue {
     }
   }
 
-  removeTag(name: string) {
-    const index = this.editedTags.indexOf(name)
-    if (index >= 0) this.editedTags.splice(index, 1)
+  removeTag(tag: { name: string }) {
+    this.editedTags = this.editedTags.filter(({ name }) => name !== tag.name)
   }
 
   get formatDate() {
@@ -166,13 +167,14 @@ export default class EventDetail extends Vue {
       this.tags = (await TagsRepo.get()).data
       this.tagLoading = false
     }
-    this.editedTags = this.event.tags.map(({ name }) => name)
+    this.editedTags = this.event.tags
   }
 
   async onTagEditEnd() {
     const tagNames = this.event.tags.map(({ name }) => name)
-    const added = difference(this.editedTags, tagNames)
-    const deleted = difference(tagNames, this.editedTags)
+    const editedTagNames = this.editedTags.map(({ name }) => name)
+    const added = difference(editedTagNames, tagNames)
+    const deleted = difference(tagNames, editedTagNames)
     const eventId = this.$route.params.id
     await Promise.all(
       added.map(name => EventsRepo.$eventId(eventId).tags.post({ name }))

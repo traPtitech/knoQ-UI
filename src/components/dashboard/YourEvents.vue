@@ -19,7 +19,9 @@
               {{ event.date }}
             </v-col>
             <v-col class="text-truncate">
-              {{ event.name }}
+              <router-link :to="`/events/${event.eventId}`">
+                {{ event.name }}
+              </router-link>
             </v-col>
             <v-col class="flex-grow-0">
               <v-btn
@@ -28,7 +30,7 @@
                 color="primary"
                 :to="`/events/edit/${event.eventId}`"
               >
-                EDIT
+                編集
               </v-btn>
             </v-col>
           </v-row>

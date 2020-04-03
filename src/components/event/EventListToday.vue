@@ -27,7 +27,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
-import { today } from '@/workers/date'
+import { today, todayEnd } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -56,7 +56,7 @@ export default class EventListToday extends Vue {
     this.events = (
       await EventsRepo.get({
         dateBegin: today(),
-        dateEnd: today(),
+        dateEnd: todayEnd(),
       })
     ).data
   }
@@ -64,7 +64,7 @@ export default class EventListToday extends Vue {
     const rooms = new Map<string, Schemas.Room>()
     const { data } = await RoomsRepo.get({
       dateBegin: today(),
-      dateEnd: today(),
+      dateEnd: todayEnd(),
     })
     data.forEach(room => rooms.set(room.roomId, room))
     this.rooms = rooms

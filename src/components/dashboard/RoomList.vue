@@ -20,7 +20,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import RoomListItem from '@/components/dashboard/RoomListItem.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
-import { today } from '@/workers/date'
+import { today, todayEnd } from '@/workers/date'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
 
@@ -44,7 +44,7 @@ export default class RoomList extends Vue {
   }
   async fetchRooms() {
     this.rooms = (
-      await RoomsRepo.get({ dateBegin: today(), dateEnd: today() })
+      await RoomsRepo.get({ dateBegin: today(), dateEnd: todayEnd() })
     ).data.filter(room => room.public)
   }
 }

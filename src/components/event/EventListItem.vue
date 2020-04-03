@@ -22,7 +22,7 @@
         </v-col>
         <v-col lg="" cols="12" class="flex-grow-0">
           <v-btn depressed color="primary" :to="`/events/${eventId}`">
-            LEARN MORE
+            詳細を見る
           </v-btn>
         </v-col>
       </v-row>

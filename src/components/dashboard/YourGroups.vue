@@ -16,7 +16,9 @@
         <v-list-item :key="group.groupId">
           <v-row align="center" style="width: 100%;">
             <v-col class="text-truncate">
-              {{ group.name }}
+              <router-link :to="`/groups/${group.groupId}`">
+                {{ group.name }}
+              </router-link>
             </v-col>
             <v-col class="flex-grow-0">
               <v-btn
@@ -25,7 +27,7 @@
                 color="primary"
                 :to="`/groups/edit/${group.groupId}`"
               >
-                EDIT
+                編集
               </v-btn>
             </v-col>
           </v-row>
@@ -34,7 +36,7 @@
       </template>
       <v-list-item>
         <v-list-item-content>
-          <v-btn depressed color="primary" to="/events/new">
+          <v-btn depressed color="primary" to="/groups/new">
             <v-icon small>mdi-plus</v-icon>
             新しいグループを作成
           </v-btn>

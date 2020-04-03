@@ -63,6 +63,7 @@ import { removeCtrlChars } from '@/workers/removeCtrlChars'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
+const UsersRepo = RepositoryFactory.get('users')
 const TagsRepo = RepositoryFactory.get('tags')
 
 @Component({
@@ -84,7 +85,11 @@ export default class EventFormContent extends Vue {
     Promise.all([this.fetchGroups(), this.fetchTags()])
   }
   async fetchGroups() {
-    this.allGroups = (await GroupsRepo.get()).data
+    const [{ data: groups }, { data: groupIds }] = await Promise.all([
+      GroupsRepo.get(),
+      UsersRepo.me.groups.get(),
+    ])
+    this.allGroups = groups.filter(group => groupIds.includes(group.groupId))
   }
   async fetchTags() {
     this.allTags = (await TagsRepo.get()).data.map(({ name }) => name)

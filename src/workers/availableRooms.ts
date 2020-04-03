@@ -112,7 +112,10 @@ function calcAvailableTimeSpansOfRoom(
   return availableTSs
 }
 
-function calcAvailableRooms(rooms: Schemas.Room[], events: Schemas.Event[]) {
+export function calcAvailableRooms(
+  rooms: Schemas.Room[],
+  events: Schemas.Event[]
+) {
   const roomEventTables = createRoomEventTables(rooms, events)
 
   return (dates: string[], sharedRoom: boolean): AvailableRoom[] => {
@@ -129,5 +132,3 @@ function calcAvailableRooms(rooms: Schemas.Room[], events: Schemas.Event[]) {
     })
   }
 }
-
-export { calcAvailableRooms }

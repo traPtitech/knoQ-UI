@@ -1,8 +1,8 @@
-function isTitechRoom(room: string): boolean {
+export function isTitechRoom(room: string): boolean {
   return /^[SWHMI]\d{3}$/g.test(room)
 }
 
-function calcRoomPdfUrl(room: string): string {
+export function calcRoomPdfUrl(room: string): string {
   const DISTRICTS = {
     S: 'minami',
     W: 'nisi',
@@ -14,5 +14,3 @@ function calcRoomPdfUrl(room: string): string {
   const district = DISTRICTS[room[0]]
   return `https://www.titech.ac.jp/enrolled/facilities/rooms/pdf/picture/${district}/${room}.pdf`
 }
-
-export { isTitechRoom, calcRoomPdfUrl }

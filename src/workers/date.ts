@@ -6,6 +6,12 @@ export const today = () =>
     .minute(0)
     .second(0)
     .format()
+export const todayEnd = () =>
+  moment()
+    .hour(23)
+    .minute(59)
+    .second(59)
+    .format()
 
 export const formatDate = (fmt?: string) => (date: string) =>
   moment(date).format(fmt)
