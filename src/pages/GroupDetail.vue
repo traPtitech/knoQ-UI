@@ -64,7 +64,7 @@ import EventList from '@/components/event/EventList.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
 const RoomsRepo = RepositoryFactory.get('rooms')

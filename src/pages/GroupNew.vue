@@ -40,7 +40,7 @@ import GroupFormContent from '@/components/group/GroupFormContent.vue'
 import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
 

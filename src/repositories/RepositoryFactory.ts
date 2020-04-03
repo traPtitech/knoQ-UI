@@ -15,6 +15,10 @@ const repositories = {
 type Repositories = typeof repositories
 type RepoName = keyof Repositories
 
-export const RepositoryFactory = {
-  get: <T extends RepoName>(name: T): Repositories[T] => repositories[name],
+const RepositoryFactory = {
+  get<T extends RepoName>(name: T): Repositories[T] {
+    return repositories[name]
+  },
 }
+
+export default RepositoryFactory

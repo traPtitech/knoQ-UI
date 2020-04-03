@@ -92,7 +92,7 @@ import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 import {
   formatDate,
   getDateStr,

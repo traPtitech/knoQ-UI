@@ -1,6 +1,6 @@
 import { defineModule, defineMutations, defineActions } from 'direct-vuex'
 import { rootActionContext } from '@/store'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const UsersRepo = RepositoryFactory.get('users')
 

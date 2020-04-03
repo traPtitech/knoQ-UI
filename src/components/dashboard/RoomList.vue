@@ -19,7 +19,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import RoomListItem from '@/components/dashboard/RoomListItem.vue'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { today } from '@/workers/date'
 
 const RoomsRepo = RepositoryFactory.get('rooms')

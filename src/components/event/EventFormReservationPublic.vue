@@ -50,7 +50,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
 import { today, getDateStr, getIso8601, getTimeStr } from '@/workers/date'
 

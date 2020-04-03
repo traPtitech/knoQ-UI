@@ -47,7 +47,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { formatDate, today } from '@/workers/date'
 
 const GroupsRepo = RepositoryFactory.get('groups')

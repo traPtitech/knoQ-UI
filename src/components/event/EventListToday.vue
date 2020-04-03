@@ -26,7 +26,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { today } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')

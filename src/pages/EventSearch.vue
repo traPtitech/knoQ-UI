@@ -39,7 +39,7 @@ import EventList from '@/components/event/EventList.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
-import { RepositoryFactory } from '@/repositories/RepositoryFactory'
+import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { today, formatDate } from '@/workers/date'
 
 const EventsRepo = RepositoryFactory.get('events')
