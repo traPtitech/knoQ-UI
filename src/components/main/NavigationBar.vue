@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app :color="color" :elevation="elevation">
+  <v-app-bar app :color="color" :flat="$vuetify.breakpoint.mdAndUp">
     <v-app-bar-nav-icon
       v-if="$vuetify.breakpoint.smAndDown"
       @click="onClickNavIcon"
@@ -26,16 +26,12 @@ import TrapAvatar from '@/components/shared/TrapAvatar.vue'
     TrapAvatar,
   },
 })
-export default class NavBar extends Vue {
+export default class NavigationBar extends Vue {
   @Emit('click-nav-icon')
   onClickNavIcon() {}
 
   get color(): string {
     return this.$vuetify.breakpoint.smAndDown ? 'white' : 'background'
-  }
-
-  get elevation(): number {
-    return this.$vuetify.breakpoint.smAndDown ? 3 : 0
   }
 
   get me(): string {

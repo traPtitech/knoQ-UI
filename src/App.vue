@@ -1,7 +1,7 @@
 <template>
   <v-app :style="{ background }">
     <Sidebar v-model="drawer" />
-    <NavBar @click-nav-icon="drawer = !drawer" />
+    <NavigationBar @click-nav-icon="drawer = !drawer" />
     <MainView />
   </v-app>
 </template>
@@ -9,14 +9,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import Sidebar from '@/components/main/Sidebar/Sidebar.vue'
-import NavBar from '@/components/main/NavBar/NavBar.vue'
-import MainView from '@/components/main/MainView/MainView.vue'
+import Sidebar from '@/components/main/Sidebar.vue'
+import NavigationBar from '@/components/main/NavigationBar.vue'
+import MainView from '@/components/main/MainView.vue'
 
 @Component({
   components: {
     Sidebar,
-    NavBar,
+    NavigationBar,
     MainView,
   },
 })

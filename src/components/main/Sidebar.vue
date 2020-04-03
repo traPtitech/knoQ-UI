@@ -5,13 +5,13 @@
     :mobile-break-point="$vuetify.breakpoint.thresholds.sm"
   >
     <template #prepend>
-      <Header />
+      <SidebarHeader />
     </template>
 
-    <Navigation />
+    <SidebarNavigation />
 
     <template #append>
-      <Footer />
+      <SidebarFooter />
     </template>
   </v-navigation-drawer>
 </template>
@@ -19,15 +19,15 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import Header from '@/components/main/Sidebar/Header.vue'
-import Navigation from '@/components/main/Sidebar/Navigation.vue'
-import Footer from '@/components/main/Sidebar/Footer.vue'
+import SidebarHeader from '@/components/main/SidebarHeader.vue'
+import SidebarNavigation from '@/components/main/SidebarNavigation.vue'
+import SidebarFooter from '@/components/main/SidebarFooter.vue'
 
 @Component({
   components: {
-    Header,
-    Navigation,
-    Footer,
+    SidebarHeader,
+    SidebarNavigation,
+    SidebarFooter,
   },
 })
 export default class Sidebar extends Vue {

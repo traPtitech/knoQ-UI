@@ -21,7 +21,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 
 @Component
-export default class Navigation extends Vue {
+export default class SidebarNavigation extends Vue {
   get navs() {
     return [
       {
