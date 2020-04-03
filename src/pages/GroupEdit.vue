@@ -34,29 +34,7 @@
         </v-stepper-items>
       </v-stepper>
 
-      <v-dialog v-model="dialog" width="500">
-        <template #activator="{ on }">
-          <v-card class="px-5 pt-5 pb-3">
-            <span class="headline mr-3">Delete this group</span>
-            <v-btn small depressed color="error" class="mb-2" v-on="on">
-              Delete
-            </v-btn>
-          </v-card>
-        </template>
-        <v-card>
-          <v-card-title>
-            CAUTION
-          </v-card-title>
-          <v-card-text>
-            This operation cannot be undone. Are you sure?
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text color="secondary" @click="dialog = false">CANCEL</v-btn>
-            <v-btn text color="error" @click="deleteGroup">DELETE</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <DeleteConfirmationDialog v-model="dialog" @confirm="deleteGroup" />
     </template>
   </v-container>
 </template>
@@ -71,6 +49,7 @@ import FormBackButton from '@/components/shared/FormBackButton.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
+import DeleteConfirmationDialog from '@/components/shared/DeleteConfirmationDialog.vue'
 
 const GroupsRepo = RepositoryFactory.get('groups')
 
@@ -82,6 +61,7 @@ const GroupsRepo = RepositoryFactory.get('groups')
     FormBackButton,
     ProgressCircular,
     LoadFailedText,
+    DeleteConfirmationDialog,
   },
 })
 export default class GroupEdit extends Vue {
@@ -121,7 +101,6 @@ export default class GroupEdit extends Vue {
     const groupId = this.$route.params.id
     try {
       await GroupsRepo.$groupId(groupId).delete()
-      this.dialog = false
       this.$router.push('/')
     } catch (__) {
       alert('Failed to submit...')

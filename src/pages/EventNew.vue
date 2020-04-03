@@ -52,33 +52,11 @@
           <FormNextButton v-if="!isPrivate" @click="submitEvent">
             Submit
           </FormNextButton>
-          <v-dialog v-else v-model="dialog" width="500">
-            <template #activator="{ on }">
-              <FormNextButton v-on="on">
-                Submit
-              </FormNextButton>
-            </template>
-            <v-card>
-              <v-card-title>
-                確認
-              </v-card-title>
-              <v-card-text>
-                <div>
-                  traPが予約していない場所でイベントを開催しようとしています
-                </div>
-                <div>
-                  そこでイベントを開催できるのかを確認した上でフォームを提出してください
-                </div>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn text color="secondary" @click="dialog = false">
-                  CANCEL
-                </v-btn>
-                <v-btn text color="primary" @click="submitEvent">SUBMIT</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <PrivateRoomConfirmationDialog
+            v-else
+            v-model="dialog"
+            @confirm="submitEvent"
+          />
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -94,6 +72,7 @@ import EventFormReservationPrivate from '@/components/event/EventFormReservation
 import EventFormSummary from '@/components/event/EventFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
+import PrivateRoomConfirmationDialog from '@/components/event/PrivateRoomConfirmationDialog.vue'
 import { AvailableRoom } from '@/workers/availableRooms'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
@@ -108,6 +87,7 @@ const EventsRepo = RepositoryFactory.get('events')
     EventFormSummary,
     FormNextButton,
     FormBackButton,
+    PrivateRoomConfirmationDialog,
   },
 })
 export default class EventNew extends Vue {
@@ -182,7 +162,6 @@ export default class EventNew extends Vue {
           timeEnd: reservation.timeEnd,
         })
       ).data
-      this.dialog = false
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')

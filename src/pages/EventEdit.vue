@@ -55,64 +55,16 @@
             <FormNextButton v-if="!isPrivate" @click="submitEvent">
               Submit
             </FormNextButton>
-            <v-dialog v-else v-model="dialog" width="500">
-              <template #activator="{ on }">
-                <FormNextButton v-on="on">
-                  Submit
-                </FormNextButton>
-              </template>
-              <v-card>
-                <v-card-title>
-                  確認
-                </v-card-title>
-                <v-card-text>
-                  <div>
-                    traPが予約していない場所でイベントを開催しようとしています
-                  </div>
-                  <div>
-                    そこでイベントを開催できるのかを確認した上でフォームを提出してください
-                  </div>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer />
-                  <v-btn text color="secondary" @click="dialog = false">
-                    Cancel
-                  </v-btn>
-                  <v-btn text color="primary" @click="submitEvent">
-                    Submit
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
+            <PrivateRoomConfirmationDialog
+              v-else
+              v-model="dialog"
+              @confirm="submitEvent"
+            />
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
 
-      <v-dialog v-model="dialog2" width="500">
-        <template #activator="{ on }">
-          <v-card class="px-5 pt-5 pb-3">
-            <span class="headline mr-3">Delete this event</span>
-            <v-btn small depressed color="error" class="mb-2" v-on="on">
-              Delete
-            </v-btn>
-          </v-card>
-        </template>
-        <v-card>
-          <v-card-title>
-            CAUTION
-          </v-card-title>
-          <v-card-text>
-            This operation cannot be undone. Are you sure?
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn text color="secondary" @click="dialog2 = false">
-              CANCEL
-            </v-btn>
-            <v-btn text color="error" @click="deleteEvent">DELETE</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <DeleteConfirmationDialog v-model="dialog2" @confirm="deleteEvent" />
     </template>
   </v-container>
 </template>
@@ -128,6 +80,8 @@ import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
+import PrivateRoomConfirmationDialog from '@/components/event/PrivateRoomConfirmationDialog.vue'
+import DeleteConfirmationDialog from '@/components/shared/DeleteConfirmationDialog.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { formatDate } from '@/workers/date'
 
@@ -145,6 +99,8 @@ const GroupsRepo = RepositoryFactory.get('groups')
     FormBackButton,
     ProgressCircular,
     LoadFailedText,
+    PrivateRoomConfirmationDialog,
+    DeleteConfirmationDialog,
   },
 })
 export default class EventEdit extends Vue {
@@ -274,7 +230,6 @@ export default class EventEdit extends Vue {
     const eventId = this.$route.params.id
     try {
       await EventsRepo.$eventId(eventId).delete()
-      this.dialog2 = false
       this.$router.push('/')
     } catch (__) {
       alert('Failed to submit...')
