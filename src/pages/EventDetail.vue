@@ -7,6 +7,9 @@
         <h1 class="mb-1 display-1">{{ event.name }}</h1>
         <div class="mb-3">
           <template v-if="!isTagEditting">
+            <span v-if="!event.tags.length" class="text--secondary">
+              No tags
+            </span>
             <EventTag
               v-for="tag in event.tags"
               :key="tag.name"
@@ -37,12 +40,16 @@
           </v-combobox>
         </div>
         <div class="text--secondary">
-          <span class="mr-3">
+          <span v-if="group" class="mr-3">
             by
             <router-link :to="`/groups/${event.groupId}`">
               {{ group.name }}
             </router-link>
           </span>
+          <div v-else>
+            <v-icon small color="error" class="mb-1">mdi-alert-circle</v-icon>
+            グループ不明
+          </div>
         </div>
       </div>
       <div class="mb-5">
@@ -127,14 +134,17 @@ export default class EventDetail extends Vue {
     this.status = 'loading'
     try {
       this.event = (await EventsRepo.$eventId(eventId).get()).data
-      ;[{ data: this.room }, { data: this.group }] = await Promise.all([
-        RoomsRepo.$roomId(this.event.roomId).get(),
-        GroupsRepo.$groupId(this.event.groupId).get(),
-      ])
-      this.status = 'loaded'
+      this.room = (await RoomsRepo.$roomId(this.event.roomId).get()).data
     } catch (__) {
       this.status = 'error'
+      return
     }
+    try {
+      this.group = (await GroupsRepo.$groupId(this.event.groupId).get()).data
+    } catch (__) {
+      this.group = null
+    }
+    this.status = 'loaded'
   }
 
   removeTag(tag1: string) {
