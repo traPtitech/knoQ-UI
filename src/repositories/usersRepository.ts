@@ -1,13 +1,28 @@
-import Repository from './Repository'
+import { AxiosPromise } from 'axios'
+import Repository from '@/repositories/Repository'
 
 const resource = '/users'
 
 export default {
-  get() {
-    return Repository.get(`${resource}`)
+  get(): AxiosPromise<API.Users.Get.Responses.$200> {
+    return Repository.get(resource)
   },
 
-  getMe() {
-    return Repository.get(`${resource}/me`)
+  me: {
+    get(): AxiosPromise<API.Users.Me.Get.Responses.$200> {
+      return Repository.get(`${resource}/me`)
+    },
+
+    events: {
+      get(): AxiosPromise<API.Users.Me.Events.Get.Responses.$200> {
+        return Repository.get(`${resource}/me/events`)
+      },
+    },
+
+    groups: {
+      get(): AxiosPromise<API.Users.Me.Groups.Get.Responses.$200> {
+        return Repository.get(`${resource}/me/groups`)
+      },
+    },
   },
 }

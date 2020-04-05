@@ -1,84 +1,30 @@
 <template>
-  <v-app>
-    <v-snackbar v-model="snackbar" top>
-      {{ snackMessage }}
-      <v-btn color="pink" flat @click="snackbar = false">
-        Close
-      </v-btn>
-    </v-snackbar>
-    <Header />
-    <v-content>
-      <router-view />
-    </v-content>
-    <Footer />
+  <v-app :style="{ background }">
+    <Sidebar v-model="drawer" />
+    <NavigationBar @click-nav-icon="drawer = !drawer" />
+    <MainView />
   </v-app>
 </template>
 
-<script>
-import Header from '@/components/Organisms/Header'
-import Footer from '@/components/Organisms/Footer'
-import { RepositoryFactory } from './repositories/RepositoryFactory'
-import { mapActions } from 'vuex'
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+import Sidebar from '@/components/main/Sidebar.vue'
+import NavigationBar from '@/components/main/NavigationBar.vue'
+import MainView from '@/components/main/MainView.vue'
 
-const RoomsRepository = RepositoryFactory.get('rooms')
-export default {
-  name: 'App',
+@Component({
   components: {
-    Header,
-    Footer,
+    Sidebar,
+    NavigationBar,
+    MainView,
   },
-  data() {
-    return {
-      drawer: false,
-      query: '',
-      dialog: false,
-      snackbar: false,
-      snackMessage: '',
-    }
-  },
-  computed: {
-    traQID() {
-      if (!this.$store.state.loginUser.traq_id) {
-        return 'fuji'
-      }
-      return this.$store.state.loginUser.traq_id
-    },
-  },
-  created: async function() {
-    await this.getUserMe()
-  },
-  methods: {
-    roomsAll: async function() {
-      try {
-        const response = await RoomsRepository.postAll()
-        console.log(response)
-        this.snackMessage = response.statusText
-        this.snackbar = true
-      } catch (error) {
-        this.snackMessage = error
-        this.snackbar = true
-      }
-    },
-    trigger: function(event) {
-      if (event.keyCode === 13) {
-        this.search()
-      }
-    },
-    search: function() {
-      if (this.query !== '') {
-        this.dialog = false
-        this.$router.push({ name: 'Search', query: { q: this.query } })
-      }
-    },
-    ...mapActions(['getUserMe']),
-  },
+})
+export default class App extends Vue {
+  drawer: boolean | null = null
+
+  get background() {
+    return this.$vuetify.theme.themes.light.background
+  }
 }
 </script>
-
-<style>
-.v-dialog {
-  position: absolute;
-  top: 0;
-  padding-right: 50px;
-}
-</style>
