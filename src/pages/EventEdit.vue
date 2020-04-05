@@ -25,6 +25,7 @@
               Continue
             </FormNextButton>
           </v-stepper-content>
+
           <v-stepper-content step="2">
             <v-checkbox
               v-model="isPrivate"
@@ -47,6 +48,7 @@
               Continue
             </FormNextButton>
           </v-stepper-content>
+
           <v-stepper-content step="3">
             <EventFormSummary v-bind="eventSummary" />
             <FormBackButton class="mr-2" @click="step = 2">
@@ -141,8 +143,8 @@ export default class EventEdit extends Vue {
     if (this.room.public) {
       this.isPrivate = false
       this.reservationPublic.room = this.room
-      this.reservationPublic.timeStart = this.event.timeStart
-      this.reservationPublic.timeEnd = this.event.timeEnd
+      this.reservationPublic.timeStart = formatDate()(this.event.timeStart)
+      this.reservationPublic.timeEnd = formatDate()(this.event.timeEnd)
       this.reservationPublic.sharedRoom = this.event.sharedRoom
     } else {
       this.isPrivate = true
@@ -193,7 +195,7 @@ export default class EventEdit extends Vue {
       timeEnd: reservation.timeEnd,
       place: this.isPrivate
         ? this.reservationPrivate.place
-        : this.reservationPublic.room && this.reservationPublic.room.place,
+        : this.reservationPublic.room?.place,
       sharedRoom: this.isPrivate ? null : this.reservationPublic.sharedRoom,
     }
   }
@@ -215,11 +217,10 @@ export default class EventEdit extends Vue {
         ...this.content,
         groupId: this.content.group.groupId,
         roomId,
-        sharedRoom: this.isPrivate ? true : this.reservationPublic.sharedRoom,
+        sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
         timeStart: reservation.timeStart,
         timeEnd: reservation.timeEnd,
       })
-      this.dialog = false
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')

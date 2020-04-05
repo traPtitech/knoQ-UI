@@ -22,6 +22,7 @@
             Continue
           </FormNextButton>
         </v-stepper-content>
+
         <v-stepper-content step="2">
           <v-checkbox
             v-model="isPrivate"
@@ -44,6 +45,7 @@
             Continue
           </FormNextButton>
         </v-stepper-content>
+
         <v-stepper-content step="3">
           <EventFormSummary v-bind="event" />
           <FormBackButton class="mr-2" @click="step = 2">
@@ -135,7 +137,7 @@ export default class EventNew extends Vue {
       timeEnd: reservation.timeEnd,
       place: this.isPrivate
         ? this.reservationPrivate.place
-        : this.reservationPublic.room && this.reservationPublic.room.place,
+        : this.reservationPublic.room?.place,
       sharedRoom: this.isPrivate ? null : this.reservationPublic.sharedRoom,
     }
   }

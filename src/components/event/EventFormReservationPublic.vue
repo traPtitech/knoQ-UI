@@ -20,7 +20,7 @@
           outlined
           label="進捗部屋"
           :disabled="!dates.length"
-          :items="availableRoomsList"
+          :items="availableRooms"
           :item-value="r => r"
           :item-text="r => `${r.place}: ${r.timeStart} ~ ${r.timeEnd}`"
           :rules="$rules.eventRoom"
@@ -64,23 +64,18 @@ const EventsRepo = RepositoryFactory.get('events')
   },
 })
 export default class EventFormReservationPublic extends Vue {
-  @Prop() value: boolean
-  @PropSync('room') roomSync: Schemas.Room
-  @PropSync('timeStart') timeStartSync: string
-  @PropSync('timeEnd') timeEndSync: string
-  @PropSync('sharedRoom') sharedRoomSync: boolean
+  @Prop() value!: boolean
+  @PropSync('room') roomSync!: Schemas.Room
+  @PropSync('timeStart') timeStartSync!: string
+  @PropSync('timeEnd') timeEndSync!: string
+  @PropSync('sharedRoom') sharedRoomSync!: boolean
 
   dates: string[] = []
   allRooms: Schemas.Room[] = []
   allEvents: Schemas.Event[] = []
-  calcAvailableRooms: (
-    dates: string[],
-    sharedRoom: boolean
-  ) => AvailableRoom[] | null = null
 
   async created() {
     await Promise.all([this.fetchRooms(), this.fetchEvents()])
-    this.calcAvailableRooms = calcAvailableRooms(this.allRooms, this.allEvents)
   }
   async fetchRooms() {
     this.allRooms = (await RoomsRepo.get({ dateBegin: today() })).data
@@ -97,12 +92,12 @@ export default class EventFormReservationPublic extends Vue {
   @Watch('dates')
   onQueryChange() {
     this.roomSync = null
-    this._timeStart = ''
-    this._timeEnd = ''
+    this.timeStartSync = ''
+    this.timeEndSync = ''
   }
 
   get _timeStart(): string {
-    return getTime(this.timeStartSync)
+    return this.timeStartSync && getTime(this.timeStartSync)
   }
   set _timeStart(time: string) {
     if (this.roomSync) {
@@ -110,7 +105,7 @@ export default class EventFormReservationPublic extends Vue {
     }
   }
   get _timeEnd(): string {
-    return getTime(this.timeEndSync)
+    return this.timeEndSync && getTime(this.timeEndSync)
   }
   set _timeEnd(time: string) {
     if (this.roomSync) {
@@ -134,8 +129,12 @@ export default class EventFormReservationPublic extends Vue {
     return this.roomSync?.timeEnd
   }
 
-  get availableRoomsList() {
-    return this.calcAvailableRooms?.(this.dates, this.sharedRoomSync)
+  get calcAvailableRooms() {
+    return calcAvailableRooms(this.allRooms, this.allEvents)
+  }
+
+  get availableRooms() {
+    return this.calcAvailableRooms(this.dates, this.sharedRoomSync)
   }
 
   get _valid(): boolean {

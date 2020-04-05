@@ -106,7 +106,7 @@ export default class EventSearch extends Vue {
 
   get allEventData() {
     if (!this.events || !this.rooms) return []
-    return this.events
+    return [...this.events]
       .sort((e1, e2) => (e1.timeStart < e2.timeStart ? -1 : 1))
       .map(event => ({ ...event, place: this.rooms.get(event.roomId).place }))
   }
