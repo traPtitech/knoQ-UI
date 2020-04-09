@@ -6,10 +6,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 
 @Component
 export default class EventTag extends Vue {
-  @Prop() name!: string
+  @Prop({ required: true }) name!: string
 }
 </script>

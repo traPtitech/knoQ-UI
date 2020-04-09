@@ -111,9 +111,9 @@ export default class EventEdit extends Vue {
   dialog2 = false
   step = 1
 
-  event: Schemas.Event = null
-  room: Schemas.Room = null
-  group: Schemas.Group = null
+  event: Schemas.Event | null = null
+  room: Schemas.Room | null = null
+  group: Schemas.Group | null = null
 
   async created() {
     await this.fetchEventData()
@@ -136,30 +136,30 @@ export default class EventEdit extends Vue {
   }
 
   assignEventData() {
-    this.content.name = this.event.name
-    this.content.description = this.event.description
-    this.content.tags = this.event.tags
+    this.content.name = this.event?.name ?? ''
+    this.content.description = this.event?.description ?? ''
+    this.content.tags = this.event?.tags ?? []
     this.content.group = this.group
-    if (this.room.public) {
+    if (this.room?.public) {
       this.isPrivate = false
       this.reservationPublic.room = this.room
-      this.reservationPublic.timeStart = formatDate()(this.event.timeStart)
-      this.reservationPublic.timeEnd = formatDate()(this.event.timeEnd)
-      this.reservationPublic.sharedRoom = this.event.sharedRoom
+      this.reservationPublic.timeStart = formatDate()(this.event!.timeStart)
+      this.reservationPublic.timeEnd = formatDate()(this.event!.timeEnd)
+      this.reservationPublic.sharedRoom = this.event?.sharedRoom ?? false
     } else {
       this.isPrivate = true
-      this.reservationPrivate.place = this.room.place
-      this.reservationPrivate.timeStart = formatDate()(this.room.timeStart)
-      this.reservationPrivate.timeEnd = formatDate()(this.room.timeEnd)
+      this.reservationPrivate.place = this.room?.place ?? ''
+      this.reservationPrivate.timeStart = formatDate()(this.room!.timeStart)
+      this.reservationPrivate.timeEnd = formatDate()(this.room!.timeEnd)
     }
   }
 
   valid1 = false
   content = {
     name: '',
-    tags: [],
+    tags: [] as { name: string }[],
     description: '',
-    group: null as Schemas.Group,
+    group: null as Schemas.Group | null,
   }
 
   isPrivate = false
@@ -172,7 +172,7 @@ export default class EventEdit extends Vue {
     )
   }
   reservationPublic = {
-    room: null as Schemas.Room,
+    room: null as Schemas.Room | null,
     timeStart: '',
     timeEnd: '',
     sharedRoom: true,
@@ -207,7 +207,7 @@ export default class EventEdit extends Vue {
         roomId = (await RoomsRepo.private.post(this.reservationPrivate)).data
           .roomId
       } else {
-        roomId = this.reservationPublic.room.roomId
+        roomId = this.reservationPublic.room!.roomId
       }
       const reservation = this.isPrivate
         ? this.reservationPrivate
@@ -215,7 +215,7 @@ export default class EventEdit extends Vue {
       const eventId = this.$route.params.id
       await EventsRepo.$eventId(eventId).put({
         ...this.content,
-        groupId: this.content.group.groupId,
+        groupId: this.content.group!.groupId,
         roomId,
         sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
         timeStart: reservation.timeStart,

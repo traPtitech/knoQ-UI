@@ -48,6 +48,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
@@ -64,11 +65,11 @@ const EventsRepo = RepositoryFactory.get('events')
   },
 })
 export default class EventFormReservationPublic extends Vue {
-  @Prop() value!: boolean
-  @PropSync('room') roomSync!: Schemas.Room
-  @PropSync('timeStart') timeStartSync!: string
-  @PropSync('timeEnd') timeEndSync!: string
-  @PropSync('sharedRoom') sharedRoomSync!: boolean
+  @Prop({ required: true }) value!: boolean
+  @PropSync('room', { required: true }) roomSync!: Schemas.Room | null
+  @PropSync('timeStart', { required: true }) timeStartSync!: string
+  @PropSync('timeEnd', { required: true }) timeEndSync!: string
+  @PropSync('sharedRoom', { required: true }) sharedRoomSync!: boolean
 
   dates: string[] = []
   allRooms: Schemas.Room[] = []
@@ -116,16 +117,16 @@ export default class EventFormReservationPublic extends Vue {
   get dateMin(): string {
     return today()
   }
-  get startMin(): string {
+  get startMin(): string | undefined {
     return this.roomSync?.timeStart
   }
-  get startMax(): string {
+  get startMax(): string | undefined {
     return strMin(this.roomSync?.timeEnd, this._timeEnd)
   }
-  get endMin(): string {
+  get endMin(): string | undefined {
     return strMax(this.roomSync?.timeStart, this._timeStart)
   }
-  get endMax(): string {
+  get endMax(): string | undefined {
     return this.roomSync?.timeEnd
   }
 

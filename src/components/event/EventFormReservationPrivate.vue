@@ -37,6 +37,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import { getDate, getTime, getIso8601, today } from '@/workers/date'
@@ -47,10 +48,10 @@ import { getDate, getTime, getIso8601, today } from '@/workers/date'
   },
 })
 export default class EventFormReservationPrivate extends Vue {
-  @PropSync('place') placeSync!: string
-  @PropSync('timeStart') timeStartSync!: string
-  @PropSync('timeEnd') timeEndSync!: string
-  @Prop() value!: boolean
+  @PropSync('place', { required: true }) placeSync!: string
+  @PropSync('timeStart', { required: true }) timeStartSync!: string
+  @PropSync('timeEnd', { required: true }) timeEndSync!: string
+  @Prop({ required: true }) value!: boolean
 
   private dateMem = ''
   private timeStartMem = ''

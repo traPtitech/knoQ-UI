@@ -44,6 +44,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventTag from '@/components/shared/EventTag.vue'
@@ -66,15 +67,15 @@ import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
   },
 })
 export default class EventFormSummary extends Vue {
-  @Prop() name!: string
-  @Prop() group!: Schemas.Group
-  @Prop() tags!: { name: string }[]
-  @Prop() description!: string
-  @Prop() isPrivate!: boolean
-  @Prop() place!: string
-  @Prop() timeStart!: string
-  @Prop() timeEnd!: string
-  @Prop() sharedRoom!: boolean
+  @Prop({ required: true }) name!: string
+  @Prop({ required: true }) group!: Schemas.Group | null
+  @Prop({ required: true }) tags!: { name: string }[]
+  @Prop({ required: true }) description!: string
+  @Prop({ required: true }) isPrivate!: boolean
+  @Prop({ required: true }) place!: string
+  @Prop({ required: true }) timeStart!: string
+  @Prop({ required: true }) timeEnd!: string
+  @Prop({ required: true }) sharedRoom!: boolean
 
   get sharedRoomString(): string {
     return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'

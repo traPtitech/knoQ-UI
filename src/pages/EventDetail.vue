@@ -121,9 +121,9 @@ export default class EventDetail extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
   isTagEditting = false
 
-  event: Schemas.Event = null
-  room: Schemas.Room = null
-  group: Schemas.Group = null
+  event: Schemas.Event | null = null
+  room: Schemas.Room | null = null
+  group: Schemas.Group | null = null
   tags: Schemas.Tag[] = []
   tagLoading = false
 
@@ -156,11 +156,11 @@ export default class EventDetail extends Vue {
   }
 
   get sharedRoomString(): string {
-    return this.event.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
+    return this.event?.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
   }
 
   get sharedRoomIcon() {
-    return this.event.sharedRoom
+    return this.event?.sharedRoom
       ? { icon: 'mdi-door-open', color: 'success' }
       : { icon: 'mdi-door-closed-lock', color: 'error' }
   }
@@ -175,11 +175,11 @@ export default class EventDetail extends Vue {
       this.tags = (await TagsRepo.get()).data
       this.tagLoading = false
     }
-    this.editedTags = this.event.tags.map(({ name }) => name)
+    this.editedTags = this.event?.tags.map(({ name }) => name) ?? []
   }
 
   async onTagEditEnd() {
-    const prevTagNames = this.event.tags.map(({ name }) => name)
+    const prevTagNames = this.event?.tags.map(({ name }) => name) ?? []
     const added = difference(this.editedTags, prevTagNames)
     const deleted = difference(prevTagNames, this.editedTags)
     const eventId = this.$route.params.id

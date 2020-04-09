@@ -37,7 +37,7 @@ export default class SidebarFooter extends Vue {
     return process.env.__APP_VERSION__
   }
 
-  get isAdmin(): boolean {
+  get isAdmin(): boolean | undefined {
     return this.$store.direct.state.me?.admin
   }
 

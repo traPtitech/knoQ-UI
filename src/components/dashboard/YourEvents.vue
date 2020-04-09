@@ -75,7 +75,7 @@ export default class YourEvents extends Vue {
   async fetchEvents() {
     this.events = (await UsersRepo.me.events.get()).data
       .filter(event => today() <= event.timeStart)
-      .filter(event => event.createdBy === this.$store.direct.state.me.userId)
+      .filter(event => event.createdBy === this.$store.direct.state.me?.userId)
   }
 
   get allEventData() {

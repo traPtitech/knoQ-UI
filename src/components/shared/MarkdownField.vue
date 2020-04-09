@@ -5,12 +5,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import { render } from '@/workers/markdown-it'
 
 @Component
 export default class MarkdownField extends Vue {
-  @Prop() src!: string
+  @Prop({ required: true }) src!: string
 
   get rendered(): string {
     return render(this.src)

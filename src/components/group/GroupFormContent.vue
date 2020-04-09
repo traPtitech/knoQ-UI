@@ -44,6 +44,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 
@@ -53,11 +54,11 @@ import TrapAvatar from '@/components/shared/TrapAvatar.vue'
   },
 })
 export default class GroupFormContent extends Vue {
-  @PropSync('name') nameSync!: string
-  @PropSync('description') descriptionSync!: string
-  @PropSync('members') membersSync!: string[]
-  @PropSync('open') openSync!: boolean
-  @Prop() value!: boolean
+  @PropSync('name', { required: true }) nameSync!: string
+  @PropSync('description', { required: true }) descriptionSync!: string
+  @PropSync('members', { required: true }) membersSync!: string[]
+  @PropSync('open', { required: true }) openSync!: boolean
+  @Prop({ required: true }) value!: boolean
 
   get allMembers(): Schemas.User[] {
     return [...(this.$store.direct.state.usersCache.users?.values() ?? [])]
