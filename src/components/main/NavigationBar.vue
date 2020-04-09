@@ -34,7 +34,7 @@ export default class NavigationBar extends Vue {
     return this.$vuetify.breakpoint.smAndDown ? 'white' : 'background'
   }
 
-  get me(): string {
+  get me(): string | undefined {
     return this.$store.direct.state.me?.name
   }
 }

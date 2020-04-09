@@ -13,12 +13,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 
 @Component
 export default class AssignedRoomDisplay extends Vue {
-  @Prop() place!: string
-  @Prop() timeStart!: string
-  @Prop() timeEnd!: string
+  @Prop({ required: true }) place!: string
+  @Prop({ required: true }) timeStart!: string
+  @Prop({ required: true }) timeEnd!: string
 }
 </script>

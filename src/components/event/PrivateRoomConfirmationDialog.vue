@@ -32,6 +32,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Emit, Prop } from 'vue-property-decorator'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 
@@ -41,7 +42,7 @@ import FormNextButton from '@/components/shared/FormNextButton.vue'
   },
 })
 export default class PrivateRoomConfirmationDialog extends Vue {
-  @Prop() value!: boolean
+  @Prop({ required: true }) value!: boolean
 
   @Emit('confirm')
   onConfirm() {

@@ -136,7 +136,7 @@ export default class GroupDetail extends Vue {
     if (!this.events || !this.rooms) return []
     return [...this.events]
       .sort((e1, e2) => (e1.timeStart < e2.timeStart ? -1 : 1))
-      .map(event => ({ ...event, place: this.rooms.get(event.roomId).place }))
+      .map(event => ({ ...event, place: this.rooms?.get(event.roomId)?.place }))
   }
 
   get joining(): boolean {
@@ -145,9 +145,9 @@ export default class GroupDetail extends Vue {
     return this.group.members.includes(me.userId)
   }
 
-  get memberNames(): string[] {
+  get memberNames(): (string | undefined)[] {
     const nameById = this.$store.direct.getters.usersCache.nameById
-    return this.group.members.map(nameById).filter(v => v)
+    return this.group?.members.map(nameById).filter(v => v) ?? []
   }
 }
 </script>

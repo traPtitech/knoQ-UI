@@ -28,11 +28,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Emit, Prop } from 'vue-property-decorator'
 
 @Component
 export default class DeleteConfirmationDialog extends Vue {
-  @Prop() value!: boolean
+  @Prop({ required: true }) value!: boolean
 
   @Emit('confirm')
   onConfirm() {
