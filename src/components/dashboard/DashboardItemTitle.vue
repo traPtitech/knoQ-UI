@@ -1,4 +1,4 @@
-<template>
+<template functional>
   <h2 class="font-weight-regular">
     <slot />
   </h2>
