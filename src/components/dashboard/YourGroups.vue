@@ -71,13 +71,9 @@ export default class YourGroups extends Vue {
   }
 
   async fetchGroups() {
-    const [{ data: groups }, { data: groupIds }] = await Promise.all([
-      GroupsRepo.get(),
-      UsersRepo.me.groups.get(),
-    ])
-    this.groups = groups
-      .filter(group => groupIds.includes(group.groupId))
-      .filter(group => group.createdBy === this.$store.direct.state.me?.userId)
+    this.groups = (await GroupsRepo.get()).data.filter(
+      group => group.createdBy === this.$store.direct.state.me?.userId
+    )
   }
 }
 </script>
