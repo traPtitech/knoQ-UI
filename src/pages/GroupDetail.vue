@@ -29,29 +29,26 @@
         </template>
       </div>
       <MarkdownField :src="group.description" class="mb-7" />
-      <div class="mb-7">
-        <div class="text--secondary">Members</div>
-        <v-expansion-panels>
-          <v-expansion-panel>
-            <v-expansion-panel-header class="pa-0">
-              <span class="headline">{{ memberNames.length }} members</span>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <TrapAvatar
-                v-for="memberName in memberNames"
-                :key="memberName"
-                size="36"
-                :traq-id="memberName"
-                class="mr-3 mb-2"
-              />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </div>
-      <div>
-        <div class="text--secondary">Events</div>
-        <EventList :events="allEventData" />
-      </div>
+      <v-tabs>
+        <v-tab>Events</v-tab>
+        <v-tab>Members</v-tab>
+        <v-tab-item class="pt-6">
+          <EventList :events="allEventData" />
+        </v-tab-item>
+        <v-tab-item class="pt-6">
+          <div class="text--secondary">{{ memberNames.length }} members</div>
+          <v-list>
+            <v-list-item v-for="memberName in memberNames" :key="memberName">
+              <v-list-item-avatar>
+                <TrapAvatar size="36" :traq-id="memberName" />
+              </v-list-item-avatar>
+              <v-list-item-content>
+                {{ memberName }}
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-tab-item>
+      </v-tabs>
     </v-card>
   </v-container>
 </template>
@@ -151,10 +148,3 @@ export default class GroupDetail extends Vue {
   }
 }
 </script>
-
-<style>
-/* Remove shadow of expansion panel */
-.v-expansion-panel::before {
-  content: none;
-}
-</style>
