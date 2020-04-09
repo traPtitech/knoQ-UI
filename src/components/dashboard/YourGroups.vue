@@ -1,38 +1,44 @@
 <template>
-  <div v-if="status === 'loading'">
-    読み込み中...
-  </div>
-  <div v-else-if="status === 'error'">
-    データを読み込めませんでした...
-  </div>
-  <v-card v-else class="px-3">
+  <v-card class="px-3">
     <v-list>
-      <v-list-item v-if="!groups.length">
+      <v-list-item v-if="status === 'loading'">
         <span class="text--secondary">
-          あなたの作成したグループはありません
+          読み込み中...
         </span>
       </v-list-item>
-      <template v-for="(group, i) in groups">
-        <v-list-item :key="group.groupId">
-          <v-row align="center" style="width: 100%;">
-            <v-col class="text-truncate">
-              <router-link :to="`/groups/${group.groupId}`">
-                {{ group.name }}
-              </router-link>
-            </v-col>
-            <v-col class="flex-grow-0">
-              <v-btn
-                small
-                outlined
-                color="primary"
-                :to="`/groups/edit/${group.groupId}`"
-              >
-                編集
-              </v-btn>
-            </v-col>
-          </v-row>
+      <v-list-item v-else-if="status === 'error'">
+        <span class="text--secondary">
+          データを読み込めませんでした...
+        </span>
+      </v-list-item>
+      <template v-else>
+        <v-list-item v-if="!groups.length">
+          <span class="text--secondary">
+            あなたの作成したグループはありません
+          </span>
         </v-list-item>
-        <v-divider :key="i" />
+        <template v-for="(group, i) in groups">
+          <v-list-item :key="group.groupId">
+            <v-row align="center" style="width: 100%;">
+              <v-col class="text-truncate">
+                <router-link :to="`/groups/${group.groupId}`">
+                  {{ group.name }}
+                </router-link>
+              </v-col>
+              <v-col class="flex-grow-0">
+                <v-btn
+                  small
+                  outlined
+                  color="primary"
+                  :to="`/groups/edit/${group.groupId}`"
+                >
+                  編集
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-list-item>
+          <v-divider :key="i" />
+        </template>
       </template>
       <v-list-item>
         <v-list-item-content>
