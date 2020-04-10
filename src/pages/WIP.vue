@@ -1,11 +1,8 @@
 <template>
   <v-container>
     <p class="display-1 text--secondary">
-      工事中だなも...
-      <v-icon x-large>mdi-leaf</v-icon>
-    </p>
-    <p>
-      <v-icon size="10rem">mdi-worker</v-icon>
+      Work in progress
+      <v-icon x-large>mdi-account-hard-hat</v-icon>
     </p>
   </v-container>
 </template>

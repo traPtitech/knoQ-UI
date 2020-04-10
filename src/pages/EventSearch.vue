@@ -1,34 +1,32 @@
 <template>
   <v-container>
+    <v-autocomplete
+      v-model="filterTags"
+      :items="tags"
+      item-text="name"
+      placeholder="Filter by tags"
+      chips
+      clearable
+      multiple
+      solo
+      prepend-inner-icon="mdi-filter"
+    >
+      <template #selection="{ item }">
+        <EventTag
+          close
+          :name="item.name"
+          @click:close="removeFilterTag(item.name)"
+        />
+      </template>
+    </v-autocomplete>
+    <v-checkbox
+      v-model="showFinished"
+      label="過去のイベントも表示"
+      class="mt-n6"
+    />
     <ProgressCircular v-if="status === 'loading'" />
     <LoadFailed v-else-if="status === 'error'" />
-    <template v-else>
-      <v-autocomplete
-        v-model="filterTags"
-        :items="tags"
-        item-text="name"
-        placeholder="Filter by tags"
-        chips
-        clearable
-        multiple
-        solo
-        prepend-inner-icon="mdi-filter"
-      >
-        <template #selection="{ item }">
-          <EventTag
-            close
-            :name="item.name"
-            @click:close="removeFilterTag(item.name)"
-          />
-        </template>
-      </v-autocomplete>
-      <v-checkbox
-        v-model="showFinished"
-        label="過去のイベントも表示"
-        class="mt-n6"
-      />
-      <EventList :events="allEventData" :event-filter="filterFn" />
-    </template>
+    <EventList v-else :events="allEventData" :event-filter="filterFn" />
   </v-container>
 </template>
 

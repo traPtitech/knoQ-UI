@@ -5,6 +5,7 @@
       :key="nav.title"
       color="primary"
       :to="nav.link"
+      exact
     >
       <v-list-item-icon>
         <v-icon>{{ nav.icon }}</v-icon>
