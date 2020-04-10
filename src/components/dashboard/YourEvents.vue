@@ -45,7 +45,7 @@
       </template>
       <v-list-item>
         <v-list-item-content>
-          <v-btn depressed color="primary" to="/events/new">
+          <v-btn depressed block color="primary" to="/events/new">
             <v-icon small>mdi-plus</v-icon>
             新しいイベントを作成
           </v-btn>

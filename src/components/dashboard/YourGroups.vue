@@ -42,7 +42,7 @@
       </template>
       <v-list-item>
         <v-list-item-content>
-          <v-btn depressed color="primary" to="/groups/new">
+          <v-btn depressed block color="primary" to="/groups/new">
             <v-icon small>mdi-plus</v-icon>
             新しいグループを作成
           </v-btn>
