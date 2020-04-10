@@ -5,7 +5,7 @@ const PathStorage = {
     sessionStorage.setItem(PATH_KEY, window.location.pathname)
   },
 
-  getSavedPath(): string {
+  getSavedPath(): string | null {
     return sessionStorage.getItem(PATH_KEY)
   },
 }

@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
@@ -46,10 +47,10 @@ import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
   },
 })
 export default class GroupEventFormSummary extends Vue {
-  @Prop() name!: string
-  @Prop() description!: string
-  @Prop() members!: string[]
-  @Prop() open!: boolean
+  @Prop({ required: true }) name!: string
+  @Prop({ required: true }) description!: string
+  @Prop({ required: true }) members!: string[]
+  @Prop({ required: true }) open!: boolean
 
   get openString(): string {
     return this.open
@@ -57,7 +58,7 @@ export default class GroupEventFormSummary extends Vue {
       : '自由参加できないグループです'
   }
 
-  get memberNames(): string[] {
+  get memberNames(): (string | undefined)[] {
     const nameById = this.$store.direct.getters.usersCache.nameById
     return this.members.map(nameById)
   }

@@ -18,6 +18,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import SidebarHeader from '@/components/main/SidebarHeader.vue'
 import SidebarNavigation from '@/components/main/SidebarNavigation.vue'
@@ -36,7 +37,7 @@ export default class Sidebar extends Vue {
   get drawer(): boolean | null {
     return this.value
   }
-  set drawer(value: boolean) {
+  set drawer(value: boolean | null) {
     this.$emit('input', value)
   }
 }

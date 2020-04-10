@@ -89,6 +89,7 @@ export default class GroupEdit extends Vue {
 
   async submitGroup() {
     const groupId = this.$route.params.id
+    if (!this.group) return
     try {
       await GroupsRepo.$groupId(groupId).put(this.group)
       this.$router.push(`/groups/${groupId}`)

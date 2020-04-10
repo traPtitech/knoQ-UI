@@ -101,7 +101,7 @@ export default class EventNew extends Vue {
     name: '',
     tags: [] as { name: string }[],
     description: '',
-    group: null as Schemas.Group,
+    group: null as Schemas.Group | null,
   }
 
   isPrivate = false
@@ -114,7 +114,7 @@ export default class EventNew extends Vue {
     )
   }
   reservationPublic = {
-    room: null as Schemas.Room,
+    room: null as Schemas.Room | null,
     timeStart: '',
     timeEnd: '',
     sharedRoom: true,
@@ -149,7 +149,7 @@ export default class EventNew extends Vue {
         roomId = (await RoomsRepo.private.post(this.reservationPrivate)).data
           .roomId
       } else {
-        roomId = this.reservationPublic.room.roomId
+        roomId = this.reservationPublic.room!.roomId
       }
       const reservation = this.isPrivate
         ? this.reservationPrivate
@@ -157,7 +157,7 @@ export default class EventNew extends Vue {
       const { eventId } = (
         await EventsRepo.post({
           ...this.content,
-          groupId: this.content.group.groupId,
+          groupId: this.content.group!.groupId,
           roomId,
           sharedRoom: this.isPrivate ? true : this.reservationPublic.sharedRoom,
           timeStart: reservation.timeStart,

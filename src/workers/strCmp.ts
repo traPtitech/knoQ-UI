@@ -1,17 +1,15 @@
-export function strMax(
-  ...strs: (string | null | undefined)[]
-): string | undefined {
-  if (!strs.length) return undefined
-  return strs
-    .filter(str => str !== null && str !== undefined)
-    .reduce((prev, curr) => (curr > prev ? curr : prev))
+const notEmpty = <T>(x: T | null | undefined): x is T => {
+  return !!x
 }
 
-export function strMin(
-  ...strs: (string | null | undefined)[]
-): string | undefined {
-  if (!strs.length) return undefined
-  return strs
-    .filter(str => str !== null && str !== undefined)
-    .reduce((prev, curr) => (curr < prev ? curr : prev))
+export function strMax(...strs: (string | null | undefined)[]): string | null {
+  const nonEmp = strs.filter(notEmpty)
+  if (!nonEmp.length) return null
+  return nonEmp.reduce((prev, curr) => (curr > prev ? curr : prev))
+}
+
+export function strMin(...strs: (string | null | undefined)[]): string | null {
+  const nonEmp = strs.filter(notEmpty)
+  if (!nonEmp.length) return null
+  return nonEmp.reduce((prev, curr) => (curr < prev ? curr : prev))
 }

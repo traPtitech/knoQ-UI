@@ -7,7 +7,7 @@ const api = axios.create({
   withCredentials: true,
 })
 
-api.interceptors.response.use(null, async err => {
+api.interceptors.response.use(undefined, async err => {
   if (err.response && err.response.status === 401) {
     // if unauthorized
     const { data: authParams } = await fetchAuthParams()

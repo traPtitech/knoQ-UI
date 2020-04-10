@@ -68,6 +68,8 @@ function differenceTimeSpan(t1: TimeSpan, t2: TimeSpan): TimeSpan[] {
   if (t1.timeStart > t2.timeStart && t1.timeEnd > t2.timeEnd) {
     return [{ timeStart: t2.timeEnd, timeEnd: t1.timeEnd }]
   }
+
+  throw new Error('differenceTimespan: Unreachable')
 }
 
 function createRoomEventTables(
@@ -80,7 +82,7 @@ function createRoomEventTables(
     if (!roomEventMap.has(date)) {
       roomEventMap.set(date, new Map())
     }
-    roomEventMap.get(date).set(room.roomId, { room, events: [] })
+    roomEventMap.get(date)?.set(room.roomId, { room, events: [] })
   }
   for (const event of events) {
     roomEventMap

@@ -22,7 +22,7 @@
           :disabled="!dates.length"
           :items="availableRooms"
           :item-value="r => r"
-          :item-text="r => `${r.place}: ${r.timeStart} ~ ${r.timeEnd}`"
+          :item-text="formatAvailableRoom"
           :rules="$rules.eventRoom"
         />
         <TimePicker
@@ -48,11 +48,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
-import { today, getDate, getIso8601, getTime } from '@/workers/date'
+import {
+  formatDate,
+  DATETIME_DISPLAY_FORMAT,
+  today,
+  getDate,
+  getIso8601,
+  getTime,
+} from '@/workers/date'
 import { strMax, strMin } from '@/workers/strCmp'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -64,11 +72,11 @@ const EventsRepo = RepositoryFactory.get('events')
   },
 })
 export default class EventFormReservationPublic extends Vue {
-  @Prop() value!: boolean
-  @PropSync('room') roomSync!: Schemas.Room
-  @PropSync('timeStart') timeStartSync!: string
-  @PropSync('timeEnd') timeEndSync!: string
-  @PropSync('sharedRoom') sharedRoomSync!: boolean
+  @Prop({ required: true }) value!: boolean
+  @PropSync('room', { required: true }) roomSync!: Schemas.Room | null
+  @PropSync('timeStart', { required: true }) timeStartSync!: string
+  @PropSync('timeEnd', { required: true }) timeEndSync!: string
+  @PropSync('sharedRoom', { required: true }) sharedRoomSync!: boolean
 
   dates: string[] = []
   allRooms: Schemas.Room[] = []
@@ -78,7 +86,9 @@ export default class EventFormReservationPublic extends Vue {
     await Promise.all([this.fetchRooms(), this.fetchEvents()])
   }
   async fetchRooms() {
-    this.allRooms = (await RoomsRepo.get({ dateBegin: today() })).data
+    this.allRooms = (await RoomsRepo.get({ dateBegin: today() })).data.filter(
+      room => room.public
+    )
   }
   async fetchEvents() {
     this.allEvents = (
@@ -116,17 +126,19 @@ export default class EventFormReservationPublic extends Vue {
   get dateMin(): string {
     return today()
   }
-  get startMin(): string {
-    return this.roomSync?.timeStart
+  get startMin(): string | null {
+    return this.roomSync && getTime(this.roomSync.timeStart)
   }
-  get startMax(): string {
-    return strMin(this.roomSync?.timeEnd, this._timeEnd)
+  get startMax(): string | null {
+    const timeEnd = strMin(this.roomSync?.timeEnd, this._timeEnd)
+    return timeEnd && getTime(timeEnd)
   }
-  get endMin(): string {
-    return strMax(this.roomSync?.timeStart, this._timeStart)
+  get endMin(): string | null {
+    const timeStart = strMax(this.roomSync?.timeStart, this._timeStart)
+    return timeStart && getTime(timeStart)
   }
-  get endMax(): string {
-    return this.roomSync?.timeEnd
+  get endMax(): string | null {
+    return this.roomSync && getTime(this.roomSync.timeEnd)
   }
 
   get calcAvailableRooms() {
@@ -135,6 +147,12 @@ export default class EventFormReservationPublic extends Vue {
 
   get availableRooms() {
     return this.calcAvailableRooms(this.dates, this.sharedRoomSync)
+  }
+
+  get formatAvailableRoom() {
+    const fmt = formatDate(DATETIME_DISPLAY_FORMAT)
+    return (r: AvailableRoom) =>
+      `${r.place}: ${fmt(r.timeStart)} ~ ${fmt(r.timeEnd)}`
   }
 
   get _valid(): boolean {

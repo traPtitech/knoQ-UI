@@ -57,6 +57,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import 'reflect-metadata'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import EventTag from '@/components/shared/EventTag.vue'
 import { rmCtrlChar } from '@/workers/rmCtrlChar'
@@ -72,11 +73,11 @@ const TagsRepo = RepositoryFactory.get('tags')
   },
 })
 export default class EventFormContent extends Vue {
-  @Prop() value!: boolean
-  @PropSync('name') nameSync!: string
-  @PropSync('group') groupSync!: string
-  @PropSync('tags') tagsSync!: { name: string }[]
-  @PropSync('description') descriptionSync!: string
+  @Prop({ required: true }) value!: boolean
+  @PropSync('name', { required: true }) nameSync!: string
+  @PropSync('group', { required: true }) groupSync!: Schemas.Group | null
+  @PropSync('tags', { required: true }) tagsSync!: { name: string }[]
+  @PropSync('description', { required: true }) descriptionSync!: string
 
   allGroups: Schemas.Group[] = []
   allTags: string[] = []
