@@ -12,7 +12,7 @@
     <v-card-text class="text-truncate">{{ description }}</v-card-text>
     <v-card-actions class="px-4">
       <v-row dense>
-        <v-col lg="" cols="12">
+        <v-col sm="" cols="12">
           <EventTag
             v-for="tag in tags"
             :key="tag.name"
@@ -20,7 +20,7 @@
             class="mr-3"
           />
         </v-col>
-        <v-col lg="" cols="12" class="flex-grow-0">
+        <v-col sm="" cols="12" class="flex-grow-0">
           <v-btn depressed color="primary" :to="`/events/${eventId}`">
             詳細を見る
           </v-btn>
