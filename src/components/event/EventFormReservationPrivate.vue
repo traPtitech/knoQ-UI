@@ -4,7 +4,7 @@
       v-model="placeSync"
       outlined
       label="場所"
-      placeholder="チズケ2階"
+      :placeholder="'\t'"
       :rules="$rules.eventPlace"
     />
     <v-dialog width="290px">
@@ -13,6 +13,7 @@
           v-model="dateMem"
           outlined
           label="開催日"
+          :placeholder="'\t'"
           readonly
           :rules="$rules.eventDate"
           v-on="on"

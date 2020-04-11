@@ -19,6 +19,7 @@
           v-model="roomSync"
           outlined
           label="進捗部屋"
+          :placeholder="'\t'"
           :disabled="!dates.length"
           :items="availableRooms"
           :item-value="r => r"

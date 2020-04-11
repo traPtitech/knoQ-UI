@@ -4,6 +4,7 @@
       <v-text-field
         v-model="time"
         outlined
+        :placeholder="'\t'"
         readonly
         v-bind="$attrs"
         v-on="on"

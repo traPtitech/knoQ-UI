@@ -4,17 +4,17 @@
       v-model="nameSync"
       outlined
       label="グループ名"
-      placeholder="Some group"
+      :placeholder="'\t'"
       :rules="$rules.groupName"
       class="mb-n6"
     />
-    <v-checkbox v-model="openSync" label="自由参加可能なグループ" />
+    <v-checkbox v-model="openSync" label="グループへの自由参加を許可する" />
     <v-autocomplete
       v-model="membersSync"
       outlined
       multiple
       label="メンバー"
-      placeholder="trapyojo, ..."
+      :placeholder="'\t'"
       :items="allMembers"
       item-text="name"
       item-value="userId"
@@ -37,7 +37,7 @@
       rows="10"
       label="説明"
       no-resize
-      placeholder="# You can write markdown here"
+      placeholder="# You can write Markdown here"
     />
   </v-form>
 </template>
