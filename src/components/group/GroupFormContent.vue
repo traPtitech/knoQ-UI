@@ -2,19 +2,17 @@
   <v-form v-model="valid" class="pt-2">
     <v-text-field
       v-model="nameSync"
-      outlined
+      filled
       label="グループ名"
-      :placeholder="'\t'"
       :rules="$rules.groupName"
       class="mb-n6"
     />
     <v-checkbox v-model="openSync" label="グループへの自由参加を許可する" />
     <v-autocomplete
       v-model="membersSync"
-      outlined
+      filled
       multiple
       label="メンバー"
-      :placeholder="'\t'"
       :items="allMembers"
       item-text="name"
       item-value="userId"
@@ -33,7 +31,7 @@
     </v-autocomplete>
     <v-textarea
       v-model="descriptionSync"
-      outlined
+      filled
       rows="10"
       label="説明"
       no-resize

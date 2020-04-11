@@ -1,14 +1,7 @@
 <template>
   <v-dialog width="290px">
     <template #activator="{ on }">
-      <v-text-field
-        v-model="time"
-        outlined
-        :placeholder="'\t'"
-        readonly
-        v-bind="$attrs"
-        v-on="on"
-      />
+      <v-text-field v-model="time" filled readonly v-bind="$attrs" v-on="on" />
     </template>
     <v-time-picker
       v-model="time"

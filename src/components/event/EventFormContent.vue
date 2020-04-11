@@ -10,16 +10,14 @@
     </div>
     <v-text-field
       v-model="nameSync"
-      outlined
+      filled
       label="イベント名"
-      :placeholder="'\t'"
       :rules="$rules.eventName"
     />
     <v-autocomplete
       v-model="groupSync"
-      outlined
+      filled
       label="主催グループ"
-      :placeholder="'\t'"
       :items="allGroups"
       item-text="name"
       :item-value="v => v"
@@ -27,7 +25,7 @@
     />
     <v-combobox
       v-model="tagNames"
-      outlined
+      filled
       multiple
       clearable
       label="タグ"
@@ -46,7 +44,7 @@
     </v-combobox>
     <v-textarea
       v-model="descriptionSync"
-      outlined
+      filled
       rows="25"
       no-resize
       label="説明"

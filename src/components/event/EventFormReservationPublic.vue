@@ -17,9 +17,8 @@
         <v-checkbox v-model="sharedRoomSync" label="部屋の共用を許可する" />
         <v-autocomplete
           v-model="roomSync"
-          outlined
+          filled
           label="進捗部屋"
-          :placeholder="'\t'"
           :disabled="!dates.length"
           :items="availableRooms"
           :item-value="r => r"

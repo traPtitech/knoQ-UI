@@ -2,18 +2,16 @@
   <v-form v-model="_valid">
     <v-text-field
       v-model="placeSync"
-      outlined
+      filled
       label="場所"
-      :placeholder="'\t'"
       :rules="$rules.eventPlace"
     />
     <v-dialog width="290px">
       <template #activator="{ on }">
         <v-text-field
           v-model="dateMem"
-          outlined
+          filled
           label="開催日"
-          :placeholder="'\t'"
           readonly
           :rules="$rules.eventDate"
           v-on="on"
