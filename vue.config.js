@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const { version } = require('./package.json')
 
 const versionInj = {
@@ -10,6 +11,6 @@ const versionInj = {
 module.exports = {
   transpileDependencies: ['vuetify'],
   configureWebpack: {
-    plugins: [new webpack.DefinePlugin(versionInj)],
+    plugins: [new webpack.DefinePlugin(versionInj), new BundleAnalyzerPlugin()],
   },
 }
