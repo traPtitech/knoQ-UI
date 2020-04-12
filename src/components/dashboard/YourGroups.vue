@@ -77,9 +77,9 @@ export default class YourGroups extends Vue {
   }
 
   async fetchGroups() {
-    this.groups = (await GroupsRepo.get()).data.filter(
-      group => group.createdBy === this.$store.direct.state.me?.userId
-    )
+    this.groups = (await GroupsRepo.get()).data
+      .filter(group => !group.isTraQGroup)
+      .filter(group => group.createdBy === this.$store.direct.state.me?.userId)
   }
 }
 </script>

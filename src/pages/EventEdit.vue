@@ -2,6 +2,12 @@
   <v-container>
     <ProgressCircular v-if="status === 'loading'" />
     <LoadFailedText v-else-if="status === 'error'" />
+    <template v-else-if="!canEdit">
+      <v-icon large color="error" class="mr-5">mdi-alert-circle</v-icon>
+      <span class="text--secondary headline">
+        他の人が作ったイベントは編集できません
+      </span>
+    </template>
     <template v-else>
       <v-stepper v-model="step" class="mb-5">
         <v-stepper-header>
@@ -66,7 +72,9 @@
         </v-stepper-items>
       </v-stepper>
 
-      <DeleteConfirmationDialog v-model="dialog2" @confirm="deleteEvent" />
+      <DeleteConfirmationDialog v-model="dialog2" @confirm="deleteEvent">
+        Delete this event
+      </DeleteConfirmationDialog>
     </template>
   </v-container>
 </template>
@@ -107,6 +115,7 @@ const GroupsRepo = RepositoryFactory.get('groups')
 })
 export default class EventEdit extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
+  canEdit = true
   dialog = false
   dialog2 = false
   step = 1
@@ -116,23 +125,29 @@ export default class EventEdit extends Vue {
   group: Schemas.Group | null = null
 
   async created() {
-    await this.fetchEventData()
+    this.status = 'loading'
+    try {
+      await this.fetchEventData()
+      if (this.canEdit) this.assignEventData()
+      this.status = 'loaded'
+    } catch (__) {
+      this.status = 'error'
+    }
     this.assignEventData()
   }
 
   async fetchEventData() {
     const eventId = this.$route.params.id
-    this.status = 'loading'
-    try {
-      this.event = (await EventsRepo.$eventId(eventId).get()).data
-      ;[{ data: this.room }, { data: this.group }] = await Promise.all([
-        RoomsRepo.$roomId(this.event.roomId).get(),
-        GroupsRepo.$groupId(this.event.groupId).get(),
-      ])
-      this.status = 'loaded'
-    } catch (__) {
-      this.status = 'error'
+    const event = (await EventsRepo.$eventId(eventId).get()).data
+    if (event.createdBy !== this.$store.direct.state.me?.userId) {
+      this.canEdit = false
+      return
     }
+    this.event = event
+    ;[{ data: this.room }, { data: this.group }] = await Promise.all([
+      RoomsRepo.$roomId(this.event.roomId).get(),
+      GroupsRepo.$groupId(this.event.groupId).get(),
+    ])
   }
 
   assignEventData() {

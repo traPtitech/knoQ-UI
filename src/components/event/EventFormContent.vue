@@ -1,25 +1,23 @@
 <template>
   <v-form v-model="valid">
-    <div class="mb-3">
-      <span class="text--secondary caption">
+    <div class="mb-4 text--secondary caption">
+      <span class="mr-1">
         ※イベントを作るには主催するグループが必要です
       </span>
-      <v-btn small text color="primary" to="/groups/new" class="mb-1">
+      <router-link to="/groups/new">
         新しくグループを作る
-      </v-btn>
+      </router-link>
     </div>
     <v-text-field
       v-model="nameSync"
-      outlined
+      filled
       label="イベント名"
-      placeholder="Some event"
       :rules="$rules.eventName"
     />
     <v-autocomplete
       v-model="groupSync"
-      outlined
+      filled
       label="主催グループ"
-      placeholder="traP"
       :items="allGroups"
       item-text="name"
       :item-value="v => v"
@@ -27,11 +25,11 @@
     />
     <v-combobox
       v-model="tagNames"
-      outlined
+      filled
       multiple
       clearable
       label="タグ"
-      placeholder="Vue, なろう講習会, ..."
+      placeholder="Select or create one"
       :items="allTags"
     >
       <template #selection="{ item }">
@@ -46,11 +44,11 @@
     </v-combobox>
     <v-textarea
       v-model="descriptionSync"
-      outlined
+      filled
       rows="25"
       no-resize
-      label="description"
-      :placeholder="'# You can write markdown here'"
+      label="説明"
+      placeholder="# You can write Markdown here"
     />
   </v-form>
 </template>

@@ -2,7 +2,9 @@
   <v-dialog v-model="dialog" width="500">
     <template #activator="{ on }">
       <v-card class="px-5 pt-5 pb-3">
-        <span class="headline mr-3">Delete this event</span>
+        <span class="headline mr-3">
+          <slot />
+        </span>
         <v-btn small depressed color="error" class="mb-2" v-on="on">
           Delete
         </v-btn>
