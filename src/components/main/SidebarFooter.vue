@@ -44,6 +44,7 @@ export default class SidebarFooter extends Vue {
   async syncRooms() {
     try {
       await RoomsRepo.all.post()
+      window.location.reload()
     } catch (__) {
       alert('Failed to sync rooms...')
     }
