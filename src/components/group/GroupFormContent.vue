@@ -7,7 +7,7 @@
       :rules="$rules.groupName"
       class="mb-n6"
     />
-    <v-checkbox v-model="openSync" label="グループへの自由参加を許可する" />
+    <v-checkbox v-model="openSync" label="自由参加可能なグループにする" />
     <v-autocomplete
       v-model="membersSync"
       filled

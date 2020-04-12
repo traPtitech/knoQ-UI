@@ -2,6 +2,12 @@
   <v-container>
     <ProgressCircular v-if="status === 'loading'" />
     <LoadFailedText v-else-if="status === 'error'" />
+    <template v-else-if="!canEdit">
+      <v-icon large color="error" class="mr-5">mdi-alert-circle</v-icon>
+      <span class="text--secondary headline">
+        traP公式のグループは編集できません
+      </span>
+    </template>
     <template v-else>
       <v-stepper v-model="step" class="mb-5">
         <v-stepper-header>
@@ -34,7 +40,9 @@
         </v-stepper-items>
       </v-stepper>
 
-      <DeleteConfirmationDialog v-model="dialog" @confirm="deleteGroup" />
+      <DeleteConfirmationDialog v-model="dialog" @confirm="deleteGroup">
+        Delete this group
+      </DeleteConfirmationDialog>
     </template>
   </v-container>
 </template>
@@ -66,24 +74,31 @@ const GroupsRepo = RepositoryFactory.get('groups')
 })
 export default class GroupEdit extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
+  canEdit = true
   dialog = false
   valid = false
   step = 1
 
   group: Schemas.Group | null = null
 
-  created() {
-    this.fetchGroupData()
-  }
-
-  async fetchGroupData() {
+  async created() {
     this.status = 'loading'
     const groupId = this.$route.params.id
     try {
-      this.group = (await GroupsRepo.$groupId(groupId).get()).data
+      this.fetchGroupData()
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
+    }
+  }
+
+  async fetchGroupData() {
+    const groupId = this.$route.params.id
+    const group = (await GroupsRepo.$groupId(groupId).get()).data
+    if (group.isTraQGroup) {
+      this.canEdit = false
+    } else {
+      this.group = group
     }
   }
 
