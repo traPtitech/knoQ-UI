@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="_valid">
+  <v-form v-model="valid">
     <v-row>
       <v-col class="pl-4 flex-grow-0">
         <div class="text--secondary caption">
@@ -155,10 +155,10 @@ export default class EventFormReservationPublic extends Vue {
       `${r.place}: ${fmt(r.timeStart)} ~ ${fmt(r.timeEnd)}`
   }
 
-  get _valid(): boolean {
+  get valid(): boolean {
     return this.value
   }
-  set _valid(value: boolean) {
+  set valid(value: boolean) {
     this.$emit('input', value)
   }
 }

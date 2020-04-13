@@ -12,12 +12,14 @@
       v-model="nameSync"
       filled
       label="イベント名"
+      placeholder="イベント名を入力"
       :rules="$rules.eventName"
     />
     <v-autocomplete
       v-model="groupSync"
       filled
       label="主催グループ"
+      placeholder="グループを選択"
       :items="allGroups"
       item-text="name"
       :item-value="v => v"
@@ -29,7 +31,7 @@
       multiple
       clearable
       label="タグ"
-      placeholder="Select or create one"
+      placeholder="タグを選択または新規作成"
       :items="allTags"
     >
       <template #selection="{ item }">
@@ -48,7 +50,7 @@
       rows="25"
       no-resize
       label="説明"
-      placeholder="# You can write Markdown here"
+      placeholder="# Markdownも書けます"
     />
   </v-form>
 </template>

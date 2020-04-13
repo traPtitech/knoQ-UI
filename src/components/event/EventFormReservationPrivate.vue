@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="_valid">
+  <v-form v-model="valid">
     <v-text-field
       v-model="placeSync"
       filled
@@ -86,10 +86,10 @@ export default class EventFormReservationPrivate extends Vue {
     return today()
   }
 
-  get _valid(): boolean {
+  get valid(): boolean {
     return this.value
   }
-  set _valid(value: boolean) {
+  set valid(value: boolean) {
     this.$emit('input', value)
   }
 }
