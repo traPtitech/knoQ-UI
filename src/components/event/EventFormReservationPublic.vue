@@ -19,11 +19,14 @@
           v-model="roomSync"
           filled
           label="進捗部屋"
+          hint="日付の候補と部屋の共用の可否を選ぶと使える進捗部屋を選択できるようになります"
+          :persistent-hint="true"
           :disabled="!dates.length"
           :items="availableRooms"
           :item-value="r => r"
           :item-text="formatAvailableRoom"
           :rules="$rules.eventRoom"
+          class="mb-4"
         />
         <TimePicker
           v-model="_timeStart"

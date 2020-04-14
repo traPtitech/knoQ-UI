@@ -24,20 +24,24 @@
         </v-stepper-content>
 
         <v-stepper-content step="2">
-          <v-checkbox
-            v-model="isPrivate"
-            label="traPが予約していない場所で開催する"
-          />
-          <EventFormReservationPublic
-            v-show="!isPrivate"
-            v-model="validPublic"
-            v-bind.sync="reservationPublic"
-          />
-          <EventFormReservationPrivate
-            v-show="isPrivate"
-            v-model="validPrivate"
-            v-bind.sync="reservationPrivate"
-          />
+          <v-tabs v-model="tab">
+            <v-tab>進捗部屋で開催</v-tab>
+            <v-tab>その他で開催</v-tab>
+            <v-tab-item class="pt-3">
+              <EventFormReservationPublic
+                v-show="!isPrivate"
+                v-model="validPublic"
+                v-bind.sync="reservationPublic"
+              />
+            </v-tab-item>
+            <v-tab-item class="pt-3">
+              <EventFormReservationPrivate
+                v-show="isPrivate"
+                v-model="validPrivate"
+                v-bind.sync="reservationPrivate"
+              />
+            </v-tab-item>
+          </v-tabs>
           <FormBackButton class="mr-2" @click="step = 1">
             Back
           </FormBackButton>
@@ -105,6 +109,12 @@ export default class EventNew extends Vue {
   }
 
   isPrivate = false
+  get tab(): number {
+    return +this.isPrivate
+  }
+  set tab(t: number) {
+    this.isPrivate = !!t
+  }
   validPublic = false
   validPrivate = false
   get valid2(): boolean {
