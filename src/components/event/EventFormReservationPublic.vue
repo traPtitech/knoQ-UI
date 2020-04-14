@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="_valid">
+  <v-form v-model="valid">
     <v-row>
       <v-col class="pl-4 flex-grow-0">
         <div class="text--secondary caption">
@@ -19,11 +19,14 @@
           v-model="roomSync"
           filled
           label="進捗部屋"
+          hint="日付の候補と部屋の共用の可否を選ぶと使える進捗部屋を選択できるようになります"
+          :persistent-hint="true"
           :disabled="!dates.length"
           :items="availableRooms"
           :item-value="r => r"
           :item-text="formatAvailableRoom"
           :rules="$rules.eventRoom"
+          class="mb-4"
         />
         <TimePicker
           v-model="_timeStart"
@@ -155,10 +158,10 @@ export default class EventFormReservationPublic extends Vue {
       `${r.place}: ${fmt(r.timeStart)} ~ ${fmt(r.timeEnd)}`
   }
 
-  get _valid(): boolean {
+  get valid(): boolean {
     return this.value
   }
-  set _valid(value: boolean) {
+  set valid(value: boolean) {
     this.$emit('input', value)
   }
 }

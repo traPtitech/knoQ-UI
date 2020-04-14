@@ -2,15 +2,11 @@ import moment from 'moment'
 
 export const today = () =>
   moment()
-    .hour(0)
-    .minute(0)
-    .second(0)
+    .startOf('day')
     .format()
 export const todayEnd = () =>
   moment()
-    .hour(23)
-    .minute(59)
-    .second(59)
+    .endOf('day')
     .format()
 
 export const formatDate = (fmt?: string) => (date: string) =>
