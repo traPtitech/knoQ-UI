@@ -4,29 +4,40 @@
     <LoadFailedText v-else-if="status === 'error'" />
     <v-card v-else class="pa-9">
       <div class="mb-7">
-        <h1 class="display-1 d-inline mr-5">{{ group && group.name }}</h1>
-        <template v-if="group.open">
-          <v-btn
-            v-if="!joining"
-            small
-            depressed
-            color="primary"
-            class="mb-3"
-            @click="joinGroup"
-          >
-            JOIN
-          </v-btn>
-          <v-btn
-            v-else
-            small
-            outlined
-            color="primary"
-            class="mb-3"
-            @click="leaveGroup"
-          >
-            JOINING
-          </v-btn>
-        </template>
+        <v-row no-gutters>
+          <v-col>
+            <h1 class="display-1 d-inline mr-5">{{ group && group.name }}</h1>
+            <template v-if="group.open">
+              <v-btn
+                v-if="!joining"
+                small
+                depressed
+                color="primary"
+                class="mb-3"
+                @click="joinGroup"
+              >
+                JOIN
+              </v-btn>
+              <v-btn
+                v-else
+                small
+                outlined
+                color="primary"
+                class="mb-3"
+                @click="leaveGroup"
+              >
+                JOINING
+              </v-btn>
+            </template>
+          </v-col>
+          <v-col class="flex-grow-0">
+            <ActionMenu>
+              <v-list-item v-if="isMyGroup" :to="`/groups/edit/${groupId}`">
+                <v-list-item-title>Edit this event</v-list-item-title>
+              </v-list-item>
+            </ActionMenu>
+          </v-col>
+        </v-row>
       </div>
       <MarkdownField :src="group.description" class="mb-7" />
       <v-tabs>
@@ -61,6 +72,7 @@ import EventList from '@/components/event/EventList.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
+import ActionMenu from '@/components/shared/ActionMenu.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const GroupsRepo = RepositoryFactory.get('groups')
@@ -73,6 +85,7 @@ const RoomsRepo = RepositoryFactory.get('rooms')
     TrapAvatar,
     ProgressCircular,
     LoadFailedText,
+    ActionMenu,
   },
 })
 export default class GroupDetail extends Vue {
@@ -145,6 +158,10 @@ export default class GroupDetail extends Vue {
   get memberNames(): (string | undefined)[] {
     const nameById = this.$store.direct.getters.usersCache.nameById
     return this.group?.members.map(nameById).filter(v => v) ?? []
+  }
+
+  get isMyGroup(): boolean {
+    return this.group?.createdBy === this.$store.direct.state.me?.userId
   }
 }
 </script>

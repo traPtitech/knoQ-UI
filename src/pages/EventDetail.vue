@@ -4,7 +4,18 @@
     <LoadFailedText v-else-if="status === 'error'" />
     <v-card v-else class="pa-9">
       <div class="mb-12">
-        <h1 class="mb-1 display-1">{{ event.name }}</h1>
+        <v-row no-gutters>
+          <v-col>
+            <h1 class="mb-1 display-1">{{ event.name }}</h1>
+          </v-col>
+          <v-col class="flex-grow-0">
+            <ActionMenu>
+              <v-list-item v-if="isMyEvent" :to="`/events/edit/${eventId}`">
+                <v-list-item-title>Edit this event</v-list-item-title>
+              </v-list-item>
+            </ActionMenu>
+          </v-col>
+        </v-row>
         <div class="mb-3">
           <template v-if="!isTagEditting">
             <span v-if="!event.tags.length" class="text--secondary">
@@ -16,28 +27,22 @@
               :name="tag.name"
               class="mr-3"
             />
-            <v-btn x-small icon title="Edit tags" @click="isTagEditting = true">
-              <v-icon>mdi-pencil</v-icon>
+            <v-btn
+              x-small
+              outlined
+              color="primary"
+              @click="isTagEditting = true"
+            >
+              Edit tags
             </v-btn>
           </template>
-          <v-combobox
+          <EventTagEditor
             v-else
             v-model="editedTags"
-            :loading="tagLoading"
-            :items="tagNames"
-            autofocus
-            dense
-            outlined
-            chips
-            clearable
-            multiple
-            @focus="onTagEditStart"
-            @blur="onTagEditEnd"
-          >
-            <template #selection="{ item }">
-              <EventTag close :name="item" @click:close="removeTag(item)" />
-            </template>
-          </v-combobox>
+            :tags="tagNames"
+            @tag-edit-start="onTagEditStart"
+            @tag-edit-end="onTagEditEnd"
+          />
         </div>
         <div class="text--secondary">
           <span v-if="group" class="mr-3">
@@ -95,6 +100,8 @@ import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
+import EventTagEditor from '@/components/event/EventTagEditor.vue'
+import ActionMenu from '@/components/shared/ActionMenu.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import {
   formatDate,
@@ -115,6 +122,8 @@ const TagsRepo = RepositoryFactory.get('tags')
     LoadFailedText,
     EventTag,
     MarkdownField,
+    EventTagEditor,
+    ActionMenu,
   },
 })
 export default class EventDetail extends Vue {
@@ -145,10 +154,6 @@ export default class EventDetail extends Vue {
       this.group = null
     }
     this.status = 'loaded'
-  }
-
-  removeTag(tag1: string) {
-    this.editedTags = this.editedTags.filter(tag2 => tag1 !== tag2)
   }
 
   get formatDate() {
@@ -183,16 +188,18 @@ export default class EventDetail extends Vue {
     const added = difference(this.editedTags, prevTagNames)
     const deleted = difference(prevTagNames, this.editedTags)
     const eventId = this.$route.params.id
-    await Promise.all(
-      added.map(name => EventsRepo.$eventId(eventId).tags.post({ name }))
-    )
-    await Promise.all(
-      deleted.map(name =>
-        EventsRepo.$eventId(eventId)
-          .tags.$tagName(name)
-          .delete()
-      )
-    )
+    await Promise.all([
+      Promise.all(
+        added.map(name => EventsRepo.$eventId(eventId).tags.post({ name }))
+      ),
+      Promise.all(
+        deleted.map(name =>
+          EventsRepo.$eventId(eventId)
+            .tags.$tagName(name)
+            .delete()
+        )
+      ),
+    ])
     this.event = (await EventsRepo.$eventId(eventId).get()).data
     this.isTagEditting = false
     this.editedTags = []
@@ -204,6 +211,13 @@ export default class EventDetail extends Vue {
 
   get calcRoomPdfUrl() {
     return calcRoomPdfUrl
+  }
+  get eventId(): string {
+    return this.$route.params.id
+  }
+
+  get isMyEvent(): boolean {
+    return this.event?.createdBy === this.$store.direct.state.me?.userId
   }
 }
 
