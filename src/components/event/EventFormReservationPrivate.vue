@@ -58,13 +58,13 @@ export default class EventFormReservationPrivate extends Vue {
 
   @Watch('timeStartSync', { immediate: true })
   private onTimeStartPropChange() {
-    this.dateMem = getDate(this.timeStartSync)
-    this.timeStartMem = getTime(this.timeStartSync)
+    this.dateMem = this.timeStartSync && getDate(this.timeStartSync)
+    this.timeStartMem = this.timeStartSync && getTime(this.timeStartSync)
   }
   @Watch('timeEndSync', { immediate: true })
   private onTimeEndPropChange() {
-    this.dateMem = getDate(this.timeStartSync)
-    this.timeEndMem = getTime(this.timeEndSync)
+    this.dateMem = this.timeEndSync && getDate(this.timeStartSync)
+    this.timeEndMem = this.timeEndSync && getTime(this.timeEndSync)
   }
 
   @Watch('dateMem')
