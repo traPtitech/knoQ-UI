@@ -29,14 +29,12 @@
             <v-tab>その他で開催</v-tab>
             <v-tab-item class="pt-3">
               <EventFormReservationPublic
-                v-show="!isPrivate"
                 v-model="validPublic"
                 v-bind.sync="reservationPublic"
               />
             </v-tab-item>
             <v-tab-item class="pt-3">
               <EventFormReservationPrivate
-                v-show="isPrivate"
                 v-model="validPrivate"
                 v-bind.sync="reservationPrivate"
               />
@@ -55,14 +53,9 @@
           <FormBackButton class="mr-2" @click="step = 2">
             Back
           </FormBackButton>
-          <FormNextButton v-if="!isPrivate" @click="submitEvent">
+          <FormNextButton @click="submitEvent">
             Submit
           </FormNextButton>
-          <PrivateRoomConfirmationDialog
-            v-else
-            v-model="dialog"
-            @confirm="submitEvent"
-          />
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -78,7 +71,6 @@ import EventFormReservationPrivate from '@/components/event/EventFormReservation
 import EventFormSummary from '@/components/event/EventFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
-import PrivateRoomConfirmationDialog from '@/components/event/PrivateRoomConfirmationDialog.vue'
 import { AvailableRoom } from '@/workers/availableRooms'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
@@ -93,12 +85,10 @@ const EventsRepo = RepositoryFactory.get('events')
     EventFormSummary,
     FormNextButton,
     FormBackButton,
-    PrivateRoomConfirmationDialog,
   },
 })
 export default class EventNew extends Vue {
   step = 1
-  dialog = false
 
   valid1 = false
   content = {
@@ -153,6 +143,12 @@ export default class EventNew extends Vue {
   }
 
   async submitEvent() {
+    if (this.isPrivate) {
+      const confirmed = window.confirm(
+        'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
+      )
+      if (!confirmed) return
+    }
     try {
       let roomId: string
       if (this.isPrivate) {
