@@ -94,6 +94,7 @@ import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { formatDate } from '@/workers/date'
+import { isTrapGroup } from '@/workers/isTrapGroup'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -218,6 +219,12 @@ export default class EventEdit extends Vue {
   }
 
   async submitEvent() {
+    if (this.content.group && isTrapGroup(this.content.group)) {
+      const confirmed = window.confirm(
+        'traP部員全体が対象となるようなイベントを開催しようとしています。本当によろしいですか？'
+      )
+      if (!confirmed) return
+    }
     if (this.isPrivate) {
       const confirmed = window.confirm(
         'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'

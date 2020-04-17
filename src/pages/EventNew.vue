@@ -71,7 +71,7 @@ import EventFormReservationPrivate from '@/components/event/EventFormReservation
 import EventFormSummary from '@/components/event/EventFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
-import { AvailableRoom } from '@/workers/availableRooms'
+import { isTrapGroup } from '@/workers/isTrapGroup'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -143,6 +143,12 @@ export default class EventNew extends Vue {
   }
 
   async submitEvent() {
+    if (this.content.group && isTrapGroup(this.content.group)) {
+      const confirmed = window.confirm(
+        'traP部員全体が対象となるようなイベントを開催しようとしています。本当によろしいですか？'
+      )
+      if (!confirmed) return
+    }
     if (this.isPrivate) {
       const confirmed = window.confirm(
         'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
