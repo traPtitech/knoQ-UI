@@ -1,17 +1,16 @@
 <template>
-  <v-form v-model="_valid">
+  <v-form v-model="valid">
     <v-text-field
       v-model="placeSync"
-      outlined
+      filled
       label="場所"
-      placeholder="チズケ2階"
       :rules="$rules.eventPlace"
     />
     <v-dialog width="290px">
       <template #activator="{ on }">
         <v-text-field
           v-model="dateMem"
-          outlined
+          filled
           label="開催日"
           readonly
           :rules="$rules.eventDate"
@@ -57,15 +56,15 @@ export default class EventFormReservationPrivate extends Vue {
   private timeStartMem = ''
   private timeEndMem = ''
 
-  @Watch('timeStartSync')
+  @Watch('timeStartSync', { immediate: true })
   private onTimeStartPropChange() {
-    this.dateMem = getDate(this.timeStartSync)
-    this.timeStartMem = getTime(this.timeStartSync)
+    this.dateMem = this.timeStartSync && getDate(this.timeStartSync)
+    this.timeStartMem = this.timeStartSync && getTime(this.timeStartSync)
   }
-  @Watch('timeEndSync')
+  @Watch('timeEndSync', { immediate: true })
   private onTimeEndPropChange() {
-    this.dateMem = getDate(this.timeStartSync)
-    this.timeEndMem = getTime(this.timeEndSync)
+    this.dateMem = this.timeEndSync && getDate(this.timeStartSync)
+    this.timeEndMem = this.timeEndSync && getTime(this.timeEndSync)
   }
 
   @Watch('dateMem')
@@ -87,10 +86,10 @@ export default class EventFormReservationPrivate extends Vue {
     return today()
   }
 
-  get _valid(): boolean {
+  get valid(): boolean {
     return this.value
   }
-  set _valid(value: boolean) {
+  set valid(value: boolean) {
     this.$emit('input', value)
   }
 }

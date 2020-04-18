@@ -24,20 +24,22 @@
         </v-stepper-content>
 
         <v-stepper-content step="2">
-          <v-checkbox
-            v-model="isPrivate"
-            label="traPが予約していない場所で開催する"
-          />
-          <EventFormReservationPublic
-            v-show="!isPrivate"
-            v-model="validPublic"
-            v-bind.sync="reservationPublic"
-          />
-          <EventFormReservationPrivate
-            v-show="isPrivate"
-            v-model="validPrivate"
-            v-bind.sync="reservationPrivate"
-          />
+          <v-tabs v-model="tab">
+            <v-tab>進捗部屋で開催</v-tab>
+            <v-tab>その他で開催</v-tab>
+            <v-tab-item class="pt-3">
+              <EventFormReservationPublic
+                v-model="validPublic"
+                v-bind.sync="reservationPublic"
+              />
+            </v-tab-item>
+            <v-tab-item class="pt-3">
+              <EventFormReservationPrivate
+                v-model="validPrivate"
+                v-bind.sync="reservationPrivate"
+              />
+            </v-tab-item>
+          </v-tabs>
           <FormBackButton class="mr-2" @click="step = 1">
             Back
           </FormBackButton>
@@ -51,14 +53,9 @@
           <FormBackButton class="mr-2" @click="step = 2">
             Back
           </FormBackButton>
-          <FormNextButton v-if="!isPrivate" @click="submitEvent">
+          <FormNextButton @click="submitEvent">
             Submit
           </FormNextButton>
-          <PrivateRoomConfirmationDialog
-            v-else
-            v-model="dialog"
-            @confirm="submitEvent"
-          />
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -74,8 +71,7 @@ import EventFormReservationPrivate from '@/components/event/EventFormReservation
 import EventFormSummary from '@/components/event/EventFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
-import PrivateRoomConfirmationDialog from '@/components/event/PrivateRoomConfirmationDialog.vue'
-import { AvailableRoom } from '@/workers/availableRooms'
+import { isTrapGroup } from '@/workers/isTrapGroup'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -89,12 +85,10 @@ const EventsRepo = RepositoryFactory.get('events')
     EventFormSummary,
     FormNextButton,
     FormBackButton,
-    PrivateRoomConfirmationDialog,
   },
 })
 export default class EventNew extends Vue {
   step = 1
-  dialog = false
 
   valid1 = false
   content = {
@@ -105,6 +99,12 @@ export default class EventNew extends Vue {
   }
 
   isPrivate = false
+  get tab(): number {
+    return +this.isPrivate
+  }
+  set tab(t: number) {
+    this.isPrivate = !!t
+  }
   validPublic = false
   validPrivate = false
   get valid2(): boolean {
@@ -143,6 +143,18 @@ export default class EventNew extends Vue {
   }
 
   async submitEvent() {
+    if (this.content.group && isTrapGroup(this.content.group)) {
+      const confirmed = window.confirm(
+        'traP部員全体が対象となるようなイベントを開催しようとしています。本当によろしいですか？'
+      )
+      if (!confirmed) return
+    }
+    if (this.isPrivate) {
+      const confirmed = window.confirm(
+        'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
+      )
+      if (!confirmed) return
+    }
     try {
       let roomId: string
       if (this.isPrivate) {

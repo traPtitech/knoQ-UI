@@ -15,7 +15,7 @@
       <v-btn
         icon
         title="help"
-        href="https://md.trapti.tech/0spW8adnSyCUaV_wioVlWA"
+        href="https://wiki.trap.jp/SysAd/docs/room"
         target="_blank"
       >
         <v-icon>mdi-help</v-icon>
@@ -44,6 +44,7 @@ export default class SidebarFooter extends Vue {
   async syncRooms() {
     try {
       await RoomsRepo.all.post()
+      window.location.reload()
     } catch (__) {
       alert('Failed to sync rooms...')
     }

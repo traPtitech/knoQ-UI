@@ -2,6 +2,12 @@
   <v-container>
     <ProgressCircular v-if="status === 'loading'" />
     <LoadFailedText v-else-if="status === 'error'" />
+    <template v-else-if="!canEdit">
+      <v-icon large color="error" class="mr-5">mdi-alert-circle</v-icon>
+      <span class="text--secondary headline">
+        他の人が作ったイベントは編集できません
+      </span>
+    </template>
     <template v-else>
       <v-stepper v-model="step" class="mb-5">
         <v-stepper-header>
@@ -27,20 +33,22 @@
           </v-stepper-content>
 
           <v-stepper-content step="2">
-            <v-checkbox
-              v-model="isPrivate"
-              label="traPが予約していない場所で開催する"
-            />
-            <EventFormReservationPublic
-              v-show="!isPrivate"
-              v-model="validPublic"
-              v-bind.sync="reservationPublic"
-            />
-            <EventFormReservationPrivate
-              v-show="isPrivate"
-              v-model="validPrivate"
-              v-bind.sync="reservationPrivate"
-            />
+            <v-tabs v-model="tab">
+              <v-tab>進捗部屋で開催</v-tab>
+              <v-tab>その他で開催</v-tab>
+              <v-tab-item class="pt-3">
+                <EventFormReservationPublic
+                  v-model="validPublic"
+                  v-bind.sync="reservationPublic"
+                />
+              </v-tab-item>
+              <v-tab-item class="pt-3">
+                <EventFormReservationPrivate
+                  v-model="validPrivate"
+                  v-bind.sync="reservationPrivate"
+                />
+              </v-tab-item>
+            </v-tabs>
             <FormBackButton class="mr-2" @click="step = 1">
               Back
             </FormBackButton>
@@ -54,19 +62,21 @@
             <FormBackButton class="mr-2" @click="step = 2">
               Back
             </FormBackButton>
-            <FormNextButton v-if="!isPrivate" @click="submitEvent">
+            <FormNextButton @click="submitEvent">
               Submit
             </FormNextButton>
-            <PrivateRoomConfirmationDialog
-              v-else
-              v-model="dialog"
-              @confirm="submitEvent"
-            />
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
 
-      <DeleteConfirmationDialog v-model="dialog2" @confirm="deleteEvent" />
+      <v-card class="px-5 pt-5 pb-3">
+        <span class="headline mr-3">
+          Delete this event
+        </span>
+        <v-btn small depressed color="error" class="mb-2" @click="deleteEvent">
+          Delete
+        </v-btn>
+      </v-card>
     </template>
   </v-container>
 </template>
@@ -82,10 +92,9 @@ import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
-import PrivateRoomConfirmationDialog from '@/components/event/PrivateRoomConfirmationDialog.vue'
-import DeleteConfirmationDialog from '@/components/shared/DeleteConfirmationDialog.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { formatDate } from '@/workers/date'
+import { isTrapGroup } from '@/workers/isTrapGroup'
 
 const EventsRepo = RepositoryFactory.get('events')
 const RoomsRepo = RepositoryFactory.get('rooms')
@@ -101,14 +110,11 @@ const GroupsRepo = RepositoryFactory.get('groups')
     FormBackButton,
     ProgressCircular,
     LoadFailedText,
-    PrivateRoomConfirmationDialog,
-    DeleteConfirmationDialog,
   },
 })
 export default class EventEdit extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  dialog = false
-  dialog2 = false
+  canEdit = true
   step = 1
 
   event: Schemas.Event | null = null
@@ -116,23 +122,29 @@ export default class EventEdit extends Vue {
   group: Schemas.Group | null = null
 
   async created() {
-    await this.fetchEventData()
+    this.status = 'loading'
+    try {
+      await this.fetchEventData()
+      if (this.canEdit) this.assignEventData()
+      this.status = 'loaded'
+    } catch (__) {
+      this.status = 'error'
+    }
     this.assignEventData()
   }
 
   async fetchEventData() {
     const eventId = this.$route.params.id
-    this.status = 'loading'
-    try {
-      this.event = (await EventsRepo.$eventId(eventId).get()).data
-      ;[{ data: this.room }, { data: this.group }] = await Promise.all([
-        RoomsRepo.$roomId(this.event.roomId).get(),
-        GroupsRepo.$groupId(this.event.groupId).get(),
-      ])
-      this.status = 'loaded'
-    } catch (__) {
-      this.status = 'error'
+    const event = (await EventsRepo.$eventId(eventId).get()).data
+    if (event.createdBy !== this.$store.direct.state.me?.userId) {
+      this.canEdit = false
+      return
     }
+    this.event = event
+    ;[{ data: this.room }, { data: this.group }] = await Promise.all([
+      RoomsRepo.$roomId(this.event.roomId).get(),
+      GroupsRepo.$groupId(this.event.groupId).get(),
+    ])
   }
 
   assignEventData() {
@@ -163,6 +175,12 @@ export default class EventEdit extends Vue {
   }
 
   isPrivate = false
+  get tab(): number {
+    return +this.isPrivate
+  }
+  set tab(t: number) {
+    this.isPrivate = !!t
+  }
   validPublic = false
   validPrivate = false
   get valid2(): boolean {
@@ -201,6 +219,18 @@ export default class EventEdit extends Vue {
   }
 
   async submitEvent() {
+    if (this.content.group && isTrapGroup(this.content.group)) {
+      const confirmed = window.confirm(
+        'traP部員全体が対象となるようなイベントを開催しようとしています。本当によろしいですか？'
+      )
+      if (!confirmed) return
+    }
+    if (this.isPrivate) {
+      const confirmed = window.confirm(
+        'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
+      )
+      if (!confirmed) return
+    }
     try {
       let roomId: string
       if (this.isPrivate) {
@@ -228,6 +258,10 @@ export default class EventEdit extends Vue {
   }
 
   async deleteEvent() {
+    const confirmed = window.confirm(
+      'この操作は取り消せません。本当にこのイベントを削除してもよろしいですか？'
+    )
+    if (!confirmed) return
     const eventId = this.$route.params.id
     try {
       await EventsRepo.$eventId(eventId).delete()

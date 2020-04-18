@@ -2,19 +2,17 @@
   <v-form v-model="valid" class="pt-2">
     <v-text-field
       v-model="nameSync"
-      outlined
+      filled
       label="グループ名"
-      placeholder="Some group"
       :rules="$rules.groupName"
       class="mb-n6"
     />
-    <v-checkbox v-model="openSync" label="自由参加可能なグループ" />
+    <v-checkbox v-model="openSync" label="自由参加可能なグループにする" />
     <v-autocomplete
       v-model="membersSync"
-      outlined
+      filled
       multiple
       label="メンバー"
-      placeholder="trapyojo, ..."
       :items="allMembers"
       item-text="name"
       item-value="userId"
@@ -33,11 +31,11 @@
     </v-autocomplete>
     <v-textarea
       v-model="descriptionSync"
-      outlined
+      filled
       rows="10"
       label="説明"
       no-resize
-      placeholder="# You can write markdown here"
+      placeholder="# You can write Markdown here"
     />
   </v-form>
 </template>

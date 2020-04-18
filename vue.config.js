@@ -8,8 +8,10 @@ const versionInj = {
 }
 
 module.exports = {
-  transpileDependencies: ['vuetify'],
   configureWebpack: {
-    plugins: [new webpack.DefinePlugin(versionInj)],
+    plugins: [
+      new webpack.DefinePlugin(versionInj),
+      new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /ja/),
+    ],
   },
 }
