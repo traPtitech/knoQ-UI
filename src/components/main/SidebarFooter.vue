@@ -1,6 +1,6 @@
 <template>
   <v-row class="mx-4 mb-5" justify="space-between" align="center" dense>
-    <v-col>Room {{ version }}</v-col>
+    <v-col>knoQ {{ version }}</v-col>
     <v-col class="flex-grow-0">
       <v-btn
         v-if="isAdmin"
@@ -15,8 +15,9 @@
       <v-btn
         icon
         title="help"
-        href="https://wiki.trap.jp/SysAd/docs/room"
+        href="https://wiki.trap.jp/SysAd/docs/knoQ"
         target="_blank"
+        rel="noopener noreferer"
       >
         <v-icon>mdi-help</v-icon>
       </v-btn>
