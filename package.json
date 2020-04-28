@@ -44,7 +44,7 @@
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
     "prettier": "1.19",
-    "sass": "^1.19.0",
+    "sass": "^1.26.5",
     "sass-loader": "7",
     "typescript": "3.7.5",
     "vue-cli-plugin-vuetify": "^1.1.1",
