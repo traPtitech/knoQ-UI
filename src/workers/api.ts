@@ -1,8 +1,7 @@
 import axios, { AxiosPromise } from 'axios'
 
-// export const baseURL =
-//   process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '/api'
-export const baseURL = 'http://localhost:3000/api'
+export const baseURL =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:3000/api' : '/api'
 const traQAPIBaseURL = 'https://q.trap.jp/api/1.0'
 
 const authAPI = axios.create({
