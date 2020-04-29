@@ -16,6 +16,7 @@
           <EventTag
             v-for="tag in tags"
             :key="tag.name"
+            to-tag-page-on-click
             :name="tag.name"
             class="mr-3"
           />
