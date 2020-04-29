@@ -14,12 +14,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 
 @Component
 export default class TimePicker extends Vue {
-  @Prop({ required: true }) value!: string
+  @Prop({ type: String, required: true })
+  value!: string
 
   get time(): string {
     return this.value

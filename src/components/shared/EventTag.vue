@@ -13,14 +13,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import { RawLocation } from 'vue-router'
 
 @Component
 export default class EventTag extends Vue {
-  @Prop({ required: true }) name!: string
-  @Prop({ type: Boolean, default: false }) toTagPageOnClick!: boolean
+  @Prop({ type: String, required: true })
+  name!: string
+
+  @Prop({ type: Boolean, default: false })
+  toTagPageOnClick!: boolean
 
   get to(): RawLocation | undefined {
     if (!this.toTagPageOnClick) {

@@ -16,7 +16,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
 import { formatDate, getDate, DATE_DISPLAY_FORMAT } from '@/workers/date'
@@ -31,11 +30,14 @@ interface EventData extends Schemas.Event {
   },
 })
 export default class EventList extends Vue {
-  @Prop({ required: true }) events!: EventData[]
-  @Prop() eventFilter?: (e: any) => boolean
+  @Prop({ type: Array, required: true })
+  events!: EventData[]
+
+  @Prop({ type: Function, default: () => true })
+  eventFilter!: (e: EventData) => boolean
 
   get filteredEvents() {
-    return this.events.filter(this.eventFilter ?? (_ => true))
+    return this.events.filter(this.eventFilter)
   }
 
   get isDateBorder() {

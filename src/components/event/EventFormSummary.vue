@@ -44,7 +44,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventTag from '@/components/shared/EventTag.vue'
@@ -67,15 +66,35 @@ import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
   },
 })
 export default class EventFormSummary extends Vue {
-  @Prop({ required: true }) name!: string
-  @Prop({ required: true }) group!: Schemas.Group | null
-  @Prop({ required: true }) tags!: { name: string }[]
-  @Prop({ required: true }) description!: string
-  @Prop({ required: true }) isPrivate!: boolean
-  @Prop({ required: true }) place!: string
-  @Prop({ required: true }) timeStart!: string
-  @Prop({ required: true }) timeEnd!: string
-  @Prop({ required: true }) sharedRoom!: boolean
+  @Prop({ type: String, required: true })
+  name!: string
+
+  @Prop({
+    validator: prop => typeof prop === 'object' || prop === null,
+    required: true,
+  })
+  group!: Schemas.Group | null
+
+  @Prop({ type: Array, required: true })
+  tags!: { name: string }[]
+
+  @Prop({ type: String, required: true })
+  description!: string
+
+  @Prop({ type: Boolean, required: true })
+  isPrivate!: boolean
+
+  @Prop({ type: String, required: true })
+  place!: string
+
+  @Prop({ type: String, required: true })
+  timeStart!: string
+
+  @Prop({ type: String, required: true })
+  timeEnd!: string
+
+  @Prop({ type: Boolean, required: true })
+  sharedRoom!: boolean
 
   get sharedRoomString(): string {
     return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'

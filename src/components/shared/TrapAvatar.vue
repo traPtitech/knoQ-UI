@@ -9,12 +9,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 
 @Component
 export default class TrapAvatar extends Vue {
-  @Prop({ required: true }) size!: number
-  @Prop({ required: true }) traqId!: string
+  @Prop({ type: String, required: true })
+  size!: string
+
+  @Prop({ type: String, required: true })
+  traqId!: string
 }
 </script>

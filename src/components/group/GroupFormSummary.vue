@@ -27,7 +27,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
@@ -47,10 +46,17 @@ import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
   },
 })
 export default class GroupEventFormSummary extends Vue {
-  @Prop({ required: true }) name!: string
-  @Prop({ required: true }) description!: string
-  @Prop({ required: true }) members!: string[]
-  @Prop({ required: true }) open!: boolean
+  @Prop({ type: String, required: true })
+  name!: string
+
+  @Prop({ type: String, required: true })
+  description!: string
+
+  @Prop({ type: Array, required: true })
+  members!: string[]
+
+  @Prop({ type: Boolean, required: true })
+  open!: boolean
 
   get openString(): string {
     return this.open
