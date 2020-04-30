@@ -13,7 +13,7 @@
     "babel-plugin-root-import": "^6.4.1",
     "direct-vuex": "^0.10.4",
     "eslint-plugin-vue": "^6.0.0",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.0.1",
     "markdown-it": "^10.0.0",
     "markdown-it-link-attributes": "^3.0.0",
     "moment": "^2.24.0",
