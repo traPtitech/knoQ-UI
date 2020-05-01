@@ -15,6 +15,7 @@ export const formatDate = (fmt?: string) => (date: string) =>
 export const GOOGLE_CALENDER_URL_FORMAT = 'YYYYMMDDTHHmmssZ'
 export const DATETIME_DISPLAY_FORMAT = 'ddd M/D, h:mma'
 export const DATE_DISPLAY_FORMAT = 'ddd M/D, YYYY'
+export const TIME_DISPLAY_FORMAT = 'h:mm a'
 
 export const getDate = formatDate('YYYY-MM-DD')
 export const getTime = formatDate('HH:mm')

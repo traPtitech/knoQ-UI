@@ -4,9 +4,9 @@
       {{ place }}
     </v-card-title>
     <v-card-text class="text-center title font-weight-regular">
-      {{ timeStart }}
+      {{ formatDate(timeStart) }}
       <v-icon class="mb-1">mdi-chevron-right</v-icon>
-      {{ timeEnd }}
+      {{ formatDate(timeEnd) }}
     </v-card-text>
   </v-card>
 </template>
@@ -15,11 +15,16 @@
 import Vue from 'vue'
 import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
+import { formatDate, TIME_DISPLAY_FORMAT } from '@/workers/date'
 
 @Component
 export default class AssignedRoomDisplay extends Vue {
   @Prop({ required: true }) place!: string
   @Prop({ required: true }) timeStart!: string
   @Prop({ required: true }) timeEnd!: string
+
+  get formatDate() {
+    return formatDate(TIME_DISPLAY_FORMAT)
+  }
 }
 </script>
