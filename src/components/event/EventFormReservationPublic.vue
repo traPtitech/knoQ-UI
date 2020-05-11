@@ -1,7 +1,7 @@
 <template>
   <v-form v-model="valid">
     <v-row>
-      <v-col class="pl-4 flex-grow-0">
+      <v-col cols="12" md="" class="pl-4 flex-grow-0">
         <div class="text--secondary caption">
           イベントを開催する日付の候補を選んでください
         </div>
@@ -13,7 +13,7 @@
           class="mb-5"
         />
       </v-col>
-      <v-col>
+      <v-col cols="12" md="">
         <v-checkbox v-model="sharedRoomSync" label="部屋の共用を許可する" />
         <v-autocomplete
           v-model="roomSync"
