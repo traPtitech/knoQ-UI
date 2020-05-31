@@ -1,8 +1,10 @@
 <template>
   <v-list-item class="mx-4 mt-3">
     <v-list-item-content class="d-block">
-      <v-icon large color="primary" class="mr-3">mdi-balloon</v-icon>
-      <span class="headline font-weight-bold">knoQ</span>
+      <v-avatar>
+        <img src="logo.svg" class="logo-icon" />
+      </v-avatar>
+      <img src="logotype.svg" class="logo-type" />
     </v-list-item-content>
   </v-list-item>
 </template>
@@ -10,3 +12,16 @@
 <script>
 export default { name: 'SidebarHeader' }
 </script>
+
+<style scoped>
+.logo-icon {
+  width: 30px;
+}
+
+.logo-type {
+  position: absolute;
+  padding-left: 8px;
+  padding-top: 10px;
+  width: 80px;
+}
+</style>
