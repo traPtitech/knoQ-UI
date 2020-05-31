@@ -13,7 +13,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "lib": ["esnext", "dom", "scripthost", "webworker"]
+    "lib": ["esnext", "dom"]
   },
   "include": [
     "src/**/*.ts",
