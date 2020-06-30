@@ -14,7 +14,7 @@
     "direct-vuex": "^0.10.4",
     "eslint-plugin-vue": "^6.0.0",
     "highlight.js": "^10.0.1",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^11.0.0",
     "markdown-it-link-attributes": "^3.0.0",
     "moment": "^2.24.0",
     "reflect-metadata": "^0.1.13",
