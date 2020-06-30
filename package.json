@@ -16,7 +16,7 @@
     "highlight.js": "^10.0.1",
     "markdown-it": "^11.0.0",
     "markdown-it-link-attributes": "^3.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.27.0",
     "reflect-metadata": "^0.1.13",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
