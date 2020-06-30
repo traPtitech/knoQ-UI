@@ -9,7 +9,7 @@
     "lint:fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.2",
     "babel-plugin-root-import": "^6.4.1",
     "direct-vuex": "^0.10.4",
     "eslint-plugin-vue": "^6.0.0",
