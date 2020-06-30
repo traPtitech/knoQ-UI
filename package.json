@@ -29,7 +29,7 @@
     "@mdi/font": "^5.3.45",
     "@types/highlight.js": "^9.12.3",
     "@types/markdown-it": "^10.0.1",
-    "@typescript-eslint/eslint-plugin": "^2.6.1",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.26.0",
     "@vue/cli-plugin-babel": "^4.2.3",
     "@vue/cli-plugin-eslint": "^4.3.1",
