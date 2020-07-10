@@ -1,13 +1,7 @@
 import moment from 'moment'
 
-export const today = () =>
-  moment()
-    .startOf('day')
-    .format()
-export const todayEnd = () =>
-  moment()
-    .endOf('day')
-    .format()
+export const today = () => moment().startOf('day').format()
+export const todayEnd = () => moment().endOf('day').format()
 
 export const formatDate = (fmt?: string) => (date: string) =>
   moment(date).format(fmt)
