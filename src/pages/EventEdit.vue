@@ -247,7 +247,7 @@ export default class EventEdit extends Vue {
         ...this.content,
         groupId: this.content.group!.groupId,
         roomId,
-        sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
+        sharedRoom: this.isPrivate || this.reservationPublic.sharedRoom,
         timeStart: reservation.timeStart,
         timeEnd: reservation.timeEnd,
       })
