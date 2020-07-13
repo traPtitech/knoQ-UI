@@ -213,8 +213,8 @@ export default class EventEdit extends Vue {
       timeEnd: reservation.timeEnd,
       place: this.isPrivate
         ? this.reservationPrivate.place
-        : this.reservationPublic.room?.place,
-      sharedRoom: this.isPrivate ? null : this.reservationPublic.sharedRoom,
+        : this.reservationPublic.room?.place ?? '',
+      sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
     }
   }
 
@@ -247,7 +247,7 @@ export default class EventEdit extends Vue {
         ...this.content,
         groupId: this.content.group!.groupId,
         roomId,
-        sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
+        sharedRoom: this.isPrivate || this.reservationPublic.sharedRoom,
         timeStart: reservation.timeStart,
         timeEnd: reservation.timeEnd,
       })

@@ -16,6 +16,7 @@
           <EventTag
             v-for="tag in tags"
             :key="tag.name"
+            to-tag-page-on-click
             :name="tag.name"
             class="mr-3"
           />
@@ -32,7 +33,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop } from 'vue-property-decorator'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import EventTag from '@/components/shared/EventTag.vue'
@@ -45,13 +45,26 @@ import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
   },
 })
 export default class EventListItem extends Vue {
-  @Prop({ required: true }) eventId!: number
-  @Prop({ required: true }) name!: string
-  @Prop({ required: true }) timeStart!: string
-  @Prop({ required: true }) timeEnd!: string
-  @Prop({ required: true }) place!: string
-  @Prop({ required: true }) description!: string
-  @Prop({ required: true }) tags!: { name: string }[]
+  @Prop({ type: String, required: true })
+  eventId!: string
+
+  @Prop({ type: String, required: true })
+  name!: string
+
+  @Prop({ type: String, required: true })
+  timeStart!: string
+
+  @Prop({ type: String, required: true })
+  timeEnd!: string
+
+  @Prop({ type: String, required: true })
+  place!: string
+
+  @Prop({ type: String, required: true })
+  description!: string
+
+  @Prop({ type: Array, required: true })
+  tags!: { name: string }[]
 
   get formatDate() {
     return formatDate(DATETIME_DISPLAY_FORMAT)

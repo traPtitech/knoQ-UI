@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 import EventList from '@/components/event/EventList.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
@@ -70,6 +70,10 @@ export default class EventSearch extends Vue {
         this.fetchTags(),
       ])
       this.status = 'loaded'
+      this.filterTags = [this.$route.query.tags]
+        .flat()
+        .filter((v): v is string => !!v)
+      this.showFinished = [this.$route.query.showFinished].flat()[0] === '1'
     } catch (__) {
       this.status = 'error'
     }
@@ -85,6 +89,20 @@ export default class EventSearch extends Vue {
   }
   async fetchTags() {
     this.tags = (await TagsRepo.get()).data
+  }
+
+  @Watch('showFinished')
+  @Watch('filterTags')
+  onChangeSearchQuery() {
+    this.$router
+      .push({
+        path: '/events',
+        query: {
+          showFinished: this.showFinished ? '1' : '0',
+          tags: this.filterTags,
+        },
+      })
+      .catch(() => {})
   }
 
   get filterFn() {

@@ -51,7 +51,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import 'reflect-metadata'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
@@ -75,11 +74,23 @@ const EventsRepo = RepositoryFactory.get('events')
   },
 })
 export default class EventFormReservationPublic extends Vue {
-  @Prop({ required: true }) value!: boolean
-  @PropSync('room', { required: true }) roomSync!: Schemas.Room | null
-  @PropSync('timeStart', { required: true }) timeStartSync!: string
-  @PropSync('timeEnd', { required: true }) timeEndSync!: string
-  @PropSync('sharedRoom', { required: true }) sharedRoomSync!: boolean
+  @Prop({ type: Boolean, required: true })
+  value!: boolean
+
+  @PropSync('room', {
+    validator: prop => typeof prop === 'object' || prop === null,
+    required: true,
+  })
+  roomSync!: Schemas.Room | null
+
+  @PropSync('timeStart', { type: String, required: true })
+  timeStartSync!: string
+
+  @PropSync('timeEnd', { type: String, required: true })
+  timeEndSync!: string
+
+  @PropSync('sharedRoom', { type: Boolean, required: true })
+  sharedRoomSync!: boolean
 
   dates: string[] = []
   allRooms: Schemas.Room[] = []

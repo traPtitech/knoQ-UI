@@ -3,7 +3,7 @@ export function isTitechRoom(room: string): boolean {
 }
 
 export function calcRoomPdfUrl(room: string): string {
-  const DISTRICTS = {
+  const DISTRICTS: Record<string, string> = {
     S: 'minami',
     W: 'nisi',
     H: 'honkan',
