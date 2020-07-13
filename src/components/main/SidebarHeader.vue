@@ -2,9 +2,9 @@
   <v-list-item class="mx-4 mt-3">
     <v-list-item-content class="d-block">
       <v-avatar>
-        <img src="logo.svg" class="logo-icon" />
+        <img src="/logo.svg" class="logo-icon" />
       </v-avatar>
-      <img src="logotype.svg" class="logo-type" />
+      <img src="/logotype.svg" class="logo-type" />
     </v-list-item-content>
   </v-list-item>
 </template>
