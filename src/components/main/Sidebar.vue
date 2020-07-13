@@ -2,7 +2,7 @@
   <v-navigation-drawer
     v-model="drawer"
     app
-    :mobile-break-point="$vuetify.breakpoint.thresholds.sm"
+    :mobile-breakpoint="$vuetify.breakpoint.thresholds.sm"
   >
     <template #prepend>
       <SidebarHeader />
