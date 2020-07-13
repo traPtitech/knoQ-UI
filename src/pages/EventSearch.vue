@@ -70,7 +70,9 @@ export default class EventSearch extends Vue {
         this.fetchTags(),
       ])
       this.status = 'loaded'
-      this.filterTags = [this.$route.query.tags].flat().filter(v => !!v)
+      this.filterTags = [this.$route.query.tags]
+        .flat()
+        .filter((v): v is string => !!v)
       this.showFinished = [this.$route.query.showFinished].flat()[0] === '1'
     } catch (__) {
       this.status = 'error'

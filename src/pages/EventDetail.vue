@@ -195,9 +195,7 @@ export default class EventDetail extends Vue {
       ),
       Promise.all(
         deleted.map(name =>
-          EventsRepo.$eventId(eventId)
-            .tags.$tagName(name)
-            .delete()
+          EventsRepo.$eventId(eventId).tags.$tagName(name).delete()
         )
       ),
     ])
