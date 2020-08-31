@@ -45,7 +45,7 @@
     "lint-staged": "^10.2.11",
     "prettier": "2.0",
     "sass": "^1.26.10",
-    "sass-loader": "8",
+    "sass-loader": "10",
     "typescript": "3.9.6",
     "vue-cli-plugin-vuetify": "^2.0.6",
     "vue-template-compiler": "^2.6.11",
