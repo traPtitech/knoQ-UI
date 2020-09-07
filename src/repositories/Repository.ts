@@ -8,8 +8,7 @@ const api = axios.create({
 })
 
 api.interceptors.response.use(undefined, async err => {
-  if (err.response && err.response.status === 401) {
-    // if unauthorized
+  if (err?.response.headers['x-knoq-need-authorization']) {
     const { data: authParams } = await fetchAuthParams()
     PathStorage.saveCurrentPath()
     redirectToAuthPage(authParams)
