@@ -4,12 +4,12 @@ on: [push, pull_request]
 
 jobs:
   packages:
-    name: check npm install
+    name: check yarn install
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v1
-      - name: check yarn
+      - name: yarn
         run: yarn
 
   lint:
