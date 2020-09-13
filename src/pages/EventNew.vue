@@ -133,10 +133,10 @@ export default class EventNew extends Vue {
       name: this.eventReified.name,
       description: this.eventReified.description,
       tags: this.eventReified.tags,
-      groupName: this.eventReified.group!.name,
+      groupName: this.eventReified.group?.name ?? '',
       place: this.isPrivateRoom
         ? this.roomParams.place
-        : this.eventReified.room!.place,
+        : this.eventReified.room?.place ?? '',
       isPrivate: this.isPrivateRoom,
       sharedRoom: this.eventReified.sharedRoom,
       timeStart: this.eventReified.timeStart,
