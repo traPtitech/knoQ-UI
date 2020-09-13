@@ -1,10 +1,10 @@
 <template>
-  <v-card elevation="4" style="width: 100%;" class="px-3 py-1">
+  <v-card elevation="4" style="width: 100%" class="px-3 py-1">
     <v-card-title class="headline">{{ name }}</v-card-title>
     <v-card-subtitle>
       <div>
         {{ formatDate(timeStart) }}
-        <v-icon small style="margin-bottom: 3px;">mdi-chevron-right</v-icon>
+        <v-icon small style="margin-bottom: 3px">mdi-chevron-right</v-icon>
         {{ formatDate(timeEnd) }}
       </div>
       <div>@{{ place }}</div>

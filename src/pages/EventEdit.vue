@@ -19,9 +19,7 @@
             日時・場所
           </v-stepper-step>
           <v-divider />
-          <v-stepper-step :complete="step > 3" step="3">
-            確認
-          </v-stepper-step>
+          <v-stepper-step :complete="step > 3" step="3"> 確認 </v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items class="pb-1">
@@ -62,17 +60,13 @@
             <FormBackButton class="mr-2" @click="step = 2">
               Back
             </FormBackButton>
-            <FormNextButton @click="submitEvent">
-              Submit
-            </FormNextButton>
+            <FormNextButton @click="submitEvent"> Submit </FormNextButton>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
 
       <v-card class="px-5 pt-5 pb-3">
-        <span class="headline mr-3">
-          Delete this event
-        </span>
+        <span class="headline mr-3"> Delete this event </span>
         <v-btn small depressed color="error" class="mb-2" @click="deleteEvent">
           Delete
         </v-btn>

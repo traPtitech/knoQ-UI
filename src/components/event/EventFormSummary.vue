@@ -3,7 +3,12 @@
     <SummaryItem>
       <SummaryItemCaption>New Event</SummaryItemCaption>
       <SummaryItemMain>{{ name }}</SummaryItemMain>
-      <EventTag v-for="tag in tags" :key="tag.name" :name="tag.name" class="mr-3" />
+      <EventTag
+        v-for="tag in tags"
+        :key="tag.name"
+        :name="tag.name"
+        class="mr-3"
+      />
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Group</SummaryItemCaption>

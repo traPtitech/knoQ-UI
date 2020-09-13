@@ -6,9 +6,7 @@
           グループ詳細
         </v-stepper-step>
         <v-divider />
-        <v-stepper-step :complete="step > 2" step="2">
-          確認
-        </v-stepper-step>
+        <v-stepper-step :complete="step > 2" step="2"> 確認 </v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
@@ -21,12 +19,8 @@
 
         <v-stepper-content step="2">
           <GroupFormSummary v-bind="group" />
-          <FormBackButton class="mr-3" @click="step = 1">
-            Back
-          </FormBackButton>
-          <FormNextButton @click="submitGroup">
-            Submit
-          </FormNextButton>
+          <FormBackButton class="mr-3" @click="step = 1"> Back </FormBackButton>
+          <FormNextButton @click="submitGroup"> Submit </FormNextButton>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
