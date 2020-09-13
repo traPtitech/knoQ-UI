@@ -2,25 +2,26 @@
   <v-container>
     <v-stepper v-model="step">
       <v-stepper-header>
-        <v-stepper-step :complete="step > 1" step="1">
-          イベント内容
-        </v-stepper-step>
+        <v-stepper-step :complete="step > 1" step="1"
+          >イベント内容</v-stepper-step
+        >
         <v-divider />
-        <v-stepper-step :complete="step > 2" step="2">
-          日時・場所
-        </v-stepper-step>
+        <v-stepper-step :complete="step > 2" step="2"
+          >日時・場所</v-stepper-step
+        >
         <v-divider />
-        <v-stepper-step :complete="step > 3" step="3">
-          確認
-        </v-stepper-step>
+        <v-stepper-step :complete="step > 3" step="3">確認</v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items class="pb-1">
         <v-stepper-content step="1">
-          <EventFormContent v-model="valid1" v-bind.sync="content" />
-          <FormNextButton :disabled="!valid1" @click="step = 2">
-            Continue
-          </FormNextButton>
+          <EventFormContent
+            v-model="isValidContent"
+            v-bind.sync="eventReified"
+          />
+          <FormNextButton :disabled="!isValidContent" @click="step = 2"
+            >Continue</FormNextButton
+          >
         </v-stepper-content>
 
         <v-stepper-content step="2">
@@ -29,33 +30,27 @@
             <v-tab>その他で開催</v-tab>
             <v-tab-item class="pt-3">
               <EventFormReservationPublic
-                v-model="validPublic"
-                v-bind.sync="reservationPublic"
+                v-model="isValidPublicRoom"
+                v-bind.sync="eventReified"
               />
             </v-tab-item>
             <v-tab-item class="pt-3">
               <EventFormReservationPrivate
-                v-model="validPrivate"
-                v-bind.sync="reservationPrivate"
+                v-model="isValidPrivateRoom"
+                v-bind.sync="roomParams"
               />
             </v-tab-item>
           </v-tabs>
-          <FormBackButton class="mr-2" @click="step = 1">
-            Back
-          </FormBackButton>
-          <FormNextButton :disabled="!valid2" @click="step = 3">
-            Continue
-          </FormNextButton>
+          <FormBackButton class="mr-2" @click="step = 1">Back</FormBackButton>
+          <FormNextButton :disabled="!isValidRoom" @click="step = 3"
+            >Continue</FormNextButton
+          >
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <EventFormSummary v-bind="event" />
-          <FormBackButton class="mr-2" @click="step = 2">
-            Back
-          </FormBackButton>
-          <FormNextButton @click="submitEvent">
-            Submit
-          </FormNextButton>
+          <EventFormSummary v-bind="eventSummary" />
+          <FormBackButton class="mr-2" @click="step = 2">Back</FormBackButton>
+          <FormNextButton @click="submitEvent">Submit</FormNextButton>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -64,7 +59,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 import EventFormContent from '@/components/event/EventFormContent.vue'
 import EventFormReservationPublic from '@/components/event/EventFormReservationPublic.vue'
 import EventFormReservationPrivate from '@/components/event/EventFormReservationPrivate.vue'
@@ -89,91 +84,98 @@ const EventsRepo = RepositoryFactory.get('events')
 })
 export default class EventNew extends Vue {
   step = 1
-
-  valid1 = false
-  content = {
-    name: '',
-    tags: [] as { name: string }[],
-    description: '',
-    group: null as Schemas.Group | null,
-  }
-
-  isPrivate = false
   get tab(): number {
-    return +this.isPrivate
+    return +this.isPrivateRoom
   }
   set tab(t: number) {
-    this.isPrivate = !!t
+    this.isPrivateRoom = !!t
   }
-  validPublic = false
-  validPrivate = false
-  get valid2(): boolean {
+
+  isValidContent = false
+  isPrivateRoom = false
+  isValidPublicRoom = false
+  isValidPrivateRoom = false
+  get isValidRoom(): boolean {
     return (
-      (!this.isPrivate && this.validPublic) ||
-      (this.isPrivate && this.validPrivate)
+      (!this.isPrivateRoom && this.isValidPublicRoom) ||
+      (this.isPrivateRoom && this.isValidPrivateRoom)
     )
   }
-  reservationPublic = {
-    room: null as Schemas.Room | null,
+
+  eventReified = {
+    name: '',
+    description: '',
+    tags: [] as { name: string }[],
     timeStart: '',
     timeEnd: '',
+    group: null as Schemas.Group | null,
+    room: null as Schemas.Room | null,
     sharedRoom: true,
   }
-  reservationPrivate = {
+
+  roomParams = {
     place: '',
     timeStart: '',
     timeEnd: '',
   }
 
-  // TODO: make more readable
-  get event() {
-    const reservation = this.isPrivate
-      ? this.reservationPrivate
-      : this.reservationPublic
+  @Watch('roomParams.timeStart')
+  onRoomParamstimeStartChange() {
+    this.eventReified.timeStart = this.roomParams.timeStart
+  }
+  @Watch('roomParams.timeEnd')
+  onRoomParamstimeEndtChange() {
+    this.eventReified.timeEnd = this.roomParams.timeEnd
+  }
+
+  get eventSummary() {
     return {
-      ...this.content,
-      isPrivate: this.isPrivate,
-      timeStart: reservation.timeStart,
-      timeEnd: reservation.timeEnd,
-      place: this.isPrivate
-        ? this.reservationPrivate.place
-        : this.reservationPublic.room?.place ?? '',
-      sharedRoom: !this.isPrivate && this.reservationPublic.sharedRoom,
+      name: this.eventReified.name,
+      description: this.eventReified.description,
+      tags: this.eventReified.tags,
+      groupName: this.eventReified.group!.name,
+      place: this.isPrivateRoom
+        ? this.roomParams.place
+        : this.eventReified.room!.place,
+      isPrivate: this.isPrivateRoom,
+      sharedRoom: this.eventReified.sharedRoom,
+      timeStart: this.eventReified.timeStart,
+      timeEnd: this.eventReified.timeEnd,
     }
   }
 
   async submitEvent() {
-    if (this.content.group && isTrapGroup(this.content.group)) {
+    if (this.eventReified.group && isTrapGroup(this.eventReified.group)) {
       const confirmed = window.confirm(
         'traP部員全体が対象となるようなイベントを開催しようとしています。本当によろしいですか？'
       )
       if (!confirmed) return
     }
-    if (this.isPrivate) {
+    if (this.isPrivateRoom) {
       const confirmed = window.confirm(
         'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
       )
       if (!confirmed) return
     }
+
     try {
       let roomId: string
-      if (this.isPrivate) {
-        roomId = (await RoomsRepo.private.post(this.reservationPrivate)).data
-          .roomId
+      if (this.isPrivateRoom) {
+        roomId = (await RoomsRepo.private.post(this.roomParams)).data.roomId
       } else {
-        roomId = this.reservationPublic.room!.roomId
+        roomId = this.eventReified.room!.roomId
       }
-      const reservation = this.isPrivate
-        ? this.reservationPrivate
-        : this.reservationPublic
+
       const { eventId } = (
         await EventsRepo.post({
-          ...this.content,
-          groupId: this.content.group!.groupId,
+          name: this.eventReified.name,
+          description: this.eventReified.description,
+          tags: this.eventReified.tags,
+          groupId: this.eventReified.group!.groupId,
           roomId,
-          sharedRoom: this.isPrivate || this.reservationPublic.sharedRoom,
-          timeStart: reservation.timeStart,
-          timeEnd: reservation.timeEnd,
+          timeStart: this.eventReified.timeStart,
+          timeEnd: this.eventReified.timeEnd,
+          sharedRoom: this.eventReified.sharedRoom,
         })
       ).data
       this.$router.push(`/events/${eventId}`)
