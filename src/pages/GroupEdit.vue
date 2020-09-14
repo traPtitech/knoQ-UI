@@ -15,9 +15,7 @@
             グループ詳細
           </v-stepper-step>
           <v-divider />
-          <v-stepper-step :complete="step > 2" step="2">
-            確認
-          </v-stepper-step>
+          <v-stepper-step :complete="step > 2" step="2"> 確認 </v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items>
@@ -33,17 +31,13 @@
             <FormBackButton class="mr-3" @click="step = 1">
               Back
             </FormBackButton>
-            <FormNextButton @click="submitGroup">
-              Submit
-            </FormNextButton>
+            <FormNextButton @click="submitGroup"> Submit </FormNextButton>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
 
       <v-card class="px-5 pt-5 pb-3">
-        <span class="headline mr-3">
-          Delete this group
-        </span>
+        <span class="headline mr-3"> Delete this group </span>
         <v-btn small depressed color="error" class="mb-2" @click="deleteGroup">
           Delete
         </v-btn>

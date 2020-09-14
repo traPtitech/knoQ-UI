@@ -1,12 +1,8 @@
 <template>
   <v-form v-model="valid">
     <div class="mb-4 text--secondary caption">
-      <span class="mr-1">
-        ※イベントを作るには主催するグループが必要です
-      </span>
-      <router-link to="/groups/new">
-        新しくグループを作る
-      </router-link>
+      <span class="mr-1"> ※イベントを作るには主催するグループが必要です </span>
+      <router-link to="/groups/new"> 新しくグループを作る </router-link>
     </div>
     <v-text-field
       v-model="nameSync"

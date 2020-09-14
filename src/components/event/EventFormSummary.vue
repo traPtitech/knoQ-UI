@@ -12,7 +12,7 @@
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Group</SummaryItemCaption>
-      <SummaryItemText>{{ group && group.name }}</SummaryItemText>
+      <SummaryItemText>{{ groupName }}</SummaryItemText>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Date</SummaryItemCaption>
@@ -26,17 +26,13 @@
       <SummaryItemCaption>Place</SummaryItemCaption>
       <SummaryItemText>{{ place }}</SummaryItemText>
       <SummaryItemSubtext v-if="!isPrivate">
-        <v-icon :color="sharedRoomIcon.color">
-          {{ sharedRoomIcon.icon }}
-        </v-icon>
+        <v-icon :color="sharedRoomIcon.color">{{ sharedRoomIcon.icon }}</v-icon>
         {{ sharedRoomString }}
       </SummaryItemSubtext>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Description</SummaryItemCaption>
-      <div v-if="!description" class="text--secondary">
-        説明はありません
-      </div>
+      <div v-if="!description" class="text--secondary">説明はありません</div>
       <MarkdownField v-else :src="description" />
     </SummaryItem>
   </div>
@@ -69,11 +65,8 @@ export default class EventFormSummary extends Vue {
   @Prop({ type: String, required: true })
   name!: string
 
-  @Prop({
-    validator: prop => typeof prop === 'object' || prop === null,
-    required: true,
-  })
-  group!: Schemas.Group | null
+  @Prop({ type: String, required: true })
+  groupName!: string
 
   @Prop({ type: Array, required: true })
   tags!: { name: string }[]

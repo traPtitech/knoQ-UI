@@ -1,9 +1,7 @@
 <template>
   <div>
     <span class="text--secondary">
-      <template v-if="status === 'loading'">
-        読み込み中...
-      </template>
+      <template v-if="status === 'loading'"> 読み込み中... </template>
       <template v-else-if="status === 'error'">
         データを読み込めませんでした...
       </template>
