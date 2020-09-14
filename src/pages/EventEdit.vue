@@ -9,7 +9,7 @@
       >
     </template>
     <template v-else>
-      <v-stepper v-model="step" class="mb-5">
+      <v-stepper v-model="step">
         <v-stepper-header>
           <v-stepper-step :complete="step > 1" step="1"
             >イベント内容</v-stepper-step
@@ -24,8 +24,11 @@
 
         <v-stepper-items class="pb-1">
           <v-stepper-content step="1">
-            <EventFormContent v-model="valid1" v-bind.sync="content" />
-            <FormNextButton :disabled="!valid1" @click="step = 2"
+            <EventFormContent
+              v-model="isValidContent"
+              v-bind.sync="eventReified"
+            />
+            <FormNextButton :disabled="!isValidContent" @click="step = 2"
               >Continue</FormNextButton
             >
           </v-stepper-content>
@@ -36,19 +39,19 @@
               <v-tab>その他で開催</v-tab>
               <v-tab-item class="pt-3">
                 <EventFormReservationPublic
-                  v-model="validPublic"
-                  v-bind.sync="reservationPublic"
+                  v-model="isValidPublicRoom"
+                  v-bind.sync="eventReified"
                 />
               </v-tab-item>
               <v-tab-item class="pt-3">
                 <EventFormReservationPrivate
-                  v-model="validPrivate"
-                  v-bind.sync="reservationPrivate"
+                  v-model="isValidPrivateRoom"
+                  v-bind.sync="roomParams"
                 />
               </v-tab-item>
             </v-tabs>
             <FormBackButton class="mr-2" @click="step = 1">Back</FormBackButton>
-            <FormNextButton :disabled="!valid2" @click="step = 3"
+            <FormNextButton :disabled="!isValidRoom" @click="step = 3"
               >Continue</FormNextButton
             >
           </v-stepper-content>
@@ -136,6 +139,13 @@ export default class EventEdit extends Vue {
         timeStart: event.timeStart,
         timeEnd: event.timeEnd,
         sharedRoom: event.sharedRoom,
+      }
+      if (!room.public) {
+        this.roomParams = {
+          place: room.place,
+          timeStart: room.timeStart,
+          timeEnd: room.timeEnd,
+        }
       }
       this.status = 'loaded'
     } catch (__) {
