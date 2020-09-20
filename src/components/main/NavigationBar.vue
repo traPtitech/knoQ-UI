@@ -6,13 +6,25 @@
     >
       <v-icon>mdi-menu</v-icon>
     </v-app-bar-nav-icon>
-    <v-toolbar-title class="headline">
-      {{ $route.meta.headerTitle }}
-    </v-toolbar-title>
+    <v-toolbar-title class="headline">{{
+      $route.meta.headerTitle
+    }}</v-toolbar-title>
 
     <v-spacer />
 
-    <TrapAvatar v-if="me" size="36" :traq-id="me" />
+    <v-menu offset-y>
+      <template #activator="{ on }">
+        <v-btn text v-on="on">
+          <TrapAvatar v-if="me" size="36" :traq-id="me" class="mr-2" />
+          <span class="text--secondary">{{ me }}</span>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item>
+          <v-list-item-subtitle>No action available</v-list-item-subtitle>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </v-app-bar>
 </template>
 
