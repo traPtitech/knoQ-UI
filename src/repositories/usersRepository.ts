@@ -32,7 +32,7 @@ export default {
 
       put(): AxiosPromise<API.Users.Me.Ical.Get.Responses.$200> {
         return Repository.put(`${resource}/me/ical`)
-      }
-    }
+      },
+    },
   },
 }
