@@ -85,6 +85,12 @@ const router = new Router({
       redirect: PathStorage.getSavedPath() || '/',
     },
     {
+      path: '/settings/ical',
+      name: 'Ical',
+      component: WIP,
+      meta: { headerTitle: 'カレンダー配信設定' },
+    },
+    {
       path: '*',
       name: 'NotFound',
       component: NotFound,

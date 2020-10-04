@@ -6,22 +6,26 @@
     >
       <v-icon>mdi-menu</v-icon>
     </v-app-bar-nav-icon>
-    <v-toolbar-title class="headline">{{
-      $route.meta.headerTitle
-    }}</v-toolbar-title>
+    <v-toolbar-title class="headline">
+      {{ $route.meta.headerTitle }}
+    </v-toolbar-title>
 
     <v-spacer />
 
-    <v-menu offset-y>
+    <v-menu v-model="menu" offset-y>
       <template #activator="{ on }">
-        <v-btn text v-on="on">
+        <v-btn text class="text--secondary" v-on="on">
           <TrapAvatar v-if="me" size="36" :traq-id="me" class="mr-2" />
-          <span class="text--secondary">{{ me }}</span>
+          <span>{{ me }}</span>
+          <v-icon small>mdi-chevron-down</v-icon>
         </v-btn>
       </template>
       <v-list>
-        <v-list-item>
-          <v-list-item-subtitle>No action available</v-list-item-subtitle>
+        <v-list-item :to="'/settings/ical'">
+          <v-list-item-icon>
+            <v-icon>mdi-access-point</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>カレンダー配信設定</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -39,6 +43,8 @@ import TrapAvatar from '@/components/shared/TrapAvatar.vue'
   },
 })
 export default class NavigationBar extends Vue {
+  menu: boolean = false
+
   @Emit('click-nav-icon')
   onClickNavIcon() {}
 
