@@ -11,6 +11,8 @@
           readonly
           :disabled="shouldGenerateSecret"
           :value="icsURL"
+          :append-outer-icon="'mdi-content-copy'"
+          @click:append-outer="copyUrlToClipboard"
         />
         <v-btn color="primary" depressed @click="generateSecret">
           URLを{{ shouldGenerateSecret ? '生成' : '再生成' }}
@@ -65,6 +67,13 @@ export default class WIP extends Vue {
     } catch (__) {
       alert('Failed to regenerate secret')
     }
+  }
+
+  copyUrlToClipboard() {
+    navigator.clipboard
+      .writeText(this.icsURL)
+      .then(() => alert('Copied'))
+      .catch(() => alert('Failed to copy'))
   }
 }
 </script>
