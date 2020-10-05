@@ -2,6 +2,10 @@ import axios, { AxiosPromise } from 'axios'
 
 export const baseURL =
   process.env.NODE_ENV === 'development' ? 'http://localhost:4000/api' : '/api'
+export const icalURL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:4000/api/ical'
+    : 'https://knoq.trap.jp/api/ical'
 const traQAPIBaseURL = 'https://q.trap.jp/api/1.0'
 
 const authAPI = axios.create({

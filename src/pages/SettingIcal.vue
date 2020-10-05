@@ -26,6 +26,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
+import { icalURL } from '@/workers/api'
 
 const UsersRepo = RepositoryFactory.get('users')
 
@@ -44,9 +45,7 @@ export default class WIP extends Vue {
   get icsURL(): string {
     const me = this.$store.state.me?.userId
     const query = `user==${me}`
-    return `https://knoq.trap.jp/api/ical/${me}${
-      this.secret
-    }?q=${encodeURIComponent(query)}`
+    return `${icalURL}/${me}${this.secret}?q=${encodeURIComponent(query)}`
   }
 
   async fetchSecret() {
