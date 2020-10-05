@@ -19,7 +19,7 @@
             >日時・場所</v-stepper-step
           >
           <v-divider />
-          <v-stepper-step :complete="step > 3" step="3">確認</v-stepper-step>
+          <v-stepper-step :complete="step > 3" step="3"> 確認 </v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items class="pb-1">
@@ -28,9 +28,9 @@
               v-model="isValidContent"
               v-bind.sync="eventReified"
             />
-            <FormNextButton :disabled="!isValidContent" @click="step = 2"
-              >Continue</FormNextButton
-            >
+            <FormNextButton :disabled="!isValidContent" @click="step = 2">
+              Continue
+            </FormNextButton>
           </v-stepper-content>
 
           <v-stepper-content step="2">
@@ -51,24 +51,26 @@
               </v-tab-item>
             </v-tabs>
             <FormBackButton class="mr-2" @click="step = 1">Back</FormBackButton>
-            <FormNextButton :disabled="!isValidRoom" @click="step = 3"
-              >Continue</FormNextButton
-            >
+            <FormNextButton :disabled="!isValidRoom" @click="step = 3">
+              Continue
+            </FormNextButton>
           </v-stepper-content>
 
           <v-stepper-content step="3">
             <EventFormSummary v-bind="eventSummary" />
-            <FormBackButton class="mr-2" @click="step = 2">Back</FormBackButton>
-            <FormNextButton @click="submitEvent">Submit</FormNextButton>
+            <FormBackButton class="mr-2" @click="step = 2">
+              Back
+            </FormBackButton>
+            <FormNextButton @click="submitEvent"> Submit </FormNextButton>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
 
       <v-card class="px-5 pt-5 pb-3">
-        <span class="headline mr-3">Delete this event</span>
-        <v-btn small depressed color="error" class="mb-2" @click="deleteEvent"
-          >Delete</v-btn
-        >
+        <span class="headline mr-3"> Delete this event </span>
+        <v-btn small depressed color="error" class="mb-2" @click="deleteEvent">
+          Delete
+        </v-btn>
       </v-card>
     </template>
   </v-container>
