@@ -51,6 +51,10 @@ declare namespace Schemas {
     name: string
   }
 
+  export interface IcalSecret {
+    secret: string
+  }
+
   export interface AuthParams {
     clientId: string
     state: string

@@ -203,6 +203,14 @@ declare namespace API {
           }
         }
       }
+
+      namespace Ical {
+        namespace Get {
+          namespace Responses {
+            export type $200 = Schemas.IcalSecret
+          }
+        }
+      }
     }
   }
 
