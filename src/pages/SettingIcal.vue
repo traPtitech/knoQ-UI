@@ -27,11 +27,12 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { icalURL } from '@/workers/api'
+import clipboard from '@cloudcmd/clipboard'
 
 const UsersRepo = RepositoryFactory.get('users')
 
 @Component
-export default class WIP extends Vue {
+export default class SettingIcal extends Vue {
   secret: string = ''
 
   created() {
@@ -72,7 +73,7 @@ export default class WIP extends Vue {
   }
 
   copyUrlToClipboard() {
-    navigator.clipboard
+    clipboard
       .writeText(this.icsURL)
       .then(() => alert('Copied'))
       .catch(() => alert('Failed to copy'))
