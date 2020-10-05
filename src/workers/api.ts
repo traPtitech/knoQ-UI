@@ -5,7 +5,7 @@ export const baseURL =
 export const icalURL =
   process.env.NODE_ENV === 'development'
     ? 'http://localhost:4000/api/ical'
-    : `${window.location.host}/api/ical`
+    : `${window.location.origin}/api/ical`
 const traQAPIBaseURL = 'https://q.trap.jp/api/1.0'
 
 const authAPI = axios.create({
