@@ -43,7 +43,10 @@ export default class WIP extends Vue {
 
   get icsURL(): string {
     const me = this.$store.state.me?.userId
-    return `https://knoq.trap.jp/ical/${me}${this.secret}/?q=user==${me}`
+    const query = `user==${me}`
+    return `https://knoq.trap.jp/api/ical/${me}${
+      this.secret
+    }?q=${encodeURIComponent(query)}`
   }
 
   async fetchSecret() {
