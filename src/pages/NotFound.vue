@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <p class="display-1 text--secondary">
-      404 - File not found
-    </p>
+    <p class="display-1 text--secondary">404 - File not found</p>
   </v-container>
 </template>
 

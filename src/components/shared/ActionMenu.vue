@@ -8,9 +8,7 @@
     <v-list>
       <slot>
         <v-list-item>
-          <v-list-item-subtitle>
-            No action available
-          </v-list-item-subtitle>
+          <v-list-item-subtitle> No action available </v-list-item-subtitle>
         </v-list-item>
       </slot>
     </v-list>

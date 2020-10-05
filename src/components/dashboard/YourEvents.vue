@@ -2,14 +2,10 @@
   <v-card class="px-3">
     <v-list>
       <v-list-item v-if="status === 'loading'">
-        <span class="text--secondary">
-          読み込み中
-        </span>
+        <span class="text--secondary"> 読み込み中 </span>
       </v-list-item>
       <v-list-item v-else-if="status === 'error'">
-        <span class="text--secondary">
-          データを読み込めませんでした...
-        </span>
+        <span class="text--secondary"> データを読み込めませんでした... </span>
       </v-list-item>
       <template v-else>
         <v-list-item v-if="!events.length">
@@ -19,7 +15,7 @@
         </v-list-item>
         <template v-for="(event, i) in allEventData">
           <v-list-item :key="event.eventId">
-            <v-row align="center" style="width: 100%;">
+            <v-row align="center" style="width: 100%">
               <v-col class="flex-grow-0 text-no-wrap text--secondary">
                 {{ event.date }}
               </v-col>

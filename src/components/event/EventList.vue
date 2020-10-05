@@ -1,9 +1,7 @@
 <template>
   <div>
     <div v-if="!filteredEvents.length">
-      <span class="text--secondary headline">
-        イベントがありません...
-      </span>
+      <span class="text--secondary headline"> イベントがありません... </span>
     </div>
     <template v-for="(event, i) in filteredEvents" v-else>
       <div v-if="isDateBorder(i)" :key="event.date" class="mb-1 headline">

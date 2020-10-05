@@ -10,9 +10,7 @@
           日時・場所
         </v-stepper-step>
         <v-divider />
-        <v-stepper-step :complete="step > 3" step="3">
-          確認
-        </v-stepper-step>
+        <v-stepper-step :complete="step > 3" step="3"> 確認 </v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items class="pb-1">
@@ -40,9 +38,7 @@
               />
             </v-tab-item>
           </v-tabs>
-          <FormBackButton class="mr-2" @click="step = 1">
-            Back
-          </FormBackButton>
+          <FormBackButton class="mr-2" @click="step = 1"> Back </FormBackButton>
           <FormNextButton :disabled="!valid2" @click="step = 3">
             Continue
           </FormNextButton>
@@ -50,12 +46,8 @@
 
         <v-stepper-content step="3">
           <EventFormSummary v-bind="event" />
-          <FormBackButton class="mr-2" @click="step = 2">
-            Back
-          </FormBackButton>
-          <FormNextButton @click="submitEvent">
-            Submit
-          </FormNextButton>
+          <FormBackButton class="mr-2" @click="step = 2"> Back </FormBackButton>
+          <FormNextButton @click="submitEvent"> Submit </FormNextButton>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>

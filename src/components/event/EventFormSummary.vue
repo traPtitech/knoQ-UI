@@ -34,9 +34,7 @@
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Description</SummaryItemCaption>
-      <div v-if="!description" class="text--secondary">
-        説明はありません
-      </div>
+      <div v-if="!description" class="text--secondary">説明はありません</div>
       <MarkdownField v-else :src="description" />
     </SummaryItem>
   </div>
