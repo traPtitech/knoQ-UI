@@ -11,6 +11,7 @@ const EventEdit = () => import('@/pages/EventEdit.vue')
 const GroupDetail = () => import('@/pages/GroupDetail.vue')
 const GroupNew = () => import('@/pages/GroupNew.vue')
 const GroupEdit = () => import('@/pages/GroupEdit.vue')
+const SettingIcal = () => import('@/pages/SettingIcal.vue')
 const NotFound = () => import('@/pages/NotFound.vue')
 const WIP = () => import('@/pages/WIP.vue')
 
@@ -83,6 +84,12 @@ const router = new Router({
       path: '/callback',
       name: 'Callback',
       redirect: PathStorage.getSavedPath() || '/',
+    },
+    {
+      path: '/settings/ical',
+      name: 'Ical',
+      component: SettingIcal,
+      meta: { headerTitle: 'カレンダー配信設定' },
     },
     {
       path: '*',

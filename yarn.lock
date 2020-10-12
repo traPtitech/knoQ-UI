@@ -939,6 +939,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@cloudcmd/clipboard@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@cloudcmd/clipboard/-/clipboard-2.0.0.tgz#d4b3890e3b1ef47232e07be9a6148e9cf938bb2c"
+  integrity sha512-HxOZBGA7m+JR+5G/J+ndBgalAeEi+Sf0r6rOB24+U9HIy1015eKgZiaxUxgslFATmKU1/5MGt53kSxZeD2ZYQw==
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"

@@ -12,7 +12,23 @@
 
     <v-spacer />
 
-    <TrapAvatar v-if="me" size="36" :traq-id="me" />
+    <v-menu v-model="menu" offset-y>
+      <template #activator="{ on }">
+        <v-btn text class="text--secondary" v-on="on">
+          <TrapAvatar v-if="me" size="36" :traq-id="me" class="mr-2" />
+          <span>{{ me }}</span>
+          <v-icon small>mdi-chevron-down</v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item :to="'/settings/ical'">
+          <v-list-item-icon>
+            <v-icon>mdi-access-point</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>カレンダー配信設定</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </v-app-bar>
 </template>
 
@@ -27,6 +43,8 @@ import TrapAvatar from '@/components/shared/TrapAvatar.vue'
   },
 })
 export default class NavigationBar extends Vue {
+  menu: boolean = false
+
   @Emit('click-nav-icon')
   onClickNavIcon() {}
 

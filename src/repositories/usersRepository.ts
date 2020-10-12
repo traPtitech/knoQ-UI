@@ -24,5 +24,15 @@ export default {
         return Repository.get(`${resource}/me/groups`)
       },
     },
+
+    ical: {
+      get(): AxiosPromise<API.Users.Me.Ical.Get.Responses.$200> {
+        return Repository.get(`${resource}/me/ical`)
+      },
+
+      put(): AxiosPromise<API.Users.Me.Ical.Get.Responses.$200> {
+        return Repository.put(`${resource}/me/ical`)
+      },
+    },
   },
 }
