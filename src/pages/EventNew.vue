@@ -42,13 +42,13 @@
             </v-tab-item>
           </v-tabs>
           <FormBackButton class="mr-2" @click="step = 1"> Back </FormBackButton>
-          <FormNextButton :disabled="!valid2" @click="step = 3">
+          <FormNextButton :disabled="!isValidRoom" @click="step = 3">
             Continue
           </FormNextButton>
         </v-stepper-content>
 
         <v-stepper-content step="3">
-          <EventFormSummary v-bind="event" />
+          <EventFormSummary v-bind="eventSummary" />
           <FormBackButton class="mr-2" @click="step = 2"> Back </FormBackButton>
           <FormNextButton @click="submitEvent"> Submit </FormNextButton>
         </v-stepper-content>
