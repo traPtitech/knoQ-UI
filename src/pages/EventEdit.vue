@@ -230,18 +230,17 @@ export default class EventEdit extends Vue {
         roomId = this.eventReified.room!.roomId
       }
 
-      const { eventId } = (
-        await EventsRepo.post({
-          name: this.eventReified.name,
-          description: this.eventReified.description,
-          tags: this.eventReified.tags,
-          groupId: this.eventReified.group!.groupId,
-          roomId,
-          timeStart: this.eventReified.timeStart,
-          timeEnd: this.eventReified.timeEnd,
-          sharedRoom: this.eventReified.sharedRoom,
-        })
-      ).data
+      const eventId = this.$route.params.id
+      await EventsRepo.$eventId(eventId).put({
+        name: this.eventReified.name,
+        description: this.eventReified.description,
+        tags: this.eventReified.tags,
+        groupId: this.eventReified.group!.groupId,
+        roomId,
+        timeStart: this.eventReified.timeStart,
+        timeEnd: this.eventReified.timeEnd,
+        sharedRoom: this.eventReified.sharedRoom,
+      })
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')
