@@ -33,7 +33,9 @@
           <v-tab-item class="pt-3">
             <EventFormReservationPrivate
               v-model="isValidPrivateRoom"
-              v-bind.sync="room"
+              :place.sync="place"
+              :time-start.sync="event.timeStart"
+              :time-end.sync="event.timeEnd"
             />
           </v-tab-item>
         </v-tabs>
@@ -54,18 +56,21 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
 
-interface Event {
+export type Event = {
   name: string
   description: string
   sharedRoom: boolean
   timeStart: string
   timeEnd: string
-  room: Schemas.Room | null
   group: Schemas.Group | null
   tags: Schemas.Tag[]
-}
+  admins: Schemas.User['userId'][]
+} & (
+  | { isPrivateRoom: false; room: Schemas.Room | null }
+  | { isPrivateRoom: true; place: string }
+)
 
 const emptyEvent = (): Event => ({
   name: '',
@@ -73,21 +78,11 @@ const emptyEvent = (): Event => ({
   sharedRoom: false,
   timeStart: '',
   timeEnd: '',
+  isPrivateRoom: false,
   room: null,
   group: null,
   tags: [],
-})
-
-interface Room {
-  place: string
-  timeStart: string
-  timeEnd: string
-}
-
-const emptyRoom = (): Room => ({
-  place: '',
-  timeStart: '',
-  timeEnd: '',
+  admins: [],
 })
 
 @Component
@@ -96,36 +91,26 @@ export default class EventFormBase extends Vue {
   event!: Event
 
   @Prop({ type: Function, default: () => {} })
-  onSubmit!: (isPrivateRoom: boolean, room: Room, event: Event) => void
+  onSubmit!: (event: Event) => void
 
-  room = emptyRoom()
+  place = ''
 
   step = 1
   get tab(): number {
-    return Number(this.isPrivateRoom)
+    return Number(this.event.isPrivateRoom)
   }
   set tab(t: number) {
-    this.isPrivateRoom = Boolean(t)
+    this.event.isPrivateRoom = Boolean(t)
   }
 
   isValidContent = false
-  isPrivateRoom = false
   isValidPublicRoom = false
   isValidPrivateRoom = false
   get isValidRoom(): boolean {
     return (
-      (!this.isPrivateRoom && this.isValidPublicRoom) ||
-      (this.isPrivateRoom && this.isValidPrivateRoom)
+      (!this.event.isPrivateRoom && this.isValidPublicRoom) ||
+      (this.event.isPrivateRoom && this.isValidPrivateRoom)
     )
-  }
-
-  @Watch('room.timeStart')
-  onRoomParamstimeStartChange() {
-    this.event.timeStart = this.room.timeStart
-  }
-  @Watch('room.timeEnd')
-  onRoomParamstimeEndtChange() {
-    this.event.timeEnd = this.room.timeEnd
   }
 
   get eventSummary() {
@@ -134,10 +119,10 @@ export default class EventFormBase extends Vue {
       description: this.event.description,
       tags: this.event.tags,
       groupName: this.event.group?.name ?? '',
-      place: this.isPrivateRoom
-        ? this.room.place
+      place: this.event.isPrivateRoom
+        ? this.place
         : this.event.room?.place ?? '',
-      isPrivate: this.isPrivateRoom,
+      isPrivate: this.event.isPrivateRoom,
       sharedRoom: this.event.sharedRoom,
       timeStart: this.event.timeStart,
       timeEnd: this.event.timeEnd,
@@ -145,7 +130,7 @@ export default class EventFormBase extends Vue {
   }
 
   get submit() {
-    return () => this.onSubmit(this.isPrivateRoom, this.room, this.event)
+    return () => this.onSubmit(this.event)
   }
 }
 </script>

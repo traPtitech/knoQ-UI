@@ -60,6 +60,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
+import EventFormBase, { Event } from '@/components/event/EventFormBase.vue'
 import EventFormContent from '@/components/event/EventFormContent.vue'
 import EventFormReservationPublic from '@/components/event/EventFormReservationPublic.vue'
 import EventFormReservationPrivate from '@/components/event/EventFormReservationPrivate.vue'
@@ -74,6 +75,7 @@ const EventsRepo = RepositoryFactory.get('events')
 
 @Component({
   components: {
+    EventFormBase,
     EventFormContent,
     EventFormReservationPublic,
     EventFormReservationPrivate,
@@ -176,6 +178,7 @@ export default class EventNew extends Vue {
           timeStart: this.eventReified.timeStart,
           timeEnd: this.eventReified.timeEnd,
           sharedRoom: this.eventReified.sharedRoom,
+          admins: [],
         })
       ).data
       this.$router.push(`/events/${eventId}`)

@@ -99,6 +99,7 @@ declare namespace API {
           tags: {
             name: string
           }[]
+          admins: string[]
         }
         namespace Responses {
           export type $200 = Schemas.Event

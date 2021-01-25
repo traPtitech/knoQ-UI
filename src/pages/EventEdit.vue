@@ -240,6 +240,7 @@ export default class EventEdit extends Vue {
         timeStart: this.eventReified.timeStart,
         timeEnd: this.eventReified.timeEnd,
         sharedRoom: this.eventReified.sharedRoom,
+        admins: [],
       })
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
