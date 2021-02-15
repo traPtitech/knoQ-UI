@@ -88,19 +88,18 @@ declare namespace API {
       }
 
       namespace Put {
-        export interface RequestBody {
+        export type RequestBody = {
           name: string
           description: string
           sharedRoom: boolean
           timeStart: string
           timeEnd: string
-          roomId: string
           groupId: string
+          admins: string[]
           tags: {
             name: string
           }[]
-          admins: string[]
-        }
+        } & ({ roomId: string } | { place: string })
         namespace Responses {
           export type $200 = Schemas.Event
         }
