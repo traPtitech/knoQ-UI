@@ -58,6 +58,14 @@ import EventTag from '@/components/shared/EventTag.vue'
 import { rmCtrlChar } from '@/workers/rmCtrlChar'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
+export type EventContent = {
+  name: string
+  description: string
+  group: Schemas.Group | null
+  tags: Schemas.Tag[]
+  admins: Schemas.User[]
+}
+
 const GroupsRepo = RepositoryFactory.get('groups')
 const UsersRepo = RepositoryFactory.get('users')
 const TagsRepo = RepositoryFactory.get('tags')

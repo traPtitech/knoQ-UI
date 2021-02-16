@@ -65,6 +65,13 @@ import {
 } from '@/workers/date'
 import { strMax, strMin } from '@/workers/strCmp'
 
+export type EventTimeAndPlace = {
+  sharedRoom: boolean
+  timeStart: string
+  timeEnd: string
+  room: Schemas.Room | null
+}
+
 const RoomsRepo = RepositoryFactory.get('rooms')
 const EventsRepo = RepositoryFactory.get('events')
 
@@ -73,7 +80,7 @@ const EventsRepo = RepositoryFactory.get('events')
     TimePicker,
   },
 })
-export default class EventFormReservationPublic extends Vue {
+export default class EventFormTimeAndPlace extends Vue {
   @Prop({ type: Boolean, required: true })
   value!: boolean
 
