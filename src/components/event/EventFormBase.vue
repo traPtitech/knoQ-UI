@@ -126,7 +126,7 @@ export default class EventFormBase extends Vue {
     place: this.event?.personal ? this.event.place : '',
   }
 
-  personal: boolean = false
+  personal: boolean = this.event?.personal ?? false
 
   step = 1
 
