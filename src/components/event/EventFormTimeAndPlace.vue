@@ -14,9 +14,9 @@
         />
       </v-col>
       <v-col cols="12" md="">
-        <v-checkbox v-model="sharedRoomSync" label="部屋の共用を許可する" />
+        <v-checkbox v-model="sharedRoomInput" label="部屋の共用を許可する" />
         <v-autocomplete
-          v-model="roomSync"
+          v-model="roomInput"
           filled
           label="進捗部屋"
           hint="日付の候補と部屋の共用の可否を選ぶと使える進捗部屋を選択できるようになります"
@@ -32,7 +32,7 @@
           v-model="_timeStart"
           label="開始時刻"
           :rules="$rules.eventTimeStart"
-          :disabled="!roomSync"
+          :disabled="!roomInput"
           :min="startMin"
           :max="startMax"
         />
@@ -40,7 +40,7 @@
           v-model="_timeEnd"
           label="終了時刻"
           :rules="$rules.eventTimeEnd"
-          :disabled="!roomSync"
+          :disabled="!roomInput"
           :min="endMin"
           :max="endMax"
         />
@@ -88,16 +88,16 @@ export default class EventFormTimeAndPlace extends Vue {
     validator: prop => typeof prop === 'object' || prop === null,
     required: true,
   })
-  roomSync!: Schemas.Room | null
+  roomInput!: Schemas.Room | null
 
   @PropSync('timeStart', { type: String, required: true })
-  timeStartSync!: string
+  timeStartInput!: string
 
   @PropSync('timeEnd', { type: String, required: true })
-  timeEndSync!: string
+  timeEndInput!: string
 
   @PropSync('sharedRoom', { type: Boolean, required: true })
-  sharedRoomSync!: boolean
+  sharedRoomInput!: boolean
 
   dates: string[] = []
   allRooms: Schemas.Room[] = []
@@ -119,28 +119,28 @@ export default class EventFormTimeAndPlace extends Vue {
     ).data
   }
 
-  @Watch('sharedRoomSync')
+  @Watch('sharedRoomInput')
   @Watch('dates')
   onQueryChange() {
-    this.roomSync = null
-    this.timeStartSync = ''
-    this.timeEndSync = ''
+    this.roomInput = null
+    this.timeStartInput = ''
+    this.timeEndInput = ''
   }
 
   get _timeStart(): string {
-    return this.timeStartSync && getTime(this.timeStartSync)
+    return this.timeStartInput && getTime(this.timeStartInput)
   }
   set _timeStart(time: string) {
-    if (this.roomSync) {
-      this.timeStartSync = getIso8601(getDate(this.roomSync.timeStart), time)
+    if (this.roomInput) {
+      this.timeStartInput = getIso8601(getDate(this.roomInput.timeStart), time)
     }
   }
   get _timeEnd(): string {
-    return this.timeEndSync && getTime(this.timeEndSync)
+    return this.timeEndInput && getTime(this.timeEndInput)
   }
   set _timeEnd(time: string) {
-    if (this.roomSync) {
-      this.timeEndSync = getIso8601(getDate(this.roomSync.timeEnd), time)
+    if (this.roomInput) {
+      this.timeEndInput = getIso8601(getDate(this.roomInput.timeEnd), time)
     }
   }
 
@@ -148,18 +148,18 @@ export default class EventFormTimeAndPlace extends Vue {
     return today()
   }
   get startMin(): string | null {
-    return this.roomSync && getTime(this.roomSync.timeStart)
+    return this.roomInput && getTime(this.roomInput.timeStart)
   }
   get startMax(): string | null {
-    const timeEnd = strMin(this.roomSync?.timeEnd, this._timeEnd)
+    const timeEnd = strMin(this.roomInput?.timeEnd, this._timeEnd)
     return timeEnd && getTime(timeEnd)
   }
   get endMin(): string | null {
-    const timeStart = strMax(this.roomSync?.timeStart, this._timeStart)
+    const timeStart = strMax(this.roomInput?.timeStart, this._timeStart)
     return timeStart && getTime(timeStart)
   }
   get endMax(): string | null {
-    return this.roomSync && getTime(this.roomSync.timeEnd)
+    return this.roomInput && getTime(this.roomInput.timeEnd)
   }
 
   get calcAvailableRooms() {
@@ -167,7 +167,7 @@ export default class EventFormTimeAndPlace extends Vue {
   }
 
   get availableRooms() {
-    return this.calcAvailableRooms(this.dates, this.sharedRoomSync)
+    return this.calcAvailableRooms(this.dates, this.sharedRoomInput)
   }
 
   get formatAvailableRoom() {

@@ -5,14 +5,14 @@
       <router-link to="/groups/new"> 新しくグループを作る </router-link>
     </div>
     <v-text-field
-      v-model="nameSync"
+      v-model="nameInput"
       filled
       label="イベント名"
       placeholder="イベント名を入力"
       :rules="$rules.eventName"
     />
     <v-autocomplete
-      v-model="groupSync"
+      v-model="groupInput"
       filled
       label="主催グループ"
       placeholder="グループを選択"
@@ -41,7 +41,7 @@
       </template>
     </v-combobox>
     <v-textarea
-      v-model="descriptionSync"
+      v-model="descriptionInput"
       filled
       rows="25"
       no-resize
@@ -80,19 +80,19 @@ export default class EventFormContent extends Vue {
   value!: boolean
 
   @PropSync('name', { type: String, required: true })
-  nameSync!: string
+  nameInput!: string
 
   @PropSync('group', {
     validator: prop => typeof prop === 'object' || prop === null,
     required: true,
   })
-  groupSync!: Schemas.Group | null
+  groupInput!: Schemas.Group | null
 
   @PropSync('tags', { type: Array, required: true })
-  tagsSync!: { name: string }[]
+  tagsInput!: { name: string }[]
 
   @PropSync('description', { type: String, required: true })
-  descriptionSync!: string
+  descriptionInput!: string
 
   allGroups: Schemas.Group[] = []
   allTags: string[] = []
@@ -123,10 +123,10 @@ export default class EventFormContent extends Vue {
   }
 
   private get tagNames(): string[] {
-    return this.tagsSync.map(tag => tag.name)
+    return this.tagsInput.map(tag => tag.name)
   }
   private set tagNames(tags: string[]) {
-    this.tagsSync = tags
+    this.tagsInput = tags
       .map(rmCtrlChar)
       .filter(name => !!name)
       .map(name => ({ name }))
