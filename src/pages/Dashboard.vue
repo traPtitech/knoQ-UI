@@ -11,7 +11,7 @@
     <v-row>
       <v-col md="6" cols="12">
         <DashboardItem>
-          <DashboardItemTitle>あなたの作成したイベント</DashboardItemTitle>
+          <DashboardItemTitle>あなたが管理者のイベント</DashboardItemTitle>
           <YourEvents />
         </DashboardItem>
       </v-col>
