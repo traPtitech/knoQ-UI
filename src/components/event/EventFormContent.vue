@@ -29,11 +29,13 @@
       label="タグ"
       placeholder="タグを選択または新規作成"
       :items="allTags"
+      item-text="name"
+      :item-value="v => v"
     >
       <template #selection="{ item }">
-        <EventTag
-          :key="item"
-          :name="item"
+        <event-tag
+          :key="item.name"
+          :name="item.name"
           close
           class="mt-3"
           @click:close="removeTag(item)"
@@ -89,13 +91,13 @@ export default class EventFormContent extends Vue {
   groupInput!: Schemas.Group | null
 
   @PropSync('tags', { type: Array, required: true })
-  tagsInput!: { name: string }[]
+  tagsInput!: Schemas.Tag[]
 
   @PropSync('description', { type: String, required: true })
   descriptionInput!: string
 
   allGroups: Schemas.Group[] = []
-  allTags: string[] = []
+  allTags: Schemas.Tag[] = []
 
   created() {
     Promise.all([this.fetchGroups(), this.fetchTags()])
@@ -108,11 +110,11 @@ export default class EventFormContent extends Vue {
     this.allGroups = groups.filter(group => groupIds.includes(group.groupId))
   }
   async fetchTags() {
-    this.allTags = (await TagsRepo.get()).data.map(({ name }) => name)
+    this.allTags = (await TagsRepo.get()).data
   }
 
-  removeTag(tag1: string) {
-    this.tagNames = this.tagNames.filter(tag2 => tag1 !== tag2)
+  removeTag(tag1: Schemas.Tag) {
+    this.tagNames = this.tagNames.filter(({ name }) => tag1.name !== name)
   }
 
   private get valid(): boolean {
@@ -122,14 +124,17 @@ export default class EventFormContent extends Vue {
     this.$emit('input', value)
   }
 
-  private get tagNames(): string[] {
-    return this.tagsInput.map(tag => tag.name)
+  private get tagNames(): Schemas.Tag[] {
+    return this.tagsInput
   }
-  private set tagNames(tags: string[]) {
-    this.tagsInput = tags
-      .map(rmCtrlChar)
-      .filter(name => !!name)
-      .map(name => ({ name }))
+  private set tagNames(tags: Schemas.Tag[]) {
+    this.tagsInput = tags.flatMap(tag => {
+      const name = rmCtrlChar(tag.name)
+      if (!name) {
+        return []
+      }
+      return { ...tag, name }
+    })
   }
 }
 </script>
