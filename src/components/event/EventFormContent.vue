@@ -21,6 +21,19 @@
       :item-value="v => v"
       :rules="$rules.eventGroup"
     />
+    <v-autocomplete
+      v-model="adminsInput"
+      filled
+      multiple
+      clearable
+      label="イベント管理者"
+      placeholder="イベント管理者を選択"
+      :disabled="groupInput === null"
+      :items="memberOfSelectedGroup"
+      item-text="name"
+      :item-value="v => v"
+      :rules="$rules.eventAdmins"
+    />
     <v-combobox
       v-model="tagNames"
       filled
@@ -88,6 +101,9 @@ export default class EventFormContent extends Vue {
   })
   groupInput!: Schemas.Group | null
 
+  @PropSync('admins', { type: Array, required: true })
+  adminsInput!: Schemas.User[]
+
   @PropSync('tags', { type: Array, required: true })
   tagsInput!: { name: string }[]
 
@@ -111,10 +127,6 @@ export default class EventFormContent extends Vue {
     this.allTags = (await TagsRepo.get()).data.map(({ name }) => name)
   }
 
-  removeTag(tag1: string) {
-    this.tagNames = this.tagNames.filter(tag2 => tag1 !== tag2)
-  }
-
   private get valid(): boolean {
     return this.value
   }
@@ -122,6 +134,9 @@ export default class EventFormContent extends Vue {
     this.$emit('input', value)
   }
 
+  removeTag(tag1: string) {
+    this.tagNames = this.tagNames.filter(tag2 => tag1 !== tag2)
+  }
   private get tagNames(): string[] {
     return this.tagsInput.map(tag => tag.name)
   }
@@ -130,6 +145,16 @@ export default class EventFormContent extends Vue {
       .map(rmCtrlChar)
       .filter(name => !!name)
       .map(name => ({ name }))
+  }
+
+  private get memberOfSelectedGroup(): Schemas.User[] {
+    const users = this.$store.direct.state.usersCache.users
+    if (!users?.size || this.groupInput === null) {
+      return []
+    }
+    return [...users.values()].filter(({ userId }) =>
+      this.groupInput?.members.includes(userId)
+    )
   }
 }
 </script>

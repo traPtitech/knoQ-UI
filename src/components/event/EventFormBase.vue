@@ -97,19 +97,14 @@ export default class EventFormBase extends Vue {
   @Prop({ type: Object })
   event!: EventInputContent | null | undefined
 
-  created() {
-    const me = this.$store.direct.state.me
-    if (me) {
-      this.content.admins.push(me)
-    }
-  }
-
   content: EventContent = {
     name: this.event?.name ?? '',
     description: this.event?.description ?? '',
     group: this.event?.group ?? null,
     tags: this.event?.tags ?? [],
-    admins: this.event?.admins ?? [],
+    admins:
+      this.event?.admins ??
+      (this.$store.direct.state.me ? [this.$store.direct.state.me] : []),
   }
 
   timeAndPlace: EventTimeAndPlace = {

@@ -12,6 +12,10 @@ const rules = {
     (v: string) => v.length <= 32 || 'イベント名は32文字までです',
   ],
   eventGroup: [(v: string) => !!v || 'グループは必須です'],
+  eventAdmins: [
+    (v: unknown[]) =>
+      !!v.length || 'イベントには1人以上のメンバーを指定してください',
+  ],
   eventRoom: [(v: string) => !!v || '進捗部屋を選んでください'],
   eventPlace: [
     (v: string) => !!v || '場所名は必須です',
