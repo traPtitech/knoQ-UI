@@ -23,6 +23,7 @@ declare namespace Schemas {
     timeEnd: string
     roomId: string
     groupId: string
+    admins: string[]
     tags: { name: string }[]
     createdBy: string
     createdAt: string
