@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@cloudcmd/clipboard": "^2.0.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "direct-vuex": "^0.12.0",
     "highlight.js": "^10.4.1",
     "markdown-it": "^12.0.2",
