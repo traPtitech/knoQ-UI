@@ -216,7 +216,10 @@ export default class EventDetail extends Vue {
   }
 
   get isMyEvent(): boolean {
-    return this.event?.createdBy === this.$store.direct.state.me?.userId
+    return (
+      this.event?.admins.includes(this.$store.direct.state.me?.userId ?? '') ??
+      false
+    )
   }
 }
 

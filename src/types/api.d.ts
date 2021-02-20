@@ -131,6 +131,7 @@ declare namespace API {
         description: string
         open: boolean
         members: string[]
+        admins: string[]
       }
       namespace Responses {
         export type $201 = Schemas.Group
@@ -150,6 +151,7 @@ declare namespace API {
           description: string
           open: boolean
           members: string[]
+          admins: string[]
         }
         namespace Responses {
           export type $200 = Schemas.Group

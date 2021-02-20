@@ -37,6 +37,7 @@ declare namespace Schemas {
     open: boolean
     members: string[]
     isTraQGroup: boolean
+    admins: string[]
     createdBy: string
     createdAt: string
     updatedAt: string

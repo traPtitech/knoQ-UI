@@ -52,7 +52,6 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
-import { formatDate, today } from '@/workers/date'
 
 const GroupsRepo = RepositoryFactory.get('groups')
 const UsersRepo = RepositoryFactory.get('users')
@@ -75,7 +74,9 @@ export default class YourGroups extends Vue {
   async fetchGroups() {
     this.groups = (await GroupsRepo.get()).data
       .filter(group => !group.isTraQGroup)
-      .filter(group => group.createdBy === this.$store.direct.state.me?.userId)
+      .filter(group =>
+        group.admins.includes(this.$store.direct.state.me?.userId ?? '')
+      )
   }
 }
 </script>

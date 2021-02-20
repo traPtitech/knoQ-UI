@@ -35,6 +35,13 @@ import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
 import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 
+export type GroupFormSummaryProps = {
+  name: string
+  description: string
+  members: string[]
+  open: boolean
+}
+
 @Component({
   components: {
     MarkdownField,
@@ -45,7 +52,7 @@ import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
     SummaryItemSubtext,
   },
 })
-export default class GroupEventFormSummary extends Vue {
+export default class GroupFormSummary extends Vue {
   @Prop({ type: String, required: true })
   name!: string
 
