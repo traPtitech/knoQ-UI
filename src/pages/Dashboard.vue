@@ -17,7 +17,7 @@
       </v-col>
       <v-col md="6" cols="12">
         <DashboardItem>
-          <DashboardItemTitle>あなたの作成したグループ</DashboardItemTitle>
+          <DashboardItemTitle>あなたの管理者のグループ</DashboardItemTitle>
           <YourGroups />
         </DashboardItem>
       </v-col>

@@ -79,7 +79,6 @@ export default class GroupEdit extends Vue {
 
   async created() {
     this.status = 'loading'
-    const groupId = this.$route.params.id
     try {
       await this.fetchGroupData()
       this.status = 'loaded'

@@ -55,6 +55,7 @@ export default class GroupNew extends Vue {
     description: '',
     members: [],
     open: false,
+    admins: [],
   }
 
   async submitGroup() {
