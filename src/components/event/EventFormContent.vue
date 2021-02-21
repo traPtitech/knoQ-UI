@@ -26,14 +26,25 @@
       filled
       multiple
       clearable
+      :disabled="groupInput === null"
       label="イベント管理者"
       placeholder="イベント管理者を選択"
-      :disabled="groupInput === null"
       :items="memberOfSelectedGroup"
       item-text="name"
       :item-value="v => v"
       :rules="$rules.eventAdmins"
-    />
+    >
+      <template #item="{ item }">
+        <v-list-item-avatar>
+          <trap-avatar size="36" :traq-id="item.name" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{ item.name }}
+          </v-list-item-title>
+        </v-list-item-content>
+      </template>
+    </v-autocomplete>
     <v-combobox
       v-model="tagNames"
       filled
@@ -44,7 +55,7 @@
       :items="allTags"
     >
       <template #selection="{ item }">
-        <EventTag
+        <event-tag
           :key="item"
           :name="item"
           close
@@ -68,6 +79,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import EventTag from '@/components/shared/EventTag.vue'
+import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import { rmCtrlChar } from '@/workers/rmCtrlChar'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
@@ -86,6 +98,7 @@ const TagsRepo = RepositoryFactory.get('tags')
 @Component({
   components: {
     EventTag,
+    TrapAvatar,
   },
 })
 export default class EventFormContent extends Vue {
