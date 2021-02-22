@@ -33,7 +33,7 @@
           <v-col class="flex-grow-0">
             <ActionMenu>
               <v-list-item v-if="isMyGroup" :to="`/groups/edit/${groupId}`">
-                <v-list-item-title>Edit this event</v-list-item-title>
+                <v-list-item-title>Edit this group</v-list-item-title>
               </v-list-item>
             </ActionMenu>
           </v-col>

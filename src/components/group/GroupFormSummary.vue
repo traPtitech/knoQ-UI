@@ -71,9 +71,9 @@ export default class GroupFormSummary extends Vue {
       : '自由参加できないグループです'
   }
 
-  get memberNames(): (string | undefined)[] {
+  get memberNames(): string[] {
     const nameById = this.$store.direct.getters.usersCache.nameById
-    return this.members.map(nameById)
+    return this.members.flatMap(userId => nameById(userId) ?? [])
   }
 
   get openIcon() {
