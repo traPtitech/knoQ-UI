@@ -3598,10 +3598,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-direct-vuex@^0.12.0:
-  version "0.12.0"
-  resolved "https://registry.yarnpkg.com/direct-vuex/-/direct-vuex-0.12.0.tgz#aba06acc5def3c5cd8e26b6dabb0557e9d074ddf"
-  integrity sha512-yhIlQl9nfKtP55ZEomljcEsxq9rWWc6Fo/DhuU2SIN24qIa4VfTY1dcCAAOQrYdZt4+id5hHjWMdDFa0BDGgSw==
+direct-vuex@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/direct-vuex/-/direct-vuex-0.12.1.tgz#19afc96b58faa3414837ae06154897a381a9a8af"
+  integrity sha512-U1eVqJuUasjZvpTUBvogfTEWkvPPntqimK5pzZKehuPeGMvMbb/iimP/ahsG+G4vsZDOY4IsRtq8x2xsAl+fmQ==
 
 dns-equal@^1.0.0:
   version "1.0.0"
