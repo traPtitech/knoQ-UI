@@ -23,6 +23,7 @@ declare namespace Schemas {
     timeEnd: string
     roomId: string
     groupId: string
+    admins: string[]
     tags: { name: string }[]
     createdBy: string
     createdAt: string
@@ -36,6 +37,7 @@ declare namespace Schemas {
     open: boolean
     members: string[]
     isTraQGroup: boolean
+    admins: string[]
     createdBy: string
     createdAt: string
     updatedAt: string

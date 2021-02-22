@@ -1,15 +1,36 @@
 <template>
   <v-form v-model="valid" class="pt-2">
     <v-text-field
-      v-model="nameSync"
+      v-model="nameInput"
       filled
       label="グループ名"
       :rules="$rules.groupName"
       class="mb-n6"
     />
-    <v-checkbox v-model="openSync" label="自由参加可能なグループにする" />
+    <v-checkbox v-model="openInput" label="自由参加可能なグループにする" />
     <v-autocomplete
-      v-model="membersSync"
+      v-model="adminsInput"
+      filled
+      multiple
+      label="管理者"
+      :items="allMembers"
+      item-text="name"
+      item-value="userId"
+      :rules="$rules.groupMembers"
+    >
+      <template #item="{ item }">
+        <v-list-item-avatar>
+          <TrapAvatar size="36" :traq-id="item.name" />
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{ item.name }}
+          </v-list-item-title>
+        </v-list-item-content>
+      </template>
+    </v-autocomplete>
+    <v-autocomplete
+      v-model="membersInput"
       filled
       multiple
       label="メンバー"
@@ -30,7 +51,7 @@
       </template>
     </v-autocomplete>
     <v-textarea
-      v-model="descriptionSync"
+      v-model="descriptionInput"
       filled
       rows="10"
       label="説明"
@@ -45,6 +66,14 @@ import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 
+export type GroupFormContentProps = {
+  name: string
+  description: string
+  admins: string[]
+  members: string[]
+  open: boolean
+}
+
 @Component({
   components: {
     TrapAvatar,
@@ -52,16 +81,19 @@ import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 })
 export default class GroupFormContent extends Vue {
   @PropSync('name', { type: String, required: true })
-  nameSync!: string
+  nameInput!: string
 
   @PropSync('description', { type: String, required: true })
-  descriptionSync!: string
+  descriptionInput!: string
+
+  @PropSync('admins', { type: Array, required: true })
+  adminsInput!: string[]
 
   @PropSync('members', { type: Array, required: true })
-  membersSync!: string[]
+  membersInput!: string[]
 
   @PropSync('open', { type: Boolean, required: true })
-  openSync!: boolean
+  openInput!: boolean
 
   @Prop({ type: Boolean, required: true })
   value!: boolean

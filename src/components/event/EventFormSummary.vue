@@ -50,6 +50,18 @@ import SummaryItemText from '@/components/shared/SummaryItemText.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 
+export type EventSummary = {
+  name: string
+  description: string
+  tags: { name: string }[]
+  groupName: string
+  place: string
+  isPrivate: boolean
+  sharedRoom: boolean
+  timeStart: string
+  timeEnd: string
+}
+
 @Component({
   components: {
     MarkdownField,

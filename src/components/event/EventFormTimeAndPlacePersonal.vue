@@ -1,7 +1,7 @@
 <template>
   <v-form v-model="valid">
     <v-text-field
-      v-model="placeSync"
+      v-model="placeInput"
       filled
       label="場所"
       :rules="$rules.eventPlace"
@@ -40,20 +40,26 @@ import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import { getDate, getTime, getIso8601, today } from '@/workers/date'
 
+export type EventTimeAndPlacePersonal = {
+  timeStart: string
+  timeEnd: string
+  place: string
+}
+
 @Component({
   components: {
     TimePicker,
   },
 })
-export default class EventFormReservationPrivate extends Vue {
+export default class EventFormTimeAndPlacePersonal extends Vue {
   @PropSync('place', { type: String, required: true })
-  placeSync!: string
+  placeInput!: string
 
   @PropSync('timeStart', { type: String, required: true })
-  timeStartSync!: string
+  timeStartInput!: string
 
   @PropSync('timeEnd', { type: String, required: true })
-  timeEndSync!: string
+  timeEndInput!: string
 
   @Prop({ type: Boolean, required: true })
   value!: boolean
@@ -62,29 +68,29 @@ export default class EventFormReservationPrivate extends Vue {
   private timeStartMem = ''
   private timeEndMem = ''
 
-  @Watch('timeStartSync', { immediate: true })
+  @Watch('timeStartInput', { immediate: true })
   private onTimeStartPropChange() {
-    this.dateMem = this.timeStartSync && getDate(this.timeStartSync)
-    this.timeStartMem = this.timeStartSync && getTime(this.timeStartSync)
+    this.dateMem = this.timeStartInput && getDate(this.timeStartInput)
+    this.timeStartMem = this.timeStartInput && getTime(this.timeStartInput)
   }
-  @Watch('timeEndSync', { immediate: true })
+  @Watch('timeEndInput', { immediate: true })
   private onTimeEndPropChange() {
-    this.dateMem = this.timeEndSync && getDate(this.timeStartSync)
-    this.timeEndMem = this.timeEndSync && getTime(this.timeEndSync)
+    this.dateMem = this.timeEndInput && getDate(this.timeStartInput)
+    this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
   @Watch('dateMem')
   @Watch('timeStartMem')
   private onTimeStartMemChange() {
     if (this.dateMem && this.timeStartMem) {
-      this.timeStartSync = getIso8601(this.dateMem, this.timeStartMem)
+      this.timeStartInput = getIso8601(this.dateMem, this.timeStartMem)
     }
   }
   @Watch('dateMem')
   @Watch('timeEndMem')
   private onTimeEndMemChange() {
     if (this.dateMem && this.timeEndMem) {
-      this.timeEndSync = getIso8601(this.dateMem, this.timeEndMem)
+      this.timeEndInput = getIso8601(this.dateMem, this.timeEndMem)
     }
   }
 
