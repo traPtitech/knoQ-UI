@@ -53,9 +53,13 @@ export default class GroupNew extends Vue {
   group: API.Groups.Post.RequestBody = {
     name: '',
     description: '',
-    members: [],
     open: false,
-    admins: [],
+    admins: this.$store.direct.state.me?.userId
+      ? [this.$store.direct.state.me.userId]
+      : [],
+    members: this.$store.direct.state.me?.userId
+      ? [this.$store.direct.state.me.userId]
+      : [],
   }
 
   async submitGroup() {

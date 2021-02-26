@@ -11,7 +11,7 @@
       placeholder="イベント名を入力"
       :rules="$rules.eventName"
     />
-    <v-autocomplete
+    <autocomplete
       v-model="groupInput"
       filled
       label="主催グループ"
@@ -21,7 +21,7 @@
       :item-value="v => v"
       :rules="$rules.eventGroup"
     />
-    <v-autocomplete
+    <autocomplete
       v-model="adminsInput"
       filled
       multiple
@@ -44,7 +44,7 @@
           </v-list-item-title>
         </v-list-item-content>
       </template>
-    </v-autocomplete>
+    </autocomplete>
     <v-combobox
       v-model="tagNames"
       filled
@@ -80,6 +80,7 @@ import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import EventTag from '@/components/shared/EventTag.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import Autocomplete from '@/components/shared/Autocomplete.vue'
 import { rmCtrlChar } from '@/workers/rmCtrlChar'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 
@@ -99,6 +100,7 @@ const TagsRepo = RepositoryFactory.get('tags')
   components: {
     EventTag,
     TrapAvatar,
+    Autocomplete,
   },
 })
 export default class EventFormContent extends Vue {
