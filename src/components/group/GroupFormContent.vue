@@ -8,7 +8,7 @@
       class="mb-n6"
     />
     <v-checkbox v-model="openInput" label="自由参加可能なグループにする" />
-    <v-autocomplete
+    <autocomplete
       v-model="adminsInput"
       filled
       multiple
@@ -28,8 +28,8 @@
           </v-list-item-title>
         </v-list-item-content>
       </template>
-    </v-autocomplete>
-    <v-autocomplete
+    </autocomplete>
+    <autocomplete
       v-model="membersInput"
       filled
       multiple
@@ -49,7 +49,7 @@
           </v-list-item-title>
         </v-list-item-content>
       </template>
-    </v-autocomplete>
+    </autocomplete>
     <v-textarea
       v-model="descriptionInput"
       filled
@@ -65,6 +65,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import Autocomplete from '@/components/shared/Autocomplete.vue'
 
 export type GroupFormContentProps = {
   name: string
@@ -77,6 +78,7 @@ export type GroupFormContentProps = {
 @Component({
   components: {
     TrapAvatar,
+    Autocomplete,
   },
 })
 export default class GroupFormContent extends Vue {

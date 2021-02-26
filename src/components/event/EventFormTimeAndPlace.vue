@@ -15,7 +15,7 @@
       </v-col>
       <v-col cols="12" md="">
         <v-checkbox v-model="sharedRoomInput" label="部屋の共用を許可する" />
-        <v-autocomplete
+        <autocomplete
           v-model="roomInput"
           filled
           label="進捗部屋"
@@ -53,6 +53,7 @@
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
+import Autocomplete from '@/components/shared/Autocomplete.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
 import {
@@ -78,6 +79,7 @@ const EventsRepo = RepositoryFactory.get('events')
 @Component({
   components: {
     TimePicker,
+    Autocomplete,
   },
 })
 export default class EventFormTimeAndPlace extends Vue {

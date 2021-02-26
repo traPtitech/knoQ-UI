@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-autocomplete
+    <autocomplete
       v-model="filterTags"
       :items="tags"
       item-text="name"
@@ -18,7 +18,7 @@
           @click:close="removeFilterTag(item.name)"
         />
       </template>
-    </v-autocomplete>
+    </autocomplete>
     <v-checkbox
       v-model="showFinished"
       label="過去のイベントも表示"
@@ -37,6 +37,7 @@ import EventList from '@/components/event/EventList.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
+import Autocomplete from '@/components/shared/Autocomplete.vue'
 import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { today, formatDate } from '@/workers/date'
 
@@ -50,6 +51,7 @@ const TagsRepo = RepositoryFactory.get('tags')
     EventTag,
     ProgressCircular,
     LoadFailedText,
+    Autocomplete,
   },
 })
 export default class EventSearch extends Vue {
