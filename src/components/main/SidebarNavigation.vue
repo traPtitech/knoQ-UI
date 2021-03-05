@@ -36,7 +36,7 @@ export default class SidebarNavigation extends Vue {
         link: '/events',
       },
       {
-        icon: 'mdi-map-marker',
+        icon: 'mdi-calendar',
         title: 'Calendar',
         link: '/calendar',
       },
