@@ -59,9 +59,9 @@ export default class EventSearch extends Vue {
   filterTags: string[] = []
   showFinished = false
 
-  events: Schemas.Event[] | null = null
-  rooms: Map<string, Schemas.Room> | null = null
-  tags: Schemas.Tag[] | null = null
+  events: Schemas.Event[] = []
+  rooms: Map<string, Schemas.Room> = new Map()
+  tags: Schemas.Tag[] = []
 
   async created() {
     this.status = 'loading'
