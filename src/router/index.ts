@@ -4,6 +4,7 @@ import store from '@/store'
 import PathStorage from '@/workers/PathStorage'
 
 const Dashboard = () => import('@/pages/Dashboard.vue')
+const Calendar = () => import('@/pages/Calendar.vue')
 const EventSearch = () => import('@/pages/EventSearch.vue')
 const EventDetail = () => import('@/pages/EventDetail.vue')
 const EventNew = () => import('@/pages/EventNew.vue')
@@ -31,6 +32,12 @@ const router = new Router({
       name: 'Rooms',
       component: WIP,
       meta: { headerTitle: 'Rooms' },
+    },
+    {
+      path: '/calendar',
+      name: 'Calendar',
+      component: Calendar,
+      meta: { headerTitle: 'Calendar' },
     },
     {
       path: '/groups',
