@@ -40,11 +40,6 @@ export default class SidebarNavigation extends Vue {
         title: 'Calendar',
         link: '/calendar',
       },
-      {
-        icon: 'mdi-map-marker',
-        title: 'Rooms',
-        link: '/rooms',
-      },
     ]
   }
 }

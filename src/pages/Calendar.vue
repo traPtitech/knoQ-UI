@@ -2,7 +2,12 @@
   <v-col>
     <v-sheet height="64">
       <v-toolbar flat>
-        <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
+        <v-btn
+          outlined
+          class="mr-4"
+          color="grey darken-2"
+          @click="jumpToCurrentDate"
+        >
           Today
         </v-btn>
         <v-btn fab text small color="grey darken-2" @click="prev">
@@ -14,7 +19,7 @@
         <v-toolbar-title v-if="$refs.calendar">
           {{ calendarTitle }}
         </v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-menu bottom right>
           <template #activator="{ on, attrs }">
             <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
@@ -24,16 +29,16 @@
           </template>
           <v-list>
             <v-list-item @click="type = 'day'">
-              <v-list-item-title>Day</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="type = 'week'">
-              <v-list-item-title>Week</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="type = 'month'">
-              <v-list-item-title>Month</v-list-item-title>
+              <v-list-item-title>{{ typeToLabel['day'] }}</v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = '4day'">
-              <v-list-item-title>4 days</v-list-item-title>
+              <v-list-item-title>{{ typeToLabel['4day'] }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="type = 'week'">
+              <v-list-item-title>{{ typeToLabel['week'] }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="type = 'month'">
+              <v-list-item-title>{{ typeToLabel['month'] }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -41,15 +46,15 @@
     </v-sheet>
     <v-sheet height="720">
       <v-calendar
-        ref="calendar"
+        :ref="calendarRefName"
         v-model="focus"
         :type="type"
-        :events="calendarEvents"
+        :events="calendarEvent"
         :event-color="getEventColor"
         @click:event="showEvent"
         @click:more="viewDay"
         @click:date="viewDay"
-      ></v-calendar>
+      />
       <v-menu
         v-model="selectedOpen"
         :close-on-content-click="false"
@@ -62,7 +67,7 @@
           min-width="350px"
           flat
         >
-          <v-toolbar :color="selectedEvent.color" dark>
+          <v-toolbar :color="selectedEvent.color" dark flat>
             <v-toolbar-title>
               <router-link :to="`/events/${selectedEvent.eventId}`">
                 {{ selectedEvent.name }}
@@ -78,11 +83,12 @@
             </v-btn>
           </v-toolbar>
           <v-card-text>
-            <MarkdownField :src="selectedEvent.description" />
+            <p v-if="!selectedEvent.description">No description provided.</p>
+            <markdown-field v-else :src="selectedEvent.description" />
           </v-card-text>
           <v-card-actions>
             <v-btn text color="secondary" @click="selectedOpen = false">
-              Cancel
+              Close
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -100,7 +106,7 @@ import MarkdownField from '@/components/shared/MarkdownField.vue'
 
 const EventsRepo = RepositoryFactory.get('events')
 
-type calendarEvent = {
+type CalendarEvent = {
   eventId: string
   name: string
   description: string
@@ -118,57 +124,39 @@ type calendarEvent = {
 export default class Calendar extends Vue {
   events: Schemas.Event[] = []
 
-  calendarEvents: calendarEvent[] = []
-
   focus = ''
   type = 'month'
 
-  selectedEvent: calendarEvent | null = null
+  selectedEvent: CalendarEvent | null = null
   selectedElement = null
   selectedOpen = false
 
   typeToLabel = {
     month: 'Month',
+    '4day': '4 Days',
     week: 'Week',
     day: 'Day',
-    '4day': '4 Days',
   }
-
-  colors = [
-    'blue',
-    'indigo',
-    'deep-purple',
-    'cyan',
-    'green',
-    'orange',
-    'grey darken-1',
-    'red',
-  ]
 
   async created() {
-    this.events = await this.fetchEvents()
-    this.calendarEvents = this.events.map(event => ({
-      eventId: event.eventId,
-      name: event.name,
-      description: event.description,
-      admins: event.admins,
-      color: this.colors[parseInt(event.groupId[0], 16) % 8],
-      start: formatDate('YYYY-MM-DD HH:mm')(event.timeStart),
-      end: formatDate('YYYY-MM-DD HH:mm')(event.timeEnd),
-    }))
+    this.events = (await EventsRepo.get()).data
   }
 
-  async fetchEvents() {
-    return (await EventsRepo.get()).data
+  calendarRefName = 'calendar'
+  get calendarRef() {
+    return this.$refs[this.calendarRefName] as any
+  }
+  get calendarTitle() {
+    return this.calendarRef?.title
   }
 
   prev() {
-    ;(this.$refs.calendar as any).prev()
+    this.calendarRef?.prev()
   }
   next() {
-    ;(this.$refs.calendar as any).next()
+    this.calendarRef?.next()
   }
-  setToday() {
+  jumpToCurrentDate() {
     this.focus = ''
   }
 
@@ -195,20 +183,37 @@ export default class Calendar extends Vue {
     this.type = 'day'
   }
 
-  getEventColor(event) {
+  get calendarEvent(): CalendarEvent[] {
+    const idToColor = (id: string) =>
+      [
+        'blue',
+        'indigo',
+        'deep-purple',
+        'cyan',
+        'green',
+        'orange',
+        'grey darken-1',
+        'red',
+      ][parseInt(id[0], 16) % 8]
+    const toVCalendarDateFormat = formatDate('YYYY-MM-DD HH:mm')
+
+    return this.events.map(event => ({
+      eventId: event.eventId,
+      name: event.name,
+      description: event.description,
+      admins: event.admins,
+      color: idToColor(event.groupId),
+      start: toVCalendarDateFormat(event.timeStart),
+      end: toVCalendarDateFormat(event.timeEnd),
+    }))
+  }
+  getEventColor(event: CalendarEvent) {
     return event.color
   }
 
-  get calendarTitle() {
-    return (this.$refs.calendar as any).title
-  }
-  get isMyEvent(): (event: calendarEvent) => boolean {
-    return (event: calendarEvent) => {
-      return (
-        event?.admins.includes(this.$store.direct.state.me?.userId ?? '') ??
-        false
-      )
-    }
+  get isMyEvent() {
+    return (event: CalendarEvent) =>
+      event?.admins.includes(this.$store.direct.state.me?.userId ?? '') ?? false
   }
 }
 </script>
