@@ -158,13 +158,21 @@ export default class Calendar extends Vue {
   }
 
   showEvent({ nativeEvent, event }) {
-    if (this.selectedOpen) {
-      this.selectedOpen = false
-    } else {
-      this.selectedOpen = true
+    const open = () => {
       this.selectedEvent = event
       this.selectedElement = nativeEvent.target
+      setTimeout(() => {
+        this.selectedOpen = true
+      }, 10)
     }
+
+    if (this.selectedOpen) {
+      this.selectedOpen = false
+      setTimeout(open, 10)
+    } else {
+      open()
+    }
+
     nativeEvent.stopPropagation()
   }
 
