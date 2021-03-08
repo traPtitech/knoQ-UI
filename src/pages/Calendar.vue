@@ -63,6 +63,12 @@
           flat
         >
           <v-toolbar :color="selectedEvent.color" dark>
+            <v-toolbar-title>
+              <router-link :to="`/events/${selectedEvent.eventId}`">
+                {{ selectedEvent.name }}
+              </router-link>
+            </v-toolbar-title>
+            <v-spacer />
             <v-btn
               v-if="isMyEvent(selectedEvent)"
               icon
@@ -70,11 +76,6 @@
             >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-toolbar-title>
-              <router-link :to="`/events/${selectedEvent.eventId}`">
-                {{ selectedEvent.name }}
-              </router-link>
-            </v-toolbar-title>
           </v-toolbar>
           <v-card-text>
             <MarkdownField :src="selectedEvent.description" />
