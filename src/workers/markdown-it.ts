@@ -4,7 +4,7 @@ import mila from 'markdown-it-link-attributes'
 
 function highlight(code: string, lang: string): string {
   const result = hljs.getLanguage(lang)
-    ? hljs.highlight(lang, code)
+    ? hljs.highlight(code, { language: lang })
     : hljs.highlightAuto(code)
   return result.value
 }
