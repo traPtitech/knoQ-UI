@@ -9362,10 +9362,10 @@ vuetify-loader@^1.7.2:
     file-loader "^6.2.0"
     loader-utils "^2.0.0"
 
-vuetify@^2.4.8:
-  version "2.4.8"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.8.tgz#c6e883a9b2560f9906bd8b9f9eb58b001200aeef"
-  integrity sha512-rJYyzSO4Qsm/Q79W4FAUedgIDzUvx2uXzXXQ7OB2z9kAAkVOpTdMFY0CnpBcvlYbXOYy/mJ81/yUCV1ZAvJ3FQ==
+vuetify@^2.4.10:
+  version "2.4.10"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-2.4.10.tgz#e3989f3c3fa49dbb62534ba3aeca8dc890e43bab"
+  integrity sha512-ic/qg2dtXdWpCxQteyErBcBpzPvk/66u+RJOw57spZvd4BkhDUjUcOGWAruePfWmwnRryCNvpjbLZRjdt8k5BA==
 
 vuex@^3.6.2:
   version "3.6.2"
