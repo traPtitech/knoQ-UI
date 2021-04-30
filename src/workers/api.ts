@@ -13,22 +13,13 @@ const authAPI = axios.create({
 })
 
 interface AuthParams {
-  state: string
-  codeChallenge: string
-  clientId: string
+  url: string
 }
 
 export const fetchAuthParams = (): AxiosPromise<AuthParams> => {
   return authAPI.post('/authParams')
 }
 
-export const redirectToAuthPage = (codes: AuthParams) => {
-  const authEndpointURL = new URL(`${traQAPIBaseURL}/oauth2/authorize`)
-  authEndpointURL.searchParams.set('response_type', 'code')
-  authEndpointURL.searchParams.set('client_id', codes.clientId)
-  authEndpointURL.searchParams.set('state', codes.state)
-  authEndpointURL.searchParams.set('code_challenge', codes.codeChallenge)
-  authEndpointURL.searchParams.set('code_challenge_method', 'S256')
-
-  window.location.assign(authEndpointURL.href)
+export const redirectToAuthPage = (ap: AuthParams) => {
+  window.location.assign(ap.url)
 }
