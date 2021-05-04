@@ -26,7 +26,7 @@
     />
     <ProgressCircular v-if="status === 'loading'" />
     <LoadFailed v-else-if="status === 'error'" />
-    <EventList v-else :events="allEventData" :event-filter="filterFn" />
+    <EventList v-else :events="events" :event-filter="filterFn" />
   </v-container>
 </template>
 
@@ -38,12 +38,8 @@ import EventTag from '@/components/shared/EventTag.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { today, formatDate } from '@/workers/date'
-
-const EventsRepo = RepositoryFactory.get('events')
-const RoomsRepo = RepositoryFactory.get('rooms')
-const TagsRepo = RepositoryFactory.get('tags')
+import api, { ResponseEvent, ResponseTag } from '@/api'
 
 @Component({
   components: {
@@ -59,17 +55,15 @@ export default class EventSearch extends Vue {
   filterTags: string[] = []
   showFinished = false
 
-  events: Schemas.Event[] = []
-  rooms: Map<string, Schemas.Room> = new Map()
-  tags: Schemas.Tag[] = []
+  events: ResponseEvent[] = []
+  tags: ResponseTag[] = []
 
   async created() {
     this.status = 'loading'
     try {
-      await Promise.all([
-        this.fetchEvents(),
-        this.fetchRooms(),
-        this.fetchTags(),
+      ;[this.events, this.tags] = await Promise.all([
+        api.events.getEvents({}),
+        api.tags.getTag(),
       ])
       this.status = 'loaded'
       this.filterTags = [this.$route.query.tags]
@@ -79,18 +73,6 @@ export default class EventSearch extends Vue {
     } catch (__) {
       this.status = 'error'
     }
-  }
-  async fetchEvents() {
-    this.events = (await EventsRepo.get()).data
-  }
-  async fetchRooms() {
-    const rooms = new Map<string, Schemas.Room>()
-    const { data } = await RoomsRepo.get()
-    data.forEach(room => rooms.set(room.roomId, room))
-    this.rooms = rooms
-  }
-  async fetchTags() {
-    this.tags = (await TagsRepo.get()).data
   }
 
   @Watch('showFinished')
@@ -120,13 +102,6 @@ export default class EventSearch extends Vue {
   removeFilterTag(name: string) {
     const index = this.filterTags.indexOf(name)
     if (index >= 0) this.filterTags.splice(index, 1)
-  }
-
-  get allEventData() {
-    if (!this.events || !this.rooms) return []
-    return [...this.events]
-      .sort((e1, e2) => (e1.timeStart < e2.timeStart ? -1 : 1))
-      .map(event => ({ ...event, place: this.rooms?.get(event.roomId)?.place }))
   }
 }
 </script>

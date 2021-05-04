@@ -4,23 +4,20 @@
       <span class="text--secondary headline"> イベントがありません... </span>
     </div>
     <template v-for="(event, i) in filteredEvents" v-else>
-      <div v-if="isDateBorder(i)" :key="event.date" class="mb-1 headline">
+      <div v-if="isDateBorder(i)" :key="event.timeStart" class="mb-1 headline">
         {{ formatDate(event.timeStart) }}
       </div>
-      <EventListItem :key="event.id" v-bind="event" class="mb-5" />
+      <EventListItem :key="event.eventId" :event="event" class="mb-5" />
     </template>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop, Watch } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
 import EventListItem from '@/components/event/EventListItem.vue'
 import { formatDate, getDate, DATE_DISPLAY_FORMAT } from '@/workers/date'
-
-interface EventData extends Schemas.Event {
-  place: string
-}
+import { ResponseEvent } from '@/api'
 
 @Component({
   components: {
@@ -29,10 +26,10 @@ interface EventData extends Schemas.Event {
 })
 export default class EventList extends Vue {
   @Prop({ type: Array, required: true })
-  events!: EventData[]
+  events!: ResponseEvent[]
 
   @Prop({ type: Function, default: () => true })
-  eventFilter!: (e: EventData) => boolean
+  eventFilter!: (e: ResponseEvent) => boolean
 
   get filteredEvents() {
     return this.events.filter(this.eventFilter)
