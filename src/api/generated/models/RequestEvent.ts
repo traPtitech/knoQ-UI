@@ -46,6 +46,6 @@ export function RequestEventToJSON(value?: RequestEvent | null): any {
     if (value === null) {
         return null;
     }
-    return { ...RequestEventInstantToJSON(value), ...RequestEventStockToJSON(value) };
+    return { ...RequestEventInstantToJSON(value as any), ...RequestEventStockToJSON(value as any) };
 }
 
