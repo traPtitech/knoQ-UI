@@ -17,6 +17,7 @@ const authMiddleware: API.Middleware = {
 
 const config: API.Configuration = new API.Configuration({
   basePath: baseURL,
+  credentials: 'include',
   middleware: [authMiddleware],
 })
 
