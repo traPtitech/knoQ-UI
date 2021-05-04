@@ -24,13 +24,13 @@ export interface ResponseEventTags {
      * @type {string}
      * @memberof ResponseEventTags
      */
-    tagId?: string;
+    tagId: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventTags
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {boolean}
@@ -49,8 +49,8 @@ export function ResponseEventTagsFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'tagId': !exists(json, 'tagId') ? undefined : json['tagId'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'tagId': json['tagId'],
+        'name': json['name'],
         'locked': !exists(json, 'locked') ? undefined : json['locked'],
     };
 }
