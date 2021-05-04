@@ -2,7 +2,7 @@
   <v-container>
     <ProgressCircular v-if="status === 'loading'" />
     <LoadFailedText v-else-if="status === 'error'" />
-    <v-card v-else class="pa-9">
+    <v-card v-else-if="event" class="pa-9">
       <div class="mb-12">
         <v-row no-gutters>
           <v-col>
@@ -10,7 +10,10 @@
           </v-col>
           <v-col class="flex-grow-0">
             <ActionMenu>
-              <v-list-item v-if="isMyEvent" :to="`/events/edit/${eventId}`">
+              <v-list-item
+                v-if="isMyEvent"
+                :to="`/events/edit/${event.eventId}`"
+              >
                 <v-list-item-title>Edit this event</v-list-item-title>
               </v-list-item>
             </ActionMenu>
@@ -46,10 +49,10 @@
           />
         </div>
         <div class="text--secondary">
-          <span v-if="group" class="mr-3">
+          <span v-if="event.group" class="mr-3">
             by
-            <router-link :to="`/groups/${event.groupId}`">
-              {{ group.name }}
+            <router-link :to="`/groups/${event.group.groupId}`">
+              {{ event.group.name }}
             </router-link>
           </span>
           <div v-else>
@@ -70,17 +73,17 @@
         <div class="text--secondary mb-n1">Place</div>
         <div class="headline">
           <a
-            v-if="isTitechRoom(room.place)"
-            :href="calcRoomPdfUrl(room.place)"
+            v-if="isTitechRoom(event.room.place)"
+            :href="calcRoomPdfUrl(event.room.place)"
             target="_blank"
             rel="noreferer noopener"
             class="mr-3"
           >
-            {{ room.place }}
+            {{ event.room.place }}
           </a>
-          <span v-else class="mr-3">{{ room.place }}</span>
+          <span v-else class="mr-3">{{ event.room.place }}</span>
         </div>
-        <div v-if="room.public" class="text--secondary body-2">
+        <div v-if="event.room.verified" class="text--secondary body-2">
           <v-icon :color="sharedRoomIcon.color">
             {{ sharedRoomIcon.icon }}
           </v-icon>
@@ -103,19 +106,9 @@ import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventTagEditor from '@/components/event/EventTagEditor.vue'
 import ActionMenu from '@/components/shared/ActionMenu.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-import {
-  formatDate,
-  getDate,
-  getTime,
-  DATETIME_DISPLAY_FORMAT,
-} from '@/workers/date'
+import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 import { isTitechRoom, calcRoomPdfUrl } from '@/workers/TokyoTech'
-
-const EventsRepo = RepositoryFactory.get('events')
-const RoomsRepo = RepositoryFactory.get('rooms')
-const GroupsRepo = RepositoryFactory.get('groups')
-const TagsRepo = RepositoryFactory.get('tags')
+import api, { ResponseEventDetail } from '@/api'
 
 @Component({
   components: {
@@ -131,28 +124,18 @@ export default class EventDetail extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
   isTagEditting = false
 
-  event: Schemas.Event | null = null
-  room: Schemas.Room | null = null
-  group: Schemas.Group | null = null
-  tags: Schemas.Tag[] = []
-  tagLoading = false
+  event: ResponseEventDetail | null = null
 
   editedTags: string[] = []
 
   async created() {
-    const eventId = this.$route.params.id
+    const eventID = this.$route.params.id
     this.status = 'loading'
     try {
-      this.event = (await EventsRepo.$eventId(eventId).get()).data
-      this.room = (await RoomsRepo.$roomId(this.event.roomId).get()).data
+      this.event = await api.events.getEventDetail({ eventID })
     } catch (__) {
       this.status = 'error'
       return
-    }
-    try {
-      this.group = (await GroupsRepo.$groupId(this.event.groupId).get()).data
-    } catch (__) {
-      this.group = null
     }
     this.status = 'loaded'
   }
@@ -172,15 +155,10 @@ export default class EventDetail extends Vue {
   }
 
   get tagNames(): string[] {
-    return this.tags.map(({ name }) => name)
+    return this.event?.tags.map(({ name }) => name) ?? []
   }
 
   async onTagEditStart() {
-    if (!this.tags.length) {
-      this.tagLoading = true
-      this.tags = (await TagsRepo.get()).data
-      this.tagLoading = false
-    }
     this.editedTags = this.event?.tags.map(({ name }) => name) ?? []
   }
 
@@ -188,18 +166,16 @@ export default class EventDetail extends Vue {
     const prevTagNames = this.event?.tags.map(({ name }) => name) ?? []
     const added = difference(this.editedTags, prevTagNames)
     const deleted = difference(prevTagNames, this.editedTags)
-    const eventId = this.$route.params.id
+    const eventID = this.$route.params.id
     await Promise.all([
-      Promise.all(
-        added.map(name => EventsRepo.$eventId(eventId).tags.post({ name }))
+      ...added.map(name =>
+        api.events.addEventTag({ eventID, requestTag: { name } })
       ),
-      Promise.all(
-        deleted.map(name =>
-          EventsRepo.$eventId(eventId).tags.$tagName(name).delete()
-        )
+      ...deleted.map(name =>
+        api.events.deleteEventTag({ eventID, tagName: name })
       ),
     ])
-    this.event = (await EventsRepo.$eventId(eventId).get()).data
+    this.event = await api.events.getEventDetail({ eventID })
     this.isTagEditting = false
     this.editedTags = []
   }
@@ -210,9 +186,6 @@ export default class EventDetail extends Vue {
 
   get calcRoomPdfUrl() {
     return calcRoomPdfUrl
-  }
-  get eventId(): string {
-    return this.$route.params.id
   }
 
   get isMyEvent(): boolean {
