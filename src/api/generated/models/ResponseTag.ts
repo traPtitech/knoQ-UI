@@ -24,25 +24,25 @@ export interface ResponseTag {
      * @type {string}
      * @memberof ResponseTag
      */
-    tagId?: string;
+    tagId: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseTag
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseTag
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseTag
      */
-    updatedAt?: string;
+    updatedAt: string;
 }
 
 export function ResponseTagFromJSON(json: any): ResponseTag {
@@ -55,10 +55,10 @@ export function ResponseTagFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'tagId': !exists(json, 'tagId') ? undefined : json['tagId'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'createdAt': !exists(json, 'createdAt') ? undefined : json['createdAt'],
-        'updatedAt': !exists(json, 'updatedAt') ? undefined : json['updatedAt'],
+        'tagId': json['tagId'],
+        'name': json['name'],
+        'createdAt': json['createdAt'],
+        'updatedAt': json['updatedAt'],
     };
 }
 

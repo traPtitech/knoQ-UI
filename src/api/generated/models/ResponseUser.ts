@@ -24,37 +24,37 @@ export interface ResponseUser {
      * @type {string}
      * @memberof ResponseUser
      */
-    id?: string;
+    id: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseUser
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseUser
      */
-    displayName?: string;
+    displayName: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseUser
      */
-    icon?: string;
+    icon: string;
     /**
      * 
      * @type {boolean}
      * @memberof ResponseUser
      */
-    privileged?: boolean;
+    privileged: boolean;
     /**
      * ユーザーアカウント状態 0: 停止 1: 有効 2: 一時停止
      * @type {number}
      * @memberof ResponseUser
      */
-    state?: number;
+    state: number;
 }
 
 export function ResponseUserFromJSON(json: any): ResponseUser {
@@ -67,12 +67,12 @@ export function ResponseUserFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'id': !exists(json, 'id') ? undefined : json['id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'displayName': !exists(json, 'displayName') ? undefined : json['displayName'],
-        'icon': !exists(json, 'icon') ? undefined : json['icon'],
-        'privileged': !exists(json, 'privileged') ? undefined : json['privileged'],
-        'state': !exists(json, 'state') ? undefined : json['state'],
+        'id': json['id'],
+        'name': json['name'],
+        'displayName': json['displayName'],
+        'icon': json['icon'],
+        'privileged': json['privileged'],
+        'state': json['state'],
     };
 }
 

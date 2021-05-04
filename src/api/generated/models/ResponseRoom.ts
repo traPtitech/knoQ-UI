@@ -31,67 +31,67 @@ export interface ResponseRoom {
      * @type {string}
      * @memberof ResponseRoom
      */
-    roomId?: string;
+    roomId: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseRoom
      */
-    place?: string;
+    place: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseRoom
      */
-    timeStart?: string;
+    timeStart: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseRoom
      */
-    timeEnd?: string;
+    timeEnd: string;
     /**
      * 部屋が使えることを保証する
      * @type {boolean}
      * @memberof ResponseRoom
      */
-    verified?: boolean;
+    verified: boolean;
     /**
      * どのイベントも使用していない時間帯
      * @type {Array<Duration>}
      * @memberof ResponseRoom
      */
-    freeTimes?: Array<Duration>;
+    freeTimes: Array<Duration>;
     /**
      * 部屋を共用すれば、使用できる時間帯
      * @type {Array<Duration>}
      * @memberof ResponseRoom
      */
-    sharedTimes?: Array<Duration>;
+    sharedTimes: Array<Duration>;
     /**
      * 編集権を持つユーザー
      * @type {Array<string>}
      * @memberof ResponseRoom
      */
-    admins?: Array<string>;
+    admins: Array<string>;
     /**
      * 
      * @type {string}
      * @memberof ResponseRoom
      */
-    createdBy?: string;
+    createdBy: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseRoom
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseRoom
      */
-    updatedAt?: string;
+    updatedAt: string;
 }
 
 export function ResponseRoomFromJSON(json: any): ResponseRoom {
@@ -104,17 +104,17 @@ export function ResponseRoomFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'roomId': !exists(json, 'roomId') ? undefined : json['roomId'],
-        'place': !exists(json, 'place') ? undefined : json['place'],
-        'timeStart': !exists(json, 'timeStart') ? undefined : json['timeStart'],
-        'timeEnd': !exists(json, 'timeEnd') ? undefined : json['timeEnd'],
-        'verified': !exists(json, 'verified') ? undefined : json['verified'],
-        'freeTimes': !exists(json, 'freeTimes') ? undefined : ((json['freeTimes'] as Array<any>).map(DurationFromJSON)),
-        'sharedTimes': !exists(json, 'sharedTimes') ? undefined : ((json['sharedTimes'] as Array<any>).map(DurationFromJSON)),
-        'admins': !exists(json, 'admins') ? undefined : json['admins'],
-        'createdBy': !exists(json, 'createdBy') ? undefined : json['createdBy'],
-        'createdAt': !exists(json, 'createdAt') ? undefined : json['createdAt'],
-        'updatedAt': !exists(json, 'updatedAt') ? undefined : json['updatedAt'],
+        'roomId': json['roomId'],
+        'place': json['place'],
+        'timeStart': json['timeStart'],
+        'timeEnd': json['timeEnd'],
+        'verified': json['verified'],
+        'freeTimes': ((json['freeTimes'] as Array<any>).map(DurationFromJSON)),
+        'sharedTimes': ((json['sharedTimes'] as Array<any>).map(DurationFromJSON)),
+        'admins': json['admins'],
+        'createdBy': json['createdBy'],
+        'createdAt': json['createdAt'],
+        'updatedAt': json['updatedAt'],
     };
 }
 
@@ -132,8 +132,8 @@ export function ResponseRoomToJSON(value?: ResponseRoom | null): any {
         'timeStart': value.timeStart,
         'timeEnd': value.timeEnd,
         'verified': value.verified,
-        'freeTimes': value.freeTimes === undefined ? undefined : ((value.freeTimes as Array<any>).map(DurationToJSON)),
-        'sharedTimes': value.sharedTimes === undefined ? undefined : ((value.sharedTimes as Array<any>).map(DurationToJSON)),
+        'freeTimes': ((value.freeTimes as Array<any>).map(DurationToJSON)),
+        'sharedTimes': ((value.sharedTimes as Array<any>).map(DurationToJSON)),
         'admins': value.admins,
         'createdBy': value.createdBy,
         'createdAt': value.createdAt,

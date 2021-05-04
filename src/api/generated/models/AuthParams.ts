@@ -24,7 +24,7 @@ export interface AuthParams {
      * @type {string}
      * @memberof AuthParams
      */
-    url?: string;
+    url: string;
 }
 
 export function AuthParamsFromJSON(json: any): AuthParams {
@@ -37,7 +37,7 @@ export function AuthParamsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'url': !exists(json, 'url') ? undefined : json['url'],
+        'url': json['url'],
     };
 }
 

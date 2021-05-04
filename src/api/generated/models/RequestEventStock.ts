@@ -31,49 +31,49 @@ export interface RequestEventStock {
      * @type {string}
      * @memberof RequestEventStock
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof RequestEventStock
      */
-    descirption?: string;
+    description: string;
     /**
      * 部屋の共用をするか
      * @type {boolean}
      * @memberof RequestEventStock
      */
-    sharedRoom?: boolean;
+    sharedRoom: boolean;
     /**
      * 
      * @type {string}
      * @memberof RequestEventStock
      */
-    timeStart?: string;
+    timeStart: string;
     /**
      * 
      * @type {string}
      * @memberof RequestEventStock
      */
-    timeEnd?: string;
+    timeEnd: string;
     /**
      * 
      * @type {string}
      * @memberof RequestEventStock
      */
-    roomId?: string;
+    roomId: string;
     /**
      * 
      * @type {string}
      * @memberof RequestEventStock
      */
-    groupId?: string;
+    groupId: string;
     /**
      * 編集権を持つユーザー
      * @type {Array<string>}
      * @memberof RequestEventStock
      */
-    admins?: Array<string>;
+    admins: Array<string>;
     /**
      * 
      * @type {Array<RequestEventInstantTags>}
@@ -92,14 +92,14 @@ export function RequestEventStockFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'descirption': !exists(json, 'descirption') ? undefined : json['descirption'],
-        'sharedRoom': !exists(json, 'sharedRoom') ? undefined : json['sharedRoom'],
-        'timeStart': !exists(json, 'timeStart') ? undefined : json['timeStart'],
-        'timeEnd': !exists(json, 'timeEnd') ? undefined : json['timeEnd'],
-        'roomId': !exists(json, 'roomId') ? undefined : json['roomId'],
-        'groupId': !exists(json, 'groupId') ? undefined : json['groupId'],
-        'admins': !exists(json, 'admins') ? undefined : json['admins'],
+        'name': json['name'],
+        'description': json['description'],
+        'sharedRoom': json['sharedRoom'],
+        'timeStart': json['timeStart'],
+        'timeEnd': json['timeEnd'],
+        'roomId': json['roomId'],
+        'groupId': json['groupId'],
+        'admins': json['admins'],
         'tags': !exists(json, 'tags') ? undefined : ((json['tags'] as Array<any>).map(RequestEventInstantTagsFromJSON)),
     };
 }
@@ -114,7 +114,7 @@ export function RequestEventStockToJSON(value?: RequestEventStock | null): any {
     return {
         
         'name': value.name,
-        'descirption': value.descirption,
+        'description': value.description,
         'sharedRoom': value.sharedRoom,
         'timeStart': value.timeStart,
         'timeEnd': value.timeEnd,

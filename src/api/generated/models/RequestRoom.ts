@@ -24,25 +24,25 @@ export interface RequestRoom {
      * @type {string}
      * @memberof RequestRoom
      */
-    place?: string;
+    place: string;
     /**
      * 
      * @type {string}
      * @memberof RequestRoom
      */
-    timeStart?: string;
+    timeStart: string;
     /**
      * 
      * @type {string}
      * @memberof RequestRoom
      */
-    timeEnd?: string;
+    timeEnd: string;
     /**
      * 編集権を持つユーザー
      * @type {Array<string>}
      * @memberof RequestRoom
      */
-    admins?: Array<string>;
+    admins: Array<string>;
 }
 
 export function RequestRoomFromJSON(json: any): RequestRoom {
@@ -55,10 +55,10 @@ export function RequestRoomFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'place': !exists(json, 'place') ? undefined : json['place'],
-        'timeStart': !exists(json, 'timeStart') ? undefined : json['timeStart'],
-        'timeEnd': !exists(json, 'timeEnd') ? undefined : json['timeEnd'],
-        'admins': !exists(json, 'admins') ? undefined : json['admins'],
+        'place': json['place'],
+        'timeStart': json['timeStart'],
+        'timeEnd': json['timeEnd'],
+        'admins': json['admins'],
     };
 }
 

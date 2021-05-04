@@ -24,7 +24,7 @@ export interface IcalSecret {
      * @type {string}
      * @memberof IcalSecret
      */
-    secret?: string;
+    secret: string;
 }
 
 export function IcalSecretFromJSON(json: any): IcalSecret {
@@ -37,7 +37,7 @@ export function IcalSecretFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'secret': !exists(json, 'secret') ? undefined : json['secret'],
+        'secret': json['secret'],
     };
 }
 

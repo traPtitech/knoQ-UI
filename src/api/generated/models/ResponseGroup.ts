@@ -24,61 +24,61 @@ export interface ResponseGroup {
      * @type {string}
      * @memberof ResponseGroup
      */
-    groupId?: string;
+    groupId: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseGroup
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseGroup
      */
-    description?: string;
+    description: string;
     /**
      * 
      * @type {boolean}
      * @memberof ResponseGroup
      */
-    open?: boolean;
+    open: boolean;
     /**
      * 
      * @type {boolean}
      * @memberof ResponseGroup
      */
-    isTraQGroup?: boolean;
+    isTraQGroup: boolean;
     /**
      * グループのメンバー
      * @type {Array<string>}
      * @memberof ResponseGroup
      */
-    members?: Array<string>;
+    members: Array<string>;
     /**
      * 編集権を持つユーザー
      * @type {Array<string>}
      * @memberof ResponseGroup
      */
-    admins?: Array<string>;
+    admins: Array<string>;
     /**
      * 
      * @type {string}
      * @memberof ResponseGroup
      */
-    createdBy?: string;
+    createdBy: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseGroup
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseGroup
      */
-    updatedAt?: string;
+    updatedAt: string;
 }
 
 export function ResponseGroupFromJSON(json: any): ResponseGroup {
@@ -91,16 +91,16 @@ export function ResponseGroupFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'groupId': !exists(json, 'groupId') ? undefined : json['groupId'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'open': !exists(json, 'open') ? undefined : json['open'],
-        'isTraQGroup': !exists(json, 'isTraQGroup') ? undefined : json['isTraQGroup'],
-        'members': !exists(json, 'members') ? undefined : json['members'],
-        'admins': !exists(json, 'admins') ? undefined : json['admins'],
-        'createdBy': !exists(json, 'createdBy') ? undefined : json['createdBy'],
-        'createdAt': !exists(json, 'createdAt') ? undefined : json['createdAt'],
-        'updatedAt': !exists(json, 'updatedAt') ? undefined : json['updatedAt'],
+        'groupId': json['groupId'],
+        'name': json['name'],
+        'description': json['description'],
+        'open': json['open'],
+        'isTraQGroup': json['isTraQGroup'],
+        'members': json['members'],
+        'admins': json['admins'],
+        'createdBy': json['createdBy'],
+        'createdAt': json['createdAt'],
+        'updatedAt': json['updatedAt'],
     };
 }
 

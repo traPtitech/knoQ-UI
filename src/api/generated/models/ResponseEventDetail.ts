@@ -39,91 +39,91 @@ export interface ResponseEventDetail {
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    eventId?: string;
+    eventId: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    descirption?: string;
+    description: string;
     /**
      * 部屋の共用をするか
      * @type {boolean}
      * @memberof ResponseEventDetail
      */
-    sharedRoom?: boolean;
+    sharedRoom: boolean;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    timeStart?: string;
+    timeStart: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    timeEnd?: string;
+    timeEnd: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    place?: string;
+    place: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    groupName?: string;
+    groupName: string;
     /**
      * 
      * @type {ResponseRoom}
      * @memberof ResponseEventDetail
      */
-    room?: ResponseRoom;
+    room: ResponseRoom;
     /**
      * 
      * @type {ResponseGroup}
      * @memberof ResponseEventDetail
      */
-    group?: ResponseGroup;
+    group: ResponseGroup;
     /**
      * 編集権を持つユーザー
      * @type {Array<string>}
      * @memberof ResponseEventDetail
      */
-    admins?: Array<string>;
+    admins: Array<string>;
     /**
      * 
      * @type {Array<ResponseEventTags>}
      * @memberof ResponseEventDetail
      */
-    tags?: Array<ResponseEventTags>;
+    tags: Array<ResponseEventTags>;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    createdBy?: string;
+    createdBy: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    createdAt?: string;
+    createdAt: string;
     /**
      * 
      * @type {string}
      * @memberof ResponseEventDetail
      */
-    updatedAt?: string;
+    updatedAt: string;
 }
 
 export function ResponseEventDetailFromJSON(json: any): ResponseEventDetail {
@@ -136,21 +136,21 @@ export function ResponseEventDetailFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
-        'eventId': !exists(json, 'eventId') ? undefined : json['eventId'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'descirption': !exists(json, 'descirption') ? undefined : json['descirption'],
-        'sharedRoom': !exists(json, 'sharedRoom') ? undefined : json['sharedRoom'],
-        'timeStart': !exists(json, 'timeStart') ? undefined : json['timeStart'],
-        'timeEnd': !exists(json, 'timeEnd') ? undefined : json['timeEnd'],
-        'place': !exists(json, 'place') ? undefined : json['place'],
-        'groupName': !exists(json, 'groupName') ? undefined : json['groupName'],
-        'room': !exists(json, 'room') ? undefined : ResponseRoomFromJSON(json['room']),
-        'group': !exists(json, 'group') ? undefined : ResponseGroupFromJSON(json['group']),
-        'admins': !exists(json, 'admins') ? undefined : json['admins'],
-        'tags': !exists(json, 'tags') ? undefined : ((json['tags'] as Array<any>).map(ResponseEventTagsFromJSON)),
-        'createdBy': !exists(json, 'createdBy') ? undefined : json['createdBy'],
-        'createdAt': !exists(json, 'createdAt') ? undefined : json['createdAt'],
-        'updatedAt': !exists(json, 'updatedAt') ? undefined : json['updatedAt'],
+        'eventId': json['eventId'],
+        'name': json['name'],
+        'description': json['description'],
+        'sharedRoom': json['sharedRoom'],
+        'timeStart': json['timeStart'],
+        'timeEnd': json['timeEnd'],
+        'place': json['place'],
+        'groupName': json['groupName'],
+        'room': ResponseRoomFromJSON(json['room']),
+        'group': ResponseGroupFromJSON(json['group']),
+        'admins': json['admins'],
+        'tags': ((json['tags'] as Array<any>).map(ResponseEventTagsFromJSON)),
+        'createdBy': json['createdBy'],
+        'createdAt': json['createdAt'],
+        'updatedAt': json['updatedAt'],
     };
 }
 
@@ -165,7 +165,7 @@ export function ResponseEventDetailToJSON(value?: ResponseEventDetail | null): a
         
         'eventId': value.eventId,
         'name': value.name,
-        'descirption': value.descirption,
+        'description': value.description,
         'sharedRoom': value.sharedRoom,
         'timeStart': value.timeStart,
         'timeEnd': value.timeEnd,
@@ -174,7 +174,7 @@ export function ResponseEventDetailToJSON(value?: ResponseEventDetail | null): a
         'room': ResponseRoomToJSON(value.room),
         'group': ResponseGroupToJSON(value.group),
         'admins': value.admins,
-        'tags': value.tags === undefined ? undefined : ((value.tags as Array<any>).map(ResponseEventTagsToJSON)),
+        'tags': ((value.tags as Array<any>).map(ResponseEventTagsToJSON)),
         'createdBy': value.createdBy,
         'createdAt': value.createdAt,
         'updatedAt': value.updatedAt,

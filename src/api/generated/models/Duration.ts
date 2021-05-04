@@ -24,13 +24,13 @@ export interface Duration {
      * @type {string}
      * @memberof Duration
      */
-    timeStart?: string;
+    timeStart: string;
     /**
      * 
      * @type {string}
      * @memberof Duration
      */
-    timeEnd?: string;
+    timeEnd: string;
 }
 
 export function DurationFromJSON(json: any): Duration {
@@ -43,8 +43,8 @@ export function DurationFromJSONTyped(json: any, ignoreDiscriminator: boolean): 
     }
     return {
         
-        'timeStart': !exists(json, 'timeStart') ? undefined : json['timeStart'],
-        'timeEnd': !exists(json, 'timeEnd') ? undefined : json['timeEnd'],
+        'timeStart': json['timeStart'],
+        'timeEnd': json['timeEnd'],
     };
 }
 

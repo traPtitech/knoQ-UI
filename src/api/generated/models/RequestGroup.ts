@@ -24,19 +24,19 @@ export interface RequestGroup {
      * @type {string}
      * @memberof RequestGroup
      */
-    name?: string;
+    name: string;
     /**
      * 
      * @type {string}
      * @memberof RequestGroup
      */
-    description?: string;
+    description: string;
     /**
      * 
      * @type {boolean}
      * @memberof RequestGroup
      */
-    open?: boolean;
+    open: boolean;
     /**
      * グループのメンバー
      * @type {Array<string>}
@@ -48,7 +48,7 @@ export interface RequestGroup {
      * @type {Array<string>}
      * @memberof RequestGroup
      */
-    admins?: Array<string>;
+    admins: Array<string>;
 }
 
 export function RequestGroupFromJSON(json: any): RequestGroup {
@@ -61,11 +61,11 @@ export function RequestGroupFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'open': !exists(json, 'open') ? undefined : json['open'],
+        'name': json['name'],
+        'description': json['description'],
+        'open': json['open'],
         'members': !exists(json, 'members') ? undefined : json['members'],
-        'admins': !exists(json, 'admins') ? undefined : json['admins'],
+        'admins': json['admins'],
     };
 }
 

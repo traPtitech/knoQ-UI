@@ -102,6 +102,7 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import { formatDate } from '@/workers/date'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
+import { ResponseEvent } from '@/api'
 
 type CalendarEvent = {
   eventId: string
@@ -123,7 +124,7 @@ export default class Calendar extends Vue {
   height!: number
 
   @Prop({ type: Array, default: [] })
-  events!: Schemas.Event[]
+  events!: ResponseEvent[]
 
   focus = ''
   type = 'month'

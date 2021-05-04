@@ -24,7 +24,7 @@ export interface RequestTag {
      * @type {string}
      * @memberof RequestTag
      */
-    name?: string;
+    name: string;
 }
 
 export function RequestTagFromJSON(json: any): RequestTag {
@@ -37,7 +37,7 @@ export function RequestTagFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'name': !exists(json, 'name') ? undefined : json['name'],
+        'name': json['name'],
     };
 }
 
