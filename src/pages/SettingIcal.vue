@@ -25,11 +25,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { icalURL } from '@/workers/api'
 import clipboard from '@cloudcmd/clipboard'
-
-const UsersRepo = RepositoryFactory.get('users')
+import api from '@/api'
 
 @Component
 export default class SettingIcal extends Vue {
@@ -51,9 +49,9 @@ export default class SettingIcal extends Vue {
 
   async fetchSecret() {
     try {
-      this.secret = (await UsersRepo.me.ical.get()).data.secret
-    } catch (__) {
-      alert('Failed to fetch secret')
+      this.secret = (await api.users.getIcalSecret()).secret
+    } catch (err) {
+      if (err.status !== 404) alert('Failed to fetch secret')
     }
   }
 
@@ -66,7 +64,7 @@ export default class SettingIcal extends Vue {
     }
 
     try {
-      this.secret = (await UsersRepo.me.ical.put()).data.secret
+      this.secret = (await api.users.resetIcalSecret()).secret
     } catch (__) {
       alert('Failed to regenerate secret')
     }
