@@ -82,7 +82,7 @@ import EventTag from '@/components/shared/EventTag.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
 import { rmCtrlChar } from '@/workers/rmCtrlChar'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
+import api, { ResponseGroup } from '@/api'
 
 export type EventContent = {
   name: string
@@ -91,10 +91,6 @@ export type EventContent = {
   tags: Schemas.Tag[]
   admins: Schemas.User[]
 }
-
-const GroupsRepo = RepositoryFactory.get('groups')
-const UsersRepo = RepositoryFactory.get('users')
-const TagsRepo = RepositoryFactory.get('tags')
 
 @Component({
   components: {
@@ -125,21 +121,21 @@ export default class EventFormContent extends Vue {
   @PropSync('description', { type: String, required: true })
   descriptionInput!: string
 
-  allGroups: Schemas.Group[] = []
+  allGroups: ResponseGroup[] = []
   allTags: string[] = []
 
   created() {
     Promise.all([this.fetchGroups(), this.fetchTags()])
   }
   async fetchGroups() {
-    const [{ data: groups }, { data: groupIds }] = await Promise.all([
-      GroupsRepo.get(),
-      UsersRepo.me.groups.get(),
+    const [groups, groupIds] = await Promise.all([
+      api.groups.getGroups(),
+      api.groups.getMyGroups(),
     ])
     this.allGroups = groups.filter(group => groupIds.includes(group.groupId))
   }
   async fetchTags() {
-    this.allTags = (await TagsRepo.get()).data.map(({ name }) => name)
+    this.allTags = (await api.tags.getTag()).map(({ name }) => name)
   }
 
   private get valid(): boolean {
