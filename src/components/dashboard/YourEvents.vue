@@ -13,11 +13,11 @@
             あなたの作成したイベントはありません
           </span>
         </v-list-item>
-        <template v-for="(event, i) in allEventData">
+        <template v-for="(event, i) in events">
           <v-list-item :key="event.eventId">
             <v-row align="center" style="width: 100%">
               <v-col class="flex-grow-0 text-no-wrap text--secondary">
-                {{ event.date }}
+                {{ formatDate(event.timeStart) }}
               </v-col>
               <v-col class="text-truncate">
                 <router-link :to="`/events/${event.eventId}`">
@@ -54,41 +54,30 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { formatDate, today } from '@/workers/date'
-
-const UsersRepo = RepositoryFactory.get('users')
+import api, { ResponseEvent } from '@/api'
 
 @Component
 export default class YourEvents extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  events: Schemas.Event[] | null = null
+  events: ResponseEvent[] = []
 
   async created() {
     this.status = 'loading'
     try {
-      await this.fetchEvents()
+      this.events = (await api.events.getEvents({}))
+        .filter(event => today() <= event.timeStart)
+        .filter(event =>
+          event.admins.includes(this.$store.direct.state.me?.userId ?? '')
+        )
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
   }
 
-  async fetchEvents() {
-    this.events = (await UsersRepo.me.events.get()).data
-      .filter(event => today() <= event.timeStart)
-      .filter(event =>
-        event.admins.includes(this.$store.direct.state.me?.userId ?? '')
-      )
-  }
-
-  get allEventData() {
-    if (!this.events) return []
-    return this.events.map(event => ({
-      eventId: event.eventId,
-      name: event.name,
-      date: formatDate('MM/DD')(event.timeStart),
-    }))
+  get formatDate() {
+    return formatDate('MM/DD')
   }
 }
 </script>
