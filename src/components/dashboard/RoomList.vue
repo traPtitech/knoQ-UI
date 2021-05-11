@@ -8,7 +8,7 @@
   </div>
   <v-row v-else>
     <v-col v-for="(room, i) in rooms" :key="i" sm="4" cols="12">
-      <RoomListItem v-bind="room" />
+      <RoomListItem :room="room" />
     </v-col>
   </v-row>
 </template>
@@ -32,10 +32,12 @@ export default class RoomList extends Vue {
   async created() {
     this.status = 'loading'
     try {
-      this.rooms = await api.rooms.getRooms({
-        dateBegin: today(),
-        dateEnd: todayEnd(),
-      })
+      this.rooms = (
+        await api.rooms.getRooms({
+          dateBegin: today(),
+          dateEnd: todayEnd(),
+        })
+      ).filter(room => room.verified)
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
