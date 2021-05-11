@@ -90,7 +90,7 @@ export default class EventSearch extends Vue {
   }
 
   get filterFn() {
-    return (e: Schemas.Event) => {
+    return (e: ResponseEvent) => {
       const isFinished = formatDate()(e.timeEnd) < today()
       const hasTags = this.filterTags.every(t =>
         e.tags.some(({ name }) => name === t)
