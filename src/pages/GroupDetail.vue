@@ -126,7 +126,7 @@ export default class GroupDetail extends Vue {
   get joining(): boolean {
     const me = this.$store.direct.state.me
     if (!me || !this.group) return false
-    return this.group.members.includes(me.userId)
+    return this.group.members.includes(me.id)
   }
 
   get memberNames(): string[] {
@@ -139,7 +139,7 @@ export default class GroupDetail extends Vue {
   }
 
   get isMyGroup(): boolean {
-    return this.group?.createdBy === this.$store.direct.state.me?.userId
+    return this.group?.createdBy === this.$store.direct.state.me?.id
   }
 }
 </script>

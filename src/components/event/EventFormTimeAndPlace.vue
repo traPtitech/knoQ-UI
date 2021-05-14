@@ -54,8 +54,6 @@ import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-import { calcAvailableRooms, AvailableRoom } from '@/workers/availableRooms'
 import {
   formatDate,
   DATETIME_DISPLAY_FORMAT,
@@ -65,16 +63,14 @@ import {
   getTime,
 } from '@/workers/date'
 import { strMax, strMin } from '@/workers/strCmp'
+import api, { ResponseRoom } from '@/api'
 
-export type EventTimeAndPlace = {
+export type EventInputTimeAndPlace = {
+  room: ResponseRoom | null
   sharedRoom: boolean
   timeStart: string
   timeEnd: string
-  room: Schemas.Room | null
 }
-
-const RoomsRepo = RepositoryFactory.get('rooms')
-const EventsRepo = RepositoryFactory.get('events')
 
 @Component({
   components: {
@@ -90,7 +86,7 @@ export default class EventFormTimeAndPlace extends Vue {
     validator: prop => typeof prop === 'object' || prop === null,
     required: true,
   })
-  roomInput!: Schemas.Room | null
+  roomInput!: ResponseRoom | null
 
   @PropSync('timeStart', { type: String, required: true })
   timeStartInput!: string
@@ -102,23 +98,12 @@ export default class EventFormTimeAndPlace extends Vue {
   sharedRoomInput!: boolean
 
   dates: string[] = []
-  allRooms: Schemas.Room[] = []
-  allEvents: Schemas.Event[] = []
+  allRooms: ResponseRoom[] = []
 
   async created() {
-    await Promise.all([this.fetchRooms(), this.fetchEvents()])
-  }
-  async fetchRooms() {
-    this.allRooms = (await RoomsRepo.get({ dateBegin: today() })).data.filter(
-      room => room.public
+    this.allRooms = (await api.rooms.getRooms({ dateBegin: today() })).filter(
+      room => room.verified
     )
-  }
-  async fetchEvents() {
-    this.allEvents = (
-      await EventsRepo.get({
-        dateBegin: today(),
-      })
-    ).data
   }
 
   @Watch('sharedRoomInput')
@@ -164,17 +149,20 @@ export default class EventFormTimeAndPlace extends Vue {
     return this.roomInput && getTime(this.roomInput.timeEnd)
   }
 
-  get calcAvailableRooms() {
-    return calcAvailableRooms(this.allRooms, this.allEvents)
-  }
-
-  get availableRooms() {
-    return this.calcAvailableRooms(this.dates, this.sharedRoomInput)
+  get availableRooms(): ResponseRoom[] {
+    const key = this.sharedRoomInput ? 'sharedTimes' : 'freeTimes'
+    return this.allRooms.flatMap(room =>
+      this.dates.flatMap(date =>
+        room[key]
+          .filter(({ timeStart }) => timeStart.startsWith(date))
+          .map(({ timeStart, timeEnd }) => ({ ...room, timeStart, timeEnd }))
+      )
+    )
   }
 
   get formatAvailableRoom() {
     const fmt = formatDate(DATETIME_DISPLAY_FORMAT)
-    return (r: AvailableRoom) =>
+    return (r: ResponseRoom) =>
       `${r.place}: ${fmt(r.timeStart)} ~ ${fmt(r.timeEnd)}`
   }
 

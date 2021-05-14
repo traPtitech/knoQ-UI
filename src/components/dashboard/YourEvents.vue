@@ -68,7 +68,7 @@ export default class YourEvents extends Vue {
       this.events = (await api.events.getEvents({}))
         .filter(event => today() <= event.timeStart)
         .filter(event =>
-          event.admins.includes(this.$store.direct.state.me?.userId ?? '')
+          event.admins.includes(this.$store.direct.state.me?.id ?? '')
         )
       this.status = 'loaded'
     } catch (__) {

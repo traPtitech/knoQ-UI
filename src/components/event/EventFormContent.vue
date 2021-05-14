@@ -82,14 +82,18 @@ import EventTag from '@/components/shared/EventTag.vue'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
 import { rmCtrlChar } from '@/workers/rmCtrlChar'
-import api, { ResponseGroup } from '@/api'
+import api, {
+  ResponseGroup,
+  ResponseUser,
+  RequestEventInstantTags,
+} from '@/api'
 
-export type EventContent = {
+export type EventInputContent = {
   name: string
   description: string
-  group: Schemas.Group | null
-  tags: Schemas.Tag[]
-  admins: Schemas.User[]
+  group: ResponseGroup | null
+  tags: { name: string }[]
+  admins: ResponseUser[]
 }
 
 @Component({
@@ -110,10 +114,10 @@ export default class EventFormContent extends Vue {
     validator: prop => typeof prop === 'object' || prop === null,
     required: true,
   })
-  groupInput!: Schemas.Group | null
+  groupInput!: ResponseGroup | null
 
   @PropSync('admins', { type: Array, required: true })
-  adminsInput!: Schemas.User[]
+  adminsInput!: ResponseUser[]
 
   @PropSync('tags', { type: Array, required: true })
   tagsInput!: { name: string }[]
@@ -158,13 +162,13 @@ export default class EventFormContent extends Vue {
       .map(name => ({ name }))
   }
 
-  private get memberOfSelectedGroup(): Schemas.User[] {
+  private get memberOfSelectedGroup(): ResponseUser[] {
     const users = this.$store.direct.state.usersCache.users
     if (!users?.size || this.groupInput === null) {
       return []
     }
-    return [...users.values()].filter(({ userId }) =>
-      this.groupInput?.members.includes(userId)
+    return [...users.values()].filter(({ id }) =>
+      this.groupInput?.members.includes(id)
     )
   }
 }

@@ -6,13 +6,11 @@ import {
   localGetterContext,
   localActionContext,
 } from 'direct-vuex'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { isUser } from '@/workers/isUser'
-
-const UsersRepo = RepositoryFactory.get('users')
+import api, { ResponseUser } from '@/api'
 
 interface State {
-  users: Map<string, Schemas.User> | null
+  users: Map<string, ResponseUser> | null
 }
 
 const state = (): State => ({
@@ -31,10 +29,10 @@ const getters = defineGetters<State>()({
 //     state.users.set(k, v)
 // does not trigger re-rendering.
 const mutations = defineMutations<State>()({
-  SET_USERS(state, users: Schemas.User[]): void {
-    const usersMap = new Map<string, Schemas.User>()
+  SET_USERS(state, users: ResponseUser[]): void {
+    const usersMap = new Map<string, ResponseUser>()
     users.forEach(user => {
-      if (isUser(user.name)) usersMap.set(user.userId, user)
+      if (isUser(user.name)) usersMap.set(user.id, user)
     })
     // Next line triggers re-rendering since this simply updates
     // one field of object.
@@ -45,8 +43,8 @@ const mutations = defineMutations<State>()({
 const actions = defineActions({
   async getUsers(context) {
     const { commit } = usersCacheActionContext(context)
-    const { data } = await UsersRepo.get()
-    commit.SET_USERS(data)
+    const users = await api.users.getUsers({})
+    commit.SET_USERS(users)
   },
 })
 

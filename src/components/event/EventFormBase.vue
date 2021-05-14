@@ -31,9 +31,9 @@
             />
           </v-tab-item>
           <v-tab-item class="pt-3">
-            <event-form-time-and-place-personal
+            <event-form-time-and-place-instant
               v-model="validTimeAndPlacePersonal"
-              v-bind.sync="timeAndPlacePersonal"
+              v-bind.sync="timeAndPlaceInstant"
             />
           </v-tab-item>
         </v-tabs>
@@ -58,24 +58,24 @@
 import Vue from 'vue'
 import { Component, Prop, Emit } from 'vue-property-decorator'
 import EventFormContent, {
-  EventContent,
+  EventInputContent,
 } from '@/components/event/EventFormContent.vue'
 import EventFormTimeAndPlace, {
-  EventTimeAndPlace,
+  EventInputTimeAndPlace,
 } from '@/components/event/EventFormTimeAndPlace.vue'
-import EventFormTimeAndPlacePersonal, {
-  EventTimeAndPlacePersonal,
-} from '@/components/event/EventFormTimeAndPlacePersonal.vue'
+import EventFormTimeAndPlaceInstant, {
+  EventInputTimeAndPlaceInstant,
+} from '@/components/event/EventFormTimeAndPlaceInstant.vue'
 import EventFormSummary, {
   EventSummary,
 } from '@/components/event/EventFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 
-export type EventInputContent = EventContent &
+export type EventInput = EventInputContent &
   (
-    | ({ personal: false } & EventTimeAndPlace)
-    | ({ personal: true } & EventTimeAndPlacePersonal)
+    | ({ instant: false } & EventInputTimeAndPlace)
+    | ({ instant: true } & EventInputTimeAndPlaceInstant)
   )
 
 enum TimeAndPlaceFormTab {
@@ -87,7 +87,7 @@ enum TimeAndPlaceFormTab {
   components: {
     EventFormContent,
     EventFormTimeAndPlace,
-    EventFormTimeAndPlacePersonal,
+    EventFormTimeAndPlaceInstant,
     EventFormSummary,
     FormNextButton,
     FormBackButton,
@@ -95,9 +95,9 @@ enum TimeAndPlaceFormTab {
 })
 export default class EventFormBase extends Vue {
   @Prop({ type: Object })
-  event!: EventInputContent | null | undefined
+  event!: EventInput | null | undefined
 
-  content: EventContent = {
+  content: EventInputContent = {
     name: this.event?.name ?? '',
     description: this.event?.description ?? '',
     group: this.event?.group ?? null,
@@ -107,36 +107,36 @@ export default class EventFormBase extends Vue {
       (this.$store.direct.state.me ? [this.$store.direct.state.me] : []),
   }
 
-  timeAndPlace: EventTimeAndPlace = {
-    timeStart: this.event && !this.event.personal ? this.event.timeStart : '',
-    timeEnd: this.event && !this.event.personal ? this.event.timeEnd : '',
-    room: this.event && !this.event.personal ? this.event.room : null,
+  timeAndPlace: EventInputTimeAndPlace = {
+    timeStart: this.event && !this.event.instant ? this.event.timeStart : '',
+    timeEnd: this.event && !this.event.instant ? this.event.timeEnd : '',
+    room: this.event && !this.event.instant ? this.event.room : null,
     sharedRoom:
-      this.event && !this.event.personal ? this.event.sharedRoom : true,
+      this.event && !this.event.instant ? this.event.sharedRoom : true,
   }
 
-  timeAndPlacePersonal: EventTimeAndPlacePersonal = {
-    timeStart: this.event?.personal ? this.event.timeStart : '',
-    timeEnd: this.event?.personal ? this.event.timeEnd : '',
-    place: this.event?.personal ? this.event.place : '',
+  timeAndPlaceInstant: EventInputTimeAndPlaceInstant = {
+    timeStart: this.event?.instant ? this.event.timeStart : '',
+    timeEnd: this.event?.instant ? this.event.timeEnd : '',
+    place: this.event?.instant ? this.event.place : '',
   }
 
-  personal: boolean = this.event?.personal ?? false
+  instant: boolean = this.event?.instant ?? false
 
   step = 1
 
   get tab(): number {
-    return this.personal
+    return this.instant
       ? TimeAndPlaceFormTab.Personal
       : TimeAndPlaceFormTab.Default
   }
   set tab(t: number) {
     switch (t) {
       case TimeAndPlaceFormTab.Default:
-        this.personal = false
+        this.instant = false
         break
       case TimeAndPlaceFormTab.Personal:
-        this.personal = true
+        this.instant = true
         break
     }
   }
@@ -146,8 +146,8 @@ export default class EventFormBase extends Vue {
   validTimeAndPlacePersonal = false
   get validTimeAndPlace(): boolean {
     return (
-      (!this.personal && this.validTimeAndPlaceDefault) ||
-      (this.personal && this.validTimeAndPlacePersonal)
+      (!this.instant && this.validTimeAndPlaceDefault) ||
+      (this.instant && this.validTimeAndPlacePersonal)
     )
   }
 
@@ -157,16 +157,16 @@ export default class EventFormBase extends Vue {
       description: this.content.description,
       tags: this.content.tags,
       groupName: this.content.group?.name ?? '',
-      place: this.personal
-        ? this.timeAndPlacePersonal.place
+      place: this.instant
+        ? this.timeAndPlaceInstant.place
         : this.timeAndPlace.room?.place ?? '',
-      isPrivate: this.personal,
-      sharedRoom: this.personal ? false : this.timeAndPlace.sharedRoom,
-      timeStart: this.personal
-        ? this.timeAndPlacePersonal.timeStart
+      isPrivate: this.instant,
+      sharedRoom: this.instant ? false : this.timeAndPlace.sharedRoom,
+      timeStart: this.instant
+        ? this.timeAndPlaceInstant.timeStart
         : this.timeAndPlace.timeStart,
-      timeEnd: this.personal
-        ? this.timeAndPlacePersonal.timeEnd
+      timeEnd: this.instant
+        ? this.timeAndPlaceInstant.timeEnd
         : this.timeAndPlace.timeEnd,
     }
   }
@@ -176,9 +176,9 @@ export default class EventFormBase extends Vue {
     return {
       ...this.content,
       group: this.content.group!,
-      ...(this.personal
-        ? { personal: true, ...this.timeAndPlacePersonal }
-        : { personal: false, ...this.timeAndPlace }),
+      ...(this.instant
+        ? { instant: true, ...this.timeAndPlaceInstant }
+        : { instant: false, ...this.timeAndPlace }),
     }
   }
 }

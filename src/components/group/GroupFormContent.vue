@@ -66,6 +66,7 @@ import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
+import { ResponseUser } from '@/api'
 
 export type GroupFormContentProps = {
   name: string
@@ -100,7 +101,7 @@ export default class GroupFormContent extends Vue {
   @Prop({ type: Boolean, required: true })
   value!: boolean
 
-  get allMembers(): Schemas.User[] {
+  get allMembers(): ResponseUser[] {
     return [...(this.$store.direct.state.usersCache.users?.values() ?? [])]
   }
 

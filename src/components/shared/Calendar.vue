@@ -212,7 +212,7 @@ export default class Calendar extends Vue {
 
   get isMyEvent() {
     return (event: CalendarEvent) =>
-      event?.admins.includes(this.$store.direct.state.me?.userId ?? '') ?? false
+      event?.admins.includes(this.$store.direct.state.me?.id ?? '') ?? false
   }
 }
 </script>

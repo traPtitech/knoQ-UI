@@ -24,18 +24,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import EventFormBase, {
-  EventInputContent,
-} from '@/components/event/EventFormBase.vue'
+import EventFormBase, { EventInput } from '@/components/event/EventFormBase.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { isTrapGroup } from '@/workers/isTrapGroup'
-
-const EventsRepo = RepositoryFactory.get('events')
-const RoomsRepo = RepositoryFactory.get('rooms')
-const GroupsRepo = RepositoryFactory.get('groups')
-const UsersRepo = RepositoryFactory.get('users')
+import api, { ResponseEvent, ResponseGroup, ResponseRoom } from '@/api'
 
 @Component({
   components: {
@@ -47,35 +40,30 @@ const UsersRepo = RepositoryFactory.get('users')
 export default class ProgressCircularEventEdit extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
 
-  event: EventInputContent | null = null
+  event: EventInput | null = null
   canEdit = false
+
+  get eventId() {
+    return this.$route.params.id
+  }
 
   async created() {
     this.status = 'loading'
     try {
-      const eventId = this.$route.params.id
-      const event = (await EventsRepo.$eventId(eventId).get()).data
-      const [room, group, users] = await Promise.all([
-        RoomsRepo.$roomId(event.roomId)
-          .get()
-          .then(({ data }) => data),
-        GroupsRepo.$groupId(event.groupId)
-          .get()
-          .then(({ data }) => data),
-        UsersRepo.get().then(({ data }) => data),
-      ])
+      const event = await api.events.getEventDetail({ eventID: this.eventId })
 
       const me = this.$store.direct.state.me
-      this.canEdit = me ? event.admins.includes(me.userId) : false
+      this.canEdit = me ? event.admins.includes(me.id) : false
+
+      const findUser = (id: string) =>
+        this.$store.direct.state.usersCache.users?.get(id)
+
       this.event = {
         ...event,
-        admins: event.admins.flatMap(
-          userId => users.find(user => user.userId === userId) ?? []
-        ),
-        group,
-        ...(room.public
-          ? { personal: false, room }
-          : { personal: true, place: room.place }),
+        admins: event.admins.flatMap(userId => findUser(userId) ?? []),
+        ...(event.room.verified
+          ? { instant: false, room: event.room }
+          : { instant: true, place: event.room.place }),
       }
       this.status = 'loaded'
     } catch (__) {
@@ -83,8 +71,8 @@ export default class ProgressCircularEventEdit extends Vue {
     }
   }
 
-  async submit(event: EventInputContent) {
-    if (!event.group || (!event.personal && !event.room)) {
+  async submit(event: EventInput) {
+    if (!event.group || (!event.instant && !event.room)) {
       console.error('input content has null field')
       return
     }
@@ -95,7 +83,7 @@ export default class ProgressCircularEventEdit extends Vue {
       )
       if (!confirmed) return
     }
-    if (event.personal) {
+    if (event.instant) {
       const confirmed = window.confirm(
         'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
       )
@@ -103,21 +91,23 @@ export default class ProgressCircularEventEdit extends Vue {
     }
 
     try {
-      const eventId = this.$route.params.id
-      await EventsRepo.$eventId(eventId).put({
-        name: event.name,
-        description: event.description,
-        tags: event.tags,
-        groupId: event.group.groupId,
-        timeStart: event.timeStart,
-        timeEnd: event.timeEnd,
-        sharedRoom: event.personal ? false : event.sharedRoom,
-        admins: event.admins.map(user => user.userId),
-        ...(event.personal
-          ? { place: event.place }
-          : { roomId: event.room!.roomId }),
+      await api.events.updateEvent({
+        eventID: this.eventId,
+        requestEvent: {
+          name: event.name,
+          description: event.description,
+          tags: event.tags,
+          groupId: event.group.groupId,
+          timeStart: event.timeStart,
+          timeEnd: event.timeEnd,
+          sharedRoom: event.instant ? false : event.sharedRoom,
+          admins: event.admins.map(user => user.id),
+          ...(event.instant
+            ? { place: event.place }
+            : { roomId: event.room!.roomId }),
+        },
       })
-      this.$router.push(`/events/${eventId}`)
+      this.$router.push(`/events/${this.eventId}`)
     } catch (__) {
       alert('Failed to submit...')
     }
@@ -130,7 +120,7 @@ export default class ProgressCircularEventEdit extends Vue {
     if (!confirmed) return
     const eventId = this.$route.params.id
     try {
-      await EventsRepo.$eventId(eventId).delete()
+      await api.events.deleteEvent({ eventID: this.eventId })
       this.$router.push('/')
     } catch (__) {
       alert('Failed to submit...')

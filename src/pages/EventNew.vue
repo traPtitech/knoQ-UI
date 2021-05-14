@@ -7,13 +7,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import EventFormBase, {
-  EventInputContent,
-} from '@/components/event/EventFormBase.vue'
+import EventFormBase, { EventInput } from '@/components/event/EventFormBase.vue'
 import { isTrapGroup } from '@/workers/isTrapGroup'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-
-const EventsRepo = RepositoryFactory.get('events')
+import api from '@/api'
 
 @Component({
   components: {
@@ -21,8 +17,8 @@ const EventsRepo = RepositoryFactory.get('events')
   },
 })
 export default class EventNew extends Vue {
-  async submit(event: EventInputContent) {
-    if (!event.group || (!event.personal && !event.room)) {
+  async submit(event: EventInput) {
+    if (!event.group || (!event.instant && !event.room)) {
       console.error('input content has null field')
       return
     }
@@ -33,7 +29,7 @@ export default class EventNew extends Vue {
       )
       if (!confirmed) return
     }
-    if (event.personal) {
+    if (event.instant) {
       const confirmed = window.confirm(
         'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
       )
@@ -41,21 +37,21 @@ export default class EventNew extends Vue {
     }
 
     try {
-      const { eventId } = (
-        await EventsRepo.post({
+      const { eventId } = await api.events.addEvents({
+        requestEvent: {
           name: event.name,
           description: event.description,
           tags: event.tags,
           groupId: event.group.groupId,
           timeStart: event.timeStart,
           timeEnd: event.timeEnd,
-          sharedRoom: event.personal ? false : event.sharedRoom,
-          admins: event.admins.map(user => user.userId),
-          ...(event.personal
+          sharedRoom: event.instant ? false : event.sharedRoom,
+          admins: event.admins.map(user => user.id),
+          ...(event.instant
             ? { place: event.place }
             : { roomId: event.room!.roomId }),
-        })
-      ).data
+        },
+      })
       this.$router.push(`/events/${eventId}`)
     } catch (__) {
       alert('Failed to submit...')
