@@ -134,7 +134,7 @@ export default class EventFormContent extends Vue {
   async fetchGroups() {
     const [groups, groupIds] = await Promise.all([
       api.groups.getGroups(),
-      api.groups.getMyGroups(),
+      api.groups.getMyGroups({ relation: 'belongs' }),
     ])
     this.allGroups = groups.filter(group => groupIds.includes(group.groupId))
   }
@@ -167,8 +167,8 @@ export default class EventFormContent extends Vue {
     if (!users?.size || this.groupInput === null) {
       return []
     }
-    return [...users.values()].filter(({ id }) =>
-      this.groupInput?.members.includes(id)
+    return [...users.values()].filter(({ userId }) =>
+      this.groupInput?.members.includes(userId)
     )
   }
 }

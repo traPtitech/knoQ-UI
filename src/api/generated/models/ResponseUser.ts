@@ -24,7 +24,7 @@ export interface ResponseUser {
      * @type {string}
      * @memberof ResponseUser
      */
-    id: string;
+    userId: string;
     /**
      * 
      * @type {string}
@@ -67,7 +67,7 @@ export function ResponseUserFromJSONTyped(json: any, ignoreDiscriminator: boolea
     }
     return {
         
-        'id': json['id'],
+        'userId': json['userId'],
         'name': json['name'],
         'displayName': json['displayName'],
         'icon': json['icon'],
@@ -85,7 +85,7 @@ export function ResponseUserToJSON(value?: ResponseUser | null): any {
     }
     return {
         
-        'id': value.id,
+        'userId': value.userId,
         'name': value.name,
         'displayName': value.displayName,
         'icon': value.icon,

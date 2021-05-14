@@ -72,7 +72,7 @@ export default class YourGroups extends Vue {
     this.groups = (await api.groups.getGroups())
       .filter(group => !group.isTraQGroup)
       .filter(group =>
-        group.admins.includes(this.$store.direct.state.me?.id ?? '')
+        group.admins.includes(this.$store.direct.state.me?.userId ?? '')
       )
   }
 }

@@ -32,7 +32,7 @@ const mutations = defineMutations<State>()({
   SET_USERS(state, users: ResponseUser[]): void {
     const usersMap = new Map<string, ResponseUser>()
     users.forEach(user => {
-      if (isUser(user.name)) usersMap.set(user.id, user)
+      if (isUser(user.name)) usersMap.set(user.userId, user)
     })
     // Next line triggers re-rendering since this simply updates
     // one field of object.

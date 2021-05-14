@@ -46,7 +46,7 @@ export default class EventNew extends Vue {
           timeStart: event.timeStart,
           timeEnd: event.timeEnd,
           sharedRoom: event.instant ? false : event.sharedRoom,
-          admins: event.admins.map(user => user.id),
+          admins: event.admins.map(user => user.userId),
           ...(event.instant
             ? { place: event.place }
             : { roomId: event.room!.roomId }),

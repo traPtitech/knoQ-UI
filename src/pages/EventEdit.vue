@@ -53,7 +53,7 @@ export default class ProgressCircularEventEdit extends Vue {
       const event = await api.events.getEventDetail({ eventID: this.eventId })
 
       const me = this.$store.direct.state.me
-      this.canEdit = me ? event.admins.includes(me.id) : false
+      this.canEdit = me ? event.admins.includes(me.userId) : false
 
       const findUser = (id: string) =>
         this.$store.direct.state.usersCache.users?.get(id)
@@ -101,7 +101,7 @@ export default class ProgressCircularEventEdit extends Vue {
           timeStart: event.timeStart,
           timeEnd: event.timeEnd,
           sharedRoom: event.instant ? false : event.sharedRoom,
-          admins: event.admins.map(user => user.id),
+          admins: event.admins.map(user => user.userId),
           ...(event.instant
             ? { place: event.place }
             : { roomId: event.room!.roomId }),

@@ -65,8 +65,13 @@ export interface GetEventsOfRoomRequest {
     roomID: string;
 }
 
+export interface GetMyEventsRequest {
+    relation?: string;
+}
+
 export interface GetUserEventsRequest {
     userID: string;
+    relation?: string;
 }
 
 export interface UpdateEventRequest {
@@ -379,8 +384,12 @@ export class EventsApi extends runtime.BaseAPI {
     /**
      * 所属しているイベントを返す
      */
-    async getMyEventsRaw(): Promise<runtime.ApiResponse<Array<ResponseEvent>>> {
+    async getMyEventsRaw(requestParameters: GetMyEventsRequest): Promise<runtime.ApiResponse<Array<ResponseEvent>>> {
         const queryParameters: any = {};
+
+        if (requestParameters.relation !== undefined) {
+            queryParameters['relation'] = requestParameters.relation;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -397,8 +406,8 @@ export class EventsApi extends runtime.BaseAPI {
     /**
      * 所属しているイベントを返す
      */
-    async getMyEvents(): Promise<Array<ResponseEvent>> {
-        const response = await this.getMyEventsRaw();
+    async getMyEvents(requestParameters: GetMyEventsRequest): Promise<Array<ResponseEvent>> {
+        const response = await this.getMyEventsRaw(requestParameters);
         return await response.value();
     }
 
@@ -411,6 +420,10 @@ export class EventsApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.relation !== undefined) {
+            queryParameters['relation'] = requestParameters.relation;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 

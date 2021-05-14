@@ -52,11 +52,11 @@ export default class GroupNew extends Vue {
     name: '',
     description: '',
     open: false,
-    admins: this.$store.direct.state.me?.id
-      ? [this.$store.direct.state.me.id]
+    admins: this.$store.direct.state.me?.userId
+      ? [this.$store.direct.state.me.userId]
       : [],
-    members: this.$store.direct.state.me?.id
-      ? [this.$store.direct.state.me.id]
+    members: this.$store.direct.state.me?.userId
+      ? [this.$store.direct.state.me.userId]
       : [],
   }
 

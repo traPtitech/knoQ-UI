@@ -43,8 +43,13 @@ export interface GetGroupRequest {
     groupID: string;
 }
 
+export interface GetMyGroupsRequest {
+    relation?: string;
+}
+
 export interface GetUserGroupsRequest {
     userID: string;
+    relation?: string;
 }
 
 export interface UpdateGroupRequest {
@@ -250,8 +255,12 @@ export class GroupsApi extends runtime.BaseAPI {
     /**
      * 自分の所属しているグループのIDを返す
      */
-    async getMyGroupsRaw(): Promise<runtime.ApiResponse<Array<string>>> {
+    async getMyGroupsRaw(requestParameters: GetMyGroupsRequest): Promise<runtime.ApiResponse<Array<string>>> {
         const queryParameters: any = {};
+
+        if (requestParameters.relation !== undefined) {
+            queryParameters['relation'] = requestParameters.relation;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -268,8 +277,8 @@ export class GroupsApi extends runtime.BaseAPI {
     /**
      * 自分の所属しているグループのIDを返す
      */
-    async getMyGroups(): Promise<Array<string>> {
-        const response = await this.getMyGroupsRaw();
+    async getMyGroups(requestParameters: GetMyGroupsRequest): Promise<Array<string>> {
+        const response = await this.getMyGroupsRaw(requestParameters);
         return await response.value();
     }
 
@@ -282,6 +291,10 @@ export class GroupsApi extends runtime.BaseAPI {
         }
 
         const queryParameters: any = {};
+
+        if (requestParameters.relation !== undefined) {
+            queryParameters['relation'] = requestParameters.relation;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
