@@ -109,7 +109,8 @@ export default class GroupDetail extends Vue {
 
   async joinGroup() {
     try {
-      this.group = await api.groups.addMeToGroup({ groupID: this.groupId })
+      await api.groups.addMeToGroup({ groupID: this.groupId })
+      this.group = await api.groups.getGroup({ groupID: this.groupId })
     } catch (__) {
       alert('Failed to join...')
     }
@@ -117,7 +118,8 @@ export default class GroupDetail extends Vue {
 
   async leaveGroup() {
     try {
-      this.group = await api.groups.deleteMeFromGroup({ groupID: this.groupId })
+      await api.groups.deleteMeFromGroup({ groupID: this.groupId })
+      this.group = await api.groups.getGroup({ groupID: this.groupId })
     } catch (__) {
       alert('Failed to leave...')
     }

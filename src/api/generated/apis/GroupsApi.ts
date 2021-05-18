@@ -66,7 +66,7 @@ export class GroupsApi extends runtime.BaseAPI {
      * 自分をメンバーに追加する
      * 自分を追加。open=true
      */
-    async addMeToGroupRaw(requestParameters: AddMeToGroupRequest): Promise<runtime.ApiResponse<ResponseGroup>> {
+    async addMeToGroupRaw(requestParameters: AddMeToGroupRequest): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.groupID === null || requestParameters.groupID === undefined) {
             throw new runtime.RequiredError('groupID','Required parameter requestParameters.groupID was null or undefined when calling addMeToGroup.');
         }
@@ -82,16 +82,15 @@ export class GroupsApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseGroupFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * 自分をメンバーに追加する
      * 自分を追加。open=true
      */
-    async addMeToGroup(requestParameters: AddMeToGroupRequest): Promise<ResponseGroup> {
-        const response = await this.addMeToGroupRaw(requestParameters);
-        return await response.value();
+    async addMeToGroup(requestParameters: AddMeToGroupRequest): Promise<void> {
+        await this.addMeToGroupRaw(requestParameters);
     }
 
     /**
@@ -164,7 +163,7 @@ export class GroupsApi extends runtime.BaseAPI {
      * 自分しか削除出来ない。open=true
      * 自分しか削除出来ない。open=true
      */
-    async deleteMeFromGroupRaw(requestParameters: DeleteMeFromGroupRequest): Promise<runtime.ApiResponse<ResponseGroup>> {
+    async deleteMeFromGroupRaw(requestParameters: DeleteMeFromGroupRequest): Promise<runtime.ApiResponse<void>> {
         if (requestParameters.groupID === null || requestParameters.groupID === undefined) {
             throw new runtime.RequiredError('groupID','Required parameter requestParameters.groupID was null or undefined when calling deleteMeFromGroup.');
         }
@@ -180,16 +179,15 @@ export class GroupsApi extends runtime.BaseAPI {
             query: queryParameters,
         });
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ResponseGroupFromJSON(jsonValue));
+        return new runtime.VoidApiResponse(response);
     }
 
     /**
      * 自分しか削除出来ない。open=true
      * 自分しか削除出来ない。open=true
      */
-    async deleteMeFromGroup(requestParameters: DeleteMeFromGroupRequest): Promise<ResponseGroup> {
-        const response = await this.deleteMeFromGroupRaw(requestParameters);
-        return await response.value();
+    async deleteMeFromGroup(requestParameters: DeleteMeFromGroupRequest): Promise<void> {
+        await this.deleteMeFromGroupRaw(requestParameters);
     }
 
     /**
