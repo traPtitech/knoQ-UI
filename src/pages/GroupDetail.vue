@@ -7,7 +7,7 @@
         <v-row no-gutters>
           <v-col>
             <h1 class="display-1 d-inline mr-5">{{ group && group.name }}</h1>
-            <template v-if="group.open">
+            <template v-if="group && group.open">
               <v-btn
                 v-if="!joining"
                 small
@@ -39,12 +39,12 @@
           </v-col>
         </v-row>
       </div>
-      <MarkdownField :src="group.description" class="mb-7" />
+      <MarkdownField :src="group ? group.description : ''" class="mb-7" />
       <v-tabs>
         <v-tab>Events</v-tab>
         <v-tab>Members</v-tab>
         <v-tab-item class="pt-6">
-          <EventList :events="allEventData" />
+          <EventList :events="events" />
         </v-tab-item>
         <v-tab-item class="pt-6">
           <div class="text--secondary">{{ memberNames.length }} members</div>
@@ -73,10 +73,7 @@ import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import ActionMenu from '@/components/shared/ActionMenu.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-
-const GroupsRepo = RepositoryFactory.get('groups')
-const RoomsRepo = RepositoryFactory.get('rooms')
+import api, { ResponseGroup, ResponseEvent } from '@/api'
 
 @Component({
   components: {
@@ -90,40 +87,30 @@ const RoomsRepo = RepositoryFactory.get('rooms')
 })
 export default class GroupDetail extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  group: Schemas.Group | null = null
-  events: Schemas.Event[] | null = null
-  rooms: Map<string, Schemas.Room> | null = null
+  group: ResponseGroup | null = null
+  events: ResponseEvent[] = []
+
+  get groupId(): string {
+    return this.$route.params.id
+  }
 
   async created() {
     this.status = 'loading'
     try {
-      await Promise.all([
-        this.fetchGroup(),
-        this.fetchEvents(),
-        this.fetchRooms(),
+      ;[this.group, this.events] = await Promise.all([
+        api.groups.getGroup({ groupID: this.groupId }),
+        api.events.getEventsOfGroup({ groupID: this.groupId }),
       ])
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
   }
-  async fetchGroup() {
-    this.group = (await GroupsRepo.$groupId(this.groupId).get()).data
-  }
-  async fetchEvents() {
-    this.events = (await GroupsRepo.$groupId(this.groupId).events.get()).data
-  }
-  async fetchRooms() {
-    const rooms = new Map<string, Schemas.Room>()
-    const { data } = await RoomsRepo.get()
-    data.forEach(room => rooms.set(room.roomId, room))
-    this.rooms = rooms
-  }
 
   async joinGroup() {
     try {
-      await GroupsRepo.$groupId(this.groupId).members.me.put()
-      this.group = (await GroupsRepo.$groupId(this.groupId).get()).data
+      await api.groups.addMeToGroup({ groupID: this.groupId })
+      this.group = await api.groups.getGroup({ groupID: this.groupId })
     } catch (__) {
       alert('Failed to join...')
     }
@@ -131,22 +118,11 @@ export default class GroupDetail extends Vue {
 
   async leaveGroup() {
     try {
-      await GroupsRepo.$groupId(this.groupId).members.me.delete()
-      this.group = (await GroupsRepo.$groupId(this.groupId).get()).data
+      await api.groups.deleteMeFromGroup({ groupID: this.groupId })
+      this.group = await api.groups.getGroup({ groupID: this.groupId })
     } catch (__) {
       alert('Failed to leave...')
     }
-  }
-
-  get groupId(): string {
-    return this.$route.params.id
-  }
-
-  get allEventData() {
-    if (!this.events || !this.rooms) return []
-    return [...this.events]
-      .sort((e1, e2) => (e1.timeStart < e2.timeStart ? -1 : 1))
-      .map(event => ({ ...event, place: this.rooms?.get(event.roomId)?.place }))
   }
 
   get joining(): boolean {
@@ -155,9 +131,13 @@ export default class GroupDetail extends Vue {
     return this.group.members.includes(me.userId)
   }
 
-  get memberNames(): (string | undefined)[] {
+  get memberNames(): string[] {
     const nameById = this.$store.direct.getters.usersCache.nameById
-    return this.group?.members.map(nameById).filter(v => v) ?? []
+    if (!this.group) return []
+    return this.group.members.flatMap(userId => {
+      const name = nameById(userId)
+      return name ? name : []
+    })
   }
 
   get isMyGroup(): boolean {

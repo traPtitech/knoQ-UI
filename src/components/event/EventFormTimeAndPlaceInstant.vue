@@ -40,10 +40,10 @@ import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
 import TimePicker from '@/components/shared/TimePicker.vue'
 import { getDate, getTime, getIso8601, today } from '@/workers/date'
 
-export type EventTimeAndPlacePersonal = {
+export type EventInputTimeAndPlaceInstant = {
+  place: string
   timeStart: string
   timeEnd: string
-  place: string
 }
 
 @Component({
@@ -51,7 +51,7 @@ export type EventTimeAndPlacePersonal = {
     TimePicker,
   },
 })
-export default class EventFormTimeAndPlacePersonal extends Vue {
+export default class EventFormTimeAndPlaceInstant extends Vue {
   @PropSync('place', { type: String, required: true })
   placeInput!: string
 

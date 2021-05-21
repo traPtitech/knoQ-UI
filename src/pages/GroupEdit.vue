@@ -55,9 +55,7 @@ import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-
-const GroupsRepo = RepositoryFactory.get('groups')
+import api, { RequestGroup } from '@/api'
 
 @Component({
   components: {
@@ -75,34 +73,32 @@ export default class GroupEdit extends Vue {
   valid = false
   step = 1
 
-  group: Schemas.Group | null = null
+  group: RequestGroup | null = null
+
+  get groupId() {
+    return this.$route.params.id
+  }
 
   async created() {
     this.status = 'loading'
     try {
-      await this.fetchGroupData()
+      const group = await api.groups.getGroup({ groupID: this.groupId })
+      this.group = group
+      this.canEdit = !group.isTraQGroup
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
   }
 
-  async fetchGroupData() {
-    const groupId = this.$route.params.id
-    const group = (await GroupsRepo.$groupId(groupId).get()).data
-    if (group.isTraQGroup) {
-      this.canEdit = false
-    } else {
-      this.group = group
-    }
-  }
-
   async submitGroup() {
-    const groupId = this.$route.params.id
     if (!this.group) return
     try {
-      await GroupsRepo.$groupId(groupId).put(this.group)
-      this.$router.push(`/groups/${groupId}`)
+      await api.groups.updateGroup({
+        groupID: this.groupId,
+        requestGroup: this.group,
+      })
+      this.$router.push(`/groups/${this.groupId}`)
     } catch (__) {
       alert('Failed to submit...')
     }
@@ -113,9 +109,8 @@ export default class GroupEdit extends Vue {
       'この操作は取り消せません。本当にこのグループを削除してもよろしいですか？'
     )
     if (!confirmed) return
-    const groupId = this.$route.params.id
     try {
-      await GroupsRepo.$groupId(groupId).delete()
+      await api.groups.deleteGroup({ groupID: this.groupId })
       this.$router.push('/')
     } catch (__) {
       alert('Failed to submit...')

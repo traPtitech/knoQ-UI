@@ -34,9 +34,7 @@ import GroupFormContent from '@/components/group/GroupFormContent.vue'
 import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-
-const GroupsRepo = RepositoryFactory.get('groups')
+import api, { RequestGroup } from '@/api'
 
 @Component({
   components: {
@@ -50,7 +48,7 @@ export default class GroupNew extends Vue {
   valid = false
   step = 1
 
-  group: API.Groups.Post.RequestBody = {
+  group: RequestGroup = {
     name: '',
     description: '',
     open: false,
@@ -64,7 +62,7 @@ export default class GroupNew extends Vue {
 
   async submitGroup() {
     try {
-      await GroupsRepo.post(this.group)
+      await api.groups.createGroup({ requestGroup: this.group })
     } catch (__) {
       alert('Failed to submit...')
       return

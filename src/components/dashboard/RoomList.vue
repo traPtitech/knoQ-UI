@@ -8,7 +8,7 @@
   </div>
   <v-row v-else>
     <v-col v-for="(room, i) in rooms" :key="i" sm="4" cols="12">
-      <RoomListItem v-bind="room" />
+      <RoomListItem :room="room" />
     </v-col>
   </v-row>
 </template>
@@ -17,10 +17,8 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import RoomListItem from '@/components/dashboard/RoomListItem.vue'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
 import { today, todayEnd } from '@/workers/date'
-
-const RoomsRepo = RepositoryFactory.get('rooms')
+import api, { ResponseRoom } from '@/api'
 
 @Component({
   components: {
@@ -29,21 +27,21 @@ const RoomsRepo = RepositoryFactory.get('rooms')
 })
 export default class RoomList extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  rooms: Schemas.Room[] | null = null
+  rooms: ResponseRoom[] = []
 
   async created() {
     this.status = 'loading'
     try {
-      await this.fetchRooms()
+      this.rooms = (
+        await api.rooms.getRooms({
+          dateBegin: today(),
+          dateEnd: todayEnd(),
+        })
+      ).filter(room => room.verified)
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
-  }
-  async fetchRooms() {
-    this.rooms = (
-      await RoomsRepo.get({ dateBegin: today(), dateEnd: todayEnd() })
-    ).data.filter(room => room.public)
   }
 }
 </script>
