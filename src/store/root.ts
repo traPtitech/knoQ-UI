@@ -1,11 +1,9 @@
 import { defineModule, defineMutations, defineActions } from 'direct-vuex'
 import { rootActionContext } from '@/store'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-
-const UsersRepo = RepositoryFactory.get('users')
+import api, { ResponseUser } from '@/api'
 
 interface State {
-  me: Schemas.User | null
+  me: ResponseUser | null
 }
 
 const state = (): State => ({
@@ -13,7 +11,7 @@ const state = (): State => ({
 })
 
 const mutations = defineMutations<State>()({
-  SET_ME(state, me: Schemas.User): void {
+  SET_ME(state, me: ResponseUser): void {
     state.me = me
   },
 })
@@ -21,8 +19,8 @@ const mutations = defineMutations<State>()({
 const actions = defineActions({
   async getMe(context) {
     const { commit } = rootActionContext(context)
-    const { data } = await UsersRepo.me.get()
-    commit.SET_ME(data)
+    const me = await api.users.getMe()
+    commit.SET_ME(me)
   },
 })
 

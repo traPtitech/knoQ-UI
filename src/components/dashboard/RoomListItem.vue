@@ -1,12 +1,12 @@
 <template>
   <v-card class="py-3">
     <v-card-title class="d-block text-center display-1">
-      {{ place }}
+      {{ room.place }}
     </v-card-title>
     <v-card-text class="text-center title font-weight-regular">
-      {{ formatDate(timeStart) }}
+      {{ formatDate(room.timeStart) }}
       <v-icon class="mb-1">mdi-chevron-right</v-icon>
-      {{ formatDate(timeEnd) }}
+      {{ formatDate(room.timeEnd) }}
     </v-card-text>
   </v-card>
 </template>
@@ -15,17 +15,12 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import { formatDate, TIME_DISPLAY_FORMAT } from '@/workers/date'
+import { ResponseRoom } from '@/api'
 
 @Component
 export default class AssignedRoomDisplay extends Vue {
-  @Prop({ type: String, required: true })
-  place!: string
-
-  @Prop({ type: String, required: true })
-  timeStart!: string
-
-  @Prop({ type: String, required: true })
-  timeEnd!: string
+  @Prop({ type: Object, required: true })
+  room!: ResponseRoom
 
   get formatDate() {
     return formatDate(TIME_DISPLAY_FORMAT)

@@ -51,15 +51,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
-
-const GroupsRepo = RepositoryFactory.get('groups')
-const UsersRepo = RepositoryFactory.get('users')
+import api, { ResponseGroup } from '@/api'
 
 @Component
 export default class YourGroups extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  groups: Schemas.Group[] | null = null
+  groups: ResponseGroup[] = []
 
   async created() {
     this.status = 'loading'
@@ -72,7 +69,7 @@ export default class YourGroups extends Vue {
   }
 
   async fetchGroups() {
-    this.groups = (await GroupsRepo.get()).data
+    this.groups = (await api.groups.getGroups())
       .filter(group => !group.isTraQGroup)
       .filter(group =>
         group.admins.includes(this.$store.direct.state.me?.userId ?? '')

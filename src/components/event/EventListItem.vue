@@ -1,20 +1,20 @@
 <template>
   <v-card elevation="4" style="width: 100%" class="px-3 py-1">
-    <v-card-title class="headline">{{ name }}</v-card-title>
+    <v-card-title class="headline">{{ event.name }}</v-card-title>
     <v-card-subtitle>
       <div>
-        {{ formatDate(timeStart) }}
+        {{ formatDate(event.timeStart) }}
         <v-icon small style="margin-bottom: 3px">mdi-chevron-right</v-icon>
-        {{ formatDate(timeEnd) }}
+        {{ formatDate(event.timeEnd) }}
       </div>
-      <div>@{{ place }}</div>
+      <div>@{{ event.place }}</div>
     </v-card-subtitle>
-    <v-card-text class="text-truncate">{{ description }}</v-card-text>
+    <v-card-text class="text-truncate">{{ event.description }}</v-card-text>
     <v-card-actions class="px-4">
       <v-row dense>
         <v-col sm="" cols="12">
           <EventTag
-            v-for="tag in tags"
+            v-for="tag in event.tags"
             :key="tag.name"
             to-tag-page-on-click
             :name="tag.name"
@@ -22,7 +22,7 @@
           />
         </v-col>
         <v-col sm="" cols="12" class="flex-grow-0">
-          <v-btn depressed color="primary" :to="`/events/${eventId}`">
+          <v-btn depressed color="primary" :to="`/events/${event.eventId}`">
             詳細を見る
           </v-btn>
         </v-col>
@@ -37,6 +37,7 @@ import { Component, Prop } from 'vue-property-decorator'
 import TrapAvatar from '@/components/shared/TrapAvatar.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
+import { ResponseEvent } from '@/api'
 
 @Component({
   components: {
@@ -45,26 +46,8 @@ import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
   },
 })
 export default class EventListItem extends Vue {
-  @Prop({ type: String, required: true })
-  eventId!: string
-
-  @Prop({ type: String, required: true })
-  name!: string
-
-  @Prop({ type: String, required: true })
-  timeStart!: string
-
-  @Prop({ type: String, required: true })
-  timeEnd!: string
-
-  @Prop({ type: String, required: true })
-  place!: string
-
-  @Prop({ type: String, required: true })
-  description!: string
-
-  @Prop({ type: Array, required: true })
-  tags!: { name: string }[]
+  @Prop({ type: Object, required: true })
+  event!: ResponseEvent
 
   get formatDate() {
     return formatDate(DATETIME_DISPLAY_FORMAT)

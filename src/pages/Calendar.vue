@@ -7,10 +7,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import RepositoryFactory from '@/repositories/RepositoryFactory'
 import Calendar from '@/components/shared/Calendar.vue'
-
-const EventsRepo = RepositoryFactory.get('events')
+import api, { ResponseEvent } from '@/api'
 
 @Component({
   components: {
@@ -18,10 +16,10 @@ const EventsRepo = RepositoryFactory.get('events')
   },
 })
 export default class CalendarPage extends Vue {
-  events: Schemas.Event[] = []
+  events: ResponseEvent[] = []
 
   async created() {
-    this.events = (await EventsRepo.get()).data
+    this.events = await api.events.getEvents({})
   }
 }
 </script>
