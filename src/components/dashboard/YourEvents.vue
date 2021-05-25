@@ -55,7 +55,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { formatDate, today } from '@/workers/date'
-import api, { ResponseEvent } from '@/api'
+import api, { GetMyEventsRelationEnum, ResponseEvent } from '@/api'
 
 @Component
 export default class YourEvents extends Vue {
@@ -65,11 +65,12 @@ export default class YourEvents extends Vue {
   async created() {
     this.status = 'loading'
     try {
-      this.events = (await api.events.getEvents({}))
-        .filter(event => today() <= event.timeStart)
-        .filter(event =>
-          event.admins.includes(this.$store.direct.state.me?.userId ?? '')
-        )
+      const tdy = today()
+      this.events = (
+        await api.events.getMyEvents({
+          relation: GetMyEventsRelationEnum.Admins,
+        })
+      ).filter(event => tdy <= event.timeStart)
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
