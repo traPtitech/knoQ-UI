@@ -34,8 +34,6 @@ export default class EventNew extends Vue {
     try {
       const event = await api.events.getEventDetail({ eventID: this.eventId })
 
-      const me = this.$store.direct.state.me
-
       const findUser = (id: string) =>
         this.$store.direct.state.usersCache.users?.get(id)
 
