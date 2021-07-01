@@ -6,29 +6,27 @@
       label="場所"
       :rules="$rules.eventPlace"
     />
-    <v-dialog width="290px">
-      <template #activator="{ on }">
-        <v-text-field
-          v-model="dateMem"
-          filled
-          label="開催日"
-          readonly
-          :rules="$rules.eventDate"
-          v-on="on"
-        />
-      </template>
-      <v-date-picker v-model="dateMem" show-current :min="dateMin" />
-    </v-dialog>
-    <TimePicker
+    <v-text-field
+      v-model="dateMem"
+      filled
+      label="開催日"
+      :rules="$rules.eventDate"
+      type="date"
+    />
+    <v-text-field
       v-model="timeStartMem"
+      filled
       label="開始時刻"
       :rules="$rules.eventTimeStart"
+      type="time"
       :max="timeEndMem"
     />
-    <TimePicker
+    <v-text-field
       v-model="timeEndMem"
+      filled
       label="終了時刻"
       :rules="$rules.eventTimeEnd"
+      type="time"
       :min="timeStartMem"
     />
   </v-form>
@@ -37,7 +35,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
-import TimePicker from '@/components/shared/TimePicker.vue'
 import { getDate, getTime, getIso8601, today } from '@/workers/date'
 
 export type EventInputTimeAndPlaceInstant = {
@@ -46,11 +43,7 @@ export type EventInputTimeAndPlaceInstant = {
   timeEnd: string
 }
 
-@Component({
-  components: {
-    TimePicker,
-  },
-})
+@Component({})
 export default class EventFormTimeAndPlaceInstant extends Vue {
   @PropSync('place', { type: String, required: true })
   placeInput!: string

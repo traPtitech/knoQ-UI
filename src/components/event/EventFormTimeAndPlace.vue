@@ -28,19 +28,23 @@
           :rules="$rules.eventRoom"
           class="mb-4"
         />
-        <TimePicker
+        <v-text-field
           v-model="_timeStart"
+          filled
           label="開始時刻"
           :rules="$rules.eventTimeStart"
           :disabled="!roomInput"
-          :min="startMin"
+          type="time"
           :max="startMax"
+          :min="startMin"
         />
-        <TimePicker
+        <v-text-field
           v-model="_timeEnd"
+          filled
           label="終了時刻"
           :rules="$rules.eventTimeEnd"
           :disabled="!roomInput"
+          type="time"
           :min="endMin"
           :max="endMax"
         />
@@ -52,7 +56,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
-import TimePicker from '@/components/shared/TimePicker.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
 import {
   formatDate,
@@ -74,7 +77,6 @@ export type EventInputTimeAndPlace = {
 
 @Component({
   components: {
-    TimePicker,
     Autocomplete,
   },
 })
