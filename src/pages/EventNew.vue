@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <event-form-base @submit="submit" />
+    <progress-circular v-if="status === 'loading'" />
+    <event-form-base v-else-if="status === 'error'" @submit="submit" />
+    <template v-else>
+      <event-form-base :event="event" @submit="submit" />
+    </template>
   </v-container>
 </template>
 
@@ -17,6 +21,34 @@ import api from '@/api'
   },
 })
 export default class EventNew extends Vue {
+  status: 'loading' | 'loaded' | 'error' = 'loading'
+
+  event: EventInput | null = null
+
+  get eventId() {
+    return this.$route.query.baseID.toString()
+  }
+
+  async created() {
+    this.status = 'loading'
+    try {
+      const event = await api.events.getEventDetail({ eventID: this.eventId })
+
+      const findUser = (id: string) =>
+        this.$store.direct.state.usersCache.users?.get(id)
+
+      this.event = {
+        ...event,
+        admins: event.admins.flatMap(userId => findUser(userId) ?? []),
+        ...(event.room.verified
+          ? { instant: false, room: event.room }
+          : { instant: true, place: event.room.place }),
+      }
+      this.status = 'loaded'
+    } catch (__) {
+      this.status = 'error'
+    }
+  }
   async submit(event: EventInput) {
     if (!event.group || (!event.instant && !event.room)) {
       console.error('input content has null field')

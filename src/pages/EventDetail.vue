@@ -16,6 +16,12 @@
               >
                 <v-list-item-title>Edit this event</v-list-item-title>
               </v-list-item>
+              <v-list-item
+                v-if="isMyEvent"
+                :to="`/events/new?baseID=${event.eventId}`"
+              >
+                <v-list-item-title>Create new</v-list-item-title>
+              </v-list-item>
             </ActionMenu>
           </v-col>
         </v-row>
