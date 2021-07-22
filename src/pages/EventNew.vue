@@ -18,10 +18,12 @@ import EventFormBase, {
 import { isTrapGroup } from '@/workers/isTrapGroup'
 import api from '@/api'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
+import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 
 @Component({
   components: {
     EventFormBase,
+    ProgressCircular,
     LoadFailedText,
   },
 })
@@ -31,11 +33,17 @@ export default class EventNew extends Vue {
   event: EventInput | null = null
 
   get eventId() {
-    return this.$route.query.baseID.toString()
+    return [this.$route.query.baseID].flat()[0]
   }
 
   async created() {
     this.status = 'loading'
+
+    if (!this.eventId) {
+      this.status = 'loaded'
+      return
+    }
+
     try {
       const event = await api.events.getEventDetail({ eventID: this.eventId })
 
