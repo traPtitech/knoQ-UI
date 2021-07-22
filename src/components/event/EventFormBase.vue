@@ -74,6 +74,12 @@ import FormBackButton from '@/components/shared/FormBackButton.vue'
 
 export type EventInput = EventInputContent &
   (
+    | ({ instant: false } & Partial<EventInputTimeAndPlace>)
+    | ({ instant: true } & Partial<EventInputTimeAndPlaceInstant>)
+  )
+
+export type EventOutput = EventInputContent &
+  (
     | ({ instant: false } & EventInputTimeAndPlace)
     | ({ instant: true } & EventInputTimeAndPlaceInstant)
   )
@@ -108,17 +114,18 @@ export default class EventFormBase extends Vue {
   }
 
   timeAndPlace: EventInputTimeAndPlace = {
-    timeStart: this.event && !this.event.instant ? this.event.timeStart : '',
-    timeEnd: this.event && !this.event.instant ? this.event.timeEnd : '',
-    room: this.event && !this.event.instant ? this.event.room : null,
+    timeStart:
+      this.event && !this.event.instant ? this.event.timeStart ?? '' : '',
+    timeEnd: this.event && !this.event.instant ? this.event.timeEnd ?? '' : '',
+    room: this.event && !this.event.instant ? this.event.room ?? null : null,
     sharedRoom:
-      this.event && !this.event.instant ? this.event.sharedRoom : true,
+      this.event && !this.event.instant ? this.event.sharedRoom ?? true : true,
   }
 
   timeAndPlaceInstant: EventInputTimeAndPlaceInstant = {
-    timeStart: this.event?.instant ? this.event.timeStart : '',
-    timeEnd: this.event?.instant ? this.event.timeEnd : '',
-    place: this.event?.instant ? this.event.place : '',
+    timeStart: this.event?.instant ? this.event.timeStart ?? '' : '',
+    timeEnd: this.event?.instant ? this.event.timeEnd ?? '' : '',
+    place: this.event?.instant ? this.event.place ?? '' : '',
   }
 
   instant: boolean = this.event?.instant ?? false
@@ -172,7 +179,7 @@ export default class EventFormBase extends Vue {
   }
 
   @Emit()
-  submit(): EventInputContent {
+  submit(): EventOutput {
     return {
       ...this.content,
       group: this.content.group!,
