@@ -20,7 +20,9 @@
                 v-if="isMyEvent"
                 :to="`/events/new?baseID=${event.eventId}`"
               >
-                <v-list-item-title>Create new</v-list-item-title>
+                <v-list-item-title>
+                  Create new one based on this
+                </v-list-item-title>
               </v-list-item>
             </ActionMenu>
           </v-col>

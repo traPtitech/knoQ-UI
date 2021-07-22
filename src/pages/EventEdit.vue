@@ -24,7 +24,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import EventFormBase, { EventInput } from '@/components/event/EventFormBase.vue'
+import EventFormBase, {
+  EventInput,
+  EventOutput,
+} from '@/components/event/EventFormBase.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import { isTrapGroup } from '@/workers/isTrapGroup'
@@ -71,7 +74,7 @@ export default class ProgressCircularEventEdit extends Vue {
     }
   }
 
-  async submit(event: EventInput) {
+  async submit(event: EventOutput) {
     if (!event.group || (!event.instant && !event.room)) {
       console.error('input content has null field')
       return

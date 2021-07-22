@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <progress-circular v-if="status === 'loading'" />
-    <event-form-base v-else-if="status === 'error'" @submit="submit" />
+    <load-failed-text v-else-if="status === 'error'" />
     <template v-else>
       <event-form-base :event="event" @submit="submit" />
     </template>
@@ -11,13 +11,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import EventFormBase, { EventInput } from '@/components/event/EventFormBase.vue'
+import EventFormBase, {
+  EventInput,
+  EventOutput,
+} from '@/components/event/EventFormBase.vue'
 import { isTrapGroup } from '@/workers/isTrapGroup'
 import api from '@/api'
+import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 
 @Component({
   components: {
     EventFormBase,
+    LoadFailedText,
   },
 })
 export default class EventNew extends Vue {
@@ -38,10 +43,13 @@ export default class EventNew extends Vue {
         this.$store.direct.state.usersCache.users?.get(id)
 
       this.event = {
-        ...event,
+        name: event.name,
+        group: event.group,
         admins: event.admins.flatMap(userId => findUser(userId) ?? []),
+        tags: event.tags,
+        description: event.description,
         ...(event.room.verified
-          ? { instant: false, room: event.room }
+          ? { instant: false }
           : { instant: true, place: event.room.place }),
       }
       this.status = 'loaded'
@@ -49,7 +57,7 @@ export default class EventNew extends Vue {
       this.status = 'error'
     }
   }
-  async submit(event: EventInput) {
+  async submit(event: EventOutput) {
     if (!event.group || (!event.instant && !event.room)) {
       console.error('input content has null field')
       return
