@@ -22,8 +22,18 @@ const rules = {
     (v: string) => v.length <= 32 || '場所名は32文字までです',
   ],
   eventDate: [(v: string) => !!v || '日付は必須です'],
-  eventTimeStart: [(v: string) => !!v || '開始時刻は必須です'],
-  eventTimeEnd: [(v: string) => !!v || '終了時刻は必須です'],
+
+  eventTimeStart: (end: string) => [
+    (v: string) => !!v || '開始時刻は必須です',
+    (v: string) =>
+      !end || v < end || '開始時刻は終了時刻よりも早くしてください',
+  ],
+  eventTimeEnd: (start: string) => [
+    (v: string) => !!v || '終了時刻は必須です',
+    (v: string) => v > start || '終了時刻は開始時刻よりも遅くしてください',
+  ],
 }
+
+//import  EventInputTimeAndPlaceInstant from '@/components/event/EventFormTimeAndPlaceInstant.vue'
 
 export default rules
