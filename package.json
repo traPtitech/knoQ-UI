@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@mdi/font": "^5.9.55",
-    "@openapitools/openapi-generator-cli": "^2.3.7",
+    "@openapitools/openapi-generator-cli": "^2.3.8",
     "@types/highlight.js": "^10.1.0",
     "@types/markdown-it": "^12.0.3",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
