@@ -26,6 +26,7 @@
               </v-col>
               <v-col class="flex-grow-0">
                 <v-btn
+                  v-if="includesMe(event.admins)"
                   small
                   outlined
                   color="primary"
@@ -55,7 +56,11 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { formatDate, today } from '@/workers/date'
-import api, { ResponseEvent } from '@/api'
+import api, { ResponseEvent, GetMyEventsRelationEnum } from '@/api'
+
+const uniqueBy = <T, S>(f: (x: T) => S, arr: T[]): T[] => {
+  return [...new Map(arr.map(x => [f(x), x])).values()]
+}
 
 @Component
 export default class YourEvents extends Vue {
@@ -65,15 +70,23 @@ export default class YourEvents extends Vue {
   async created() {
     this.status = 'loading'
     try {
-      this.events = (await api.events.getEvents({}))
-        .filter(event => today() <= event.timeStart)
-        .filter(event =>
-          event.admins.includes(this.$store.direct.state.me?.userId ?? '')
-        )
+      const [adminEvents, belongingEvents] = await Promise.all([
+        api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Admins }),
+        api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Belongs }),
+      ])
+      this.events = uniqueBy(
+        event => event.eventId,
+        [...adminEvents, ...belongingEvents]
+      ).filter(event => today() <= event.timeStart)
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
+  }
+
+  get includesMe() {
+    return (memberIds: string[]) =>
+      memberIds.includes(this.$store.direct.state.me?.userId ?? '')
   }
 
   get formatDate() {

@@ -44,12 +44,12 @@ export interface GetGroupRequest {
 }
 
 export interface GetMyGroupsRequest {
-    relation?: string;
+    relation?: GetMyGroupsRelationEnum;
 }
 
 export interface GetUserGroupsRequest {
     userID: string;
-    relation?: string;
+    relation?: GetUserGroupsRelationEnum;
 }
 
 export interface UpdateGroupRequest {
@@ -351,4 +351,21 @@ export class GroupsApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GetMyGroupsRelationEnum {
+    Admins = 'admins',
+    Belongs = 'belongs'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GetUserGroupsRelationEnum {
+    Admins = 'admins',
+    Belongs = 'belongs'
 }

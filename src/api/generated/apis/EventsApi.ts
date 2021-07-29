@@ -66,12 +66,12 @@ export interface GetEventsOfRoomRequest {
 }
 
 export interface GetMyEventsRequest {
-    relation?: string;
+    relation?: GetMyEventsRelationEnum;
 }
 
 export interface GetUserEventsRequest {
     userID: string;
-    relation?: string;
+    relation?: GetUserEventsRelationEnum;
 }
 
 export interface UpdateEventRequest {
@@ -484,4 +484,21 @@ export class EventsApi extends runtime.BaseAPI {
         return await response.value();
     }
 
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GetMyEventsRelationEnum {
+    Admins = 'admins',
+    Belongs = 'belongs'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum GetUserEventsRelationEnum {
+    Admins = 'admins',
+    Belongs = 'belongs'
 }

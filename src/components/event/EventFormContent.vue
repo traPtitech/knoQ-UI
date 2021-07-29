@@ -86,6 +86,7 @@ import api, {
   ResponseGroup,
   ResponseUser,
   RequestEventInstantTags,
+  GetMyGroupsRelationEnum,
 } from '@/api'
 
 export type EventInputContent = {
@@ -134,7 +135,7 @@ export default class EventFormContent extends Vue {
   async fetchGroups() {
     const [groups, groupIds] = await Promise.all([
       api.groups.getGroups(),
-      api.groups.getMyGroups({ relation: 'belongs' }),
+      api.groups.getMyGroups({ relation: GetMyGroupsRelationEnum.Belongs }),
     ])
     this.allGroups = groups.filter(group => groupIds.includes(group.groupId))
   }
