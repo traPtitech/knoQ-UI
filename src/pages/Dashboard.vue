@@ -11,13 +11,13 @@
     <v-row>
       <v-col md="6" cols="12">
         <DashboardItem>
-          <DashboardItemTitle>あなたが管理者のイベント</DashboardItemTitle>
+          <DashboardItemTitle>あなたのイベント</DashboardItemTitle>
           <YourEvents />
         </DashboardItem>
       </v-col>
       <v-col md="6" cols="12">
         <DashboardItem>
-          <DashboardItemTitle>あなたが管理者のグループ</DashboardItemTitle>
+          <DashboardItemTitle>あなたのグループ</DashboardItemTitle>
           <YourGroups />
         </DashboardItem>
       </v-col>

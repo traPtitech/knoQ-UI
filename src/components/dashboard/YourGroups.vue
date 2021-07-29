@@ -23,6 +23,7 @@
               </v-col>
               <v-col class="flex-grow-0">
                 <v-btn
+                  v-if="includesMe(group.admins)"
                   small
                   outlined
                   color="primary"
@@ -71,9 +72,12 @@ export default class YourGroups extends Vue {
   async fetchGroups() {
     this.groups = (await api.groups.getGroups())
       .filter(group => !group.isTraQGroup)
-      .filter(group =>
-        group.admins.includes(this.$store.direct.state.me?.userId ?? '')
-      )
+      .filter(group => this.includesMe([...group.members, ...group.admins]))
+  }
+
+  get includesMe() {
+    return (memberIds: string[]) =>
+      memberIds.includes(this.$store.direct.state.me?.userId ?? '')
   }
 }
 </script>
