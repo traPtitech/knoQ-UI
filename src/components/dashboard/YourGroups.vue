@@ -70,9 +70,9 @@ export default class YourGroups extends Vue {
   }
 
   async fetchGroups() {
-    this.groups = (await api.groups.getGroups())
-      .filter(group => !group.isTraQGroup)
-      .filter(group => this.includesMe([...group.members, ...group.admins]))
+    this.groups = (await api.groups.getGroups()).filter(group =>
+      this.includesMe([...group.members, ...group.admins])
+    )
   }
 
   get includesMe() {
