@@ -52,8 +52,6 @@ import api, { ResponseEvent, ResponseTag } from '@/api'
 })
 export default class EventSearch extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
-  filterTags: string[] = []
-  showFinished = false
 
   events: ResponseEvent[] = []
   tags: ResponseTag[] = []
@@ -66,24 +64,32 @@ export default class EventSearch extends Vue {
         api.tags.getTag(),
       ])
       this.status = 'loaded'
-      this.filterTags = [this.$route.query.tags]
-        .flat()
-        .filter((v): v is string => !!v)
-      this.showFinished = [this.$route.query.showFinished].flat()[0] === '1'
     } catch (__) {
       this.status = 'error'
     }
   }
 
-  @Watch('showFinished')
-  @Watch('filterTags')
-  onChangeSearchQuery() {
+  get filterTags(): string[] {
+    return [this.$route.query.tags].flat().filter((v): v is string => !!v)
+  }
+  set filterTags(tags: string[]) {
+    this.setSearchQueryToUrl(tags, this.showFinished)
+  }
+
+  get showFinished(): boolean {
+    return [this.$route.query.showFinished].flat()[0] === '1'
+  }
+  set showFinished(b: boolean) {
+    this.setSearchQueryToUrl(this.filterTags, b)
+  }
+
+  setSearchQueryToUrl(tags: string[], showFinished: boolean) {
     this.$router
       .push({
         path: '/events',
         query: {
-          showFinished: this.showFinished ? '1' : '0',
-          tags: this.filterTags,
+          showFinished: showFinished ? '1' : '0',
+          tags,
         },
       })
       .catch(() => {})
@@ -101,7 +107,12 @@ export default class EventSearch extends Vue {
 
   removeFilterTag(name: string) {
     const index = this.filterTags.indexOf(name)
-    if (index >= 0) this.filterTags.splice(index, 1)
+    if (index >= 0) {
+      this.filterTags = [
+        ...this.filterTags.slice(0, index),
+        ...this.filterTags.slice(index + 1),
+      ]
+    }
   }
 }
 </script>
