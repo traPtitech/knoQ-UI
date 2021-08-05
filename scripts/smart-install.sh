@@ -1,7 +1,7 @@
 #!/bin/sh
 
 checkForChangeAnd() {
-    local changedFiles="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+    local changedFiles="$(git diff-tree -r --name-only --no-commit-id @{-1} HEAD)"
     echo "$changedFiles" | grep --quiet "$1" && eval "$2" || true
 }
 
