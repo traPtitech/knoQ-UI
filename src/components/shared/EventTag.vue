@@ -30,7 +30,12 @@ export default class EventTag extends Vue {
     }
     return {
       path: '/events',
-      query: { tags: this.name },
+      query: {
+        tags: this.name,
+        // TODO: remove showFinished
+        // this is required in order to retain the showFinished query in EventSearch page
+        showFinished: this.$route.query.showFinished,
+      },
     }
   }
 }
