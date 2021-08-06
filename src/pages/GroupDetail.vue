@@ -126,9 +126,8 @@ export default class GroupDetail extends Vue {
   }
 
   get joining(): boolean {
-    const me = this.$store.direct.state.me
-    if (!me || !this.group) return false
-    return this.group.members.includes(me.userId)
+    if (!this.me || !this.group) return false
+    return this.group.members.includes(this.me)
   }
 
   get memberNames(): string[] {
@@ -141,7 +140,11 @@ export default class GroupDetail extends Vue {
   }
 
   get isMyGroup(): boolean {
-    return this.group?.createdBy === this.$store.direct.state.me?.userId
+    return !!this.me && (this.group?.admins.includes(this.me) ?? false)
+  }
+
+  get me(): string | undefined {
+    return this.$store.direct.state.me?.userId
   }
 }
 </script>

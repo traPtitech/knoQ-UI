@@ -103,32 +103,42 @@ export default class EventFormBase extends Vue {
   @Prop({ type: Object })
   event!: EventInput | null | undefined
 
-  content: EventInputContent = {
-    name: this.event?.name ?? '',
-    description: this.event?.description ?? '',
-    group: this.event?.group ?? null,
-    tags: this.event?.tags ?? [],
-    admins:
-      this.event?.admins ??
-      (this.$store.direct.state.me ? [this.$store.direct.state.me] : []),
-  }
+  content: EventInputContent = null!
 
-  timeAndPlace: EventInputTimeAndPlace = {
-    timeStart:
-      this.event && !this.event.instant ? this.event.timeStart ?? '' : '',
-    timeEnd: this.event && !this.event.instant ? this.event.timeEnd ?? '' : '',
-    room: this.event && !this.event.instant ? this.event.room ?? null : null,
-    sharedRoom:
-      this.event && !this.event.instant ? this.event.sharedRoom ?? true : true,
-  }
+  timeAndPlace: EventInputTimeAndPlace = null!
 
-  timeAndPlaceInstant: EventInputTimeAndPlaceInstant = {
-    timeStart: this.event?.instant ? this.event.timeStart ?? '' : '',
-    timeEnd: this.event?.instant ? this.event.timeEnd ?? '' : '',
-    place: this.event?.instant ? this.event.place ?? '' : '',
-  }
+  timeAndPlaceInstant: EventInputTimeAndPlaceInstant = null!
 
-  instant: boolean = this.event?.instant ?? false
+  instant: boolean = null!
+
+  created() {
+    this.content = {
+      name: this.event?.name ?? '',
+      description: this.event?.description ?? '',
+      group: this.event?.group ?? null,
+      tags: this.event?.tags ?? [],
+      admins:
+        this.event?.admins ??
+        (this.$store.direct.state.me ? [this.$store.direct.state.me] : []),
+    }
+    this.timeAndPlace = {
+      timeStart:
+        this.event && !this.event.instant ? this.event.timeStart ?? '' : '',
+      timeEnd:
+        this.event && !this.event.instant ? this.event.timeEnd ?? '' : '',
+      room: this.event && !this.event.instant ? this.event.room ?? null : null,
+      sharedRoom:
+        this.event && !this.event.instant
+          ? this.event.sharedRoom ?? true
+          : true,
+    }
+    this.timeAndPlaceInstant = {
+      timeStart: this.event?.instant ? this.event.timeStart ?? '' : '',
+      timeEnd: this.event?.instant ? this.event.timeEnd ?? '' : '',
+      place: this.event?.instant ? this.event.place ?? '' : '',
+    }
+    this.instant = this.event?.instant ?? false
+  }
 
   step = 1
 
