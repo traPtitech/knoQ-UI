@@ -70,6 +70,16 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
+  //TODO:いい感じの方法が見つかったら変える
+  @Watch('timeStartMem')
+  private onTimeStartMemFix() {
+    const tmp = this.timeEndMem
+    this.timeEndMem = ''
+    this.$nextTick(() => {
+      this.timeEndMem = tmp
+    })
+  }
+
   @Watch('dateMem')
   @Watch('timeStartMem')
   private onTimeStartMemChange() {

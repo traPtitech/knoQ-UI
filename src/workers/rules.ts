@@ -34,6 +34,4 @@ const rules = {
   ],
 }
 
-//import  EventInputTimeAndPlaceInstant from '@/components/event/EventFormTimeAndPlaceInstant.vue'
-
 export default rules
