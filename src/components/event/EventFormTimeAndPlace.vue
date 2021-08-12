@@ -32,24 +32,24 @@
           v-model="_timeStart"
           filled
           label="開始時刻"
-          :rules="$rules.eventTimeStart"
+          :rules="$rules.eventTimeStart(_timeEnd)"
           :disabled="!roomInput"
           type="time"
-          :max="startMax"
-          :min="startMin"
         />
         <v-text-field
           v-model="_timeEnd"
           filled
           label="終了時刻"
-          :rules="$rules.eventTimeEnd"
+          :rules="$rules.eventTimeEnd(_timeStart)"
           :disabled="!roomInput"
           type="time"
-          :min="endMin"
-          :max="endMax"
         />
       </v-col>
     </v-row>
+    {{ _timeStart }}
+    {{ _timeEnd }}
+    {{ timeStartInput }}
+    {{ timeEndInput }}
   </v-form>
 </template>
 
@@ -114,6 +114,16 @@ export default class EventFormTimeAndPlace extends Vue {
     this.roomInput = null
     this.timeStartInput = ''
     this.timeEndInput = ''
+  }
+
+  //TODO:いい感じの方法が見つかったら変える
+  @Watch('_timeStart')
+  private onTimeStartFix() {
+    const tmp = this._timeEnd
+    this._timeEnd = ''
+    this.$nextTick(() => {
+      this._timeEnd = tmp
+    })
   }
 
   get _timeStart(): string {

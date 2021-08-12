@@ -32,6 +32,15 @@ const rules = {
     (v: string) => !!v || '終了時刻は必須です',
     (v: string) => v > start || '終了時刻は開始時刻よりも遅くしてください',
   ],
+  eventTimeStart2: (end: string) => [
+    (v: string) => !!v || '開始時刻は必須です',
+    (v: string) =>
+      !end || v < end || '開始時刻は終了時刻よりも早くしてください',
+  ],
+  eventTimeEnd2: (start: string) => [
+    (v: string) => !!v || '終了時刻は必須です',
+    (v: string) => v > start || '終了時刻は開始時刻よりも遅くしてください',
+  ],
 }
 
 export default rules

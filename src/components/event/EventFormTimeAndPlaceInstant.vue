@@ -27,6 +27,8 @@
       :rules="$rules.eventTimeEnd(timeStartMem)"
       type="time"
     />
+    {{ timeStartMem }}
+    {{ timeEndMem }}
   </v-form>
 </template>
 
