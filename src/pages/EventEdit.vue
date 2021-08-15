@@ -9,7 +9,7 @@
       </span>
     </template>
     <template v-else>
-      <event-form-base :event="event" @submit="submit" />
+      <event-form-base class="mb-5" :event="event" @submit="submit" />
 
       <v-card class="px-5 pt-5 pb-3">
         <span class="headline mr-3"> Delete this event </span>
@@ -40,7 +40,7 @@ import api, { ResponseEvent, ResponseGroup, ResponseRoom } from '@/api'
     LoadFailedText,
   },
 })
-export default class ProgressCircularEventEdit extends Vue {
+export default class EventEdit extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
 
   event: EventInput | null = null

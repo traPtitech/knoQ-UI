@@ -5,7 +5,7 @@
     <template v-else-if="!canEdit">
       <v-icon large color="error" class="mr-5">mdi-alert-circle</v-icon>
       <span class="text--secondary headline">
-        traP公式のグループは編集できません
+        このグループは編集できません
       </span>
     </template>
     <template v-else>
@@ -84,7 +84,8 @@ export default class GroupEdit extends Vue {
     try {
       const group = await api.groups.getGroup({ groupID: this.groupId })
       this.group = group
-      this.canEdit = !group.isTraQGroup
+      this.canEdit =
+        !group.isTraQGroup && !!this.me && group.admins.includes(this.me)
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
@@ -115,6 +116,10 @@ export default class GroupEdit extends Vue {
     } catch (__) {
       alert('Failed to submit...')
     }
+  }
+
+  get me(): string | undefined {
+    return this.$store.direct.state.me?.userId
   }
 }
 </script>
