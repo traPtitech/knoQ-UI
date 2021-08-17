@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid">
+  <v-form ref="form" v-model="valid">
     <v-text-field
       v-model="placeInput"
       filled
@@ -27,14 +27,12 @@
       :rules="$rules.eventTimeEnd(timeStartMem)"
       type="time"
     />
-    {{ timeStartMem }}
-    {{ timeEndMem }}
   </v-form>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
+import { Component, Prop, PropSync, Watch, Ref } from 'vue-property-decorator'
 import { getDate, getTime, getIso8601, today } from '@/workers/date'
 
 export type EventInputTimeAndPlaceInstant = {
@@ -72,14 +70,17 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
-  //TODO:いい感じの方法が見つかったら変える
+  @Ref()
+  readonly form!: { validate(): void }
+
   @Watch('timeStartMem')
-  private onTimeStartMemFix() {
-    const tmp = this.timeEndMem
-    this.timeEndMem = ''
-    this.$nextTick(() => {
-      this.timeEndMem = tmp
-    })
+  @Watch('timeEndMem')
+  private async onTimeStartMemFixed() {
+    if (!this.timeStartMem || !this.timeEndMem) {
+      return
+    }
+    await this.$nextTick()
+    this.form.validate()
   }
 
   @Watch('dateMem')

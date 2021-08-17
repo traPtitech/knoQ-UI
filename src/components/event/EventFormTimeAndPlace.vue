@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid">
+  <v-form ref="form" v-model="valid">
     <v-row>
       <v-col cols="12" md="" class="pl-4 flex-grow-0">
         <div class="text--secondary caption">
@@ -46,16 +46,12 @@
         />
       </v-col>
     </v-row>
-    {{ _timeStart }}
-    {{ _timeEnd }}
-    {{ timeStartInput }}
-    {{ timeEndInput }}
   </v-form>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
+import { Component, Prop, PropSync, Watch, Ref } from 'vue-property-decorator'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
 import {
   formatDate,
@@ -116,14 +112,17 @@ export default class EventFormTimeAndPlace extends Vue {
     this.timeEndInput = ''
   }
 
-  //TODO:いい感じの方法が見つかったら変える
+  @Ref()
+  readonly form!: { validate(): void }
+
   @Watch('_timeStart')
-  private onTimeStartFix() {
-    const tmp = this._timeEnd
-    this._timeEnd = ''
-    this.$nextTick(() => {
-      this._timeEnd = tmp
-    })
+  @Watch('_timeEnd')
+  private async onTimeStartFixed() {
+    if (!this._timeStart || !this._timeEnd) {
+      return
+    }
+    await this.$nextTick()
+    this.form.validate()
   }
 
   get _timeStart(): string {
