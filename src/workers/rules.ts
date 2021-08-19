@@ -22,8 +22,39 @@ const rules = {
     (v: string) => v.length <= 32 || '場所名は32文字までです',
   ],
   eventDate: [(v: string) => !!v || '日付は必須です'],
-  eventTimeStart: [(v: string) => !!v || '開始時刻は必須です'],
-  eventTimeEnd: [(v: string) => !!v || '終了時刻は必須です'],
+
+  eventTimeStart: (
+    endTime: string,
+    roomStartTime: string | null,
+    roomEndTime: string | null
+  ) => [
+    (v: string) => !!v || '開始時刻は必須です',
+    (v: string) =>
+      !endTime || v < endTime || '開始時刻は終了時刻よりも早くしてください',
+    (v: string) =>
+      (v >= roomStartTime! && v <= roomEndTime!) ||
+      '進捗部屋の利用可能な時間を選択してください',
+  ],
+  eventTimeEnd: (
+    startTime: string,
+    roomStartTime: string | null,
+    roomEndTime: string | null
+  ) => [
+    (v: string) => !!v || '終了時刻は必須です',
+    (v: string) => v > startTime || '終了時刻は開始時刻よりも遅くしてください',
+    (v: string) =>
+      (v >= roomStartTime! && v <= roomEndTime!) ||
+      '進捗部屋の利用可能な時間を選択してください',
+  ],
+  eventTimeStartInstant: (endTime: string) => [
+    (v: string) => !!v || '開始時刻は必須です',
+    (v: string) =>
+      !endTime || v < endTime || '開始時刻は終了時刻よりも早くしてください',
+  ],
+  eventTimeEndInstant: (startTime: string) => [
+    (v: string) => !!v || '終了時刻は必須です',
+    (v: string) => v > startTime || '終了時刻は開始時刻よりも遅くしてください',
+  ],
 }
 
 export default rules

@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid">
+  <v-form ref="form" v-model="valid">
     <v-row>
       <v-col cols="12" md="" class="pl-4 flex-grow-0">
         <div class="text--secondary caption">
@@ -28,21 +28,21 @@
           :rules="$rules.eventRoom"
           class="mb-4"
         />
-        <TimePicker
+        <v-text-field
           v-model="_timeStart"
+          filled
           label="開始時刻"
-          :rules="$rules.eventTimeStart"
+          :rules="$rules.eventTimeStart(_timeEnd, roomStartTime, roomEndTime)"
           :disabled="!roomInput"
-          :min="startMin"
-          :max="startMax"
+          type="time"
         />
-        <TimePicker
+        <v-text-field
           v-model="_timeEnd"
+          filled
           label="終了時刻"
-          :rules="$rules.eventTimeEnd"
+          :rules="$rules.eventTimeEnd(_timeStart, roomStartTime, roomEndTime)"
           :disabled="!roomInput"
-          :min="endMin"
-          :max="endMax"
+          type="time"
         />
       </v-col>
     </v-row>
@@ -51,8 +51,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop, PropSync, Watch } from 'vue-property-decorator'
-import TimePicker from '@/components/shared/TimePicker.vue'
+import { Component, Prop, PropSync, Watch, Ref } from 'vue-property-decorator'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
 import {
   formatDate,
@@ -74,7 +73,6 @@ export type EventInputTimeAndPlace = {
 
 @Component({
   components: {
-    TimePicker,
     Autocomplete,
   },
 })
@@ -114,6 +112,20 @@ export default class EventFormTimeAndPlace extends Vue {
     this.timeEndInput = ''
   }
 
+  @Ref()
+  readonly form!: { validate(): void }
+
+  @Watch('_timeStart')
+  @Watch('_timeEnd')
+  @Watch('roomInput')
+  private async onTimeFixed() {
+    if (!this._timeStart || !this._timeEnd) {
+      return
+    }
+    await this.$nextTick()
+    this.form.validate()
+  }
+
   get _timeStart(): string {
     return this.timeStartInput && getTime(this.timeStartInput)
   }
@@ -134,18 +146,11 @@ export default class EventFormTimeAndPlace extends Vue {
   get dateMin(): string {
     return today()
   }
-  get startMin(): string | null {
+  get roomStartTime(): string | null {
     return this.roomInput && getTime(this.roomInput.timeStart)
   }
-  get startMax(): string | null {
-    const timeEnd = strMin(this.roomInput?.timeEnd, this._timeEnd)
-    return timeEnd && getTime(timeEnd)
-  }
-  get endMin(): string | null {
-    const timeStart = strMax(this.roomInput?.timeStart, this._timeStart)
-    return timeStart && getTime(timeStart)
-  }
-  get endMax(): string | null {
+
+  get roomEndTime(): string | null {
     return this.roomInput && getTime(this.roomInput.timeEnd)
   }
 
