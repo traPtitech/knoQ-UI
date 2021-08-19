@@ -75,7 +75,7 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
 
   @Watch('timeStartMem')
   @Watch('timeEndMem')
-  private async onTimeStartMemFixed() {
+  private async onTimeMemFixed() {
     if (!this.timeStartMem || !this.timeEndMem) {
       return
     }

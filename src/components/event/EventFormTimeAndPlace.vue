@@ -117,7 +117,7 @@ export default class EventFormTimeAndPlace extends Vue {
 
   @Watch('_timeStart')
   @Watch('_timeEnd')
-  private async onTimeStartFixed() {
+  private async onTimeFixed() {
     if (!this._timeStart || !this._timeEnd) {
       return
     }
