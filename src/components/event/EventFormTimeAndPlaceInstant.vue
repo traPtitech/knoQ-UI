@@ -17,14 +17,14 @@
       v-model="timeStartMem"
       filled
       label="開始時刻"
-      :rules="$rules.eventTimeStart(timeEndMem)"
+      :rules="$rules.eventTimeStartInstant(timeEndMem)"
       type="time"
     />
     <v-text-field
       v-model="timeEndMem"
       filled
       label="終了時刻"
-      :rules="$rules.eventTimeEnd(timeStartMem)"
+      :rules="$rules.eventTimeEndInstant(timeStartMem)"
       type="time"
     />
   </v-form>

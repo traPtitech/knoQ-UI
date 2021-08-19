@@ -32,7 +32,7 @@
           v-model="_timeStart"
           filled
           label="開始時刻"
-          :rules="$rules.eventTimeStart(_timeEnd)"
+          :rules="$rules.eventTimeStart(_timeEnd, roomStartTime, roomEndTime)"
           :disabled="!roomInput"
           type="time"
         />
@@ -40,7 +40,7 @@
           v-model="_timeEnd"
           filled
           label="終了時刻"
-          :rules="$rules.eventTimeEnd(_timeStart)"
+          :rules="$rules.eventTimeEnd(_timeStart, roomStartTime, roomEndTime)"
           :disabled="!roomInput"
           type="time"
         />
@@ -117,6 +117,7 @@ export default class EventFormTimeAndPlace extends Vue {
 
   @Watch('_timeStart')
   @Watch('_timeEnd')
+  @Watch('roomInput')
   private async onTimeFixed() {
     if (!this._timeStart || !this._timeEnd) {
       return
@@ -145,18 +146,11 @@ export default class EventFormTimeAndPlace extends Vue {
   get dateMin(): string {
     return today()
   }
-  get startMin(): string | null {
+  get roomStartTime(): string | null {
     return this.roomInput && getTime(this.roomInput.timeStart)
   }
-  get startMax(): string | null {
-    const timeEnd = strMin(this.roomInput?.timeEnd, this._timeEnd)
-    return timeEnd && getTime(timeEnd)
-  }
-  get endMin(): string | null {
-    const timeStart = strMax(this.roomInput?.timeStart, this._timeStart)
-    return timeStart && getTime(timeStart)
-  }
-  get endMax(): string | null {
+
+  get roomEndTime(): string | null {
     return this.roomInput && getTime(this.roomInput.timeEnd)
   }
 
