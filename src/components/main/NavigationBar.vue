@@ -16,13 +16,13 @@
       <template #activator="{ on }">
         <v-btn text class="text--secondary" v-on="on">
           <TrapAvatar
-            v-if="myName"
+            v-if="me"
             size="36"
-            :traq-id="myName"
-            :user-icon="myIcon"
+            :traq-id="me.name"
+            :user-icon="me.icon"
             class="mr-2"
           />
-          <span>{{ myName }}</span>
+          <span v-if="me">{{ me.name }}</span>
           <v-icon small>mdi-chevron-down</v-icon>
         </v-btn>
       </template>
@@ -59,12 +59,8 @@ export default class NavigationBar extends Vue {
     return this.$vuetify.breakpoint.smAndDown ? 'white' : 'background'
   }
 
-  get myName(): string | undefined {
-    return this.$store.direct.state.me?.name
-  }
-
-  get myIcon(): string | undefined {
-    return this.$store.direct.state.me?.icon
+  get me(): ResponseUser | null {
+    return this.$store.direct.state.me
   }
 }
 </script>
