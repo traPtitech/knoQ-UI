@@ -1,9 +1,6 @@
 <template>
   <v-avatar :size="size" :title="traqId">
-    <img
-      :src="`https://q.trap.jp/api/1.0/public/icon/${traqId}`"
-      :alt="traqId"
-    />
+    <img :src="userIcon" :alt="traqId" />
   </v-avatar>
 </template>
 
@@ -18,5 +15,8 @@ export default class TrapAvatar extends Vue {
 
   @Prop({ type: String, required: true })
   traqId!: string
+
+  @Prop({ type: String, required: true })
+  userIcon!: string
 }
 </script>

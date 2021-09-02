@@ -20,7 +20,7 @@
     >
       <template #item="{ item }">
         <v-list-item-avatar>
-          <TrapAvatar size="36" :traq-id="item.name" />
+          <TrapAvatar size="36" :traq-id="item.name" :userIcon="item.icon" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
@@ -41,7 +41,7 @@
     >
       <template #item="{ item }">
         <v-list-item-avatar>
-          <TrapAvatar size="36" :traq-id="item.name" />
+          <TrapAvatar size="36" :traq-id="item.name" :userIcon="item.icon" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>

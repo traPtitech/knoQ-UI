@@ -22,6 +22,10 @@ const getters = defineGetters<State>()({
     const { state } = usersCacheGettersContext(args)
     return (id: string) => state.users?.get(id)?.name
   },
+  userById(...args) {
+    const { state } = usersCacheGettersContext(args)
+    return (id: string) => state.users?.get(id)
+  },
 })
 
 // Note:
