@@ -36,7 +36,7 @@
     >
       <template #item="{ item }">
         <v-list-item-avatar>
-          <trap-avatar size="36" :traq-id="item.name" />
+          <trap-avatar size="36" :traq-id="item.name" :userIcon="item.icon" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
