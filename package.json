@@ -30,7 +30,7 @@
     "@mdi/font": "^5.9.55",
     "@openapitools/openapi-generator-cli": "^2.4.1",
     "@types/highlight.js": "^10.1.0",
-    "@types/markdown-it": "^12.2.0",
+    "@types/markdown-it": "^12.2.1",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
     "@vue/cli-plugin-babel": "^4.5.13",
