@@ -10,10 +10,11 @@
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Members</SummaryItemCaption>
-      <TrapAvatar
-        v-for="name in memberNames"
-        :key="name"
-        :traq-id="name"
+      <user-avatar
+        v-for="member in getMembers"
+        :key="member.name"
+        :user-id="member.name"
+        :user-icon="member.icon"
         size="36"
         class="mr-2"
       />
@@ -29,11 +30,12 @@
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
 import SummaryItem from '@/components/shared/SummaryItem.vue'
 import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
 import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
+import { ResponseUser } from '@/api'
 
 export type GroupFormSummaryProps = {
   name: string
@@ -45,7 +47,7 @@ export type GroupFormSummaryProps = {
 @Component({
   components: {
     MarkdownField,
-    TrapAvatar,
+    UserAvatar,
     SummaryItem,
     SummaryItemCaption,
     SummaryItemMain,
@@ -71,9 +73,14 @@ export default class GroupFormSummary extends Vue {
       : '自由参加できないグループです'
   }
 
-  get memberNames(): string[] {
-    const nameById = this.$store.direct.getters.usersCache.nameById
-    return this.members.flatMap(userId => nameById(userId) ?? [])
+  //   get memberNames(): string[] {
+  //     const nameById = this.$store.direct.getters.usersCache.nameById
+  //     return this.members.flatMap(userId => nameById(userId) ?? [])
+  //   }
+
+  get getMembers(): ResponseUser[] {
+    const userById = this.$store.direct.getters.usersCache.userById
+    return this.members.flatMap(userID => userById(userID) ?? [])
   }
 
   get openIcon() {

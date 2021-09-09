@@ -47,14 +47,18 @@
           <EventList :events="events" />
         </v-tab-item>
         <v-tab-item class="pt-6">
-          <div class="text--secondary">{{ memberNames.length }} members</div>
+          <div class="text--secondary">{{ members.length }} members</div>
           <v-list>
-            <v-list-item v-for="memberName in memberNames" :key="memberName">
+            <v-list-item v-for="member in members" :key="member">
               <v-list-item-avatar>
-                <TrapAvatar size="36" :traq-id="memberName" />
+                <user-avatar
+                  size="36"
+                  :user-id="member.name"
+                  :user-icon="member.icon"
+                />
               </v-list-item-avatar>
               <v-list-item-content>
-                {{ memberName }}
+                {{ member.name }}
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -69,17 +73,17 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventList from '@/components/event/EventList.vue'
-import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import ActionMenu from '@/components/shared/ActionMenu.vue'
-import api, { ResponseGroup, ResponseEvent } from '@/api'
+import api, { ResponseGroup, ResponseEvent, ResponseUser } from '@/api'
 
 @Component({
   components: {
     MarkdownField,
     EventList,
-    TrapAvatar,
+    UserAvatar,
     ProgressCircular,
     LoadFailedText,
     ActionMenu,
@@ -130,12 +134,12 @@ export default class GroupDetail extends Vue {
     return this.group.members.includes(this.me)
   }
 
-  get memberNames(): string[] {
-    const nameById = this.$store.direct.getters.usersCache.nameById
+  get members(): ResponseUser[] {
+    const userById = this.$store.direct.getters.usersCache.userById
     if (!this.group) return []
     return this.group.members.flatMap(userId => {
-      const name = nameById(userId)
-      return name ? name : []
+      const user = userById(userId)
+      return user ? user : []
     })
   }
 

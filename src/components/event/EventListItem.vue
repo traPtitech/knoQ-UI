@@ -34,14 +34,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 import { ResponseEvent } from '@/api'
 
 @Component({
   components: {
-    TrapAvatar,
+    UserAvatar,
     EventTag,
   },
 })

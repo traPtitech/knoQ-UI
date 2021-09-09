@@ -15,8 +15,14 @@
     <v-menu v-model="menu" offset-y>
       <template #activator="{ on }">
         <v-btn text class="text--secondary" v-on="on">
-          <TrapAvatar v-if="me" size="36" :traq-id="me" class="mr-2" />
-          <span>{{ me }}</span>
+          <user-avatar
+            v-if="me"
+            size="36"
+            :user-id="me.name"
+            :user-icon="me.icon"
+            class="mr-2"
+          />
+          <span v-if="me">{{ me.name }}</span>
           <v-icon small>mdi-chevron-down</v-icon>
         </v-btn>
       </template>
@@ -35,11 +41,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Emit } from 'vue-property-decorator'
-import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
+import { ResponseUser } from '@/api'
 
 @Component({
   components: {
-    TrapAvatar,
+    UserAvatar,
   },
 })
 export default class NavigationBar extends Vue {
@@ -52,8 +59,8 @@ export default class NavigationBar extends Vue {
     return this.$vuetify.breakpoint.smAndDown ? 'white' : 'background'
   }
 
-  get me(): string | undefined {
-    return this.$store.direct.state.me?.name
+  get me(): ResponseUser | null {
+    return this.$store.direct.state.me
   }
 }
 </script>
