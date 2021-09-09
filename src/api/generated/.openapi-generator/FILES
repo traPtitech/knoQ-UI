@@ -18,8 +18,10 @@ models/RequestEventInstantTags.ts
 models/RequestEventStock.ts
 models/RequestGroup.ts
 models/RequestRoom.ts
+models/RequestSchedule.ts
 models/RequestTag.ts
 models/ResponseEvent.ts
+models/ResponseEventAttendees.ts
 models/ResponseEventDetail.ts
 models/ResponseEventTags.ts
 models/ResponseGroup.ts
