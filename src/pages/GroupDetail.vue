@@ -51,9 +51,9 @@
           <v-list>
             <v-list-item v-for="member in members" :key="member">
               <v-list-item-avatar>
-                <TrapAvatar
+                <user-avatar
                   size="36"
-                  :traq-id="member.name"
+                  :user-id="member.name"
                   :user-icon="member.icon"
                 />
               </v-list-item-avatar>
@@ -73,7 +73,7 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventList from '@/components/event/EventList.vue'
-import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import ActionMenu from '@/components/shared/ActionMenu.vue'
@@ -83,7 +83,7 @@ import api, { ResponseGroup, ResponseEvent, ResponseUser } from '@/api'
   components: {
     MarkdownField,
     EventList,
-    TrapAvatar,
+    UserAvatar,
     ProgressCircular,
     LoadFailedText,
     ActionMenu,

@@ -15,10 +15,10 @@
     <v-menu v-model="menu" offset-y>
       <template #activator="{ on }">
         <v-btn text class="text--secondary" v-on="on">
-          <TrapAvatar
+          <user-avatar
             v-if="me"
             size="36"
-            :traq-id="me.name"
+            :user-id="me.name"
             :user-icon="me.icon"
             class="mr-2"
           />
@@ -41,12 +41,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Emit } from 'vue-property-decorator'
-import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
 import { ResponseUser } from '@/api'
 
 @Component({
   components: {
-    TrapAvatar,
+    UserAvatar,
   },
 })
 export default class NavigationBar extends Vue {

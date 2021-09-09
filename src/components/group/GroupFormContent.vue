@@ -20,7 +20,7 @@
     >
       <template #item="{ item }">
         <v-list-item-avatar>
-          <TrapAvatar size="36" :traq-id="item.name" :user-icon="item.icon" />
+          <user-avatar size="36" :user-id="item.name" :user-icon="item.icon" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
@@ -41,7 +41,7 @@
     >
       <template #item="{ item }">
         <v-list-item-avatar>
-          <TrapAvatar size="36" :traq-id="item.name" :user-icon="item.icon" />
+          <user-avatar size="36" :user-id="item.name" :user-icon="item.icon" />
         </v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>
@@ -64,7 +64,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop, PropSync } from 'vue-property-decorator'
-import TrapAvatar from '@/components/shared/TrapAvatar.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
 import { ResponseUser } from '@/api'
 
@@ -78,7 +78,7 @@ export type GroupFormContentProps = {
 
 @Component({
   components: {
-    TrapAvatar,
+    UserAvatar,
     Autocomplete,
   },
 })
