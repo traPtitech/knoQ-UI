@@ -101,6 +101,9 @@
       <div class="mb-5">
         <MarkdownField class="mt-10" :src="event.description" />
       </div>
+      <div>
+        <event-attendees :event="event" />
+      </div>
     </v-card>
   </v-container>
 </template>
@@ -117,6 +120,7 @@ import ActionMenu from '@/components/shared/ActionMenu.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 import { isTitechRoom, calcRoomPdfUrl } from '@/workers/TokyoTech'
 import api, { ResponseEventDetail } from '@/api'
+import EventAttendees from '@/components/event/EventAttendees.vue'
 
 @Component({
   components: {
@@ -126,6 +130,7 @@ import api, { ResponseEventDetail } from '@/api'
     MarkdownField,
     EventTagEditor,
     ActionMenu,
+    EventAttendees,
   },
 })
 export default class EventDetail extends Vue {
@@ -155,7 +160,6 @@ export default class EventDetail extends Vue {
   get sharedRoomString(): string {
     return this.event?.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
   }
-
   get sharedRoomIcon() {
     return this.event?.sharedRoom
       ? { icon: 'mdi-door-open', color: 'success' }

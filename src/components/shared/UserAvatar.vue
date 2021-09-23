@@ -16,7 +16,7 @@ export default class UserAvatar extends Vue {
   @Prop({ type: String, required: true })
   userId!: string
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, required: false })
   userIcon!: string
 }
 </script>
