@@ -1,11 +1,38 @@
 <template>
   <div>
-    <user-avatar
-      :user-id="userId"
-      user-icon="https://q.trap.jp/api/v3/public/icon/itt"
-    />
-    {{ userId }}
-    {{ state }}
+    <v-row align="center" style="width: 100%">
+      <v-col class="flex-grow-0">
+        <div>
+          <user-avatar
+            size="36"
+            :user-id="userId"
+            user-icon="https://q.trap.jp/api/v3/public/icon/itt"
+          />
+        </div>
+      </v-col>
+      <v-col class="text-no-wrap">
+        <span>{{ userId }} </span>
+        <span v-if="isAdmin" class="secondary--text">(admin)</span>
+      </v-col>
+      <v-col
+        v-if="state == 'pending'"
+        class="flex-grow-0 text-no-wrap accent--text"
+      >
+        <span style="color: #e8b645">未定</span>
+      </v-col>
+      <v-col
+        v-if="state == 'attendance'"
+        class="flex-grow-0 text-no-wrap primary--text"
+      >
+        参加
+      </v-col>
+      <v-col
+        v-if="state == 'absent'"
+        class="flex-grow-0 text-no-wrap secondary--text"
+      >
+        欠席
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -24,7 +51,11 @@ export default class EventAttendeeItem extends Vue {
   userId!: string
   @Prop({ type: String, required: true })
   state!: string
+  @Prop({ type: Boolean, required: true })
+  isAdmin!: boolean
 
-  async created() {}
+  get primary() {
+    return this.$vuetify.theme.themes.light.primary
+  }
 }
 </script>
