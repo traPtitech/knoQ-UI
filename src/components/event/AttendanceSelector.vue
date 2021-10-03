@@ -7,6 +7,7 @@
     flat
     :background-color="colorOfAttendance(attendance)"
     color="white"
+    hide-details
   >
     <template #selection="{ item }">
       <span class="white--text font-weight-medium">{{ item.text }}</span>
@@ -57,3 +58,9 @@ export default class AttendanceSelector extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+::v-deep .v-select__selections input {
+  width: 0;
+}
+</style>
