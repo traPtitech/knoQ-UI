@@ -40,36 +40,11 @@ export default class EventAttendees extends Vue {
   attendanceCount: number = 0
   pendingCount: number = 0
   absentCount: number = 0
-  attendees: ResponseEventAttendees[] = [
-    {
-      userId: 'a',
-      schedule: ResponseEventAttendeesScheduleEnum.Pending,
-    },
-    {
-      userId: 'bbb',
-      schedule: ResponseEventAttendeesScheduleEnum.Absent,
-    },
-    {
-      userId: 'ccccc',
-      schedule: ResponseEventAttendeesScheduleEnum.Attendance,
-    },
-    {
-      userId: 'dddddddddd',
-      schedule: ResponseEventAttendeesScheduleEnum.Pending,
-    },
-    {
-      userId: 'eeeeeeeeeeeeeeeeee',
-      schedule: ResponseEventAttendeesScheduleEnum.Pending,
-    },
-    { userId: 'fff', schedule: ResponseEventAttendeesScheduleEnum.Attendance },
-    { userId: 'ggg', schedule: ResponseEventAttendeesScheduleEnum.Absent },
-    { userId: 'hhh', schedule: ResponseEventAttendeesScheduleEnum.Absent },
-  ]
+  attendees: ResponseEventAttendees[] = []
   page: number = 1
 
   async created() {
-    // this.attendees = this.event.attendees
-    this.updateCounts()
+    this.attendees = this.event.attendees
   }
 
   @Watch('attendees', { deep: true, immediate: true })
@@ -78,21 +53,46 @@ export default class EventAttendees extends Vue {
     let _pendingCount: number = 0
     let _absentCount: number = 0
     this.attendees.forEach(item => {
-      if (item.schedule == ResponseEventAttendeesScheduleEnum.Attendance)
+      if (item.schedule === ResponseEventAttendeesScheduleEnum.Attendance)
         _attendanceCount += 1
-      if (item.schedule == ResponseEventAttendeesScheduleEnum.Absent)
+      if (item.schedule === ResponseEventAttendeesScheduleEnum.Absent)
         _absentCount += 1
-      if (item.schedule == ResponseEventAttendeesScheduleEnum.Pending)
+      if (item.schedule === ResponseEventAttendeesScheduleEnum.Pending)
         _pendingCount += 1
     })
     this.attendanceCount = _attendanceCount
     this.pendingCount = _pendingCount
     this.absentCount = _absentCount
   }
-
-  public isAdmin(userId: string | undefined): boolean {
-    // return this.event.admins.includes(userId || '')
-    return true
+  get sortedAttendees() {
+    const _attendees = [...this.attendees]
+    _attendees.sort((a, b) => {
+      const isAAdmin: boolean = this.isAdmin(a.userId)
+      const isBAdmin: boolean = this.isAdmin(b.userId)
+      if (isAAdmin === isBAdmin) {
+        return 0
+      } else if (isAAdmin) {
+        return -1
+      } else {
+        return 1
+      }
+    })
+    _attendees.sort((a, b) => {
+      if (a.schedule! === b.schedule!) {
+        return 0
+      } else if (
+        a.schedule === ResponseEventAttendeesScheduleEnum.Attendance ||
+        b.schedule === ResponseEventAttendeesScheduleEnum.Pending
+      ) {
+        return -1
+      } else {
+        return 1
+      }
+    })
+    return _attendees
+  }
+  isAdmin = (userId: string | undefined): boolean => {
+    return this.event.admins.includes(userId || '')
   }
 
   public get pageLength(): number {
@@ -110,7 +110,7 @@ export default class EventAttendees extends Vue {
     )
   }
   public get attendeesSlice(): ResponseEventAttendees[] {
-    return this.attendees.slice(
+    return this.sortedAttendees.slice(
       (this.page - 1) * this.attendeesPerPage,
       this.page * this.attendeesPerPage
     )

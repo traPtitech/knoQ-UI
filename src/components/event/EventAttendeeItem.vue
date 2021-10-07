@@ -3,7 +3,7 @@
     <v-row align="center" style="width: 100%">
       <v-col class="flex-grow-0 mr-n3 text-no-wrap">
         <v-sheet
-          v-if="state == 'pending'"
+          v-if="state === 'pending'"
           outlined
           rounded
           :style="{
@@ -13,7 +13,7 @@
           <span style="color: #e8b645" class="ma-1">未定</span>
         </v-sheet>
         <v-sheet
-          v-if="state == 'attendance'"
+          v-if="state === 'attendance'"
           outlined
           rounded
           :style="{
@@ -23,7 +23,7 @@
           <span class="primary--text ma-1">参加</span>
         </v-sheet>
         <v-sheet
-          v-if="state == 'absent'"
+          v-if="state === 'absent'"
           outlined
           rounded
           :style="{
