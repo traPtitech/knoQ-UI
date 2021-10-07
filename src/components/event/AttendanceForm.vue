@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined>
+  <v-sheet outlined rounded>
     <v-card-title>自分の参加予定</v-card-title>
     <v-card-subtitle v-if="shouldPostAttendance" class="red--text">
       自分の参加予定を入力して下さい
@@ -27,7 +27,7 @@
         </v-col>
       </v-row>
     </v-card-actions>
-  </v-card>
+  </v-sheet>
 </template>
 
 <script lang="ts">
