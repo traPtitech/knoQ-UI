@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="mb-3">
       {{ counts }}
     </div>
     <div v-for="attendee in attendeesSlice" :key="attendee.userId">
@@ -90,7 +90,7 @@ export default class EventAttendees extends Vue {
     this.absentCount = _absentCount
   }
 
-  isAdmin = (userId: string | undefined): boolean => {
+  public isAdmin(userId: string | undefined): boolean {
     // return this.event.admins.includes(userId || '')
     return true
   }
@@ -98,14 +98,13 @@ export default class EventAttendees extends Vue {
   public get pageLength(): number {
     return Math.ceil(this.attendees.length / this.attendeesPerPage)
   }
-
   public get counts(): string {
     return (
-      '参加:' +
+      '参加: ' +
       this.attendanceCount +
-      '人, 欠席:' +
+      '人, 欠席: ' +
       this.absentCount +
-      '人, 未定:' +
+      '人, 未定: ' +
       this.pendingCount +
       '人'
     )
