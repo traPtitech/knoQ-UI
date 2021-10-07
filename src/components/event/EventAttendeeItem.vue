@@ -1,7 +1,39 @@
 <template>
   <div>
     <v-row align="center" style="width: 100%">
-      <v-col class="flex-grow-0">
+      <v-col class="flex-grow-0 mr-n3 text-no-wrap">
+        <v-sheet
+          v-if="state == 'pending'"
+          outlined
+          rounded
+          :style="{
+            'border-color': '#e8b645',
+          }"
+        >
+          <span style="color: #e8b645" class="ma-1">未定</span>
+        </v-sheet>
+        <v-sheet
+          v-if="state == 'attendance'"
+          outlined
+          rounded
+          :style="{
+            'border-color': $vuetify.theme.themes.light.primary,
+          }"
+        >
+          <span class="primary--text ma-1">参加</span>
+        </v-sheet>
+        <v-sheet
+          v-if="state == 'absent'"
+          outlined
+          rounded
+          :style="{
+            'border-color': $vuetify.theme.themes.light.secondary,
+          }"
+        >
+          <span class="secondary--text ma-1">欠席</span>
+        </v-sheet>
+      </v-col>
+      <v-col class="flex-grow-0 mr-n3">
         <div>
           <user-avatar
             size="36"
@@ -12,25 +44,7 @@
       </v-col>
       <v-col class="text-no-wrap">
         <span>{{ userId }} </span>
-        <span v-if="isAdmin" class="secondary--text">(admin)</span>
-      </v-col>
-      <v-col
-        v-if="state == 'pending'"
-        class="flex-grow-0 text-no-wrap accent--text"
-      >
-        <span style="color: #e8b645">未定</span>
-      </v-col>
-      <v-col
-        v-if="state == 'attendance'"
-        class="flex-grow-0 text-no-wrap primary--text"
-      >
-        参加
-      </v-col>
-      <v-col
-        v-if="state == 'absent'"
-        class="flex-grow-0 text-no-wrap secondary--text"
-      >
-        欠席
+        <span v-if="isAdmin" class="secondary--text">(Admin)</span>
       </v-col>
     </v-row>
   </div>
@@ -53,9 +67,5 @@ export default class EventAttendeeItem extends Vue {
   state!: string
   @Prop({ type: Boolean, required: true })
   isAdmin!: boolean
-
-  get primary() {
-    return this.$vuetify.theme.themes.light.primary
-  }
 }
 </script>

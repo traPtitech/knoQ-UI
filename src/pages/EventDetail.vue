@@ -102,7 +102,7 @@
         <MarkdownField class="mt-10" :src="event.description" />
       </div>
       <div>
-        <div class="text--secondary mb-n1">参加予定</div>
+        <div class="text--secondary mb-1">参加予定</div>
         <event-attendees :event="event" :attendees-per-page="6" />
       </div>
     </v-card>
