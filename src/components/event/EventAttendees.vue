@@ -111,14 +111,14 @@ export default class EventAttendees extends Vue {
   getUserIcon = (userId: string | undefined): string | undefined => {
     return this.$store.direct.state.usersCache.users?.get(userId!)?.icon
   }
-  public get pageLength(): number {
+  get pageLength(): number {
     return Math.ceil(this.attendees.length / this.attendeesPerPage)
   }
-  public get counts(): string {
+  get counts(): string {
     return `参加: ${this.attendanceCount}人, 欠席: ${this.absentCount}人, 未定: ${this.pendingCount}人`
   }
 
-  public get attendeesSlice(): ResponseEventAttendees[] {
+  get attendeesSlice(): ResponseEventAttendees[] {
     return this.sortedAttendees.slice(
       (this.page - 1) * this.attendeesPerPage,
       this.page * this.attendeesPerPage
