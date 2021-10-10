@@ -5,8 +5,9 @@
     </div>
     <div v-for="attendee in attendeesSlice" :key="attendee.userId">
       <event-attendee-item
-        :user-id="attendee.userId"
+        :name="getName(attendee.userId)"
         :state="attendee.schedule"
+        :icon="getUserIcon(attendee.userId)"
         :is-admin="isAdmin(attendee.userId)"
       />
     </div>
@@ -94,21 +95,20 @@ export default class EventAttendees extends Vue {
   isAdmin = (userId: string | undefined): boolean => {
     return this.event.admins.includes(userId || '')
   }
+  getName = (userId: string | undefined): string | undefined => {
+    return this.$store.direct.state.usersCache.users?.get(userId!)!.name
+  }
 
+  getUserIcon = (userId: string | undefined): string | undefined => {
+    return this.$store.direct.state.usersCache.users?.get(userId!)!.icon
+  }
   public get pageLength(): number {
     return Math.ceil(this.attendees.length / this.attendeesPerPage)
   }
   public get counts(): string {
-    return (
-      '参加: ' +
-      this.attendanceCount +
-      '人, 欠席: ' +
-      this.absentCount +
-      '人, 未定: ' +
-      this.pendingCount +
-      '人'
-    )
+    return `参加: ${this.attendanceCount}人, 欠席: ${this.absentCount}人, 未定: ${this.pendingCount}人`
   }
+
   public get attendeesSlice(): ResponseEventAttendees[] {
     return this.sortedAttendees.slice(
       (this.page - 1) * this.attendeesPerPage,
