@@ -65,8 +65,17 @@ export default class EventAttendees extends Vue {
     this.pendingCount = _pendingCount
     this.absentCount = _absentCount
   }
-  get sortedAttendees() {
+
+  get validAttendees() {
     const _attendees = [...this.attendees]
+    return _attendees.filter(
+      attendee =>
+        this.$store.direct.state.usersCache.users?.get(attendee.userId!) !==
+        undefined
+    )
+  }
+  get sortedAttendees() {
+    const _attendees = [...this.validAttendees]
     _attendees.sort((a, b) => {
       const isAAdmin: boolean = this.isAdmin(a.userId)
       const isBAdmin: boolean = this.isAdmin(b.userId)
@@ -79,7 +88,7 @@ export default class EventAttendees extends Vue {
       }
     })
     _attendees.sort((a, b) => {
-      if (a.schedule! === b.schedule!) {
+      if (a.schedule === b.schedule) {
         return 0
       } else if (
         a.schedule === ResponseEventAttendeesScheduleEnum.Attendance ||
@@ -96,11 +105,11 @@ export default class EventAttendees extends Vue {
     return this.event.admins.includes(userId || '')
   }
   getName = (userId: string | undefined): string | undefined => {
-    return this.$store.direct.state.usersCache.users?.get(userId!)!.name
+    return this.$store.direct.state.usersCache.users?.get(userId!)?.name
   }
 
   getUserIcon = (userId: string | undefined): string | undefined => {
-    return this.$store.direct.state.usersCache.users?.get(userId!)!.icon
+    return this.$store.direct.state.usersCache.users?.get(userId!)?.icon
   }
   public get pageLength(): number {
     return Math.ceil(this.attendees.length / this.attendeesPerPage)
