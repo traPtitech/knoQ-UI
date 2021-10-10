@@ -53,7 +53,7 @@ export default class EventAttendees extends Vue {
     let _attendanceCount: number = 0
     let _pendingCount: number = 0
     let _absentCount: number = 0
-    this.attendees.forEach(item => {
+    this.validAttendees.forEach(item => {
       if (item.schedule === ResponseEventAttendeesScheduleEnum.Attendance)
         _attendanceCount += 1
       if (item.schedule === ResponseEventAttendeesScheduleEnum.Absent)
@@ -112,7 +112,7 @@ export default class EventAttendees extends Vue {
     return this.$store.direct.state.usersCache.users?.get(userId!)?.icon
   }
   get pageLength(): number {
-    return Math.ceil(this.attendees.length / this.attendeesPerPage)
+    return Math.ceil(this.validAttendees.length / this.attendeesPerPage)
   }
   get counts(): string {
     return `参加: ${this.attendanceCount}人, 欠席: ${this.absentCount}人, 未定: ${this.pendingCount}人`
