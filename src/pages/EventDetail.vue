@@ -253,19 +253,27 @@ export default class EventDetail extends Vue {
   }
 
   @Watch('attendance')
-  async onAttendanceChange() {
-    if (!this.event || !this.attendance) {
-      return
+  async onAttendanceChange(
+    _: RequestScheduleScheduleEnum,
+    oldAttendance: RequestScheduleScheduleEnum
+  ) {
+    try {
+      if (!this.event || !this.attendance || !oldAttendance) {
+        return
+      }
+      await api.events.updateSchedule({
+        eventID: this.event.eventId,
+        requestSchedule: {
+          schedule: this.attendance,
+        },
+      })
+      this.event = await api.events.getEventDetail({
+        eventID: this.event.eventId,
+      })
+    } catch (err) {
+      console.error(err)
+      alert('参加予定を登録できませんでした')
     }
-    await api.events.updateSchedule({
-      eventID: this.event.eventId,
-      requestSchedule: {
-        schedule: this.attendance,
-      },
-    })
-    this.event = await api.events.getEventDetail({
-      eventID: this.event.eventId,
-    })
   }
 }
 
