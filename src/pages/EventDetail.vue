@@ -98,9 +98,14 @@
           {{ sharedRoomString }}
         </div>
       </div>
-      <div class="mb-5">
+      <div class="mb-10">
         <MarkdownField class="mt-10" :src="event.description" />
       </div>
+      <attendance-form
+        v-if="canAttendEvent && !isFinishedEvent"
+        v-model="attendance"
+        class="mb-5 pl-5 pr-5 pb-5"
+      />
       <div>
         <div class="text--secondary mb-1">参加予定</div>
         <event-attendees :event="event" :attendees-per-page="6" />
@@ -111,17 +116,23 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventTagEditor from '@/components/event/EventTagEditor.vue'
 import ActionMenu from '@/components/shared/ActionMenu.vue'
+import UserAvatar from '@/components/shared/UserAvatar.vue'
+import AttendanceForm from '@/components/event/AttendanceForm.vue'
+import EventAttendees from '@/components/event/EventAttendees.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 import { isTitechRoom, calcRoomPdfUrl } from '@/workers/TokyoTech'
-import api, { ResponseEventDetail } from '@/api'
-import EventAttendees from '@/components/event/EventAttendees.vue'
+import api, {
+  ResponseEventDetail,
+  ResponseUser,
+  RequestScheduleScheduleEnum,
+} from '@/api'
 
 @Component({
   components: {
@@ -132,6 +143,8 @@ import EventAttendees from '@/components/event/EventAttendees.vue'
     EventTagEditor,
     ActionMenu,
     EventAttendees,
+    UserAvatar,
+    AttendanceForm,
   },
 })
 export default class EventDetail extends Vue {
@@ -140,6 +153,8 @@ export default class EventDetail extends Vue {
 
   event: ResponseEventDetail | null = null
 
+  attendance: RequestScheduleScheduleEnum | null = null
+
   editedTags: string[] = []
 
   async created() {
@@ -147,6 +162,9 @@ export default class EventDetail extends Vue {
     this.status = 'loading'
     try {
       this.event = await api.events.getEventDetail({ eventID })
+      this.attendance =
+        (this.event.attendees.find(({ userId }) => userId === this.me.userId)
+          ?.schedule as RequestScheduleScheduleEnum | undefined) ?? null
     } catch (__) {
       this.status = 'error'
       return
@@ -201,11 +219,53 @@ export default class EventDetail extends Vue {
     return calcRoomPdfUrl
   }
 
+  get me(): ResponseUser {
+    return this.$store.direct.state.me!
+  }
+
+  get isOpenEvent(): boolean {
+    return this.event?.open ?? false
+  }
+
+  get canAttendEvent(): boolean {
+    if (!this.event) {
+      return false
+    }
+    const isOpen = this.isOpenEvent
+    const isEventOfJoiningGroup = this.event.attendees.some(
+      ({ userId }) => userId === this.me.userId
+    )
+    return isOpen || isEventOfJoiningGroup
+  }
+
+  get isFinishedEvent(): boolean {
+    if (!this.event) {
+      return false
+    }
+    return new Date(this.event.timeEnd) < new Date()
+  }
+
   get isMyEvent(): boolean {
     return (
       this.event?.admins.includes(this.$store.direct.state.me?.userId ?? '') ??
       false
     )
+  }
+
+  @Watch('attendance')
+  async onAttendanceChange() {
+    if (!this.event || !this.attendance) {
+      return
+    }
+    await api.events.updateSchedule({
+      eventID: this.event.eventId,
+      requestSchedule: {
+        schedule: this.attendance,
+      },
+    })
+    this.event = await api.events.getEventDetail({
+      eventID: this.event.eventId,
+    })
   }
 }
 
