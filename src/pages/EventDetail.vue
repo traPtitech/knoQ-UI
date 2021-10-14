@@ -240,7 +240,7 @@ export default class EventDetail extends Vue {
 
   get isFinishedEvent(): boolean {
     if (!this.event) {
-      return false
+      return true
     }
     return new Date(this.event.timeEnd) < new Date()
   }

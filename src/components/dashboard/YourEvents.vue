@@ -74,10 +74,10 @@ export default class YourEvents extends Vue {
         api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Admins }),
         api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Belongs }),
       ])
-      this.events = uniqueBy(event => event.eventId, [
-        ...adminEvents,
-        ...belongingEvents,
-      ]).filter(event => today() <= event.timeStart)
+      this.events = uniqueBy(
+        event => event.eventId,
+        [...adminEvents, ...belongingEvents]
+      ).filter(event => today() <= event.timeStart)
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'

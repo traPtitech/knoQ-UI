@@ -41,11 +41,10 @@ export default class EventAttendees extends Vue {
   attendanceCount: number = 0
   pendingCount: number = 0
   absentCount: number = 0
-  attendees: ResponseEventAttendees[] = []
   page: number = 1
 
-  async created() {
-    this.attendees = this.event.attendees
+  get attendees(): ResponseEventAttendees[] {
+    return this.event.attendees
   }
 
   @Watch('attendees', { deep: true, immediate: true })
