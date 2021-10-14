@@ -101,6 +101,7 @@ export default class EventEdit extends Vue {
           description: event.description,
           tags: event.tags,
           groupId: event.group.groupId,
+          open: event.open,
           timeStart: event.timeStart,
           timeEnd: event.timeEnd,
           sharedRoom: event.instant ? false : event.sharedRoom,

@@ -15,6 +15,7 @@ export default new Vuetify({
         info: colors.blue.lighten2,
         warning: colors.amber.darken1,
         error: colors.red.lighten1,
+        pending: colors.amber.darken1,
         background: '#f4f7f9',
       },
     },

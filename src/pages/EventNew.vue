@@ -53,6 +53,7 @@ export default class EventNew extends Vue {
       this.event = {
         name: event.name,
         group: event.group,
+        open: event.open,
         admins: event.admins.flatMap(userId => findUser(userId) ?? []),
         tags: event.tags,
         description: event.description,
@@ -91,6 +92,7 @@ export default class EventNew extends Vue {
           description: event.description,
           tags: event.tags,
           groupId: event.group.groupId,
+          open: event.open,
           timeStart: event.timeStart,
           timeEnd: event.timeEnd,
           sharedRoom: event.instant ? false : event.sharedRoom,
