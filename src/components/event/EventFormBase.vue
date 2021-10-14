@@ -116,6 +116,7 @@ export default class EventFormBase extends Vue {
       name: this.event?.name ?? '',
       description: this.event?.description ?? '',
       group: this.event?.group ?? null,
+      open: this.event?.open ?? false,
       tags: this.event?.tags ?? [],
       admins:
         this.event?.admins ??
@@ -174,6 +175,7 @@ export default class EventFormBase extends Vue {
       description: this.content.description,
       tags: this.content.tags,
       groupName: this.content.group?.name ?? '',
+      open: this.content.open,
       place: this.instant
         ? this.timeAndPlaceInstant.place
         : this.timeAndPlace.room?.place ?? '',

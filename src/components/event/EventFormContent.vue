@@ -21,6 +21,12 @@
       :item-value="v => v"
       :rules="$rules.eventGroup"
     />
+    <v-checkbox
+      v-model="openInput"
+      dense
+      label="グループ外の人も参加できるようにする"
+      class="mt-n2"
+    />
     <autocomplete
       v-model="adminsInput"
       filled
@@ -93,6 +99,7 @@ export type EventInputContent = {
   name: string
   description: string
   group: ResponseGroup | null
+  open: boolean
   tags: { name: string }[]
   admins: ResponseUser[]
 }
@@ -116,6 +123,9 @@ export default class EventFormContent extends Vue {
     required: true,
   })
   groupInput!: ResponseGroup | null
+
+  @PropSync('open', { type: Boolean, required: true })
+  openInput!: boolean
 
   @PropSync('admins', { type: Array, required: true })
   adminsInput!: ResponseUser[]

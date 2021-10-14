@@ -3,6 +3,10 @@
     <SummaryItem>
       <SummaryItemCaption>New Event</SummaryItemCaption>
       <SummaryItemMain>{{ name }}</SummaryItemMain>
+      <!-- <SummaryItemSubtext>
+        <v-icon :color="openIcon.color">{{ openIcon.icon }}</v-icon>
+        {{ openString }}
+      </SummaryItemSubtext> -->
       <EventTag
         v-for="tag in tags"
         :key="tag.name"
@@ -13,6 +17,13 @@
     <SummaryItem>
       <SummaryItemCaption>Group</SummaryItemCaption>
       <SummaryItemText>{{ groupName }}</SummaryItemText>
+    </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Open</SummaryItemCaption>
+      <SummaryItemText>
+        <v-icon :color="openIcon.color" large>{{ openIcon.icon }}</v-icon>
+        <span class="text-h6 ml-2">{{ openString }}</span>
+      </SummaryItemText>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Date</SummaryItemCaption>
@@ -55,6 +66,7 @@ export type EventSummary = {
   description: string
   tags: { name: string }[]
   groupName: string
+  open: boolean
   place: string
   isPrivate: boolean
   sharedRoom: boolean
@@ -79,6 +91,9 @@ export default class EventFormSummary extends Vue {
 
   @Prop({ type: String, required: true })
   groupName!: string
+
+  @Prop({ type: Boolean, required: true })
+  open!: boolean
 
   @Prop({ type: Array, required: true })
   tags!: { name: string }[]
@@ -109,6 +124,18 @@ export default class EventFormSummary extends Vue {
     return this.sharedRoom
       ? { icon: 'mdi-door-open', color: 'success' }
       : { icon: 'mdi-door-closed-lock', color: 'error' }
+  }
+
+  get openString(): string {
+    return this.open
+      ? 'グループ外の人も参加できます'
+      : 'グループ外の人は参加できません'
+  }
+
+  get openIcon() {
+    return this.open
+      ? { icon: 'mdi-account-multiple-plus', color: 'success' }
+      : { icon: 'mdi-account-multiple-remove', color: 'error' }
   }
 
   get formatDate() {
