@@ -47,6 +47,10 @@ export default class EventAttendees extends Vue {
     return this.event.attendees
   }
 
+  created() {
+    console.log('event', this.event)
+  }
+
   @Watch('attendees', { deep: true, immediate: true })
   async updateCounts() {
     let _attendanceCount: number = 0
@@ -100,15 +104,15 @@ export default class EventAttendees extends Vue {
     })
     return _attendees
   }
-  isAdmin = (userId: string | undefined): boolean => {
-    return this.event.admins.includes(userId || '')
+  isAdmin(userId: string): boolean {
+    return this.event.admins.includes(userId)
   }
-  getName = (userId: string | undefined): string | undefined => {
-    return this.$store.direct.state.usersCache.users?.get(userId!)?.name
+  getName(userId: string): string | undefined {
+    return this.$store.direct.state.usersCache.users?.get(userId)?.name
   }
 
-  getUserIcon = (userId: string | undefined): string | undefined => {
-    return this.$store.direct.state.usersCache.users?.get(userId!)?.icon
+  getUserIcon(userId: string): string | undefined {
+    return this.$store.direct.state.usersCache.users?.get(userId)?.icon
   }
   get pageLength(): number {
     return Math.ceil(this.validAttendees.length / this.attendeesPerPage)
