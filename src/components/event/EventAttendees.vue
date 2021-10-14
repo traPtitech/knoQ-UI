@@ -47,10 +47,6 @@ export default class EventAttendees extends Vue {
     return this.event.attendees
   }
 
-  created() {
-    console.log('event', this.event)
-  }
-
   @Watch('attendees', { deep: true, immediate: true })
   async updateCounts() {
     let _attendanceCount: number = 0
