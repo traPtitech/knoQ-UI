@@ -153,6 +153,7 @@ export default class EventDetail extends Vue {
 
   event: ResponseEventDetail | null = null
 
+  attendanceInitialized = false
   attendance: RequestScheduleScheduleEnum | null = null
 
   editedTags: string[] = []
@@ -165,6 +166,7 @@ export default class EventDetail extends Vue {
       this.attendance =
         (this.event.attendees.find(({ userId }) => userId === this.me.userId)
           ?.schedule as RequestScheduleScheduleEnum | undefined) ?? null
+      this.attendanceInitialized = true
     } catch (__) {
       this.status = 'error'
       return
@@ -253,12 +255,9 @@ export default class EventDetail extends Vue {
   }
 
   @Watch('attendance')
-  async onAttendanceChange(
-    _: RequestScheduleScheduleEnum,
-    oldAttendance: RequestScheduleScheduleEnum
-  ) {
+  async onAttendanceChange() {
     try {
-      if (!this.event || !this.attendance || !oldAttendance) {
+      if (!this.event || !this.attendance || !this.attendanceInitialized) {
         return
       }
       await api.events.updateSchedule({
