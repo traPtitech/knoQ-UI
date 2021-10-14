@@ -24,13 +24,13 @@ export interface ResponseEventAttendees {
      * @type {string}
      * @memberof ResponseEventAttendees
      */
-    userId?: string;
+    userId: string;
     /**
      * pending or absent or attendance
      * @type {string}
      * @memberof ResponseEventAttendees
      */
-    schedule?: ResponseEventAttendeesScheduleEnum;
+    schedule: ResponseEventAttendeesScheduleEnum;
 }
 
 /**
@@ -53,8 +53,8 @@ export function ResponseEventAttendeesFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'userId': !exists(json, 'userId') ? undefined : json['userId'],
-        'schedule': !exists(json, 'schedule') ? undefined : json['schedule'],
+        'userId': json['userId'],
+        'schedule': json['schedule'],
     };
 }
 
