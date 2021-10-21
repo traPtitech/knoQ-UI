@@ -103,8 +103,9 @@
       </div>
       <attendance-form
         v-if="canAttendEvent && !isFinishedEvent"
-        v-model="attendance"
         class="mb-5 pl-5 pr-5 pb-5"
+        :value="attendance"
+        @change="onAttendanceChange"
       />
       <div>
         <div class="text--secondary mb-1">参加予定</div>
@@ -153,7 +154,6 @@ export default class EventDetail extends Vue {
 
   event: ResponseEventDetail | null = null
 
-  attendanceInitialized = false
   attendance: RequestScheduleScheduleEnum | null = null
 
   editedTags: string[] = []
@@ -166,7 +166,6 @@ export default class EventDetail extends Vue {
       this.attendance =
         (this.event.attendees.find(({ userId }) => userId === this.me.userId)
           ?.schedule as RequestScheduleScheduleEnum | undefined) ?? null
-      this.attendanceInitialized = true
     } catch (__) {
       this.status = 'error'
       return
@@ -254,16 +253,17 @@ export default class EventDetail extends Vue {
     )
   }
 
-  @Watch('attendance')
-  async onAttendanceChange() {
+  async onAttendanceChange(attendance: RequestScheduleScheduleEnum) {
+    const oldAttendance = this.attendance
+    this.attendance = attendance
     try {
-      if (!this.event || !this.attendance || !this.attendanceInitialized) {
+      if (!this.event) {
         return
       }
       await api.events.updateSchedule({
         eventID: this.event.eventId,
         requestSchedule: {
-          schedule: this.attendance,
+          schedule: attendance,
         },
       })
       this.event = await api.events.getEventDetail({
@@ -272,6 +272,7 @@ export default class EventDetail extends Vue {
     } catch (err) {
       console.error(err)
       alert('参加予定を登録できませんでした')
+      this.attendance = oldAttendance
     }
   }
 }
