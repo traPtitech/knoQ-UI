@@ -44,7 +44,7 @@ import { RequestScheduleScheduleEnum, ResponseUser } from '@/api'
   },
 })
 export default class AttendanceForm extends Vue {
-  @ModelSync('value', 'update', { required: true })
+  @ModelSync('value', 'change', { required: true })
   attendance!: RequestScheduleScheduleEnum | null
 
   get shouldPostAttendance(): boolean {
