@@ -89,7 +89,9 @@
           >
             {{ event.room.place }}
           </a>
-          <span v-else class="mr-3">{{ event.room.place }}</span>
+          <span v-else class="mr-3">
+            <event-place :place="event.room.place"></event-place>
+          </span>
         </div>
         <div v-if="event.room.verified" class="text--secondary body-2">
           <v-icon :color="sharedRoomIcon.color">
@@ -129,6 +131,8 @@ import AttendanceForm from '@/components/event/AttendanceForm.vue'
 import EventAttendees from '@/components/event/EventAttendees.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 import { isTitechRoom, calcRoomPdfUrl } from '@/workers/TokyoTech'
+import EventPlace from '@/components/event/EventPlace.vue'
+
 import api, {
   ResponseEventDetail,
   ResponseUser,
@@ -146,6 +150,7 @@ import api, {
     EventAttendees,
     UserAvatar,
     AttendanceForm,
+    EventPlace,
   },
 })
 export default class EventDetail extends Vue {

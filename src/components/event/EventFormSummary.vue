@@ -35,7 +35,9 @@
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Place</SummaryItemCaption>
-      <SummaryItemText>{{ place }}</SummaryItemText>
+      <SummaryItemText>
+        <event-place :place="place" />
+      </SummaryItemText>
       <SummaryItemSubtext v-if="!isPrivate">
         <v-icon :color="sharedRoomIcon.color">{{ sharedRoomIcon.icon }}</v-icon>
         {{ sharedRoomString }}
@@ -60,7 +62,7 @@ import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
 import SummaryItemText from '@/components/shared/SummaryItemText.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
-
+import EventPlace from '@/components/event/EventPlace.vue'
 export type EventSummary = {
   name: string
   description: string
@@ -83,6 +85,7 @@ export type EventSummary = {
     SummaryItemMain,
     SummaryItemText,
     SummaryItemSubtext,
+    EventPlace,
   },
 })
 export default class EventFormSummary extends Vue {
