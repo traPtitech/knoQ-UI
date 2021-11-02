@@ -1,10 +1,12 @@
 <template>
   <div>
-    <v-icon v-if="contains('youtube')" class="mb-1">mdi-youtube</v-icon>
-    <v-icon v-if="contains('discord')" class="mb-1">mdi-discord</v-icon>
-    <v-icon v-if="contains('zoom')" class="mb-1">mdi-video</v-icon>
-    <v-icon v-if="contains('qall')" class="mb-1">mdi-phone</v-icon>
-    {{ place }}
+    <div>
+      <v-icon v-if="contains('youtube')" class="mr-1">mdi-youtube</v-icon>
+      <v-icon v-if="contains('discord')" class="mr-1">mdi-discord</v-icon>
+      <v-icon v-if="contains('zoom')" class="mr-1">mdi-video</v-icon>
+      <v-icon v-if="contains('qall')" class="mr-1">mdi-phone</v-icon>
+      {{ place }}
+    </div>
   </div>
 </template>
 
