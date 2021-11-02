@@ -18,7 +18,7 @@ export default class EventPlace extends Vue {
   place!: string
 
   contains(searchWord: string): boolean {
-    return this.place.toLowerCase().indexOf(searchWord) !== -1
+    return this.place.toLowerCase().includes(searchWord)
   }
 }
 </script>
