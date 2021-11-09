@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <ProgressCircular v-if="status === 'loading'" />
-    <LoadFailedText v-else-if="status === 'error'" />
+    <progress-circular v-if="status === 'loading'" />
+    <load-failed-text v-else-if="status === 'error'" />
     <template v-else-if="!canEdit">
       <v-icon large color="error" class="mr-5">mdi-alert-circle</v-icon>
       <span class="text--secondary headline">
@@ -20,18 +20,18 @@
 
         <v-stepper-items>
           <v-stepper-content step="1">
-            <GroupFormContent v-model="valid" v-bind.sync="group" />
-            <FormNextButton :disabled="!valid" @click="step = 2">
+            <group-form-content v-model="valid" v-bind.sync="group" />
+            <form-next-button :disabled="!valid" @click="step = 2">
               Continue
-            </FormNextButton>
+            </form-next-button>
           </v-stepper-content>
 
           <v-stepper-content step="2">
-            <GroupFormSummary v-bind="group" />
-            <FormBackButton class="mr-3" @click="step = 1">
+            <group-form-summary v-bind="group" />
+            <form-back-button class="mr-3" @click="step = 1">
               Back
-            </FormBackButton>
-            <FormNextButton @click="submitGroup"> Submit </FormNextButton>
+            </form-back-button>
+            <form-next-button @click="submitGroup"> Submit </form-next-button>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>

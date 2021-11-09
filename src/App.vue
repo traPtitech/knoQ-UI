@@ -1,8 +1,8 @@
 <template>
   <v-app :style="{ background }">
-    <Sidebar v-model="drawer" />
-    <NavigationBar @click-nav-icon="drawer = !drawer" />
-    <MainView />
+    <sidebar v-model="drawer" />
+    <navigation-bar @click-nav-icon="drawer = !drawer" />
+    <main-view />
   </v-app>
 </template>
 

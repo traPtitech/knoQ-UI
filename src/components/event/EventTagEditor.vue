@@ -12,7 +12,7 @@
     @blur="$emit('tag-edit-end')"
   >
     <template #selection="{ item }">
-      <EventTag close :name="item" @click:close="removeTag(item)" />
+      <event-tag close :name="item" @click:close="removeTag(item)" />
     </template>
   </v-combobox>
 </template>

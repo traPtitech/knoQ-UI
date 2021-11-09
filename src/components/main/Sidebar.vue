@@ -5,13 +5,13 @@
     :mobile-breakpoint="$vuetify.breakpoint.thresholds.sm"
   >
     <template #prepend>
-      <SidebarHeader />
+      <sidebar-header />
     </template>
 
-    <SidebarNavigation />
+    <sidebar-navigation />
 
     <template #append>
-      <SidebarFooter />
+      <sidebar-footer />
     </template>
   </v-navigation-drawer>
 </template>

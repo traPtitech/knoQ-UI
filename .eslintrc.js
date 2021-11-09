@@ -6,6 +6,11 @@ module.exports = {
   rules: {
     'vue/v-on-function-call': ['error'],
     'vue/v-slot-style': ['error'],
+    'vue/component-name-in-template-casing': [
+      'error',
+      'kebab-case',
+      { registeredComponentsOnly: false },
+    ],
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',

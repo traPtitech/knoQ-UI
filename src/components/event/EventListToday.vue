@@ -10,7 +10,7 @@
       </template>
     </span>
     <template v-if="!!events.length">
-      <EventListItem
+      <event-list-item
         v-for="event in events"
         :key="event.eventId"
         class="mb-5"

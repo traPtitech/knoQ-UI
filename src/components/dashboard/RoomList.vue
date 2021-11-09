@@ -8,7 +8,7 @@
   </div>
   <v-row v-else>
     <v-col v-for="(room, i) in rooms" :key="i" sm="4" cols="12">
-      <RoomListItem :room="room" />
+      <room-list-item :room="room" />
     </v-col>
   </v-row>
 </template>

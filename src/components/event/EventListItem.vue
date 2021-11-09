@@ -13,7 +13,7 @@
     <v-card-actions class="px-4">
       <v-row dense>
         <v-col sm="" cols="12">
-          <EventTag
+          <event-tag
             v-for="tag in event.tags"
             :key="tag.name"
             to-tag-page-on-click

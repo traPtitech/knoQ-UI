@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <ProgressCircular v-if="status === 'loading'" />
-    <LoadFailedText v-else-if="status === 'error'" />
+    <progress-circular v-if="status === 'loading'" />
+    <load-failed-text v-else-if="status === 'error'" />
     <v-card v-else-if="event" class="pa-9">
       <div class="mb-12">
         <v-row no-gutters>
@@ -9,7 +9,7 @@
             <h1 class="mb-1 display-1">{{ event.name }}</h1>
           </v-col>
           <v-col class="flex-grow-0">
-            <ActionMenu>
+            <action-menu>
               <v-list-item
                 v-if="isMyEvent"
                 :to="`/events/edit/${event.eventId}`"
@@ -24,7 +24,7 @@
                   Create new one based on this
                 </v-list-item-title>
               </v-list-item>
-            </ActionMenu>
+            </action-menu>
           </v-col>
         </v-row>
         <div class="mb-3">
@@ -32,7 +32,7 @@
             <span v-if="!event.tags.length" class="text--secondary">
               No tags
             </span>
-            <EventTag
+            <event-tag
               v-for="tag in event.tags"
               :key="tag.name"
               to-tag-page-on-click
@@ -48,7 +48,7 @@
               Edit tags
             </v-btn>
           </template>
-          <EventTagEditor
+          <event-tag-editor
             v-else
             v-model="editedTags"
             :tags="tagNames"
@@ -101,7 +101,7 @@
         </div>
       </div>
       <div class="mb-10">
-        <MarkdownField class="mt-10" :src="event.description" />
+        <markdown-field class="mt-10" :src="event.description" />
       </div>
       <attendance-form
         v-if="canAttendEvent && !isFinishedEvent"

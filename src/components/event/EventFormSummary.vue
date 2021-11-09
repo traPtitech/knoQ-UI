@@ -1,53 +1,53 @@
 <template>
   <div>
-    <SummaryItem>
-      <SummaryItemCaption>New Event</SummaryItemCaption>
-      <SummaryItemMain>{{ name }}</SummaryItemMain>
+    <summary-item>
+      <summary-item-caption>New Event</summary-item-caption>
+      <summary-item-main>{{ name }}</summary-item-main>
       <!-- <SummaryItemSubtext>
         <v-icon :color="openIcon.color">{{ openIcon.icon }}</v-icon>
         {{ openString }}
       </SummaryItemSubtext> -->
-      <EventTag
+      <event-tag
         v-for="tag in tags"
         :key="tag.name"
         :name="tag.name"
         class="mr-3"
       />
-    </SummaryItem>
-    <SummaryItem>
-      <SummaryItemCaption>Group</SummaryItemCaption>
-      <SummaryItemText>{{ groupName }}</SummaryItemText>
-    </SummaryItem>
-    <SummaryItem>
-      <SummaryItemCaption>Open</SummaryItemCaption>
-      <SummaryItemText>
+    </summary-item>
+    <summary-item>
+      <summary-item-caption>Group</summary-item-caption>
+      <summary-item-text>{{ groupName }}</summary-item-text>
+    </summary-item>
+    <summary-item>
+      <summary-item-caption>Open</summary-item-caption>
+      <summary-item-text>
         <v-icon :color="openIcon.color" large>{{ openIcon.icon }}</v-icon>
         <span class="text-h6 ml-2">{{ openString }}</span>
-      </SummaryItemText>
-    </SummaryItem>
-    <SummaryItem>
-      <SummaryItemCaption>Date</SummaryItemCaption>
-      <SummaryItemText>
+      </summary-item-text>
+    </summary-item>
+    <summary-item>
+      <summary-item-caption>Date</summary-item-caption>
+      <summary-item-text>
         {{ formatDate(timeStart) }}
         <v-icon>mdi-chevron-right</v-icon>
         {{ formatDate(timeEnd) }}
-      </SummaryItemText>
-    </SummaryItem>
-    <SummaryItem>
-      <SummaryItemCaption>Place</SummaryItemCaption>
-      <SummaryItemText>
+      </summary-item-text>
+    </summary-item>
+    <summary-item>
+      <summary-item-caption>Place</summary-item-caption>
+      <summary-item-text>
         <event-place :place="place" />
-      </SummaryItemText>
-      <SummaryItemSubtext v-if="!isPrivate">
+      </summary-item-text>
+      <summary-item-subtext v-if="!isPrivate">
         <v-icon :color="sharedRoomIcon.color">{{ sharedRoomIcon.icon }}</v-icon>
         {{ sharedRoomString }}
-      </SummaryItemSubtext>
-    </SummaryItem>
-    <SummaryItem>
-      <SummaryItemCaption>Description</SummaryItemCaption>
+      </summary-item-subtext>
+    </summary-item>
+    <summary-item>
+      <summary-item-caption>Description</summary-item-caption>
       <div v-if="!description" class="text--secondary">説明はありません</div>
-      <MarkdownField v-else :src="description" />
-    </SummaryItem>
+      <markdown-field v-else :src="description" />
+    </summary-item>
   </div>
 </template>
 

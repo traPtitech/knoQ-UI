@@ -1,25 +1,25 @@
 <template>
   <v-container>
-    <DashboardItem>
-      <DashboardItemTitle>今日の進捗部屋</DashboardItemTitle>
-      <RoomList />
-    </DashboardItem>
-    <DashboardItem>
-      <DashboardItemTitle>今日のイベント</DashboardItemTitle>
-      <EventListToday />
-    </DashboardItem>
+    <dashboard-item>
+      <dashboard-item-title>今日の進捗部屋</dashboard-item-title>
+      <room-list />
+    </dashboard-item>
+    <dashboard-item>
+      <dashboard-item-title>今日のイベント</dashboard-item-title>
+      <event-list-today />
+    </dashboard-item>
     <v-row>
       <v-col md="6" cols="12">
-        <DashboardItem>
-          <DashboardItemTitle>あなたのイベント</DashboardItemTitle>
-          <YourEvents />
-        </DashboardItem>
+        <dashboard-item>
+          <dashboard-item-title>あなたのイベント</dashboard-item-title>
+          <your-events />
+        </dashboard-item>
       </v-col>
       <v-col md="6" cols="12">
-        <DashboardItem>
-          <DashboardItemTitle>あなたのグループ</DashboardItemTitle>
-          <YourGroups />
-        </DashboardItem>
+        <dashboard-item>
+          <dashboard-item-title>あなたのグループ</dashboard-item-title>
+          <your-groups />
+        </dashboard-item>
       </v-col>
     </v-row>
   </v-container>

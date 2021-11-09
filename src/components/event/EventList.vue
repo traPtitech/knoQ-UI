@@ -7,7 +7,7 @@
       <div v-if="isDateBorder(i)" :key="event.timeStart" class="mb-1 headline">
         {{ formatDate(event.timeStart) }}
       </div>
-      <EventListItem :key="event.eventId" :event="event" class="mb-5" />
+      <event-list-item :key="event.eventId" :event="event" class="mb-5" />
     </template>
   </div>
 </template>

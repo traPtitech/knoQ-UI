@@ -12,7 +12,7 @@
       prepend-inner-icon="mdi-filter"
     >
       <template #selection="{ item }">
-        <EventTag
+        <event-tag
           close
           :name="item.name"
           @click:close="removeFilterTag(item.name)"
@@ -24,9 +24,9 @@
       label="過去のイベントも表示"
       class="mt-n6"
     />
-    <ProgressCircular v-if="status === 'loading'" />
-    <LoadFailed v-else-if="status === 'error'" />
-    <EventList v-else :events="events" :event-filter="filterFn" />
+    <progress-circular v-if="status === 'loading'" />
+    <load-failed v-else-if="status === 'error'" />
+    <event-list v-else :events="events" :event-filter="filterFn" />
   </v-container>
 </template>
 

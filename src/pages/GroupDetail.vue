@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <ProgressCircular v-if="status === 'loading'" />
-    <LoadFailedText v-else-if="status === 'error'" />
+    <progress-circular v-if="status === 'loading'" />
+    <load-failed-text v-else-if="status === 'error'" />
     <v-card v-else class="pa-9">
       <div class="mb-7">
         <v-row no-gutters>
@@ -31,20 +31,20 @@
             </template>
           </v-col>
           <v-col class="flex-grow-0">
-            <ActionMenu>
+            <action-menu>
               <v-list-item v-if="isMyGroup" :to="`/groups/edit/${groupId}`">
                 <v-list-item-title>Edit this group</v-list-item-title>
               </v-list-item>
-            </ActionMenu>
+            </action-menu>
           </v-col>
         </v-row>
       </div>
-      <MarkdownField :src="group ? group.description : ''" class="mb-7" />
+      <markdown-field :src="group ? group.description : ''" class="mb-7" />
       <v-tabs>
         <v-tab>Events</v-tab>
         <v-tab>Members</v-tab>
         <v-tab-item class="pt-6">
-          <EventList :events="events" />
+          <event-list :events="events" />
         </v-tab-item>
         <v-tab-item class="pt-6">
           <div class="text--secondary">{{ members.length }} members</div>

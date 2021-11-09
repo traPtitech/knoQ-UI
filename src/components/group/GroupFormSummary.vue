@@ -1,15 +1,15 @@
 <template>
   <div>
-    <SummaryItem>
-      <SummaryItemCaption>New Group</SummaryItemCaption>
-      <SummaryItemMain>{{ name }}</SummaryItemMain>
-      <SummaryItemSubtext>
+    <summary-item>
+      <summary-item-caption>New Group</summary-item-caption>
+      <summary-item-main>{{ name }}</summary-item-main>
+      <summary-item-subtext>
         <v-icon :color="openIcon.color">{{ openIcon.icon }}</v-icon>
         {{ openString }}
-      </SummaryItemSubtext>
-    </SummaryItem>
-    <SummaryItem>
-      <SummaryItemCaption>Members</SummaryItemCaption>
+      </summary-item-subtext>
+    </summary-item>
+    <summary-item>
+      <summary-item-caption>Members</summary-item-caption>
       <user-avatar
         v-for="member in getMembers"
         :key="member.name"
@@ -18,11 +18,11 @@
         size="36"
         class="mr-2"
       />
-    </SummaryItem>
-    <SummaryItem>
-      <SummaryItemCaption>Description</SummaryItemCaption>
-      <MarkdownField :src="description" />
-    </SummaryItem>
+    </summary-item>
+    <summary-item>
+      <summary-item-caption>Description</summary-item-caption>
+      <markdown-field :src="description" />
+    </summary-item>
   </div>
 </template>
 
