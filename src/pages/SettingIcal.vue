@@ -50,8 +50,8 @@ export default class SettingIcal extends Vue {
   async fetchSecret() {
     try {
       this.secret = (await api.users.getIcalSecret()).secret
-    } catch (err) {
-      if (err.status !== 404) alert('Failed to fetch secret')
+    } catch (__) {
+      alert('Failed to fetch secret')
     }
   }
 
