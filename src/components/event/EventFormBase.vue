@@ -1,15 +1,17 @@
 <template>
-  <v-stepper v-model="step">
+  <v-stepper v-model="step" non-linear>
     <v-stepper-header>
-      <v-stepper-step :complete="step > 1" step="1">
+      <v-stepper-step editable :complete="validContent" step="1">
         イベント内容
       </v-stepper-step>
       <v-divider />
-      <v-stepper-step :complete="step > 2" step="2">
+      <v-stepper-step editable :complete="validTimeAndPlace" step="2">
         日時・場所
       </v-stepper-step>
       <v-divider />
-      <v-stepper-step :complete="step > 3" step="3"> 確認 </v-stepper-step>
+      <v-stepper-step editable :complete="valid" step="3">
+        確認
+      </v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items class="pb-1">
@@ -48,7 +50,9 @@
         <form-back-button class="mr-2" @click="step = 2">
           Back
         </form-back-button>
-        <form-next-button @click="submit"> Submit </form-next-button>
+        <form-next-button :disabled="!valid" @click="submit">
+          Submit
+        </form-next-button>
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
@@ -159,6 +163,9 @@ export default class EventFormBase extends Vue {
     }
   }
 
+  get valid(): boolean {
+    return this.validContent && this.validTimeAndPlace
+  }
   validContent = false
   validTimeAndPlaceDefault = false
   validTimeAndPlacePersonal = false
