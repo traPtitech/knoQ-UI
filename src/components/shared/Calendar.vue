@@ -67,7 +67,7 @@
           min-width="350px"
           flat
         >
-          <v-toolbar :color="selectedEvent.color" dark flat>
+          <v-toolbar color="grey lighten-4" dark flat>
             <v-toolbar-title>
               <router-link :to="`/events/${selectedEvent.eventId}`">
                 {{ selectedEvent.name }}
@@ -79,7 +79,7 @@
               icon
               :to="`/events/edit/${selectedEvent.eventId}`"
             >
-              <v-icon>mdi-pencil</v-icon>
+              <v-icon color="grey">mdi-pencil</v-icon>
             </v-btn>
           </v-toolbar>
           <v-card-text>
