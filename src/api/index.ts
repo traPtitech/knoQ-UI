@@ -10,6 +10,12 @@ const authMiddleware: API.Middleware = {
     ) {
       const { data: authParams } = await fetchAuthParams()
       PathStorage.saveCurrentPath()
+      const confirmed = window.confirm(
+        'traQのOAuthに遷移します。よろしいですか？'
+      )
+      if (!confirmed) {
+        return
+      }
       redirectToAuthPage(authParams)
     }
   },
