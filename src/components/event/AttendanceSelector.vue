@@ -5,19 +5,16 @@
     :value="attendance"
     solo
     flat
-    :background-color="colorOfAttendance(attendance)"
-    color="white"
+    :background-color="backgroundOf(attendance)"
     hide-details
   >
     <template #selection="{ item }">
-      <span class="white--text font-weight-medium">{{ item.text }}</span>
+      <span :class="`${foregroundOf(attendance)} font-weight-medium`">{{
+        item.text
+      }}</span>
     </template>
     <template #item="{ item, on, attrs }">
-      <v-list-item
-        v-bind="attrs"
-        :color="colorOfAttendance(item.value)"
-        v-on="on"
-      >
+      <v-list-item v-bind="attrs" :active-class="undefined" v-on="on">
         {{ item.text }}
       </v-list-item>
     </template>
@@ -49,10 +46,18 @@ export default class AttendanceSelector extends Vue {
     },
   ]
 
-  colorOfAttendance(attendance: RequestScheduleScheduleEnum): string {
+  foregroundOf(attendance: RequestScheduleScheduleEnum): string {
     return {
-      [RequestScheduleScheduleEnum.Pending]: 'pending',
-      [RequestScheduleScheduleEnum.Absent]: 'secondary',
+      [RequestScheduleScheduleEnum.Pending]: 'blue-grey--text text--darken-1',
+      [RequestScheduleScheduleEnum.Absent]: 'white--text',
+      [RequestScheduleScheduleEnum.Attendance]: 'white--text',
+    }[attendance]
+  }
+
+  backgroundOf(attendance: RequestScheduleScheduleEnum): string {
+    return {
+      [RequestScheduleScheduleEnum.Pending]: '#ced6d7',
+      [RequestScheduleScheduleEnum.Absent]: '#d3664f',
       [RequestScheduleScheduleEnum.Attendance]: 'primary',
     }[attendance]
   }

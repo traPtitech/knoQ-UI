@@ -7,10 +7,10 @@
           outlined
           rounded
           :style="{
-            'border-color': '#e8b645',
+            'border-color': $vuetify.theme.themes.light.secondary,
           }"
         >
-          <span style="color: #e8b645" class="ma-1">未定</span>
+          <span class="secondary--text ma-1">未定</span>
         </v-sheet>
         <v-sheet
           v-if="state === 'attendance'"
@@ -26,11 +26,9 @@
           v-if="state === 'absent'"
           outlined
           rounded
-          :style="{
-            'border-color': $vuetify.theme.themes.light.secondary,
-          }"
+          style="border-color: #d3664f"
         >
-          <span class="secondary--text ma-1">欠席</span>
+          <span style="color: #d3664f" class="ma-1">欠席</span>
         </v-sheet>
       </v-col>
       <v-col class="flex-grow-0 mr-n3">
