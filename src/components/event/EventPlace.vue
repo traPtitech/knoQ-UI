@@ -1,9 +1,23 @@
 <template>
   <span>
-    <v-icon v-if="contains('youtube')" class="mr-1">mdi-youtube</v-icon>
-    <v-icon v-if="contains('discord')" class="mr-1">mdi-discord</v-icon>
-    <v-icon v-if="contains('zoom')" class="mr-1">mdi-video</v-icon>
-    <v-icon v-if="contains('qall')" class="mr-1">mdi-phone</v-icon>
+    <v-icon v-if="contains('youtube')" class="mr-1" style="color: red"
+      >mdi-youtube</v-icon
+    >
+    <v-icon
+      v-if="contains('discord')"
+      class="mr-1"
+      style="color: white; background-color: #5865f2"
+      >discord</v-icon
+    >
+    <v-icon
+      v-if="contains('zoom')"
+      class="mr-1"
+      style="color: white; background-color: blue"
+      >mdi-video</v-icon
+    >
+    <v-icon v-if="contains('qall')" class="mr-1" style="color: green"
+      >mdi-phone</v-icon
+    >
     {{ place }}
   </span>
 </template>
