@@ -106,6 +106,19 @@ export default class GroupEdit extends Vue {
   }
 
   async deleteGroup() {
+    try {
+      let events = await api.events.getEventsOfGroup({
+        groupID: this.groupId,
+      })
+      if (events.length != 0) {
+        alert(
+          'このGroupにはEventの情報が残っています。削除するためにはEventを全て削除してください。'
+        )
+        return
+      }
+    } catch (__) {
+      alert('このGroupの詳細を確認できませんでした。')
+    }
     const confirmed = window.confirm(
       'この操作は取り消せません。本当にこのグループを削除してもよろしいですか？'
     )
