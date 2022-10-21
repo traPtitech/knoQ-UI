@@ -27,7 +27,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@mdi/font": "^6.5.95",
+    "@mdi/font": "^7.0.96",
     "@openapitools/openapi-generator-cli": "^2.4.26",
     "@types/highlight.js": "^10.1.0",
     "@types/markdown-it": "^12.2.3",
