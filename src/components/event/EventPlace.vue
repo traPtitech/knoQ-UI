@@ -3,19 +3,13 @@
     <v-icon v-if="contains('youtube')" class="mr-1" style="color: red"
       >mdi-youtube</v-icon
     >
-    <v-icon
-      v-if="contains('discord')"
-      class="mr-1"
-      style="color: white; background-color: #5865f2"
+    <v-icon v-if="contains('discord')" class="mr-1" style="color: #5865f2"
       >discord</v-icon
     >
-    <v-icon
-      v-if="contains('zoom')"
-      class="mr-1"
-      style="color: white; background-color: blue"
+    <v-icon v-if="contains('zoom')" class="mr-1" style="color: #2d8cff"
       >mdi-video</v-icon
     >
-    <v-icon v-if="contains('qall')" class="mr-1" style="color: green"
+    <v-icon v-if="contains('qall')" class="mr-1" style="color: #00aca2"
       >mdi-phone</v-icon
     >
     {{ place }}
