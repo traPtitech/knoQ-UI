@@ -18,17 +18,15 @@ import {
     AuthParams,
     AuthParamsFromJSON,
     AuthParamsToJSON,
+    InlineResponse200,
+    InlineResponse200FromJSON,
+    InlineResponse200ToJSON,
 } from '../models';
-
-export interface GetCallbackRequest {
-    session: string;
-    code: string;
-}
 
 /**
  * 
  */
-export class AuthenticationApi extends runtime.BaseAPI {
+export class PublicApi extends runtime.BaseAPI {
 
     /**
      * リクエストに必要な情報を返す
@@ -57,40 +55,29 @@ export class AuthenticationApi extends runtime.BaseAPI {
     }
 
     /**
-     * コールバックを検知して、トークンを取得します。
+     * version情報を取得
      */
-    async getCallbackRaw(requestParameters: GetCallbackRequest): Promise<runtime.ApiResponse<void>> {
-        if (requestParameters.session === null || requestParameters.session === undefined) {
-            throw new runtime.RequiredError('session','Required parameter requestParameters.session was null or undefined when calling getCallback.');
-        }
-
-        if (requestParameters.code === null || requestParameters.code === undefined) {
-            throw new runtime.RequiredError('code','Required parameter requestParameters.code was null or undefined when calling getCallback.');
-        }
-
+    async getVersionRaw(): Promise<runtime.ApiResponse<InlineResponse200>> {
         const queryParameters: any = {};
-
-        if (requestParameters.code !== undefined) {
-            queryParameters['code'] = requestParameters.code;
-        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
         const response = await this.request({
-            path: `/callback`,
+            path: `/version`,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
         });
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => InlineResponse200FromJSON(jsonValue));
     }
 
     /**
-     * コールバックを検知して、トークンを取得します。
+     * version情報を取得
      */
-    async getCallback(requestParameters: GetCallbackRequest): Promise<void> {
-        await this.getCallbackRaw(requestParameters);
+    async getVersion(): Promise<InlineResponse200> {
+        const response = await this.getVersionRaw();
+        return await response.value();
     }
 
 }

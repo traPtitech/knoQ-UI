@@ -2,6 +2,7 @@ export * from './AuthParams';
 export * from './Duration';
 export * from './IcalSecret';
 export * from './InlineObject';
+export * from './InlineResponse200';
 export * from './RequestEvent';
 export * from './RequestEventInstant';
 export * from './RequestEventInstantTags';
