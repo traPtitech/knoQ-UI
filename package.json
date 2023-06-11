@@ -5,6 +5,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "lint": "eslint --fix",
     "prepare": "husky install",
     "api:build": "./scripts/gen-api.sh"
   },
