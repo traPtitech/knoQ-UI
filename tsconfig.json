@@ -12,7 +12,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env", "vuetify"],
+    "types": ["vite/Client", "vuetify"],
     "paths": {
       "@/*": ["src/*"]
     },

@@ -1,6 +1,12 @@
-import { defineConfig } from 'vite'
-import { createVuePlugin } from 'vite-plugin-vue2'
+import { defineConfig, loadEnv } from 'vite'
+import vue from '@vitejs/plugin-vue2'
+import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
 import path from 'path'
+
+process.env.VITE_APP_VERSION = JSON.stringify(
+  process.env.npm_package_version
+).replaceAll('"', '')
 
 export default defineConfig({
   resolve: {
@@ -11,5 +17,5 @@ export default defineConfig({
   server: {
     port: 8080,
   },
-  plugins: [createVuePlugin()],
+  plugins: [vue(), Components({ resolvers: [VuetifyResolver()] })],
 })
