@@ -12,9 +12,8 @@
     <Icon
       v-if="contains('zoom')"
       class="mr-1"
-      style="color: #2d8cff"
+      style="color: #2d8cff; vertical-align: -0.25rem"
       icon="bxl:zoom"
-      :inline="true"
     />
     {{ place }}
   </span>
