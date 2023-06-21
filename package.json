@@ -33,7 +33,7 @@
     "@types/highlight.js": "^10.1.0",
     "@types/markdown-it": "^12.2.3",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
+    "@typescript-eslint/parser": "^5.60.0",
     "@vitejs/plugin-vue2": "^2.2.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-standard": "^4.0.0",
