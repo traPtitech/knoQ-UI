@@ -52,10 +52,12 @@
         :events="calendarEvent"
         :event-color="getEventColor"
         color="calendarToday"
+        :month-format="() => ''"
         @click:event="showEvent"
         @click:more="viewDay"
         @click:date="viewDay"
       />
+
       <v-menu
         v-model="selectedOpen"
         :close-on-content-click="false"
