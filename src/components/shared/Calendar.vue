@@ -51,6 +51,7 @@
         :type="type"
         :events="calendarEvent"
         :event-color="getEventColor"
+        color="calendarToday"
         @click:event="showEvent"
         @click:more="viewDay"
         @click:date="viewDay"
@@ -216,3 +217,27 @@ export default class Calendar extends Vue {
   }
 }
 </script>
+
+<style lang="scss">
+.v-calendar-weekly__day-label {
+  margin-bottom: 4px;
+  & > .v-btn {
+    width: 28px;
+    height: 28px;
+    &.calendarToday {
+      & > .v-btn__content {
+        color: white;
+      }
+    }
+  }
+}
+.v-calendar-daily_head-day-label {
+  & > .v-btn {
+    &.calendarToday {
+      & > .v-btn__content {
+        color: white;
+      }
+    }
+  }
+}
+</style>

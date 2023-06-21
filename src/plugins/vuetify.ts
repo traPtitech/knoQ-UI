@@ -17,6 +17,7 @@ export default new Vuetify({
         error: colors.red.lighten1,
         pending: colors.amber.darken1,
         background: '#f4f7f9',
+        calendarToday: '#08645c',
       },
     },
   },
