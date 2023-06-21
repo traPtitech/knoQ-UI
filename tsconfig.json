@@ -12,7 +12,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env", "vuetify"],
+    "types": ["vite/Client", "vuetify"],
     "paths": {
       "@/*": ["src/*"]
     },
@@ -24,7 +24,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "components.d.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -8,7 +8,7 @@
 ### UIの起動
 ```shell
 $ yarn
-$ yarn serve
+$ yarn dev
 ```
 
 ### knoQサーバーと連携して実際に動作をテストする
@@ -16,10 +16,7 @@ $ yarn serve
 ```shell
 $ git clone https://github.com/traPtitech/knoQ.git
 $ cd knoQ
-
-$ cd development
-$ make init
-$ docker-compose up -d
+$ docker compose up --build
 ```
 2. UIを起動していないなら起動する
 3. ブラウザで http://localhost:6006 を開く

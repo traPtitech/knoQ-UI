@@ -3,6 +3,7 @@ apis/AuthenticationApi.ts
 apis/EventsApi.ts
 apis/GroupsApi.ts
 apis/ICalApi.ts
+apis/PublicApi.ts
 apis/RoomsApi.ts
 apis/TagsApi.ts
 apis/UsersApi.ts
@@ -12,6 +13,7 @@ models/AuthParams.ts
 models/Duration.ts
 models/IcalSecret.ts
 models/InlineObject.ts
+models/InlineResponse200.ts
 models/RequestEvent.ts
 models/RequestEventInstant.ts
 models/RequestEventInstantTags.ts

@@ -16,39 +16,39 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Duration
+ * @interface InlineResponse200
  */
-export interface Duration {
+export interface InlineResponse200 {
     /**
      * 
      * @type {string}
-     * @memberof Duration
+     * @memberof InlineResponse200
      */
-    timeStart: string;
+    version?: string;
     /**
      * 
      * @type {string}
-     * @memberof Duration
+     * @memberof InlineResponse200
      */
-    timeEnd: string;
+    revision?: string;
 }
 
-export function DurationFromJSON(json: any): Duration {
-    return DurationFromJSONTyped(json, false);
+export function InlineResponse200FromJSON(json: any): InlineResponse200 {
+    return InlineResponse200FromJSONTyped(json, false);
 }
 
-export function DurationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Duration {
+export function InlineResponse200FromJSONTyped(json: any, ignoreDiscriminator: boolean): InlineResponse200 {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'timeStart': json['timeStart'],
-        'timeEnd': json['timeEnd'],
+        'version': !exists(json, 'version') ? undefined : json['version'],
+        'revision': !exists(json, 'revision') ? undefined : json['revision'],
     };
 }
 
-export function DurationToJSON(value?: Duration | null): any {
+export function InlineResponse200ToJSON(value?: InlineResponse200 | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -57,8 +57,8 @@ export function DurationToJSON(value?: Duration | null): any {
     }
     return {
         
-        'timeStart': value.timeStart,
-        'timeEnd': value.timeEnd,
+        'version': value.version,
+        'revision': value.revision,
     };
 }
 
