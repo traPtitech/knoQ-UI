@@ -22,7 +22,7 @@ import { Component } from 'vue-property-decorator'
 @Component
 export default class SidebarFooter extends Vue {
   get version(): string {
-    return process.env.__APP_VERSION__
+    return import.meta.env.VITE_APP_VERSION
   }
 }
 </script>
