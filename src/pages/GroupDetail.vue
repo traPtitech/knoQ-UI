@@ -44,7 +44,7 @@
         <v-tab>Events</v-tab>
         <v-tab>Members</v-tab>
         <v-tab-item class="pt-6">
-          <EventList :events="events" />
+          <EventList :events="events.reverse()" />
         </v-tab-item>
         <v-tab-item class="pt-6">
           <div class="text--secondary">{{ members.length }} members</div>
