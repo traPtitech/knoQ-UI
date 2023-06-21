@@ -6,12 +6,16 @@
     <v-icon v-if="contains('discord')" class="mr-1" style="color: #5865f2"
       >discord</v-icon
     >
-    <v-icon v-if="contains('zoom')" class="mr-1" style="color: #2d8cff"
-      >mdi-video</v-icon
-    >
     <v-icon v-if="contains('qall')" class="mr-1" style="color: #00aca2"
       >mdi-phone</v-icon
     >
+    <Icon
+      v-if="contains('zoom')"
+      class="mr-1"
+      style="color: #2d8cff"
+      icon="bxl:zoom"
+      :inline="true"
+    />
     {{ place }}
   </span>
 </template>
@@ -19,8 +23,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-
-@Component
+import { Icon } from '@iconify/vue2'
+@Component({
+  components: {
+    Icon,
+  },
+})
 export default class EventPlace extends Vue {
   @Prop({ type: String, required: true })
   place!: string
