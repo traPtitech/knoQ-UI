@@ -44,7 +44,7 @@
         <v-tab>Events</v-tab>
         <v-tab>Members</v-tab>
         <v-tab-item class="pt-6">
-          <EventList :events="events.reverse()" />
+          <EventList :events="events" />
         </v-tab-item>
         <v-tab-item class="pt-6">
           <div class="text--secondary">{{ members.length }} members</div>
@@ -103,7 +103,9 @@ export default class GroupDetail extends Vue {
     try {
       ;[this.group, this.events] = await Promise.all([
         api.groups.getGroup({ groupID: this.groupId }),
-        api.events.getEventsOfGroup({ groupID: this.groupId }),
+        (
+          await api.events.getEventsOfGroup({ groupID: this.groupId })
+        ).reverse(),
       ])
       this.status = 'loaded'
     } catch (__) {
