@@ -9,6 +9,7 @@ const EventSearch = () => import('@/pages/EventSearch.vue')
 const EventDetail = () => import('@/pages/EventDetail.vue')
 const EventNew = () => import('@/pages/EventNew.vue')
 const EventEdit = () => import('@/pages/EventEdit.vue')
+const ProgressRoom = () => import('@/pages/ProgressRoom.vue')
 const GroupDetail = () => import('@/pages/GroupDetail.vue')
 const GroupNew = () => import('@/pages/GroupNew.vue')
 const GroupEdit = () => import('@/pages/GroupEdit.vue')
@@ -86,6 +87,12 @@ const router = new Router({
       name: 'EventDetail',
       component: EventDetail,
       meta: { headerTitle: 'Event detail' },
+    },
+    {
+      path: '/progressroom',
+      name: 'ProgressRoom',
+      component: ProgressRoom,
+      meta: { headerTitle: 'ProgressRoom' },
     },
     {
       path: '/callback',
