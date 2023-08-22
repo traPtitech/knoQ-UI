@@ -37,8 +37,8 @@ export default class SidebarNavigation extends Vue {
         link: '/calendar',
       },
       {
-        title: 'ProgressRoom',
-        link: '/progressroom',
+        title: 'Workspace',
+        link: '/workspace',
       },
     ]
   }
