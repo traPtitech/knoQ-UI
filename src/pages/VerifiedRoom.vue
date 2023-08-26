@@ -1,49 +1,33 @@
 <template>
   <div>
-    <v-app>
-      <v-container>
-        <!--<v-btn @click="showModal"> 進捗部屋を登録 </v-btn> 自分の作業用-->
-        <v-btn @click="showModal" v-if="isPrivilegedUser">
-          進捗部屋を登録
-        </v-btn>
-        <div v-else>
-          あなたは編集権限がないユーザーなので，進捗部屋の登録をすることはできません。
-        </div>
-        <v-dialog v-model="isVisible" max-width="600">
-          <v-card>
-            <v-card-title>
-              <span class="headline"
-                >進捗部屋の情報をcsv形式で入力してください。</span
-              >
-            </v-card-title>
-            <v-card-text>
-              <v-textarea v-model="inputData" rows="20" />
-              <div v-show="showError" class="ErrorMessage">
-                正しい形式で入力してください。
-              </div>
-              <div class="showInfoTable">
-                <v-data-table :headers="tableHeaders" :items="tableData" />
-              </div>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="blue darken-1" text @click="hideModal">
-                close
-              </v-btn>
-              <v-btn color="blue darken-1" text @click="saveData"> done </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-container>
-    </v-app>
+    <v-container>
+      <v-btn @click="showModal"> 進捗部屋を登録 </v-btn>
+      <!--<v-btn @click="showModal" v-if="isPrivilegedUser"> 進捗部屋を登録 </v-btn>
+      <div v-else>進捗部屋を登録できるのは特権ユーザーのみです。</div>-->
+      <v-dialog v-model="isVisible" max-width="600">
+        <v-card>
+          <v-card-title>
+            <span class="headline"
+              >進捗部屋の情報をcsv形式で入力してください。</span
+            >
+          </v-card-title>
+          <v-card-text>
+            <v-textarea v-model="inputData" rows="20" />
+            <div v-show="showError" class="ErrorMessage">
+              正しい形式で入力してください。
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="blue darken-1" text @click="hideModal"> close </v-btn>
+            <v-btn color="blue darken-1" text @click="saveData"> done </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import { RequestRoom } from '@/api/generated/models/RequestRoom'
-import api from '@/api'
-import { ResponseUser } from '@/api/generated/models/ResponseUser'
-import { UsersApi } from '@/api/generated/apis/UsersApi'
-
 interface TableData {
   subject: string
   place: string
@@ -59,7 +43,6 @@ export default {
       tableData: [] as (TableData | null)[],
       isVisible: false,
       showError: false,
-      user: null as ResponseUser | null,
       tableHeaders: [
         { text: 'Subject', value: 'subject' },
         { text: 'Place', value: 'place' },
@@ -72,7 +55,7 @@ export default {
   },
   computed: {
     isPrivilegedUser(): boolean {
-      return this.user?.privileged ?? false
+      return this.$store.direct.state.me?.privileged ?? false
     },
   },
   methods: {
@@ -84,50 +67,36 @@ export default {
       this.showError = false
       this.inputData = ''
     },
-    async created() {
-      const usersApi = new UsersApi()
-      this.user = await usersApi.getMe()
-    },
     async saveData() {
-      // const roomsApi = new RoomsApi()
       const rows = this.inputData.split('\n')
-      const newData = rows.map(row => {
-        const columns = row.split(',')
-        if (columns.length === 6) {
-          this.showError = false
-          return {
-            subject: columns[0],
-            place: columns[1],
-            start_date: columns[2],
-            end_date: columns[3],
-            start_time: columns[4],
-            end_time: columns[5],
-          }
-        } else {
-          this.showError = true
-          return null
-        }
-      })
-      const validData = newData.filter(data => data !== null)
+      const csvData = rows.join('\n')
       this.inputData = ''
-
-      for (const data of validData) {
-        const requestRoom: RequestRoom = {
-          place: data?.place ?? '',
-          timeStart: data?.start_date
-            ? data.start_date + 'T' + data.start_time + ':00.000Z'
-            : '',
-          timeEnd: data?.end_date
-            ? data.end_date + 'T' + data.end_time + ':00.000Z'
-            : '',
-          admins: ['1eea935c-0d3c-411b-a565-1b09565237f4'], //誰がadminになるべきか
-        }
+      const columns = rows.map(row => row.split(','))
+      if (columns.every(cols => cols.length === 6)) {
+        this.showError = false
         try {
-          const response = await api.rooms.addRooms({ requestRoom })
-          console.log(response)
-        } catch (__) {
+          const response = await fetch(
+            'http://knoq.trap.jp/api/rooms/all', //開発環境のAPI
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'text/csv',
+              },
+              body: csvData,
+            }
+          )
+          if (!response.ok) {
+            throw new Error('Network response was not ok')
+          }
+          const text = await response.text()
+          const data = JSON.parse(text)
+          console.log('データが正常に送信されました。', data)
+        } catch (error) {
           alert('Failed to submit')
+          console.error('There was a problem with the fetch operation:', error)
         }
+      } else {
+        this.showError = true
       }
     },
   },
