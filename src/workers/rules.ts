@@ -22,6 +22,7 @@ const rules = {
     (v: string) => v.length <= 32 || '場所名は32文字までです',
   ],
   eventDate: [(v: string) => !!v || '日付は必須です'],
+  verifiedRoom: [(v: string) => !!v || '進捗部屋の情報を入力してください'],
 
   eventTimeStart: (
     endTime: string,

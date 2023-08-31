@@ -4,6 +4,9 @@ import App from './App.vue'
 import router from '@/router'
 import store from '@/store'
 import rules from '@/workers/rules'
+import { Buffer } from 'buffer'
+
+window.Buffer = window.Buffer || Buffer
 
 Vue.config.productionTip = false
 Vue.prototype.$rules = rules

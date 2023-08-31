@@ -11,8 +11,14 @@
               >進捗部屋の情報をcsv形式で入力してください。</span
             >
           </v-card-title>
-          <v-card-text>
-            <v-textarea v-model="inputData" rows="20" />
+          <v-card-text no-resize filled>
+            <v-textarea
+              v-model="inputData"
+              rows="20"
+              no-resize
+              filled
+              :rules="$rules.verifiedRoom"
+            />
             <div v-show="showError" class="ErrorMessage">
               正しい形式で入力してください。
             </div>
@@ -28,6 +34,8 @@
 </template>
 
 <script lang="ts">
+import { parse } from 'csv-parse/sync'
+
 interface TableData {
   subject: string
   place: string
@@ -68,32 +76,32 @@ export default {
       this.inputData = ''
     },
     async saveData() {
-      const rows = this.inputData.split('\n')
-      const csvData = rows.join('\n')
-      this.inputData = ''
-      const columns = rows.map(row => row.split(','))
-      if (columns.every(cols => cols.length === 6)) {
+      const records = parse(this.inputData, {
+        delimiter: ',',
+        relax_column_count: true,
+      })
+      if (records.every(record => record.length === 6)) {
         this.showError = false
         try {
-          const response = await fetch(
-            'http://knoq.trap.jp/api/rooms/all', //開発環境のAPI
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'text/csv',
-              },
-              body: csvData,
-            }
-          )
+          const response = await fetch('http://localhost:6006/api/rooms/all', {
+            //開発環境url
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'text/csv',
+            },
+            body: records,
+          })
           if (!response.ok) {
             throw new Error('Network response was not ok')
           }
-          const text = await response.text()
-          const data = JSON.parse(text)
-          console.log('データが正常に送信されました。', data)
+          console.log('データが正常に送信されました。', response)
+          this.inputData = ''
+          this.isVisible = false
         } catch (error) {
-          alert('Failed to submit')
+          alert('データの送信に失敗しました。')
           console.error('There was a problem with the fetch operation:', error)
+          this.inputData = ''
         }
       } else {
         this.showError = true
