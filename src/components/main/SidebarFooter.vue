@@ -26,9 +26,9 @@
     </v-col>
     <v-dialog v-model="isVisible" max-width="600">
       <v-card>
-        <v-card-title>
+        <v-card-title class="justify-center">
           <span class="headline"
-            >進捗部屋の情報をcsv形式で入力してください。</span
+            >進捗部屋の情報をcsv形式で入力してください</span
           >
         </v-card-title>
         <v-card-text no-resize filled>
@@ -39,8 +39,8 @@
             filled
             :rules="$rules.verifiedRoom"
           />
-          <div v-show="showError" class="ErrorMessage">
-            正しい形式で入力してください。
+          <div v-show="showError" class="ErrorMessage" style="color: red">
+            データは6列で入力してください。
           </div>
         </v-card-text>
         <v-card-actions>
