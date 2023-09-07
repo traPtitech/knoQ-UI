@@ -36,29 +36,12 @@
 <script lang="ts">
 import { parse } from 'csv-parse/sync'
 
-interface TableData {
-  subject: string
-  place: string
-  start_date: string
-  end_date: string
-  start_time: string
-  end_time: string
-}
 export default {
   data() {
     return {
       inputData: '',
-      tableData: [] as (TableData | null)[],
       isVisible: false,
       showError: false,
-      tableHeaders: [
-        { text: 'Subject', value: 'subject' },
-        { text: 'Place', value: 'place' },
-        { text: 'Start date', value: 'start_date' },
-        { text: 'End date', value: 'end_date' },
-        { text: 'Start time', value: 'start_time' },
-        { text: 'End time', value: 'end_time' },
-      ],
     }
   },
   computed: {
