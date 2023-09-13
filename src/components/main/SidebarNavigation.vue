@@ -36,11 +36,6 @@ export default class SidebarNavigation extends Vue {
         title: 'Calendar',
         link: '/calendar',
       },
-      {
-        icon: 'mdi-door-open',
-        title: 'Workspace',
-        link: '/workspace',
-      },
     ]
   }
 }

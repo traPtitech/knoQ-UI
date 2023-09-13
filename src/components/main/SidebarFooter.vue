@@ -2,16 +2,21 @@
   <v-row class="mx-4 mb-5" justify="space-between" align="center" dense>
     <v-col>knoQ {{ version }}</v-col>
     <v-col class="flex-grow-0">
-      <v-btn
-        v-if="isPrivilegedUser"
-        icon
-        title="workspaceRegistration"
-        target="_blank"
-        rel="noopener noreferer"
-        @click="showModal"
-      >
-        <v-icon>mdi-door-open</v-icon>
-      </v-btn>
+      <v-tooltip v-if="isPrivilegedUser" top>
+        <template #activator="{ on }">
+          <v-btn
+            icon
+            title="workspaceRegistration"
+            target="_blank"
+            rel="noopener noreferer"
+            @click="showModal"
+            v-on="on"
+          >
+            <v-icon color="#EF3530">mdi-door-open</v-icon>
+          </v-btn>
+        </template>
+        <span>進捗部屋を登録するためのフォームを表示します</span>
+      </v-tooltip>
     </v-col>
     <v-col class="flex-grow-0">
       <v-btn
@@ -39,7 +44,7 @@
             filled
             :rules="$rules.verifiedRoom"
           />
-          <div v-show="showError" class="ErrorMessage" style="color: red">
+          <div v-show="showError" class="ErrorMessage" style="color: #ef5350">
             データは6列で入力してください。
           </div>
         </v-card-text>
@@ -54,7 +59,6 @@
 
 <script lang="ts">
 import { parse } from 'csv-parse/browser/esm/sync'
-
 export default {
   data() {
     return {
@@ -78,27 +82,39 @@ export default {
       this.showError = false
       this.inputData = ''
     },
-    async saveData() {
-      const records = parse(this.inputData, {
+    isValidData(data: string): boolean {
+      const records = parse(data, {
         delimiter: ',',
         relax_column_count: true,
       })
-      if (records.every(record => record.length === 6)) {
+      return records.every(record => record.length === 6)
+    },
+    async saveData() {
+      if (this.isValidData(this.inputData)) {
         this.showError = false
         try {
-          const response = await fetch('http://localhost:6006/api/rooms/all', {
-            //開発環境url
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'text/csv',
-            },
-            body: records,
+          const records = parse(this.inputData, {
+            delimiter: ',',
+            relax_column_count: true,
           })
-          if (!response.ok) {
-            throw new Error('Network response was not ok')
+          for (const record of records) {
+            const response = await fetch(
+              'http://localhost:6006/api/rooms/all',
+              {
+                //開発環境url
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                  'Content-Type': 'text/csv',
+                },
+                body: record.join(','),
+              }
+            )
+            if (!response.ok) {
+              throw new Error('Network response was not ok')
+            }
+            console.log('データが正常に送信されました。', response)
           }
-          console.log('データが正常に送信されました。', response)
           this.inputData = ''
           this.isVisible = false
         } catch (error) {
@@ -112,13 +128,4 @@ export default {
     },
   },
 }
-
-// import Vue from 'vue'
-// import { Component } from 'vue-property-decorator'
-// @Component
-// export default class SidebarFooter extends Vue {
-//   get version(): string {
-//     return import.meta.env.VITE_APP_VERSION
-//   }
-// }
 </script>

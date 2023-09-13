@@ -1,3 +1,5 @@
+import SidebarFooter from '@/components/main/SidebarFooter.vue'
+
 const rules = {
   groupName: [
     (v: string) => !!v || 'グループ名は必須です',
@@ -22,7 +24,11 @@ const rules = {
     (v: string) => v.length <= 32 || '場所名は32文字までです',
   ],
   eventDate: [(v: string) => !!v || '日付は必須です'],
-  verifiedRoom: [(v: string) => !!v || '進捗部屋の情報を入力してください'],
+  verifiedRoom: [
+    (v: string) => !!v || '進捗部屋の情報を入力してください',
+    (v: string) =>
+      SidebarFooter.methods?.isValidData(v) || 'データは6列で入力してください',
+  ],
 
   eventTimeStart: (
     endTime: string,
