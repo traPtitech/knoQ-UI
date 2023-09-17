@@ -59,6 +59,8 @@
 
 <script lang="ts">
 import { parse } from 'csv-parse/browser/esm/sync'
+import { unparse } from 'papaparse'
+
 export default {
   data() {
     return {
@@ -93,28 +95,20 @@ export default {
       if (this.isValidData(this.inputData)) {
         this.showError = false
         try {
-          const records = parse(this.inputData, {
-            delimiter: ',',
-            relax_column_count: true,
+          const csvData = unparse([[this.inputData]])
+          const response = await fetch('http://localhost:6006/api/rooms/all', {
+            //開発環境url
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'text/csv',
+            },
+            body: csvData,
           })
-          for (const record of records) {
-            const response = await fetch(
-              'http://localhost:6006/api/rooms/all',
-              {
-                //開発環境url
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                  'Content-Type': 'text/csv',
-                },
-                body: record.join(','),
-              }
-            )
-            if (!response.ok) {
-              throw new Error('Network response was not ok')
-            }
-            console.log('データが正常に送信されました。', response)
+          if (!response.ok) {
+            throw new Error('Network response was not ok')
           }
+          console.log('データが正常に送信されました。', response)
           this.inputData = ''
           this.isVisible = false
         } catch (error) {
