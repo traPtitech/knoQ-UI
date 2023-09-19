@@ -564,22 +564,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 20.6.2
-  resolution: "@types/node@npm:20.6.2"
-  checksum: 96fe5303872640a173f3fd43e289a451776ed5b8f0090094447c6790b43f23fb607eea8268af0829cef4d132e5afa0bfa4cd871aa7412e9042a414a698e9e971
-  languageName: node
-  linkType: hard
-
-"@types/papaparse@npm:^5.3.8":
-  version: 5.3.8
-  resolution: "@types/papaparse@npm:5.3.8"
-  dependencies:
-    "@types/node": "*"
-  checksum: 0cd51e3b3e042064c8b5ba4ae12462ceb8e0c0e4eb808744447ec92ff7f635dc78183f43c1d5b3a593c923851fa7545055bb733553728244c38fd46d43b39a48
-  languageName: node
-  linkType: hard
-
 "@types/semver@npm:^7.3.12":
   version: 7.5.0
   resolution: "@types/semver@npm:7.5.0"
@@ -3943,13 +3927,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"papaparse@npm:^5.4.1":
-  version: 5.4.1
-  resolution: "papaparse@npm:5.4.1"
-  checksum: fc9e52f7158dca3517c229e3309065b1ab5da6c7194572fba4f31ff138bc43e3c91182cc40365cc828f97fe10d0aca416068fd731661058bea0f69ddb84a411a
-  languageName: node
-  linkType: hard
-
 "parent-module@npm:^1.0.0":
   version: 1.0.1
   resolution: "parent-module@npm:1.0.1"
@@ -4336,7 +4313,6 @@ __metadata:
     "@openapitools/openapi-generator-cli": ^2.4.26
     "@types/highlight.js": ^10.1.0
     "@types/markdown-it": ^12.2.3
-    "@types/papaparse": ^5.3.8
     "@typescript-eslint/eslint-plugin": ^6.2.1
     "@typescript-eslint/parser": ^5.60.0
     "@vitejs/plugin-vue2": ^2.2.0
@@ -4356,7 +4332,6 @@ __metadata:
     markdown-it: ^13.0.1
     markdown-it-link-attributes: ^4.0.0
     moment: ^2.29.4
-    papaparse: ^5.4.1
     prettier: 2.8
     reflect-metadata: ^0.1.13
     sass: ~1.63
