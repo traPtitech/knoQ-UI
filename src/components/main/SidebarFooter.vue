@@ -58,8 +58,8 @@
 </template>
 
 <script lang="ts">
-import { parse } from 'csv-parse/browser/esm/sync'
 import { unparse } from 'papaparse'
+import { isValidData } from '@/workers/isValidData'
 
 export default {
   data() {
@@ -84,15 +84,15 @@ export default {
       this.showError = false
       this.inputData = ''
     },
-    isValidData(data: string): boolean {
-      const records = parse(data, {
-        delimiter: ',',
-        relax_column_count: true,
-      })
-      return records.every(record => record.length === 6)
-    },
+    // isValidData(data: string): boolean {
+    //   const records = parse(data, {
+    //     delimiter: ',',
+    //     relax_column_count: true,
+    //   })
+    //   return records.every(record => record.length === 6)
+    // },
     async saveData() {
-      if (this.isValidData(this.inputData)) {
+      if (isValidData(this.inputData)) {
         this.showError = false
         try {
           const csvData = unparse([[this.inputData]])
@@ -103,7 +103,7 @@ export default {
             headers: {
               'Content-Type': 'text/csv',
             },
-            body: csvData,
+            body: this.inputData,
           })
           if (!response.ok) {
             throw new Error('Network response was not ok')
