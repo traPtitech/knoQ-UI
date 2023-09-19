@@ -58,7 +58,6 @@
 </template>
 
 <script lang="ts">
-import { unparse } from 'papaparse'
 import { isValidData } from '@/workers/isValidData'
 
 export default {
@@ -84,18 +83,10 @@ export default {
       this.showError = false
       this.inputData = ''
     },
-    // isValidData(data: string): boolean {
-    //   const records = parse(data, {
-    //     delimiter: ',',
-    //     relax_column_count: true,
-    //   })
-    //   return records.every(record => record.length === 6)
-    // },
     async saveData() {
       if (isValidData(this.inputData)) {
         this.showError = false
         try {
-          const csvData = unparse([[this.inputData]])
           const response = await fetch('http://localhost:6006/api/rooms/all', {
             //開発環境url
             method: 'POST',
