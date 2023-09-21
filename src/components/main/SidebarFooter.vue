@@ -59,6 +59,7 @@
 
 <script lang="ts">
 import { isValidData } from '@/workers/isValidData'
+import { baseURL } from '@/workers/api'
 
 export default {
   data() {
@@ -87,7 +88,7 @@ export default {
       if (isValidData(this.inputData)) {
         this.showError = false
         try {
-          const response = await fetch('http://localhost:6006/api/rooms/all', {
+          await fetch(`${baseURL}/rooms/all`, {
             //開発環境url
             method: 'POST',
             credentials: 'include',
@@ -96,10 +97,6 @@ export default {
             },
             body: this.inputData,
           })
-          if (!response.ok) {
-            throw new Error('Network response was not ok')
-          }
-          console.log('データが正常に送信されました。', response)
           this.inputData = ''
           this.isVisible = false
         } catch (error) {

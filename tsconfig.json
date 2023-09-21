@@ -12,7 +12,7 @@
     "noImplicitAny": false,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["node", "vite/Client", "vuetify"],
+    "types": ["vite/Client", "vuetify"],
     "paths": {
       "@/*": ["src/*"]
     },
