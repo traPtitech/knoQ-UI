@@ -13,6 +13,7 @@
   "dependencies": {
     "@cloudcmd/clipboard": "^2.0.0",
     "axios": "^1.1.3",
+    "csv-parse": "^5.5.0",
     "direct-vuex": "^0.12.1",
     "highlight.js": "^11.6.0",
     "markdown-it": "^13.0.1",
