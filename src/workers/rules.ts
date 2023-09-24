@@ -1,4 +1,4 @@
-import { isValidData } from '@/workers/isValidData'
+import { isValidVerifiedroomData } from '@/workers/isValidVerifiedroomData'
 
 const rules = {
   groupName: [
@@ -26,7 +26,8 @@ const rules = {
   eventDate: [(v: string) => !!v || '日付は必須です'],
   verifiedRoom: [
     (v: string) => !!v || '進捗部屋の情報を入力してください',
-    (v: string) => isValidData(v) || 'データは6列で入力してください',
+    (v: string) =>
+      isValidVerifiedroomData(v) || 'データは6列で入力してください',
   ],
 
   eventTimeStart: (

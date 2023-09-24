@@ -58,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { isValidData } from '@/workers/isValidData'
+import { isValidVerifiedroomData } from '@/workers/isValidVerifiedroomData'
 import { baseURL } from '@/workers/api'
 
 export default {
@@ -85,7 +85,7 @@ export default {
       this.inputData = ''
     },
     async saveData() {
-      if (isValidData(this.inputData)) {
+      if (isValidVerifiedroomData(this.inputData)) {
         this.showError = false
         try {
           await fetch(`${baseURL}/rooms/all`, {

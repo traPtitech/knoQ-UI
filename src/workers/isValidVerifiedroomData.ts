@@ -1,6 +1,6 @@
 import { parse } from 'csv-parse/browser/esm/sync'
 
-export function isValidData(data: string): boolean {
+export function isValidVerifiedroomData(data: string): boolean {
   try {
     const records = parse(data, {
       delimiter: ',',
