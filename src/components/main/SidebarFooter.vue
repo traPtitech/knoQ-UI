@@ -75,6 +75,16 @@ export default {
       return this.$store.direct.state.me?.privileged ?? false
     },
   },
+  mounted: function () {
+    window.onbeforeunload = () => {
+      if (this.inputData) {
+        return 'このページを離れると保存されていないデータは破棄されますが，よろしいですか。'
+      }
+    }
+  },
+  destroyed() {
+    window.onbeforeunload = null
+  },
   methods: {
     showModal() {
       this.isVisible = true
