@@ -90,16 +90,20 @@ export default {
       this.isVisible = true
     },
     hideModal() {
-      this.isVisible = false
-      this.showError = false
-      this.inputData = ''
+      if (this.inputData) {
+        if (confirm('入力されたデータは破棄されますが，よろしいですか。')) {
+          this.isVisible = false
+          this.showError = false
+          this.inputData = ''
+        }
+        return
+      }
     },
     async saveData() {
       if (isValidVerifiedroomData(this.inputData)) {
         this.showError = false
         try {
           await fetch(`${baseURL}/rooms/all`, {
-            //開発環境url
             method: 'POST',
             credentials: 'include',
             headers: {
