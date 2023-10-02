@@ -97,6 +97,10 @@ export default {
           this.inputData = ''
         }
         return
+      } else {
+        this.isVisible = false
+        this.showError = false
+        this.inputData = ''
       }
     },
     async saveData() {
