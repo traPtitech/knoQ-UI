@@ -75,6 +75,9 @@ import EventFormSummary, {
 } from '@/components/event/EventFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
+import { useDraftConfirmer } from '@/workers/draftConfirmer'
+import { removeDraftConfirmer } from '@/workers/draftConfirmer'
+import router from '@/router'
 
 export type EventInput = EventInputContent &
   (
@@ -195,6 +198,47 @@ export default class EventFormBase extends Vue {
         ? this.timeAndPlaceInstant.timeEnd
         : this.timeAndPlace.timeEnd,
     }
+  }
+  hasContent(): boolean {
+    return (
+      this.summary.name !== '' ||
+      this.summary.description !== '' ||
+      this.summary.tags.length > 0 ||
+      this.summary.groupName !== '' ||
+      this.summary.place !== '' ||
+      this.summary.timeStart !== '' ||
+      this.summary.timeEnd !== '' ||
+      this.summary.open ||
+      !this.summary.sharedRoom
+    )
+  }
+  mounted() {
+    this.$watch('summary', () => {
+      if (this.hasContent()) {
+        useDraftConfirmer()
+      } else {
+        removeDraftConfirmer()
+      }
+    })
+    router.beforeEach((to, from, next) => {
+      if (from.name === 'EventNew') {
+        if (this.hasContent()) {
+          if (
+            confirm(
+              '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+            )
+          ) {
+            next()
+          } else {
+            next(false)
+          }
+        } else {
+          next()
+        }
+      } else {
+        next()
+      }
+    })
   }
 
   @Emit()

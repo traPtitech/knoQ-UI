@@ -59,6 +59,8 @@
 
 <script lang="ts">
 import { isValidVerifiedroomData } from '@/workers/isValidVerifiedroomData'
+import { useDraftConfirmer } from '@/workers/draftConfirmer'
+import { removeDraftConfirmer } from '@/workers/draftConfirmer'
 import { baseURL } from '@/workers/api'
 
 export default {
@@ -76,14 +78,13 @@ export default {
     },
   },
   mounted: function () {
-    window.onbeforeunload = () => {
-      if (this.inputData) {
-        return 'このページを離れると保存されていないデータは破棄されますが，よろしいですか。'
+    this.$watch('inputData', newVal => {
+      if (newVal !== '') {
+        useDraftConfirmer()
+      } else {
+        removeDraftConfirmer()
       }
-    }
-  },
-  destroyed() {
-    window.onbeforeunload = null
+    })
   },
   methods: {
     showModal() {
@@ -91,7 +92,11 @@ export default {
     },
     hideModal() {
       if (this.inputData) {
-        if (confirm('入力されたデータは破棄されますが，よろしいですか。')) {
+        if (
+          confirm(
+            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+          )
+        ) {
           this.isVisible = false
           this.showError = false
           this.inputData = ''

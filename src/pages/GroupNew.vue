@@ -35,6 +35,9 @@ import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 import api, { RequestGroup } from '@/api'
+import { useDraftConfirmer } from '@/workers/draftConfirmer'
+import { removeDraftConfirmer } from '@/workers/draftConfirmer'
+import router from '@/router'
 
 @Component({
   components: {
@@ -58,6 +61,44 @@ export default class GroupNew extends Vue {
     members: this.$store.direct.state.me?.userId
       ? [this.$store.direct.state.me.userId]
       : [],
+  }
+
+  hasContent(): boolean {
+    return (
+      this.group.name !== '' || this.group.description !== '' || this.group.open
+    )
+  }
+  mounted() {
+    this.$watch(
+      'group',
+      () => {
+        if (this.hasContent()) {
+          useDraftConfirmer()
+        } else {
+          removeDraftConfirmer()
+        }
+      },
+      { deep: true }
+    )
+    router.beforeEach((to, from, next) => {
+      if (from.name === 'GroupNew') {
+        if (this.hasContent()) {
+          if (
+            confirm(
+              '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+            )
+          ) {
+            next()
+          } else {
+            next(false)
+          }
+        } else {
+          next()
+        }
+      } else {
+        next()
+      }
+    })
   }
 
   async submitGroup() {
