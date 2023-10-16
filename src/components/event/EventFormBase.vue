@@ -199,6 +199,7 @@ export default class EventFormBase extends Vue {
         : this.timeAndPlace.timeEnd,
     }
   }
+
   hasContent(): boolean {
     return (
       this.summary.name !== '' ||
@@ -212,6 +213,18 @@ export default class EventFormBase extends Vue {
       !this.summary.sharedRoom
     )
   }
+  cleanupContent(): void {
+    this.summary.name = ''
+    this.summary.description = ''
+    this.summary.tags = []
+    this.summary.groupName = ''
+    this.summary.place = ''
+    this.summary.timeStart = ''
+    this.summary.timeEnd = ''
+    this.summary.open = false
+    this.summary.sharedRoom = true
+  }
+
   mounted() {
     this.$watch('summary', () => {
       if (this.hasContent()) {
@@ -228,6 +241,8 @@ export default class EventFormBase extends Vue {
               '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
             )
           ) {
+            removeDraftConfirmer()
+            this.cleanupContent()
             next()
           } else {
             next(false)

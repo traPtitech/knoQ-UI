@@ -68,6 +68,13 @@ export default class GroupNew extends Vue {
       this.group.name !== '' || this.group.description !== '' || this.group.open
     )
   }
+
+  cleanupContent(): void {
+    this.group.name = ''
+    this.group.description = ''
+    this.group.open = false
+  }
+
   mounted() {
     this.$watch(
       'group',
@@ -88,6 +95,8 @@ export default class GroupNew extends Vue {
               '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
             )
           ) {
+            removeDraftConfirmer()
+            this.cleanupContent()
             next()
           } else {
             next(false)
