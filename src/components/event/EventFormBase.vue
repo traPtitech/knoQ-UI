@@ -78,6 +78,7 @@ import FormBackButton from '@/components/shared/FormBackButton.vue'
 import { useDraftConfirmer } from '@/workers/draftConfirmer'
 import { removeDraftConfirmer } from '@/workers/draftConfirmer'
 import router from '@/router'
+import { Route } from 'vue-router'
 
 export type EventInput = EventInputContent &
   (
@@ -117,6 +118,10 @@ export default class EventFormBase extends Vue {
   timeAndPlaceInstant: EventInputTimeAndPlaceInstant = null!
 
   instant: boolean = null!
+
+  originalSummary: EventSummary = null!
+
+  beforeEachControl: (() => void) | null = null
 
   created() {
     this.content = {
@@ -200,19 +205,15 @@ export default class EventFormBase extends Vue {
     }
   }
 
-  hasContent(): boolean {
-    return (
-      this.summary.name !== '' ||
-      this.summary.description !== '' ||
-      this.summary.tags.length > 0 ||
-      this.summary.groupName !== '' ||
-      this.summary.place !== '' ||
-      this.summary.timeStart !== '' ||
-      this.summary.timeEnd !== '' ||
-      this.summary.open ||
-      !this.summary.sharedRoom
-    )
+  isChanged(): boolean {
+    if (this.summary && this.originalSummary) {
+      return (
+        JSON.stringify(this.summary) !== JSON.stringify(this.originalSummary)
+      )
+    }
+    return false
   }
+
   cleanupContent(): void {
     this.summary.name = ''
     this.summary.description = ''
@@ -225,39 +226,89 @@ export default class EventFormBase extends Vue {
     this.summary.sharedRoom = true
   }
 
-  mounted() {
-    this.$watch('summary', () => {
-      if (this.hasContent()) {
-        useDraftConfirmer()
-      } else {
-        removeDraftConfirmer()
-      }
-    })
-    router.beforeEach((to, from, next) => {
-      if (from.name === 'EventNew') {
-        if (this.hasContent()) {
-          if (
-            confirm(
-              '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
-            )
-          ) {
-            removeDraftConfirmer()
-            this.cleanupContent()
-            next()
-          } else {
-            next(false)
-          }
-        } else {
+  isEventNewOrEdit(): boolean {
+    const currentRoute: Route = this.$route
+    return currentRoute.name === 'EventNew'
+  }
+
+  beforLeaveGuardinEventEdit = (to, from, next) => {
+    if (from.name === 'EventEdit') {
+      if (this.isChanged()) {
+        if (
+          confirm(
+            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+          )
+        ) {
+          removeDraftConfirmer()
+          this.cleanupContent()
           next()
+        } else {
+          next(false)
         }
       } else {
         next()
       }
-    })
+    } else {
+      next()
+    }
+  }
+  beforLeaveGuardinEventNew = (to, from, next) => {
+    if (from.name === 'EventNew') {
+      if (this.isChanged()) {
+        if (
+          confirm(
+            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+          )
+        ) {
+          removeDraftConfirmer()
+          this.cleanupContent()
+          next()
+        } else {
+          next(false)
+        }
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  }
+
+  mounted() {
+    this.$watch(
+      'summary',
+      () => {
+        if (this.isChanged()) {
+          useDraftConfirmer()
+        } else {
+          removeDraftConfirmer()
+        }
+      },
+      { deep: true }
+    )
+    if (this.isEventNewOrEdit()) {
+      this.beforeEachControl = router.beforeEach(this.beforLeaveGuardinEventNew)
+    } else {
+      this.beforeEachControl = router.beforeEach(
+        this.beforLeaveGuardinEventEdit
+      )
+    }
+    this.originalSummary = JSON.parse(JSON.stringify(this.summary))
+  }
+
+  beforeDestroy() {
+    if (this.beforeEachControl) {
+      this.beforeEachControl()
+    }
   }
 
   @Emit()
   submit(): EventOutput {
+    removeDraftConfirmer()
+    this.cleanupContent()
+    if (this.beforeEachControl) {
+      this.beforeEachControl()
+    }
     return {
       ...this.content,
       group: this.content.group!,

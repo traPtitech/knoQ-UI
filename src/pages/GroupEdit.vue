@@ -56,6 +56,9 @@ import FormBackButton from '@/components/shared/FormBackButton.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import api, { RequestGroup } from '@/api'
+import router from '@/router'
+import { useDraftConfirmer } from '@/workers/draftConfirmer'
+import { removeDraftConfirmer } from '@/workers/draftConfirmer'
 
 @Component({
   components: {
@@ -74,6 +77,8 @@ export default class GroupEdit extends Vue {
   step = 1
 
   group: RequestGroup | null = null
+  originalGroup: RequestGroup | null = null
+  beforeEachControl: (() => void) | null = null
 
   get groupId() {
     return this.$route.params.id
@@ -84,11 +89,45 @@ export default class GroupEdit extends Vue {
     try {
       const group = await api.groups.getGroup({ groupID: this.groupId })
       this.group = group
+      this.originalGroup = JSON.parse(JSON.stringify(group))
       this.canEdit =
         !group.isTraQGroup && !!this.me && group.admins.includes(this.me)
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
+    }
+  }
+
+  isChanged(): boolean {
+    if (this.group && this.originalGroup) {
+      return JSON.stringify(this.group) !== JSON.stringify(this.originalGroup)
+    }
+    return false
+  }
+
+  cleanupContent(): void {
+    this.group = this.originalGroup
+  }
+
+  beforeLeaveGuard = (to, from, next) => {
+    if (from.path === `/groups/edit/${this.groupId}`) {
+      if (this.isChanged()) {
+        if (
+          confirm(
+            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+          )
+        ) {
+          removeDraftConfirmer()
+          this.cleanupContent()
+          next()
+        } else {
+          next(false)
+        }
+      } else {
+        next()
+      }
+    } else {
+      next()
     }
   }
 
@@ -99,6 +138,8 @@ export default class GroupEdit extends Vue {
         groupID: this.groupId,
         requestGroup: this.group,
       })
+      removeDraftConfirmer()
+      this.cleanupContent()
       this.$router.push(`/groups/${this.groupId}`)
     } catch (__) {
       alert('Failed to submit...')
@@ -125,9 +166,32 @@ export default class GroupEdit extends Vue {
     if (!confirmed) return
     try {
       await api.groups.deleteGroup({ groupID: this.groupId })
-      this.$router.push('/')
-    } catch (__) {
-      alert('Failed to submit...')
+      removeDraftConfirmer()
+      this.cleanupContent()
+      this.$router.push('/groups')
+    } catch (error) {
+      alert('Failed to delete...')
+    }
+  }
+
+  mounted() {
+    this.$watch(
+      'group',
+      () => {
+        if (this.isChanged()) {
+          useDraftConfirmer()
+        } else {
+          removeDraftConfirmer()
+        }
+      },
+      { deep: true }
+    )
+    this.beforeEachControl = router.beforeEach(this.beforeLeaveGuard)
+  }
+
+  beforeDestroy() {
+    if (this.beforeEachControl) {
+      this.beforeEachControl()
     }
   }
 

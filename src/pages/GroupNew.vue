@@ -51,6 +51,8 @@ export default class GroupNew extends Vue {
   valid = false
   step = 1
 
+  beforeEachControl: (() => void) | null = null
+
   group: RequestGroup = {
     name: '',
     description: '',
@@ -75,6 +77,28 @@ export default class GroupNew extends Vue {
     this.group.open = false
   }
 
+  beforeLeaveGuard = (to, from, next) => {
+    if (from.name === 'GroupNew') {
+      if (this.hasContent()) {
+        if (
+          confirm(
+            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+          )
+        ) {
+          removeDraftConfirmer()
+          this.cleanupContent()
+          next()
+        } else {
+          next(false)
+        }
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  }
+
   mounted() {
     this.$watch(
       'group',
@@ -87,27 +111,13 @@ export default class GroupNew extends Vue {
       },
       { deep: true }
     )
-    router.beforeEach((to, from, next) => {
-      if (from.name === 'GroupNew') {
-        if (this.hasContent()) {
-          if (
-            confirm(
-              '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
-            )
-          ) {
-            removeDraftConfirmer()
-            this.cleanupContent()
-            next()
-          } else {
-            next(false)
-          }
-        } else {
-          next()
-        }
-      } else {
-        next()
-      }
-    })
+    this.beforeEachControl = router.beforeEach(this.beforeLeaveGuard)
+  }
+
+  beforeDestroy() {
+    if (this.beforeEachControl) {
+      this.beforeEachControl()
+    }
   }
 
   async submitGroup() {
@@ -117,6 +127,8 @@ export default class GroupNew extends Vue {
       alert('Failed to submit...')
       return
     }
+    removeDraftConfirmer()
+    this.cleanupContent()
     this.$router.push('/events/new')
   }
 }
