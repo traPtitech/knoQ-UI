@@ -232,46 +232,43 @@ export default class EventFormBase extends Vue {
   }
 
   beforLeaveGuardinEventEdit = (to, from, next) => {
-    if (from.name === 'EventEdit') {
-      if (this.isChanged()) {
-        if (
-          confirm(
-            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
-          )
-        ) {
-          removeDraftConfirmer()
-          this.cleanupContent()
-          next()
-        } else {
-          next(false)
-        }
-      } else {
-        next()
-      }
-    } else {
-      next()
+    if (from.name !== 'EventEdit') {
+      return next()
     }
+
+    if (!this.isChanged()) {
+      return next()
+    }
+
+    if (
+      confirm(
+        '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+      )
+    ) {
+      removeDraftConfirmer()
+      this.cleanupContent()
+      return next()
+    }
+
+    return next(false)
   }
+
   beforLeaveGuardinEventNew = (to, from, next) => {
-    if (from.name === 'EventNew') {
-      if (this.isChanged()) {
-        if (
-          confirm(
-            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
-          )
-        ) {
-          removeDraftConfirmer()
-          this.cleanupContent()
-          next()
-        } else {
-          next(false)
-        }
-      } else {
-        next()
-      }
-    } else {
-      next()
+    if (from.name !== 'EventNew' || !this.isChanged()) {
+      return next()
     }
+
+    if (
+      confirm(
+        '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+      )
+    ) {
+      removeDraftConfirmer()
+      this.cleanupContent()
+      return next()
+    }
+
+    return next(false)
   }
 
   mounted() {

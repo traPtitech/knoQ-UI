@@ -110,25 +110,21 @@ export default class GroupEdit extends Vue {
   }
 
   beforeLeaveGuard = (to, from, next) => {
-    if (from.path === `/groups/edit/${this.groupId}`) {
-      if (this.isChanged()) {
-        if (
-          confirm(
-            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
-          )
-        ) {
-          removeDraftConfirmer()
-          this.cleanupContent()
-          next()
-        } else {
-          next(false)
-        }
-      } else {
-        next()
-      }
-    } else {
-      next()
+    if (from.path !== `/groups/edit/${this.groupId}` || !this.isChanged()) {
+      return next()
     }
+
+    if (
+      confirm(
+        '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+      )
+    ) {
+      removeDraftConfirmer()
+      this.cleanupContent()
+      return next()
+    }
+
+    return next(false)
   }
 
   async submitGroup() {

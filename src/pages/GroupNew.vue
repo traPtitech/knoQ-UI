@@ -78,25 +78,21 @@ export default class GroupNew extends Vue {
   }
 
   beforeLeaveGuard = (to, from, next) => {
-    if (from.name === 'GroupNew') {
-      if (this.hasContent()) {
-        if (
-          confirm(
-            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
-          )
-        ) {
-          removeDraftConfirmer()
-          this.cleanupContent()
-          next()
-        } else {
-          next(false)
-        }
-      } else {
-        next()
-      }
-    } else {
-      next()
+    if (from.name !== 'GroupNew' || this.hasContent()) {
+      return next()
     }
+
+    if (
+      confirm(
+        '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+      )
+    ) {
+      removeDraftConfirmer()
+      this.cleanupContent()
+      return next()
+    }
+
+    return next(false)
   }
 
   mounted() {
