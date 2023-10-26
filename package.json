@@ -48,7 +48,7 @@
     "prettier": "2.8",
     "sass": "~1.63",
     "typescript": "5.2.2",
-    "unplugin-vue-components": "^0.25.1",
+    "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
     "vue-template-compiler": "^2.7.14"
   },
