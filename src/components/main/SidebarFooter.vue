@@ -59,6 +59,8 @@
 
 <script lang="ts">
 import { isValidVerifiedroomData } from '@/workers/isValidVerifiedroomData'
+import { useDraftConfirmer } from '@/workers/draftConfirmer'
+import { removeDraftConfirmer } from '@/workers/draftConfirmer'
 import { baseURL } from '@/workers/api'
 
 export default {
@@ -75,21 +77,42 @@ export default {
       return this.$store.direct.state.me?.privileged ?? false
     },
   },
+  mounted: function () {
+    this.$watch('inputData', newVal => {
+      if (newVal !== '') {
+        useDraftConfirmer()
+      } else {
+        removeDraftConfirmer()
+      }
+    })
+  },
   methods: {
     showModal() {
       this.isVisible = true
     },
     hideModal() {
-      this.isVisible = false
-      this.showError = false
-      this.inputData = ''
+      if (this.inputData) {
+        if (
+          confirm(
+            '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+          )
+        ) {
+          this.isVisible = false
+          this.showError = false
+          this.inputData = ''
+        }
+        return
+      } else {
+        this.isVisible = false
+        this.showError = false
+        this.inputData = ''
+      }
     },
     async saveData() {
       if (isValidVerifiedroomData(this.inputData)) {
         this.showError = false
         try {
           await fetch(`${baseURL}/rooms/all`, {
-            //開発環境url
             method: 'POST',
             credentials: 'include',
             headers: {

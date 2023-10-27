@@ -35,6 +35,9 @@ import GroupFormSummary from '@/components/group/GroupFormSummary.vue'
 import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 import api, { RequestGroup } from '@/api'
+import { useDraftConfirmer } from '@/workers/draftConfirmer'
+import { removeDraftConfirmer } from '@/workers/draftConfirmer'
+import router from '@/router'
 
 @Component({
   components: {
@@ -48,6 +51,8 @@ export default class GroupNew extends Vue {
   valid = false
   step = 1
 
+  beforeEachControl: (() => void) | null = null
+
   group: RequestGroup = {
     name: '',
     description: '',
@@ -60,6 +65,57 @@ export default class GroupNew extends Vue {
       : [],
   }
 
+  hasContent(): boolean {
+    return (
+      this.group.name !== '' || this.group.description !== '' || this.group.open
+    )
+  }
+
+  cleanupContent(): void {
+    this.group.name = ''
+    this.group.description = ''
+    this.group.open = false
+  }
+
+  beforeLeaveGuard = (to, from, next) => {
+    if (from.name !== 'GroupNew' || this.hasContent()) {
+      return next()
+    }
+
+    if (
+      confirm(
+        '入力されたデータは送信されないまま破棄されますが，よろしいですか。'
+      )
+    ) {
+      removeDraftConfirmer()
+      this.cleanupContent()
+      return next()
+    }
+
+    return next(false)
+  }
+
+  mounted() {
+    this.$watch(
+      'group',
+      () => {
+        if (this.hasContent()) {
+          useDraftConfirmer()
+        } else {
+          removeDraftConfirmer()
+        }
+      },
+      { deep: true }
+    )
+    this.beforeEachControl = router.beforeEach(this.beforeLeaveGuard)
+  }
+
+  beforeDestroy() {
+    if (this.beforeEachControl) {
+      this.beforeEachControl()
+    }
+  }
+
   async submitGroup() {
     try {
       await api.groups.createGroup({ requestGroup: this.group })
@@ -67,6 +123,8 @@ export default class GroupNew extends Vue {
       alert('Failed to submit...')
       return
     }
+    removeDraftConfirmer()
+    this.cleanupContent()
     this.$router.push('/events/new')
   }
 }
