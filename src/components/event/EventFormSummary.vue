@@ -48,6 +48,30 @@
       <div v-if="!description" class="text--secondary">説明はありません</div>
       <MarkdownField v-else :src="description" />
     </SummaryItem>
+    <SummaryItem>
+      <SummaryItemCaption>Targets</SummaryItemCaption>
+      <v-list>
+        <div v-if="!targets.length" class="text--secondary">
+          対象者はいません
+        </div>
+        <v-list-item v-for="target in targetsSlice" :key="target.userId">
+          <v-list-item-avatar>
+            <user-avatar
+              size="36"
+              :user-id="target.name"
+              :user-icon="target.icon"
+            />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            {{ target.name }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <v-pagination
+        v-model="page"
+        :length="Math.ceil(targets.length / targetsPerPage)"
+      />
+    </SummaryItem>
   </div>
 </template>
 
@@ -63,6 +87,8 @@ import SummaryItemText from '@/components/shared/SummaryItemText.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 import EventPlace from '@/components/event/EventPlace.vue'
+import { EventInputContent } from '@/components/event/EventFormContent.vue'
+import { ResponseUser } from '@/api'
 export type EventSummary = {
   name: string
   description: string
@@ -89,6 +115,9 @@ export type EventSummary = {
   },
 })
 export default class EventFormSummary extends Vue {
+  @Prop({ type: Object, required: true })
+  content!: EventInputContent
+
   @Prop({ type: String, required: true })
   name!: string
 
@@ -119,6 +148,9 @@ export default class EventFormSummary extends Vue {
   @Prop({ type: Boolean, required: true })
   sharedRoom!: boolean
 
+  page: number = 1
+  targetsPerPage: number = 6
+
   get sharedRoomString(): string {
     return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
   }
@@ -143,6 +175,23 @@ export default class EventFormSummary extends Vue {
 
   get formatDate() {
     return formatDate(DATETIME_DISPLAY_FORMAT)
+  }
+
+  get targets(): ResponseUser[] {
+    const userById = this.$store.direct.getters.usersCache.userById
+    if (!this.content.group) return []
+    let targets = this.content.group.members.flatMap(userId => {
+      const user = userById(userId)
+      return user ? user : []
+    })
+    return targets
+  }
+
+  get targetsSlice(): ResponseUser[] {
+    return this.targets.slice(
+      (this.page - 1) * this.targetsPerPage,
+      this.page * this.targetsPerPage
+    )
   }
 }
 </script>
