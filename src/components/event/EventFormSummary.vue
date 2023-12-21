@@ -49,12 +49,12 @@
       <MarkdownField v-else :src="description" />
     </SummaryItem>
     <SummaryItem>
-      <SummaryItemCaption>Targets</SummaryItemCaption>
+      <SummaryItemCaption>Invitees</SummaryItemCaption>
       <v-list>
-        <div v-if="!targets.length" class="text--secondary">
-          対象者はいません
+        <div v-if="!invitees.length" class="text--secondary">
+          参加予定者はいません
         </div>
-        <v-list-item v-for="target in targetsSlice" :key="target.userId">
+        <v-list-item v-for="target in inviteesSlice" :key="target.userId">
           <v-list-item-avatar>
             <user-avatar
               size="36"
@@ -69,7 +69,7 @@
       </v-list>
       <v-pagination
         v-model="page"
-        :length="Math.ceil(targets.length / targetsPerPage)"
+        :length="Math.ceil(invitees.length / inviteesPerPage)"
       />
     </SummaryItem>
   </div>
@@ -149,7 +149,7 @@ export default class EventFormSummary extends Vue {
   sharedRoom!: boolean
 
   page: number = 1
-  targetsPerPage: number = 6
+  inviteesPerPage: number = 6
 
   get sharedRoomString(): string {
     return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
@@ -177,20 +177,20 @@ export default class EventFormSummary extends Vue {
     return formatDate(DATETIME_DISPLAY_FORMAT)
   }
 
-  get targets(): ResponseUser[] {
+  get invitees(): ResponseUser[] {
     const userById = this.$store.direct.getters.usersCache.userById
     if (!this.content.group) return []
-    let targets = this.content.group.members.flatMap(userId => {
+    let invitees = this.content.group.members.flatMap(userId => {
       const user = userById(userId)
       return user ? user : []
     })
-    return targets
+    return invitees
   }
 
-  get targetsSlice(): ResponseUser[] {
-    return this.targets.slice(
-      (this.page - 1) * this.targetsPerPage,
-      this.page * this.targetsPerPage
+  get inviteesSlice(): ResponseUser[] {
+    return this.invitees.slice(
+      (this.page - 1) * this.inviteesPerPage,
+      this.page * this.inviteesPerPage
     )
   }
 }
