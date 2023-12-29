@@ -24,6 +24,18 @@
         <v-icon :color="openIcon.color" large>{{ openIcon.icon }}</v-icon>
         <span class="text-h6 ml-2">{{ openString }}</span>
       </SummaryItemText>
+      <v-alert
+        v-if="!open"
+        border="left"
+        colored-border
+        type="warning"
+        elevation="1"
+        class="mt-3"
+        max-width="900px"
+      >
+        グループ外の人が参加できない場合，グループ外の人にはイベントの作成通知が届きません。<br />
+        また，途中でこの設定を変更した場合，すでに参加登録していたグループ外の人にも通知が届かなくなります。
+      </v-alert>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Date</SummaryItemCaption>
