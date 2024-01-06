@@ -46,7 +46,7 @@
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <event-form-summary v-bind="{ ...summary, content }" />
+        <event-form-summary v-bind="{ ...summary, content, isEdit: isEdit }" />
         <form-back-button class="mr-2" @click="step = 2">
           Back
         </form-back-button>
@@ -108,6 +108,9 @@ enum TimeAndPlaceFormTab {
   },
 })
 export default class EventFormBase extends Vue {
+  @Prop({ type: Boolean, required: true })
+  isEdit!: boolean
+
   @Prop({ type: Object })
   event!: EventInput | null | undefined
 
