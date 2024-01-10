@@ -9,7 +9,11 @@
       </span>
     </template>
     <template v-else>
-      <event-form-base class="mb-5" :event="event" @submit="submit" />
+      <event-form-base
+        class="mb-5"
+        v-bind="{ event, isEdit: true }"
+        @submit="submit"
+      />
 
       <v-card class="px-5 pt-5 pb-3">
         <span class="headline mr-3"> Delete this event </span>

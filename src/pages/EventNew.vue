@@ -3,7 +3,11 @@
     <progress-circular v-if="status === 'loading'" />
     <load-failed-text v-else-if="status === 'error'" />
     <template v-else>
-      <event-form-base :event="event" @submit="submit" />
+      <event-form-base
+        class="mb-5"
+        v-bind="{ event, isEdit: false }"
+        @submit="submit"
+      />
     </template>
   </v-container>
 </template>

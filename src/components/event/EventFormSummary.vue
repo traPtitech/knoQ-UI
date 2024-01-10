@@ -24,6 +24,16 @@
         <v-icon :color="openIcon.color" large>{{ openIcon.icon }}</v-icon>
         <span class="text-h6 ml-2">{{ openString }}</span>
       </SummaryItemText>
+      <v-alert
+        v-if="!open && isEdit && openChanged()"
+        border="left"
+        colored-border
+        type="warning"
+        elevation="1"
+        class="mt-3"
+      >
+        グループ外の参加者を許可しない場合、既に登録されているグループ外の参加者の参加情報は削除されます。
+      </v-alert>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Date</SummaryItemCaption>
@@ -148,8 +158,12 @@ export default class EventFormSummary extends Vue {
   @Prop({ type: Boolean, required: true })
   sharedRoom!: boolean
 
+  @Prop({ type: Boolean, required: true })
+  isEdit!: boolean
+
   page: number = 1
   inviteesPerPage: number = 6
+  originalOpen: boolean = null!
 
   get sharedRoomString(): string {
     return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
@@ -192,6 +206,14 @@ export default class EventFormSummary extends Vue {
       (this.page - 1) * this.inviteesPerPage,
       this.page * this.inviteesPerPage
     )
+  }
+
+  openChanged(): boolean {
+    return this.originalOpen !== this.open
+  }
+
+  created() {
+    this.originalOpen = this.open
   }
 }
 </script>
