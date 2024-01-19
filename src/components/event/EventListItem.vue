@@ -9,7 +9,9 @@
       </div>
       <div>@{{ event.place }}</div>
     </v-card-subtitle>
-    <v-card-text><MarkdownField :src="event.description" /></v-card-text>
+    <v-card-text
+      ><MarkdownField :src="event.description" class="markdown-field"
+    /></v-card-text>
     <v-card-actions class="px-4">
       <v-row dense>
         <v-col sm="" cols="12">
@@ -56,3 +58,10 @@ export default class EventListItem extends Vue {
   }
 }
 </script>
+<style scoped>
+.markdown-field {
+  padding-top: 4px;
+  max-height: 200px;
+  overflow: auto;
+}
+</style>
