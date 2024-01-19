@@ -9,7 +9,9 @@
       </div>
       <div>@{{ event.place }}</div>
     </v-card-subtitle>
-    <v-card-text class="text-truncate">{{ event.description }}</v-card-text>
+    <v-card-text class="text-truncate"
+      ><MarkdownField :src="event.description"
+    /></v-card-text>
     <v-card-actions class="px-4">
       <v-row dense>
         <v-col sm="" cols="12">
@@ -36,6 +38,7 @@ import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
 import UserAvatar from '@/components/shared/UserAvatar.vue'
 import EventTag from '@/components/shared/EventTag.vue'
+import MarkdownField from '@/components/shared/MarkdownField.vue'
 import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
 import { ResponseEvent } from '@/api'
 
@@ -43,6 +46,7 @@ import { ResponseEvent } from '@/api'
   components: {
     UserAvatar,
     EventTag,
+    MarkdownField,
   },
 })
 export default class EventListItem extends Vue {
