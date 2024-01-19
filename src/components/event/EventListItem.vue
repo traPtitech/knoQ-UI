@@ -9,9 +9,7 @@
       </div>
       <div>@{{ event.place }}</div>
     </v-card-subtitle>
-    <v-card-text class="text-truncate"
-      ><MarkdownField :src="event.description"
-    /></v-card-text>
+    <v-card-text><MarkdownField :src="event.description" /></v-card-text>
     <v-card-actions class="px-4">
       <v-row dense>
         <v-col sm="" cols="12">
