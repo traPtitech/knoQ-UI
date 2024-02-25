@@ -142,23 +142,31 @@ export default class EventFormContent extends Vue {
   created() {
     Promise.all([this.fetchGroups(), this.fetchTags()])
   }
+  sortGroups = (
+    a: ResponseGroup,
+    b: ResponseGroup,
+    currentUser: ResponseUser
+  ) => {
+    const adminA = a.admins.includes(currentUser.userId) ? -1 : 1
+    const adminB = b.admins.includes(currentUser.userId) ? -1 : 1
+    if (adminA !== adminB) {
+      return adminA - adminB
+    } else {
+      return a.name.localeCompare(b.name)
+    }
+  }
   async fetchGroups() {
     const [groups, groupIds] = await Promise.all([
       api.groups.getGroups(),
       api.groups.getMyGroups({ relation: GetMyGroupsRelationEnum.Belongs }),
     ])
-    const currentUser = this.$store.direct.state.me! // 現在のユーザー情報を取得しているので，nullではないとしてよい？
-    const adminGroups = groups.filter(group =>
-      group.admins.includes(currentUser.userId)
-    )
-    adminGroups.sort((a, b) => a.name.localeCompare(b.name))
-    const memberGroups = groups.filter(
-      group =>
-        !group.admins.includes(currentUser.userId) &&
-        groupIds.includes(group.groupId)
-    )
-    memberGroups.sort((a, b) => a.name.localeCompare(b.name))
-    this.allGroups = adminGroups.concat(memberGroups)
+    const currentUser = this.$store.direct.state.me!
+    if (!currentUser) {
+      return
+    }
+    this.allGroups = groups
+      .sort((a, b) => this.sortGroups(a, b, currentUser))
+      .filter(group => groupIds.includes(group.groupId))
   }
   async fetchTags() {
     this.allTags = (await api.tags.getTag()).map(({ name }) => name)
