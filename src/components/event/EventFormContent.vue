@@ -147,7 +147,18 @@ export default class EventFormContent extends Vue {
       api.groups.getGroups(),
       api.groups.getMyGroups({ relation: GetMyGroupsRelationEnum.Belongs }),
     ])
-    this.allGroups = groups.filter(group => groupIds.includes(group.groupId))
+    const currentUser = this.$store.direct.state.me! // 現在のユーザー情報を取得しているので，nullではないとしてよい？
+    const adminGroups = groups.filter(group =>
+      group.admins.includes(currentUser.userId)
+    )
+    adminGroups.sort((a, b) => a.name.localeCompare(b.name))
+    const memberGroups = groups.filter(
+      group =>
+        !group.admins.includes(currentUser.userId) &&
+        groupIds.includes(group.groupId)
+    )
+    memberGroups.sort((a, b) => a.name.localeCompare(b.name))
+    this.allGroups = adminGroups.concat(memberGroups)
   }
   async fetchTags() {
     this.allTags = (await api.tags.getTag()).map(({ name }) => name)

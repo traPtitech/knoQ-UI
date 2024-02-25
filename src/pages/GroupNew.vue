@@ -78,7 +78,7 @@ export default class GroupNew extends Vue {
   }
 
   beforeLeaveGuard = (to, from, next) => {
-    if (from.name !== 'GroupNew' || this.hasContent()) {
+    if (to.name === 'EventNew' || !this.hasContent()) {
       return next()
     }
 
