@@ -7,7 +7,7 @@
       :rules="$rules.eventPlace"
     />
     <v-text-field
-      v-model="dateMem"
+      v-model="dateStartMem"
       filled
       label="開催日"
       :rules="$rules.eventDate"
@@ -19,6 +19,13 @@
       label="開始時刻"
       :rules="$rules.eventTimeStartInstant(timeEndMem)"
       type="time"
+    />
+    <v-text-field
+      v-model="dateEndMem"
+      filled
+      label="終了日"
+      :rules="$rules.eventDate"
+      type="date"
     />
     <v-text-field
       v-model="timeEndMem"
@@ -55,18 +62,19 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   @Prop({ type: Boolean, required: true })
   value!: boolean
 
-  private dateMem = ''
+  private dateStartMem = ''
+  private dateEndMem = ''
   private timeStartMem = ''
   private timeEndMem = ''
 
   @Watch('timeStartInput', { immediate: true })
   private onTimeStartPropChange() {
-    this.dateMem = this.timeStartInput && getDate(this.timeStartInput)
+    this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)
     this.timeStartMem = this.timeStartInput && getTime(this.timeStartInput)
   }
   @Watch('timeEndInput', { immediate: true })
   private onTimeEndPropChange() {
-    this.dateMem = this.timeEndInput && getDate(this.timeStartInput)
+    this.dateEndMem = this.timeEndInput && getDate(this.timeEndInput)
     this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
@@ -86,15 +94,15 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   @Watch('dateMem')
   @Watch('timeStartMem')
   private onTimeStartMemChange() {
-    if (this.dateMem && this.timeStartMem) {
-      this.timeStartInput = getIso8601(this.dateMem, this.timeStartMem)
+    if (this.dateStartMem && this.timeStartMem) {
+      this.timeStartInput = getIso8601(this.dateStartMem, this.timeStartMem)
     }
   }
   @Watch('dateMem')
   @Watch('timeEndMem')
   private onTimeEndMemChange() {
-    if (this.dateMem && this.timeEndMem) {
-      this.timeEndInput = getIso8601(this.dateMem, this.timeEndMem)
+    if (this.dateEndMem && this.timeEndMem) {
+      this.timeEndInput = getIso8601(this.dateEndMem, this.timeEndMem)
     }
   }
 
