@@ -10,7 +10,10 @@
       v-model="dateStartMem"
       filled
       label="開催日"
-      :rules="$rules.eventDate"
+      :rules="
+        $rules.eventDate &&
+        $rules.eventTimeInstant(timeStartInput, timeEndInput)
+      "
       type="date"
       @blur="setDefaultDateEnd"
     />
@@ -18,21 +21,24 @@
       v-model="timeStartMem"
       filled
       label="開始時刻"
-      :rules="$rules.eventTimeStartInstant(timeEndMem)"
+      :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
     />
     <v-text-field
       v-model="dateEndMem"
       filled
       label="終了日"
-      :rules="$rules.eventDate"
+      :rules="
+        $rules.eventDate &&
+        $rules.eventTimeInstant(timeStartInput, timeEndInput)
+      "
       type="date"
     />
     <v-text-field
       v-model="timeEndMem"
       filled
       label="終了時刻"
-      :rules="$rules.eventTimeEndInstant(timeStartMem)"
+      :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
     />
   </v-form>
