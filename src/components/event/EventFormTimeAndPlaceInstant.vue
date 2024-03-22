@@ -7,24 +7,38 @@
       :rules="$rules.eventPlace"
     />
     <v-text-field
-      v-model="dateMem"
+      v-model="dateStartMem"
       filled
       label="開催日"
-      :rules="$rules.eventDate"
+      :rules="
+        $rules.eventDate &&
+        $rules.eventTimeInstant(timeStartInput, timeEndInput)
+      "
       type="date"
+      @blur="setDefaultDateEnd"
     />
     <v-text-field
       v-model="timeStartMem"
       filled
       label="開始時刻"
-      :rules="$rules.eventTimeStartInstant(timeEndMem)"
+      :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
+    />
+    <v-text-field
+      v-model="dateEndMem"
+      filled
+      label="終了日"
+      :rules="
+        $rules.eventDate &&
+        $rules.eventTimeInstant(timeStartInput, timeEndInput)
+      "
+      type="date"
     />
     <v-text-field
       v-model="timeEndMem"
       filled
       label="終了時刻"
-      :rules="$rules.eventTimeEndInstant(timeStartMem)"
+      :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
     />
   </v-form>
@@ -55,18 +69,20 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   @Prop({ type: Boolean, required: true })
   value!: boolean
 
-  private dateMem = ''
+  private dateStartMem = ''
+  private dateEndMem = ''
   private timeStartMem = ''
   private timeEndMem = ''
 
   @Watch('timeStartInput', { immediate: true })
   private onTimeStartPropChange() {
-    this.dateMem = this.timeStartInput && getDate(this.timeStartInput)
+    this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)
     this.timeStartMem = this.timeStartInput && getTime(this.timeStartInput)
   }
+
   @Watch('timeEndInput', { immediate: true })
   private onTimeEndPropChange() {
-    this.dateMem = this.timeEndInput && getDate(this.timeStartInput)
+    this.dateEndMem = this.timeEndInput && getDate(this.timeEndInput)
     this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
@@ -83,18 +99,23 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     this.form.validate()
   }
 
-  @Watch('dateMem')
+  @Watch('dateStartMem')
   @Watch('timeStartMem')
   private onTimeStartMemChange() {
-    if (this.dateMem && this.timeStartMem) {
-      this.timeStartInput = getIso8601(this.dateMem, this.timeStartMem)
+    if (this.dateStartMem && this.timeStartMem) {
+      this.timeStartInput = getIso8601(this.dateStartMem, this.timeStartMem)
     }
   }
-  @Watch('dateMem')
+
+  private setDefaultDateEnd() {
+    if (!this.dateEndMem) this.dateEndMem = this.dateStartMem
+  }
+
+  @Watch('dateEndMem')
   @Watch('timeEndMem')
   private onTimeEndMemChange() {
-    if (this.dateMem && this.timeEndMem) {
-      this.timeEndInput = getIso8601(this.dateMem, this.timeEndMem)
+    if (this.dateEndMem && this.timeEndMem) {
+      this.timeEndInput = getIso8601(this.dateEndMem, this.timeEndMem)
     }
   }
 

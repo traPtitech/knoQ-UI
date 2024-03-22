@@ -53,14 +53,12 @@ const rules = {
       (v >= roomStartTime! && v <= roomEndTime!) ||
       '進捗部屋の利用可能な時間を選択してください',
   ],
-  eventTimeStartInstant: (endTime: string) => [
-    (v: string) => !!v || '開始時刻は必須です',
-    (v: string) =>
-      !endTime || v < endTime || '開始時刻は終了時刻よりも早くしてください',
-  ],
-  eventTimeEndInstant: (startTime: string) => [
-    (v: string) => !!v || '終了時刻は必須です',
-    (v: string) => v > startTime || '終了時刻は開始時刻よりも遅くしてください',
+  eventTimeInstant: (startTime: string, endTime: string) => [
+    () =>
+      !startTime ||
+      !endTime ||
+      startTime < endTime ||
+      '終了日時が開始日時よりも遅くなるようにしてください',
   ],
 }
 
