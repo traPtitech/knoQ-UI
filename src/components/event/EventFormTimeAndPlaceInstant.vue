@@ -74,25 +74,13 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   private timeStartMem = ''
   private timeEndMem = ''
 
-  @Watch('timeStartInput', { immediate: true })
-  private onTimeStartPropChange() {
-    this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)
-    this.timeStartMem = this.timeStartInput && getTime(this.timeStartInput)
-  }
-
-  @Watch('timeEndInput', { immediate: true })
-  private onTimeEndPropChange() {
-    this.dateEndMem = this.timeEndInput && getDate(this.timeEndInput)
-    this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
-  }
-
   @Ref()
   readonly form!: { validate(): void }
 
-  @Watch('timeStartMem')
-  @Watch('timeEndMem')
-  private async onTimeMemFixed() {
-    if (!this.timeStartMem || !this.timeEndMem) {
+  @Watch('timeStartInput')
+  @Watch('timeEndInput')
+  private async onDateTimeFixed() {
+    if (!this.timeStartInput || !this.timeEndInput) {
       return
     }
     await this.$nextTick()
