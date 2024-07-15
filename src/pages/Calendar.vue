@@ -1,6 +1,10 @@
 <template>
   <v-col>
-    <calendar :height="784" :events="events" />
+    <calendar
+      :height="784"
+      :events="events"
+      @monthChanged="fetchMonthlyEvents"
+    />
   </v-col>
 </template>
 
@@ -19,7 +23,16 @@ export default class CalendarPage extends Vue {
   events: ResponseEvent[] = []
 
   async created() {
-    this.events = await api.events.getEvents({})
+    await this.fetchMonthlyEvents(new Date())
+  }
+
+  async fetchMonthlyEvents(newDate) {
+    const startDate = new Date(newDate.getFullYear(), newDate.getMonth(), 1)
+    const endDate = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0)
+    this.events = await api.events.getEvents({
+      dateBegin: startDate.toISOString(),
+      dateEnd: endDate.toISOString(),
+    })
   }
 }
 </script>

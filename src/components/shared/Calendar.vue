@@ -56,6 +56,7 @@
         @click:event="showEvent"
         @click:more="viewDay"
         @click:date="viewDay"
+        @input="onMonthChange"
       />
 
       <v-menu
@@ -216,6 +217,10 @@ export default class Calendar extends Vue {
   get isMyEvent() {
     return (event: CalendarEvent) =>
       event?.admins.includes(this.$store.direct.state.me?.userId ?? '') ?? false
+  }
+  onMonthChange(value) {
+    value = new Date(value)
+    this.$emit('monthChanged', value)
   }
 }
 </script>
