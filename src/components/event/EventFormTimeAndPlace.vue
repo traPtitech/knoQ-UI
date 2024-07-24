@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" v-model="valid">
+  <v-form :ref="form" v-model="valid">
     <v-row>
       <v-col cols="12" md="" class="pl-4 flex-grow-0">
         <div class="text--secondary caption">
@@ -49,9 +49,8 @@
   </v-form>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop, PropSync, Watch, Ref } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed, nextTick, ref, watch } from 'vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
 import {
   formatDate,
@@ -61,7 +60,6 @@ import {
   getIso8601,
   getTime,
 } from '@/workers/date'
-import { strMax, strMin } from '@/workers/strCmp'
 import api, { ResponseRoom } from '@/api'
 
 export type EventInputTimeAndPlace = {
@@ -71,111 +69,118 @@ export type EventInputTimeAndPlace = {
   timeEnd: string
 }
 
-@Component({
-  components: {
-    Autocomplete,
+const props = defineProps<{
+  value: boolean
+  eventInputTimeAndPlace: EventInputTimeAndPlace
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:value', newValue: boolean): void
+  (e: 'update:eventInputTimeAndPlace', newValue: EventInputTimeAndPlace): void
+}>()
+
+const sharedRoomInput = computed({
+  get: () => props.eventInputTimeAndPlace.sharedRoom,
+  set: v =>
+    emit('update:eventInputTimeAndPlace', {
+      ...props.eventInputTimeAndPlace,
+      sharedRoom: v,
+    }),
+})
+const roomInput = computed({
+  get: () => props.eventInputTimeAndPlace.room,
+  set: v =>
+    emit('update:eventInputTimeAndPlace', {
+      ...props.eventInputTimeAndPlace,
+      room: v,
+    }),
+})
+const timeStartInput = computed({
+  get: () => props.eventInputTimeAndPlace.timeStart,
+  set: v =>
+    emit('update:eventInputTimeAndPlace', {
+      ...props.eventInputTimeAndPlace,
+      timeStart: v,
+    }),
+})
+const timeEndInput = computed({
+  get: () => props.eventInputTimeAndPlace.timeEnd,
+  set: v =>
+    emit('update:eventInputTimeAndPlace', {
+      ...props.eventInputTimeAndPlace,
+      timeEnd: v,
+    }),
+})
+const dates = ref<string[]>([])
+const allRooms = ref<ResponseRoom[]>([])
+
+;(async () => {
+  allRooms.value = (await api.rooms.getRooms({ dateBegin: today() })).filter(
+    room => room.verified
+  )
+})()
+
+const form = ref<{ validate(): void }>()
+
+const _timeStart = computed({
+  get: () => timeStartInput.value && getTime(timeStartInput.value),
+  set: time => {
+    if (roomInput.value) {
+      timeStartInput.value = getIso8601(
+        getDate(roomInput.value.timeStart),
+        time
+      )
+    }
   },
 })
-export default class EventFormTimeAndPlace extends Vue {
-  @Prop({ type: Boolean, required: true })
-  value!: boolean
 
-  @PropSync('room', {
-    validator: prop => typeof prop === 'object' || prop === null,
-    required: true,
-  })
-  roomInput!: ResponseRoom | null
+const _timeEnd = computed({
+  get: () => timeEndInput.value && getTime(timeEndInput.value),
+  set: time => {
+    if (roomInput.value) {
+      timeEndInput.value = getIso8601(getDate(roomInput.value.timeEnd), time)
+    }
+  },
+})
 
-  @PropSync('timeStart', { type: String, required: true })
-  timeStartInput!: string
+watch([sharedRoomInput, dates], () => {
+  roomInput.value = null
+  timeStartInput.value = ''
+  timeEndInput.value = ''
+})
 
-  @PropSync('timeEnd', { type: String, required: true })
-  timeEndInput!: string
+watch([_timeStart, _timeEnd, roomInput], async () => {
+  if (!_timeStart.value || _timeEnd.value) return
+  await nextTick()
+  if (!form.value) return
+  form.value.validate()
+})
 
-  @PropSync('sharedRoom', { type: Boolean, required: true })
-  sharedRoomInput!: boolean
+const dateMin = today()
+const roomStartTime = computed(
+  () => roomInput.value && getTime(roomInput.value.timeStart)
+)
+const roomEndTime = computed(() => roomInput.value && roomInput.value.timeEnd)
 
-  dates: string[] = []
-  allRooms: ResponseRoom[] = []
-
-  async created() {
-    this.allRooms = (await api.rooms.getRooms({ dateBegin: today() })).filter(
-      room => room.verified
+const availableRooms = computed((): ResponseRoom[] => {
+  const key = sharedRoomInput.value ? 'sharedTimes' : 'freeTimes'
+  return allRooms.value.flatMap(room =>
+    dates.value.flatMap(date =>
+      room[key]
+        .filter(({ timeStart }) => timeStart.startsWith(date))
+        .map(({ timeStart, timeEnd }) => ({ ...room, timeStart, timeEnd }))
     )
-  }
+  )
+})
 
-  @Watch('sharedRoomInput')
-  @Watch('dates')
-  onQueryChange() {
-    this.roomInput = null
-    this.timeStartInput = ''
-    this.timeEndInput = ''
-  }
-
-  @Ref()
-  readonly form!: { validate(): void }
-
-  @Watch('_timeStart')
-  @Watch('_timeEnd')
-  @Watch('roomInput')
-  private async onTimeFixed() {
-    if (!this._timeStart || !this._timeEnd) {
-      return
-    }
-    await this.$nextTick()
-    this.form.validate()
-  }
-
-  get _timeStart(): string {
-    return this.timeStartInput && getTime(this.timeStartInput)
-  }
-  set _timeStart(time: string) {
-    if (this.roomInput) {
-      this.timeStartInput = getIso8601(getDate(this.roomInput.timeStart), time)
-    }
-  }
-  get _timeEnd(): string {
-    return this.timeEndInput && getTime(this.timeEndInput)
-  }
-  set _timeEnd(time: string) {
-    if (this.roomInput) {
-      this.timeEndInput = getIso8601(getDate(this.roomInput.timeEnd), time)
-    }
-  }
-
-  get dateMin(): string {
-    return today()
-  }
-  get roomStartTime(): string | null {
-    return this.roomInput && getTime(this.roomInput.timeStart)
-  }
-
-  get roomEndTime(): string | null {
-    return this.roomInput && getTime(this.roomInput.timeEnd)
-  }
-
-  get availableRooms(): ResponseRoom[] {
-    const key = this.sharedRoomInput ? 'sharedTimes' : 'freeTimes'
-    return this.allRooms.flatMap(room =>
-      this.dates.flatMap(date =>
-        room[key]
-          .filter(({ timeStart }) => timeStart.startsWith(date))
-          .map(({ timeStart, timeEnd }) => ({ ...room, timeStart, timeEnd }))
-      )
-    )
-  }
-
-  get formatAvailableRoom() {
-    const fmt = formatDate(DATETIME_DISPLAY_FORMAT)
-    return (r: ResponseRoom) =>
-      `${r.place}: ${fmt(r.timeStart)} ~ ${fmt(r.timeEnd)}`
-  }
-
-  get valid(): boolean {
-    return this.value
-  }
-  set valid(value: boolean) {
-    this.$emit('input', value)
-  }
+const formatAvailableRoom = () => {
+  const fmt = formatDate(DATETIME_DISPLAY_FORMAT)
+  return (r: ResponseRoom) =>
+    `${r.place}: ${fmt(r.timeStart)} ~ ${fmt(r.timeEnd)}`
 }
+
+const valid = computed({
+  get: () => props.value,
+  set: v => emit('update:value', v),
+})
 </script>

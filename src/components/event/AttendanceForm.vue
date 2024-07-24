@@ -23,40 +23,40 @@
           >
             出席する
           </v-btn>
-          <attendance-selector v-else v-model="attendance" />
+          <attendance-selector
+            v-else
+            :attendance="attendance"
+            @change="v => emits('change', v)"
+          />
         </v-col>
       </v-row>
     </v-card-actions>
   </v-sheet>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, ModelSync } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed } from 'vue'
 import AttendanceSelector from '@/components/event/AttendanceSelector.vue'
 import UserAvatar from '@/components/shared/UserAvatar.vue'
-import { RequestScheduleScheduleEnum, ResponseUser } from '@/api'
+import { RequestScheduleScheduleEnum } from '@/api'
+import { useStore } from '@/workers/store'
 
-@Component({
-  components: {
-    AttendanceSelector,
-    UserAvatar,
-  },
-})
-export default class AttendanceForm extends Vue {
-  @ModelSync('value', 'change', { required: true })
-  attendance!: RequestScheduleScheduleEnum | null
+const store = useStore()
 
-  get shouldPostAttendance(): boolean {
-    return this.attendance === RequestScheduleScheduleEnum.Pending
-  }
+const props = defineProps<{
+  attendance: RequestScheduleScheduleEnum | null
+}>()
+const emits = defineEmits<{
+  (e: 'change', value: RequestScheduleScheduleEnum): void
+}>()
 
-  setAttend(): void {
-    this.attendance = RequestScheduleScheduleEnum.Attendance
-  }
+const shouldPostAttendance = computed(
+  () => props.attendance === RequestScheduleScheduleEnum.Pending
+)
 
-  get me(): ResponseUser {
-    return this.$store.direct.state.me!
-  }
+const setAttend = () => {
+  emits('change', RequestScheduleScheduleEnum.Attendance)
 }
+
+const me = store.direct.state.me!
 </script>

@@ -20,33 +20,24 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+<script setup lang="ts">
+import { ref } from 'vue'
 import EventListItem from '@/components/event/EventListItem.vue'
 import { today, todayEnd } from '@/workers/date'
 import api, { ResponseEvent } from '@/api'
 
-@Component({
-  components: {
-    EventListItem,
-  },
-})
-export default class EventListToday extends Vue {
-  status: 'loading' | 'loaded' | 'error' = 'loading'
-  events: ResponseEvent[] = []
+const status = ref<'loading' | 'loaded' | 'error'>('loading')
+const events = ref<ResponseEvent[]>([])
 
-  async created() {
-    this.status = 'loading'
-    try {
-      this.events = await api.events.getEvents({
-        dateBegin: today(),
-        dateEnd: todayEnd(),
-      })
-      this.status = 'loaded'
-    } catch (__) {
-      this.status = 'error'
-    }
+;(async () => {
+  try {
+    events.value = await api.events.getEvents({
+      dateBegin: today(),
+      dateEnd: todayEnd(),
+    })
+    status.value = 'loaded'
+  } catch (__) {
+    status.value = 'error'
   }
-}
+})()
 </script>

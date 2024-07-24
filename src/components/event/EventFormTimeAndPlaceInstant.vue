@@ -44,10 +44,9 @@
   </v-form>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop, PropSync, Watch, Ref } from 'vue-property-decorator'
-import { getDate, getTime, getIso8601, today } from '@/workers/date'
+<script setup lang="ts">
+import { computed, nextTick, ref, watch } from 'vue'
+import { getIso8601, today } from '@/workers/date'
 
 export type EventInputTimeAndPlaceInstant = {
   place: string
@@ -55,67 +54,77 @@ export type EventInputTimeAndPlaceInstant = {
   timeEnd: string
 }
 
-@Component({})
-export default class EventFormTimeAndPlaceInstant extends Vue {
-  @PropSync('place', { type: String, required: true })
-  placeInput!: string
+const props = defineProps<{
+  value: boolean
+  eventInputTimeAndPlaceInstant: EventInputTimeAndPlaceInstant
+}>()
 
-  @PropSync('timeStart', { type: String, required: true })
-  timeStartInput!: string
+const emit = defineEmits<{
+  (
+    e: 'update:eventInputTimeAndPlaceInstant',
+    v: EventInputTimeAndPlaceInstant
+  ): void
+  (e: 'update:value', v: boolean): void
+}>()
 
-  @PropSync('timeEnd', { type: String, required: true })
-  timeEndInput!: string
+const placeInput = computed({
+  get: () => props.eventInputTimeAndPlaceInstant.place,
+  set: v =>
+    emit('update:eventInputTimeAndPlaceInstant', {
+      ...props.eventInputTimeAndPlaceInstant,
+      place: v,
+    }),
+})
 
-  @Prop({ type: Boolean, required: true })
-  value!: boolean
+const timeStartInput = computed({
+  get: () => props.eventInputTimeAndPlaceInstant.timeStart,
+  set: v =>
+    emit('update:eventInputTimeAndPlaceInstant', {
+      ...props.eventInputTimeAndPlaceInstant,
+      timeStart: v,
+    }),
+})
 
-  private dateStartMem = ''
-  private dateEndMem = ''
-  private timeStartMem = ''
-  private timeEndMem = ''
+const timeEndInput = computed({
+  get: () => props.eventInputTimeAndPlaceInstant.timeEnd,
+  set: v =>
+    emit('update:eventInputTimeAndPlaceInstant', {
+      ...props.eventInputTimeAndPlaceInstant,
+      timeEnd: v,
+    }),
+})
 
-  @Ref()
-  readonly form!: { validate(): void }
+const valid = computed({
+  get: () => props.value,
+  set: v => emit('update:value', v),
+})
 
-  @Watch('timeStartInput')
-  @Watch('timeEndInput')
-  private async onDateTimeFixed() {
-    if (!this.timeStartInput || !this.timeEndInput) {
-      return
-    }
-    await this.$nextTick()
-    this.form.validate()
+const form = ref<{ validate(): void }>()
+const dateStartMem = ref('')
+const dateEndMem = ref('')
+const timeStartMem = ref('')
+const timeEndMem = ref('')
+
+watch([timeStartInput, timeEndInput], async () => {
+  if (!timeStartInput.value || !timeEndInput.value) return
+  await nextTick()
+  form.value?.validate()
+})
+
+watch([dateStartMem, timeStartMem], () => {
+  if (dateStartMem.value && timeStartMem.value) {
+    timeStartInput.value = getIso8601(dateStartMem.value, timeStartMem.value)
   }
+})
 
-  @Watch('dateStartMem')
-  @Watch('timeStartMem')
-  private onTimeStartMemChange() {
-    if (this.dateStartMem && this.timeStartMem) {
-      this.timeStartInput = getIso8601(this.dateStartMem, this.timeStartMem)
-    }
+watch([dateEndMem, timeEndMem], () => {
+  if (dateEndMem.value && timeEndMem.value) {
+    timeEndInput.value = getIso8601(dateEndMem.value, timeEndMem.value)
   }
+})
 
-  private setDefaultDateEnd() {
-    if (!this.dateEndMem) this.dateEndMem = this.dateStartMem
-  }
-
-  @Watch('dateEndMem')
-  @Watch('timeEndMem')
-  private onTimeEndMemChange() {
-    if (this.dateEndMem && this.timeEndMem) {
-      this.timeEndInput = getIso8601(this.dateEndMem, this.timeEndMem)
-    }
-  }
-
-  get dateMin(): string {
-    return today()
-  }
-
-  get valid(): boolean {
-    return this.value
-  }
-  set valid(value: boolean) {
-    this.$emit('input', value)
-  }
+const setDefaultDateEnd = () => {
+  if (!dateEndMem.value) dateEndMem.value = dateStartMem.value
 }
+const dateMin = today()
 </script>
