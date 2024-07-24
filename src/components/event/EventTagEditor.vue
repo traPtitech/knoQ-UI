@@ -8,8 +8,8 @@
     chips
     clearable
     multiple
-    @focus="$emit('tag-edit-start')"
-    @blur="$emit('tag-edit-end')"
+    @focus="emit('tagEditStart')"
+    @blur="emit('tagEditEnd')"
   >
     <template #selection="{ item }">
       <EventTag close :name="item" @click:close="removeTag(item)" />
@@ -17,35 +17,27 @@
   </v-combobox>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed } from 'vue'
 import EventTag from '@/components/shared/EventTag.vue'
 
-@Component({
-  components: {
-    EventTag,
-  },
+const props = defineProps<{
+  value: string[]
+  tags: string[] | null
+}>()
+
+const emit = defineEmits<{
+  (e: 'input', v: string[]): void
+  (e: 'tagEditStart'): void
+  (e: 'tagEditEnd'): void
+}>()
+
+const editedTags = computed({
+  get: () => props.value,
+  set: v => emit('input', v),
 })
-export default class EventTagEditor extends Vue {
-  @Prop({ type: Array, required: true })
-  value!: string[]
 
-  @Prop({
-    validator: prop => prop instanceof Array || prop === null,
-    required: true,
-  })
-  tags!: string[] | null
-
-  removeTag(tag1: string) {
-    this.editedTags = this.editedTags.filter(tag2 => tag1 !== tag2)
-  }
-
-  get editedTags(): string[] {
-    return this.value
-  }
-  set editedTags(tags: string[]) {
-    this.$emit('input', tags)
-  }
+const removeTag = (tag1: string) => {
+  editedTags.value = editedTags.value.filter(tag2 => tag1 !== tag2)
 }
 </script>

@@ -11,19 +11,13 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
-import { formatDate, TIME_DISPLAY_FORMAT } from '@/workers/date'
+<script setup lang="ts">
+import { formatDate as _formatDate, TIME_DISPLAY_FORMAT } from '@/workers/date'
 import { ResponseRoom } from '@/api'
 
-@Component
-export default class AssignedRoomDisplay extends Vue {
-  @Prop({ type: Object, required: true })
-  room!: ResponseRoom
+defineProps<{
+  room: ResponseRoom
+}>()
 
-  get formatDate() {
-    return formatDate(TIME_DISPLAY_FORMAT)
-  }
-}
+const formatDate = _formatDate(TIME_DISPLAY_FORMAT)
 </script>

@@ -19,21 +19,12 @@
   </span>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+<script setup lang="ts">
 import { Icon } from '@iconify/vue2'
-@Component({
-  components: {
-    Icon,
-  },
-})
-export default class EventPlace extends Vue {
-  @Prop({ type: String, required: true })
-  place!: string
+const props = defineProps<{
+  place: string
+}>()
 
-  contains(searchWord: string): boolean {
-    return this.place.toLowerCase().includes(searchWord)
-  }
-}
+const contains = (searchWord: string) =>
+  props.place.toLocaleLowerCase().includes(searchWord)
 </script>

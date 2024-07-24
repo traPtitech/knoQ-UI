@@ -12,40 +12,29 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed } from 'vue'
 import EventListItem from '@/components/event/EventListItem.vue'
-import { formatDate, getDate, DATE_DISPLAY_FORMAT } from '@/workers/date'
+import {
+  formatDate as _formatDate,
+  getDate,
+  DATE_DISPLAY_FORMAT,
+} from '@/workers/date'
 import { ResponseEvent } from '@/api'
 
-@Component({
-  components: {
-    EventListItem,
-  },
+const props = defineProps<{
+  events: ResponseEvent[]
+  eventFilter: (e: ResponseEvent) => boolean
+}>()
+
+const filteredEvents = computed(() => props.events.filter(props.eventFilter))
+
+const isDateBorder = computed(() => (i: number) => {
+  if (i === 0) return true
+  const e1 = filteredEvents.value[i - 1]
+  const e2 = filteredEvents.value[i]
+  return getDate(e1.timeStart) !== getDate(e2.timeStart)
 })
-export default class EventList extends Vue {
-  @Prop({ type: Array, required: true })
-  events!: ResponseEvent[]
 
-  @Prop({ type: Function, default: () => true })
-  eventFilter!: (e: ResponseEvent) => boolean
-
-  get filteredEvents() {
-    return this.events.filter(this.eventFilter)
-  }
-
-  get isDateBorder() {
-    return (i: number) => {
-      if (i === 0) return true
-      const e1 = this.filteredEvents[i - 1]
-      const e2 = this.filteredEvents[i]
-      return getDate(e1.timeStart) !== getDate(e2.timeStart)
-    }
-  }
-
-  get formatDate() {
-    return formatDate(DATE_DISPLAY_FORMAT)
-  }
-}
+const formatDate = _formatDate(DATE_DISPLAY_FORMAT)
 </script>

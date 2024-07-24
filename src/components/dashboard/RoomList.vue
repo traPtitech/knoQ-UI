@@ -13,35 +13,25 @@
   </v-row>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+<script setup lang="ts">
+import { ref } from 'vue'
 import RoomListItem from '@/components/dashboard/RoomListItem.vue'
 import { today, todayEnd } from '@/workers/date'
 import api, { ResponseRoom } from '@/api'
 
-@Component({
-  components: {
-    RoomListItem,
-  },
-})
-export default class RoomList extends Vue {
-  status: 'loading' | 'loaded' | 'error' = 'loading'
-  rooms: ResponseRoom[] = []
-
-  async created() {
-    this.status = 'loading'
-    try {
-      this.rooms = (
-        await api.rooms.getRooms({
-          dateBegin: today(),
-          dateEnd: todayEnd(),
-        })
-      ).filter(room => room.verified)
-      this.status = 'loaded'
-    } catch (__) {
-      this.status = 'error'
-    }
+const status = ref<'loading' | 'loaded' | 'error'>('loading')
+const rooms = ref<ResponseRoom[]>([])
+;(async () => {
+  try {
+    ;(
+      await api.rooms.getRooms({
+        dateBegin: today(),
+        dateEnd: todayEnd(),
+      })
+    ).filter(room => room.verified)
+    status.value = 'loaded'
+  } catch (__) {
+    status.value = 'error'
   }
-}
+})()
 </script>

@@ -52,8 +52,8 @@
             v-else
             v-model="editedTags"
             :tags="tagNames"
-            @tag-edit-start="onTagEditStart"
-            @tag-edit-end="onTagEditEnd"
+            @tagEditStart="onTagEditStart"
+            @tagEditEnd="onTagEditEnd"
           />
         </div>
         <div class="text--secondary">
@@ -106,7 +106,7 @@
       <attendance-form
         v-if="canAttendEvent && !isFinishedEvent"
         class="mb-5 pl-5 pr-5 pb-5"
-        :value="attendance"
+        :attendance="attendance"
         @change="onAttendanceChange"
       />
       <div>
@@ -117,168 +117,136 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Watch } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventTagEditor from '@/components/event/EventTagEditor.vue'
 import ActionMenu from '@/components/shared/ActionMenu.vue'
-import UserAvatar from '@/components/shared/UserAvatar.vue'
 import AttendanceForm from '@/components/event/AttendanceForm.vue'
 import EventAttendees from '@/components/event/EventAttendees.vue'
-import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
+import {
+  formatDate as _formatDate,
+  DATETIME_DISPLAY_FORMAT,
+} from '@/workers/date'
 import { isTitechRoom, calcRoomPdfUrl } from '@/workers/TokyoTech'
 import EventPlace from '@/components/event/EventPlace.vue'
 
-import api, {
-  ResponseEventDetail,
-  ResponseUser,
-  RequestScheduleScheduleEnum,
-} from '@/api'
+import api, { ResponseEventDetail, RequestScheduleScheduleEnum } from '@/api'
+import { useStore } from '@/workers/store'
+import { useRoute } from 'vue-router/composables'
 
-@Component({
-  components: {
-    ProgressCircular,
-    LoadFailedText,
-    EventTag,
-    MarkdownField,
-    EventTagEditor,
-    ActionMenu,
-    EventAttendees,
-    UserAvatar,
-    AttendanceForm,
-    EventPlace,
-  },
+const route = useRoute()
+const store = useStore()
+const me = store.direct.state.me!
+
+const status = ref<'loading' | 'loaded' | 'error'>('loading')
+const isTagEditting = ref(false)
+
+const event = ref<ResponseEventDetail | null>(null)
+const attendance = ref<RequestScheduleScheduleEnum | null>(null)
+const editedTags = ref<string[]>([])
+
+;(async () => {
+  const eventID = route.params.id
+  status.value = 'loading'
+  try {
+    event.value = await api.events.getEventDetail({ eventID })
+    attendance.value =
+      (event.value.attendees.find(({ userId }) => userId === me.userId)
+        ?.schedule as RequestScheduleScheduleEnum | undefined) ?? null
+  } catch (__) {
+    status.value = 'error'
+    return
+  }
+  status.value = 'loaded'
+})()
+
+const formatDate = _formatDate(DATETIME_DISPLAY_FORMAT)
+
+const sharedRoomString = computed(() =>
+  event.value?.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
+)
+const sharedRoomIcon = computed(() =>
+  event.value?.sharedRoom
+    ? { icon: 'mdi-door-open', color: 'success' }
+    : { icon: 'mdi-door-closed-lock', color: 'error' }
+)
+
+const tagNames = computed(() => event.value?.tags.map(({ name }) => name) ?? [])
+
+const onTagEditStart = () => {
+  editedTags.value = event.value?.tags.map(({ name }) => name) ?? []
+}
+
+const onTagEditEnd = async () => {
+  const prevTagNames = event.value?.tags.map(({ name }) => name) ?? []
+  const added = difference(editedTags.value, prevTagNames)
+  const deleted = difference(prevTagNames, editedTags.value)
+  const eventID = route.params.id
+  await Promise.all([
+    ...added.map(name =>
+      api.events.addEventTag({ eventID, requestTag: { name } })
+    ),
+    ...deleted.map(name =>
+      api.events.deleteEventTag({ eventID, tagName: name })
+    ),
+  ])
+  event.value = await api.events.getEventDetail({ eventID })
+  isTagEditting.value = false
+  editedTags.value = []
+}
+
+const isOpenEvent = computed(() => event.value?.open ?? false)
+
+const canAttendEvent = computed(() => {
+  if (!event.value) {
+    return false
+  }
+  const isOpen = isOpenEvent.value
+  const isEventOfJoiningGroup = event.value.attendees.some(
+    ({ userId }) => userId === me.userId
+  )
+  return isOpen || isEventOfJoiningGroup
 })
-export default class EventDetail extends Vue {
-  status: 'loading' | 'loaded' | 'error' = 'loading'
-  isTagEditting = false
 
-  event: ResponseEventDetail | null = null
+const isFinishedEvent = computed(() => {
+  if (!event.value) {
+    return true
+  }
+  return new Date(event.value.timeEnd) < new Date()
+})
 
-  attendance: RequestScheduleScheduleEnum | null = null
+const isMyEvent = computed(
+  () =>
+    event.value?.admins.includes(store.direct.state.me?.userId ?? '') ?? false
+)
 
-  editedTags: string[] = []
-
-  async created() {
-    const eventID = this.$route.params.id
-    this.status = 'loading'
-    try {
-      this.event = await api.events.getEventDetail({ eventID })
-      this.attendance =
-        (this.event.attendees.find(({ userId }) => userId === this.me.userId)
-          ?.schedule as RequestScheduleScheduleEnum | undefined) ?? null
-    } catch (__) {
-      this.status = 'error'
+const onAttendanceChange = async (
+  newAttendance: RequestScheduleScheduleEnum
+) => {
+  console.log('fwaohewfjioewfjfihooisu')
+  const oldAttendance = attendance.value
+  attendance.value = newAttendance
+  try {
+    if (!event.value) {
       return
     }
-    this.status = 'loaded'
-  }
-
-  get formatDate() {
-    return formatDate(DATETIME_DISPLAY_FORMAT)
-  }
-
-  get sharedRoomString(): string {
-    return this.event?.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
-  }
-  get sharedRoomIcon() {
-    return this.event?.sharedRoom
-      ? { icon: 'mdi-door-open', color: 'success' }
-      : { icon: 'mdi-door-closed-lock', color: 'error' }
-  }
-
-  get tagNames(): string[] {
-    return this.event?.tags.map(({ name }) => name) ?? []
-  }
-
-  async onTagEditStart() {
-    this.editedTags = this.event?.tags.map(({ name }) => name) ?? []
-  }
-
-  async onTagEditEnd() {
-    const prevTagNames = this.event?.tags.map(({ name }) => name) ?? []
-    const added = difference(this.editedTags, prevTagNames)
-    const deleted = difference(prevTagNames, this.editedTags)
-    const eventID = this.$route.params.id
-    await Promise.all([
-      ...added.map(name =>
-        api.events.addEventTag({ eventID, requestTag: { name } })
-      ),
-      ...deleted.map(name =>
-        api.events.deleteEventTag({ eventID, tagName: name })
-      ),
-    ])
-    this.event = await api.events.getEventDetail({ eventID })
-    this.isTagEditting = false
-    this.editedTags = []
-  }
-
-  get isTitechRoom() {
-    return isTitechRoom
-  }
-
-  get calcRoomPdfUrl() {
-    return calcRoomPdfUrl
-  }
-
-  get me(): ResponseUser {
-    return this.$store.direct.state.me!
-  }
-
-  get isOpenEvent(): boolean {
-    return this.event?.open ?? false
-  }
-
-  get canAttendEvent(): boolean {
-    if (!this.event) {
-      return false
-    }
-    const isOpen = this.isOpenEvent
-    const isEventOfJoiningGroup = this.event.attendees.some(
-      ({ userId }) => userId === this.me.userId
-    )
-    return isOpen || isEventOfJoiningGroup
-  }
-
-  get isFinishedEvent(): boolean {
-    if (!this.event) {
-      return true
-    }
-    return new Date(this.event.timeEnd) < new Date()
-  }
-
-  get isMyEvent(): boolean {
-    return (
-      this.event?.admins.includes(this.$store.direct.state.me?.userId ?? '') ??
-      false
-    )
-  }
-
-  async onAttendanceChange(attendance: RequestScheduleScheduleEnum) {
-    const oldAttendance = this.attendance
-    this.attendance = attendance
-    try {
-      if (!this.event) {
-        return
-      }
-      await api.events.updateSchedule({
-        eventID: this.event.eventId,
-        requestSchedule: {
-          schedule: attendance,
-        },
-      })
-      this.event = await api.events.getEventDetail({
-        eventID: this.event.eventId,
-      })
-    } catch (err) {
-      console.error(err)
-      alert('参加予定を登録できませんでした')
-      this.attendance = oldAttendance
-    }
+    await api.events.updateSchedule({
+      eventID: event.value.eventId,
+      requestSchedule: {
+        schedule: newAttendance,
+      },
+    })
+    event.value = await api.events.getEventDetail({
+      eventID: event.value.eventId,
+    })
+  } catch (err) {
+    console.error(err)
+    alert('参加予定を登録できませんでした')
+    attendance.value = oldAttendance
   }
 }
 

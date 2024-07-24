@@ -49,35 +49,32 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+<script setup lang="ts">
+import { ref } from 'vue'
 import api, { ResponseGroup } from '@/api'
+import { useStore } from '@/workers/store'
 
-@Component
-export default class YourGroups extends Vue {
-  status: 'loading' | 'loaded' | 'error' = 'loading'
-  groups: ResponseGroup[] = []
+const store = useStore()
 
-  async created() {
-    this.status = 'loading'
-    try {
-      await this.fetchGroups()
-      this.status = 'loaded'
-    } catch (__) {
-      this.status = 'error'
-    }
-  }
+const status = ref<'loading' | 'loaded' | 'error'>('loading')
+const groups = ref<ResponseGroup[]>([])
 
-  async fetchGroups() {
-    this.groups = (await api.groups.getGroups()).filter(group =>
-      this.includesMe([...group.members, ...group.admins])
-    )
-  }
-
-  get includesMe() {
-    return (memberIds: string[]) =>
-      memberIds.includes(this.$store.direct.state.me?.userId ?? '')
-  }
+const fetchGroups = async () => {
+  groups.value = (await api.groups.getGroups()).filter(group =>
+    includesMe([...group.members, ...group.admins])
+  )
 }
+
+const includesMe = (memberIds: string[]) =>
+  memberIds.includes(store.direct.state.me?.userId ?? '')
+
+;(async () => {
+  status.value = 'loading'
+  try {
+    await fetchGroups()
+    status.value = 'loaded'
+  } catch (__) {
+    status.value = 'error'
+  }
+})()
 </script>

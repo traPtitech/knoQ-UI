@@ -33,30 +33,20 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
-import UserAvatar from '@/components/shared/UserAvatar.vue'
+<script setup lang="ts">
 import EventTag from '@/components/shared/EventTag.vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
-import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
+import {
+  formatDate as _formatDate,
+  DATETIME_DISPLAY_FORMAT,
+} from '@/workers/date'
 import { ResponseEvent } from '@/api'
 
-@Component({
-  components: {
-    UserAvatar,
-    EventTag,
-    MarkdownField,
-  },
-})
-export default class EventListItem extends Vue {
-  @Prop({ type: Object, required: true })
-  event!: ResponseEvent
+defineProps<{
+  event: ResponseEvent
+}>()
 
-  get formatDate() {
-    return formatDate(DATETIME_DISPLAY_FORMAT)
-  }
-}
+const formatDate = _formatDate(DATETIME_DISPLAY_FORMAT)
 </script>
 <style scoped>
 .markdown-field {

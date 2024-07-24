@@ -52,45 +52,39 @@
   </v-card>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
-import { formatDate, today } from '@/workers/date'
+<script setup lang="ts">
+import { formatDate as _formatDate, today } from '@/workers/date'
 import api, { ResponseEvent, GetMyEventsRelationEnum } from '@/api'
+import { ref } from 'vue'
+import { useStore } from '@/workers/store'
 
 const uniqueBy = <T, S>(f: (x: T) => S, arr: T[]): T[] => {
   return [...new Map(arr.map(x => [f(x), x])).values()]
 }
+const store = useStore()
 
-@Component
-export default class YourEvents extends Vue {
-  status: 'loading' | 'loaded' | 'error' = 'loading'
-  events: ResponseEvent[] = []
+const status = ref<'loading' | 'loaded' | 'error'>('loading')
+const events = ref<ResponseEvent[]>([])
 
-  async created() {
-    this.status = 'loading'
-    try {
-      const [adminEvents, belongingEvents] = await Promise.all([
-        api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Admins }),
-        api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Belongs }),
-      ])
-      this.events = uniqueBy(
-        event => event.eventId,
-        [...adminEvents, ...belongingEvents]
-      ).filter(event => today() <= event.timeStart)
-      this.status = 'loaded'
-    } catch (__) {
-      this.status = 'error'
-    }
+;(async () => {
+  status.value = 'loading'
+  try {
+    const [adminEvents, belongingEvents] = await Promise.all([
+      api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Admins }),
+      api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Belongs }),
+    ])
+    events.value = uniqueBy(
+      event => event.eventId,
+      [...adminEvents, ...belongingEvents]
+    ).filter(event => today() <= event.timeStart)
+    status.value = 'loaded'
+  } catch (__) {
+    status.value = 'error'
   }
+})()
 
-  get includesMe() {
-    return (memberIds: string[]) =>
-      memberIds.includes(this.$store.direct.state.me?.userId ?? '')
-  }
+const includesMe = (memberIds: string[]) =>
+  memberIds.includes(store.direct.state.me?.userId ?? '')
 
-  get formatDate() {
-    return formatDate('MM/DD')
-  }
-}
+const formatDate = _formatDate('MM/DD')
 </script>

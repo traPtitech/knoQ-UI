@@ -15,113 +15,104 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop, Watch } from 'vue-property-decorator'
-import UserAvatar from '@/components/shared/UserAvatar.vue'
-import {
-  ResponseEvent,
-  ResponseEventAttendees,
-  ResponseEventAttendeesScheduleEnum,
-} from '@/api'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { ResponseEventDetail, ResponseEventAttendeesScheduleEnum } from '@/api'
 import EventAttendeeItem from '@/components/event/EventAttendeeItem.vue'
+import { useStore } from '@/workers/store'
 
-@Component({
-  components: {
-    UserAvatar,
-    EventAttendeeItem,
-  },
+const store = useStore()
+
+const props = defineProps<{
+  event: ResponseEventDetail
+  attendeesPerPage: number
+}>()
+
+const attendanceCount = ref(0)
+const pendingCount = ref(0)
+const absentCount = ref(0)
+const page = ref(1)
+
+const attendees = computed(() => props.event.attendees)
+
+const validAttendees = computed(() => {
+  const _attendees = [...attendees.value]
+  return _attendees.filter(
+    attendee =>
+      store.direct.state.usersCache.users?.get(attendee.userId!) !== undefined
+  )
 })
-export default class EventAttendees extends Vue {
-  @Prop({ type: Object, required: true })
-  event!: ResponseEvent
-  @Prop({ type: Number, required: true })
-  attendeesPerPage!: number
 
-  attendanceCount: number = 0
-  pendingCount: number = 0
-  absentCount: number = 0
-  page: number = 1
+const updateCounts = computed(async () => {
+  let _attendanceCount: number = 0
+  let _pendingCount: number = 0
+  let _absentCount: number = 0
+  validAttendees.value.forEach(item => {
+    if (item.schedule === ResponseEventAttendeesScheduleEnum.Attendance)
+      _attendanceCount += 1
+    if (item.schedule === ResponseEventAttendeesScheduleEnum.Absent)
+      _absentCount += 1
+    if (item.schedule === ResponseEventAttendeesScheduleEnum.Pending)
+      _pendingCount += 1
+  })
+  attendanceCount.value = _attendanceCount
+  pendingCount.value = _pendingCount
+  absentCount.value = _absentCount
+})
 
-  get attendees(): ResponseEventAttendees[] {
-    return this.event.attendees
-  }
+const sortedAttendees = computed(() => {
+  const _attendees = [...validAttendees.value]
+  _attendees.sort((a, b) => {
+    const isAAdmin: boolean = isAdmin.value(a.userId)
+    const isBAdmin: boolean = isAdmin.value(b.userId)
+    if (isAAdmin === isBAdmin) {
+      return 0
+    } else if (isAAdmin) {
+      return -1
+    } else {
+      return 1
+    }
+  })
+  _attendees.sort((a, b) => {
+    if (a.schedule === b.schedule) {
+      return 0
+    } else if (
+      a.schedule === ResponseEventAttendeesScheduleEnum.Attendance ||
+      b.schedule === ResponseEventAttendeesScheduleEnum.Pending
+    ) {
+      return -1
+    } else {
+      return 1
+    }
+  })
+  return _attendees
+})
 
-  @Watch('attendees', { deep: true, immediate: true })
-  async updateCounts() {
-    let _attendanceCount: number = 0
-    let _pendingCount: number = 0
-    let _absentCount: number = 0
-    this.validAttendees.forEach(item => {
-      if (item.schedule === ResponseEventAttendeesScheduleEnum.Attendance)
-        _attendanceCount += 1
-      if (item.schedule === ResponseEventAttendeesScheduleEnum.Absent)
-        _absentCount += 1
-      if (item.schedule === ResponseEventAttendeesScheduleEnum.Pending)
-        _pendingCount += 1
-    })
-    this.attendanceCount = _attendanceCount
-    this.pendingCount = _pendingCount
-    this.absentCount = _absentCount
-  }
+const isAdmin = computed(
+  () => (userId: string) => props.event.admins.includes(userId)
+)
+const getName = computed(
+  () => (userId: string) =>
+    store.direct.state.usersCache.users?.get(userId)?.name
+)
 
-  get validAttendees() {
-    const _attendees = [...this.attendees]
-    return _attendees.filter(
-      attendee =>
-        this.$store.direct.state.usersCache.users?.get(attendee.userId!) !==
-        undefined
-    )
-  }
-  get sortedAttendees() {
-    const _attendees = [...this.validAttendees]
-    _attendees.sort((a, b) => {
-      const isAAdmin: boolean = this.isAdmin(a.userId)
-      const isBAdmin: boolean = this.isAdmin(b.userId)
-      if (isAAdmin === isBAdmin) {
-        return 0
-      } else if (isAAdmin) {
-        return -1
-      } else {
-        return 1
-      }
-    })
-    _attendees.sort((a, b) => {
-      if (a.schedule === b.schedule) {
-        return 0
-      } else if (
-        a.schedule === ResponseEventAttendeesScheduleEnum.Attendance ||
-        b.schedule === ResponseEventAttendeesScheduleEnum.Pending
-      ) {
-        return -1
-      } else {
-        return 1
-      }
-    })
-    return _attendees
-  }
-  isAdmin(userId: string): boolean {
-    return this.event.admins.includes(userId)
-  }
-  getName(userId: string): string | undefined {
-    return this.$store.direct.state.usersCache.users?.get(userId)?.name
-  }
+const getUserIcon = computed(
+  () => (userId: string) =>
+    store.direct.state.usersCache.users?.get(userId)?.icon
+)
+const pageLength = computed(() =>
+  Math.ceil(validAttendees.value.length / props.attendeesPerPage)
+)
 
-  getUserIcon(userId: string): string | undefined {
-    return this.$store.direct.state.usersCache.users?.get(userId)?.icon
-  }
-  get pageLength(): number {
-    return Math.ceil(this.validAttendees.length / this.attendeesPerPage)
-  }
-  get counts(): string {
-    return `参加: ${this.attendanceCount}人, 欠席: ${this.absentCount}人, 未定: ${this.pendingCount}人`
-  }
+const counts = computed(
+  () =>
+    `参加: ${attendanceCount.value}人, 欠席: ${absentCount.value}人, 未定: ${pendingCount.value}人`
+)
 
-  get attendeesSlice(): ResponseEventAttendees[] {
-    return this.sortedAttendees.slice(
-      (this.page - 1) * this.attendeesPerPage,
-      this.page * this.attendeesPerPage
-    )
-  }
-}
+const attendeesSlice = computed(() =>
+  sortedAttendees.value.slice(
+    (page.value - 1) * props.attendeesPerPage,
+    page.value * props.attendeesPerPage
+  )
+)
 </script>

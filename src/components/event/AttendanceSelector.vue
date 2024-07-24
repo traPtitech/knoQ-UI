@@ -2,7 +2,6 @@
   <v-select
     v-model="attendance"
     :items="items"
-    :value="attendance"
     solo
     flat
     :background-color="backgroundOf(attendance)"
@@ -21,47 +20,52 @@
   </v-select>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { RequestScheduleScheduleEnum } from '@/api'
-import Vue from 'vue'
-import { Component, ModelSync } from 'vue-property-decorator'
+import { computed } from 'vue'
 
-@Component
-export default class AttendanceSelector extends Vue {
-  @ModelSync('value', 'update', { type: String, required: true })
-  attendance!: RequestScheduleScheduleEnum
+const props = defineProps<{
+  attendance: RequestScheduleScheduleEnum
+}>()
+const emits = defineEmits<{
+  (e: 'change', value: string)
+}>()
 
-  items: { text: string; value: RequestScheduleScheduleEnum }[] = [
-    {
-      text: '未定',
-      value: RequestScheduleScheduleEnum.Pending,
-    },
-    {
-      text: '欠席予定',
-      value: RequestScheduleScheduleEnum.Absent,
-    },
-    {
-      text: '出席予定',
-      value: RequestScheduleScheduleEnum.Attendance,
-    },
-  ]
+const attendance = computed({
+  get: () => props.attendance,
+  set: (v: string) => {
+    emits('change', v)
+  },
+})
 
-  foregroundOf(attendance: RequestScheduleScheduleEnum): string {
-    return {
-      [RequestScheduleScheduleEnum.Pending]: 'blue-grey--text text--darken-1',
-      [RequestScheduleScheduleEnum.Absent]: 'white--text',
-      [RequestScheduleScheduleEnum.Attendance]: 'white--text',
-    }[attendance]
-  }
+const items: { text: string; value: RequestScheduleScheduleEnum }[] = [
+  {
+    text: '未定',
+    value: RequestScheduleScheduleEnum.Pending,
+  },
+  {
+    text: '欠席予定',
+    value: RequestScheduleScheduleEnum.Absent,
+  },
+  {
+    text: '出席予定',
+    value: RequestScheduleScheduleEnum.Attendance,
+  },
+]
 
-  backgroundOf(attendance: RequestScheduleScheduleEnum): string {
-    return {
-      [RequestScheduleScheduleEnum.Pending]: '#ced6d7',
-      [RequestScheduleScheduleEnum.Absent]: '#d3664f',
-      [RequestScheduleScheduleEnum.Attendance]: 'primary',
-    }[attendance]
-  }
-}
+const foregroundOf = (attendance: RequestScheduleScheduleEnum) =>
+  ({
+    [RequestScheduleScheduleEnum.Pending]: 'blue-grey--text text--darken-1',
+    [RequestScheduleScheduleEnum.Absent]: 'white--text',
+    [RequestScheduleScheduleEnum.Attendance]: 'white--text',
+  }[attendance])
+
+const backgroundOf = (attendance: RequestScheduleScheduleEnum) =>
+  ({
+    [RequestScheduleScheduleEnum.Pending]: '#ced6d7',
+    [RequestScheduleScheduleEnum.Absent]: '#d3664f',
+    [RequestScheduleScheduleEnum.Attendance]: 'primary',
+  }[attendance])
 </script>
 
 <style lang="scss">

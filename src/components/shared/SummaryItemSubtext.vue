@@ -1,4 +1,4 @@
-<template functional>
+<template>
   <div class="text--secondary body-2">
     <slot />
   </div>

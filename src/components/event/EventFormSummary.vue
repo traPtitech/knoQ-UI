@@ -2,13 +2,13 @@
   <div>
     <SummaryItem>
       <SummaryItemCaption>New Event</SummaryItemCaption>
-      <SummaryItemMain>{{ name }}</SummaryItemMain>
+      <SummaryItemMain>{{ eventSummary.name }}</SummaryItemMain>
       <!-- <SummaryItemSubtext>
         <v-icon :color="openIcon.color">{{ openIcon.icon }}</v-icon>
         {{ openString }}
       </SummaryItemSubtext> -->
       <EventTag
-        v-for="tag in tags"
+        v-for="tag in eventSummary.tags"
         :key="tag.name"
         :name="tag.name"
         class="mr-3"
@@ -16,7 +16,7 @@
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Group</SummaryItemCaption>
-      <SummaryItemText>{{ groupName }}</SummaryItemText>
+      <SummaryItemText>{{ eventSummary.groupName }}</SummaryItemText>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Open</SummaryItemCaption>
@@ -25,7 +25,7 @@
         <span class="text-h6 ml-2">{{ openString }}</span>
       </SummaryItemText>
       <v-alert
-        v-if="!open && isEdit && openChanged()"
+        v-if="!eventSummary.open && isEdit && openChanged()"
         border="left"
         colored-border
         type="warning"
@@ -38,25 +38,27 @@
     <SummaryItem>
       <SummaryItemCaption>Date</SummaryItemCaption>
       <SummaryItemText>
-        {{ formatDate(timeStart) }}
+        {{ formatDate(eventSummary.timeStart) }}
         <v-icon>mdi-chevron-right</v-icon>
-        {{ formatDate(timeEnd) }}
+        {{ formatDate(eventSummary.timeEnd) }}
       </SummaryItemText>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Place</SummaryItemCaption>
       <SummaryItemText>
-        <event-place :place="place" />
+        <event-place :place="eventSummary.place" />
       </SummaryItemText>
-      <SummaryItemSubtext v-if="!isPrivate">
+      <SummaryItemSubtext v-if="!eventSummary.isPrivate">
         <v-icon :color="sharedRoomIcon.color">{{ sharedRoomIcon.icon }}</v-icon>
         {{ sharedRoomString }}
       </SummaryItemSubtext>
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Description</SummaryItemCaption>
-      <div v-if="!description" class="text--secondary">説明はありません</div>
-      <MarkdownField v-else :src="description" />
+      <div v-if="!eventSummary.description" class="text--secondary">
+        説明はありません
+      </div>
+      <MarkdownField v-else :src="eventSummary.description" />
     </SummaryItem>
     <SummaryItem>
       <SummaryItemCaption>Invitees</SummaryItemCaption>
@@ -85,9 +87,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 import MarkdownField from '@/components/shared/MarkdownField.vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import SummaryItem from '@/components/shared/SummaryItem.vue'
@@ -95,10 +96,14 @@ import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
 import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
 import SummaryItemText from '@/components/shared/SummaryItemText.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
-import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
+import {
+  formatDate as _formatDate,
+  DATETIME_DISPLAY_FORMAT,
+} from '@/workers/date'
 import EventPlace from '@/components/event/EventPlace.vue'
 import { EventInputContent } from '@/components/event/EventFormContent.vue'
-import { ResponseUser } from '@/api'
+import { useStore } from '@/workers/store'
+
 export type EventSummary = {
   name: string
   description: string
@@ -112,108 +117,57 @@ export type EventSummary = {
   timeEnd: string
 }
 
-@Component({
-  components: {
-    MarkdownField,
-    EventTag,
-    SummaryItem,
-    SummaryItemCaption,
-    SummaryItemMain,
-    SummaryItemText,
-    SummaryItemSubtext,
-    EventPlace,
-  },
+const props = defineProps<{
+  content: EventInputContent
+  eventSummary: EventSummary
+  isEdit: boolean
+}>()
+
+const store = useStore()
+
+const page = ref(1)
+const inviteesPerPage = 6
+const originalOpen = ref<boolean | null>(null)
+
+const sharedRoomString = computed(() =>
+  props.eventSummary.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
+)
+
+const sharedRoomIcon = computed(() =>
+  props.eventSummary.sharedRoom
+    ? { icon: 'mdi-door-open', color: 'success' }
+    : { icon: 'mdi-door-closed-lock', color: 'error' }
+)
+
+const openString = computed(() =>
+  props.eventSummary.open
+    ? 'グループ外の人も参加できます'
+    : 'グループ外の人は参加できません'
+)
+
+const openIcon = computed(() =>
+  props.eventSummary.open
+    ? { icon: 'mdi-account-multiple-plus', color: 'success' }
+    : { icon: 'mdi-account-multiple-remove', color: 'error' }
+)
+
+const formatDate = _formatDate(DATETIME_DISPLAY_FORMAT)
+const invitees = computed(() => {
+  const userById = store.direct.getters.usersCache.userById
+  if (!props.content.group) return []
+  return props.content.group.members.flatMap(userId => {
+    const user = userById(userId)
+    return user ? user : []
+  })
 })
-export default class EventFormSummary extends Vue {
-  @Prop({ type: Object, required: true })
-  content!: EventInputContent
 
-  @Prop({ type: String, required: true })
-  name!: string
+const inviteesSlice = computed(() =>
+  invitees.value.slice(
+    (page.value - 1) * inviteesPerPage,
+    page.value * inviteesPerPage
+  )
+)
 
-  @Prop({ type: String, required: true })
-  groupName!: string
-
-  @Prop({ type: Boolean, required: true })
-  open!: boolean
-
-  @Prop({ type: Array, required: true })
-  tags!: { name: string }[]
-
-  @Prop({ type: String, required: true })
-  description!: string
-
-  @Prop({ type: Boolean, required: true })
-  isPrivate!: boolean
-
-  @Prop({ type: String, required: true })
-  place!: string
-
-  @Prop({ type: String, required: true })
-  timeStart!: string
-
-  @Prop({ type: String, required: true })
-  timeEnd!: string
-
-  @Prop({ type: Boolean, required: true })
-  sharedRoom!: boolean
-
-  @Prop({ type: Boolean, required: true })
-  isEdit!: boolean
-
-  page: number = 1
-  inviteesPerPage: number = 6
-  originalOpen: boolean = null!
-
-  get sharedRoomString(): string {
-    return this.sharedRoom ? '部屋の共用可能' : '部屋の共用不可能'
-  }
-
-  get sharedRoomIcon() {
-    return this.sharedRoom
-      ? { icon: 'mdi-door-open', color: 'success' }
-      : { icon: 'mdi-door-closed-lock', color: 'error' }
-  }
-
-  get openString(): string {
-    return this.open
-      ? 'グループ外の人も参加できます'
-      : 'グループ外の人は参加できません'
-  }
-
-  get openIcon() {
-    return this.open
-      ? { icon: 'mdi-account-multiple-plus', color: 'success' }
-      : { icon: 'mdi-account-multiple-remove', color: 'error' }
-  }
-
-  get formatDate() {
-    return formatDate(DATETIME_DISPLAY_FORMAT)
-  }
-
-  get invitees(): ResponseUser[] {
-    const userById = this.$store.direct.getters.usersCache.userById
-    if (!this.content.group) return []
-    let invitees = this.content.group.members.flatMap(userId => {
-      const user = userById(userId)
-      return user ? user : []
-    })
-    return invitees
-  }
-
-  get inviteesSlice(): ResponseUser[] {
-    return this.invitees.slice(
-      (this.page - 1) * this.inviteesPerPage,
-      this.page * this.inviteesPerPage
-    )
-  }
-
-  openChanged(): boolean {
-    return this.originalOpen !== this.open
-  }
-
-  created() {
-    this.originalOpen = this.open
-  }
-}
+const openChanged = () => originalOpen.value !== props.eventSummary.open
+originalOpen.value = props.eventSummary.open
 </script>
