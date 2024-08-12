@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-sheet height="64">
+    <v-sheet :height="status === 'loading' ? 60 : 64">
       <v-toolbar flat>
         <v-btn
           outlined
@@ -44,6 +44,11 @@
         </v-menu>
       </v-toolbar>
     </v-sheet>
+    <v-progress-linear
+      v-if="status == 'loading'"
+      indeterminate
+      color="primary"
+    ></v-progress-linear>
     <v-sheet :height="height - 64">
       <v-calendar
         :ref="calendarRefName"
@@ -129,6 +134,9 @@ export default class Calendar extends Vue {
 
   @Prop({ type: Array, default: [] })
   events!: ResponseEvent[]
+
+  @Prop({ type: String, default: 'loading' })
+  status!: 'loading' | 'loaded' | 'error'
 
   focus = ''
   type = 'month'
