@@ -1,6 +1,5 @@
 <template>
   <v-col>
-    <v-progress-linear indeterminate color="primary"></v-progress-linear>
     <calendar
       :height="784"
       :events="events"
