@@ -69,10 +69,17 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   @Prop({ type: Boolean, required: true })
   value!: boolean
 
-  private dateStartMem = ''
-  private dateEndMem = ''
-  private timeStartMem = ''
-  private timeEndMem = ''
+  public dateStartMem = ''
+  public dateEndMem = ''
+  public timeStartMem = ''
+  public timeEndMem = ''
+
+  created() {
+    this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)
+    this.dateEndMem = this.timeEndInput && getDate(this.timeEndInput)
+    this.timeStartMem = this.timeStartInput && getTime(this.timeStartInput)
+    this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
+  }
 
   @Ref()
   readonly form!: { validate(): void }
@@ -95,7 +102,7 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  private setDefaultDateEnd() {
+  public setDefaultDateEnd() {
     if (!this.dateEndMem) this.dateEndMem = this.dateStartMem
   }
 
