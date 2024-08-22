@@ -69,10 +69,10 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   @Prop({ type: Boolean, required: true })
   value!: boolean
 
-  public dateStartMem = ''
-  public dateEndMem = ''
-  public timeStartMem = ''
-  public timeEndMem = ''
+  private dateStartMem = ''
+  private dateEndMem = ''
+  private timeStartMem = ''
+  private timeEndMem = ''
 
   created() {
     this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)

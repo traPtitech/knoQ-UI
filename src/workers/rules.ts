@@ -60,21 +60,6 @@ const rules = {
       startTime < endTime ||
       '終了日時が開始日時よりも遅くなるようにしてください',
   ],
-  eventTimeInstant2: (
-    startDate: string,
-    startTime: string,
-    endDate: string,
-    endTime: string
-  ) => [
-    () =>
-      !startDate ||
-      !startTime ||
-      !endDate ||
-      !endTime ||
-      new Date(startDate + 'T' + startTime) <
-        new Date(endDate + 'T' + endTime) ||
-      '終了日時が開始日時よりも遅くなるようにしてください',
-  ],
 }
 
 export default rules
