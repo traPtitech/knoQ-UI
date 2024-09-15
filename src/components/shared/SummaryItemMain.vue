@@ -1,4 +1,4 @@
-<template functional>
+<template>
   <div class="display-1">
     <slot />
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="isValidRef">
     <div class="mb-4 text--secondary caption">
       <span class="mr-1"> ※イベントを作るには主催するグループが必要です </span>
       <router-link to="/groups/new"> 新しくグループを作る </router-link>
@@ -81,9 +81,8 @@
   </v-form>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop, PropSync } from 'vue-property-decorator'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
 import EventTag from '@/components/shared/EventTag.vue'
 import UserAvatar from '@/components/shared/UserAvatar.vue'
 import Autocomplete from '@/components/shared/Autocomplete.vue'
@@ -91,9 +90,9 @@ import { rmCtrlChar } from '@/workers/rmCtrlChar'
 import api, {
   ResponseGroup,
   ResponseUser,
-  RequestEventInstantTags,
   GetMyGroupsRelationEnum,
 } from '@/api'
+import { useStore } from '@/workers/store'
 
 export type EventInputContent = {
   name: string
@@ -104,102 +103,112 @@ export type EventInputContent = {
   admins: ResponseUser[]
 }
 
-@Component({
-  components: {
-    EventTag,
-    UserAvatar,
-    Autocomplete,
-  },
+const store = useStore()
+
+const props = defineProps<{
+  isValid: boolean
+  content: EventInputContent
+}>()
+
+const emits = defineEmits<{
+  (e: 'update:isValid', value: boolean): void
+  (e: 'update:content', value: EventInputContent): void
+}>()
+
+const nameInput = computed({
+  get: () => props.content.name,
+  set: (v: string) => emits('update:content', { ...props.content, name: v }),
 })
-export default class EventFormContent extends Vue {
-  @Prop({ type: Boolean, required: true })
-  value!: boolean
 
-  @PropSync('name', { type: String, required: true })
-  nameInput!: string
+const groupInput = computed({
+  get: () => props.content.group,
+  set: (v: ResponseGroup | null) =>
+    emits('update:content', { ...props.content, group: v }),
+})
 
-  @PropSync('group', {
-    validator: prop => typeof prop === 'object' || prop === null,
-    required: true,
-  })
-  groupInput!: ResponseGroup | null
+const openInput = computed({
+  get: () => props.content.open,
+  set: (v: boolean) => emits('update:content', { ...props.content, open: v }),
+})
 
-  @PropSync('open', { type: Boolean, required: true })
-  openInput!: boolean
+const adminsInput = computed({
+  get: () => props.content.admins,
+  set: (v: ResponseUser[]) =>
+    emits('update:content', { ...props.content, admins: v }),
+})
 
-  @PropSync('admins', { type: Array, required: true })
-  adminsInput!: ResponseUser[]
+const tagsInput = computed({
+  get: () => props.content.tags,
+  set: (v: { name: string }[]) =>
+    emits('update:content', { ...props.content, tags: v }),
+})
 
-  @PropSync('tags', { type: Array, required: true })
-  tagsInput!: { name: string }[]
+const descriptionInput = computed({
+  get: () => props.content.description,
+  set: (v: string) =>
+    emits('update:content', { ...props.content, description: v }),
+})
 
-  @PropSync('description', { type: String, required: true })
-  descriptionInput!: string
+const isValidRef = computed({
+  get: () => props.isValid,
+  set: (newValue: boolean) => emits('update:isValid', newValue),
+})
 
-  allGroups: ResponseGroup[] = []
-  allTags: string[] = []
-
-  created() {
-    Promise.all([this.fetchGroups(), this.fetchTags()])
-  }
-  sortGroups = (
-    a: ResponseGroup,
-    b: ResponseGroup,
-    currentUser: ResponseUser
-  ) => {
-    const adminA = a.admins.includes(currentUser.userId) ? -1 : 1
-    const adminB = b.admins.includes(currentUser.userId) ? -1 : 1
-    if (adminA !== adminB) {
-      return adminA - adminB
-    } else {
-      return a.name.localeCompare(b.name)
-    }
-  }
-  async fetchGroups() {
-    const [groups, groupIds] = await Promise.all([
-      api.groups.getGroups(),
-      api.groups.getMyGroups({ relation: GetMyGroupsRelationEnum.Belongs }),
-    ])
-    const currentUser = this.$store.direct.state.me!
-    if (!currentUser) {
-      return
-    }
-    this.allGroups = groups
-      .sort((a, b) => this.sortGroups(a, b, currentUser))
-      .filter(group => groupIds.includes(group.groupId))
-  }
-  async fetchTags() {
-    this.allTags = (await api.tags.getTag()).map(({ name }) => name)
-  }
-
-  private get valid(): boolean {
-    return this.value
-  }
-  private set valid(value: boolean) {
-    this.$emit('input', value)
-  }
-
-  removeTag(tag1: string) {
-    this.tagNames = this.tagNames.filter(tag2 => tag1 !== tag2)
-  }
-  private get tagNames(): string[] {
-    return this.tagsInput.map(tag => tag.name)
-  }
-  private set tagNames(tags: string[]) {
-    this.tagsInput = tags
+const tagNames = computed({
+  get: () => tagsInput.value.map(tag => tag.name),
+  set: (tags: string[]) =>
+    (tagsInput.value = tags
       .map(rmCtrlChar)
       .filter(name => !!name)
-      .map(name => ({ name }))
-  }
+      .map(name => ({ name }))),
+})
 
-  private get memberOfSelectedGroup(): ResponseUser[] {
-    const users = this.$store.direct.state.usersCache.users
-    if (!users?.size || this.groupInput === null) {
-      return []
-    }
-    return [...users.values()].filter(({ userId }) =>
-      this.groupInput?.members.includes(userId)
-    )
+const allGroups = ref<ResponseGroup[]>([])
+const allTags = ref<string[]>([])
+
+const sortGroups = (
+  a: ResponseGroup,
+  b: ResponseGroup,
+  currentUser: ResponseUser
+) => {
+  const adminA = a.admins.includes(currentUser.userId) ? -1 : 1
+  const adminB = b.admins.includes(currentUser.userId) ? -1 : 1
+  if (adminA !== adminB) {
+    return adminA - adminB
+  } else {
+    return a.name.localeCompare(b.name)
   }
 }
+const fetchGroups = async () => {
+  const [groups, groupIds] = await Promise.all([
+    api.groups.getGroups(),
+    api.groups.getMyGroups({ relation: GetMyGroupsRelationEnum.Belongs }),
+  ])
+  const currentUser = store.direct.state.me!
+  if (!currentUser) {
+    return
+  }
+  allGroups.value = groups
+    .sort((a, b) => sortGroups(a, b, currentUser))
+    .filter(group => groupIds.includes(group.groupId))
+}
+const fetchTags = async () => {
+  allTags.value = (await api.tags.getTag()).map(({ name }) => name)
+}
+
+;(async () => Promise.all([fetchGroups(), fetchTags()]))()
+
+const removeTag = (tag1: string) => {
+  tagNames.value = tagNames.value.filter(tag2 => tag1 !== tag2)
+}
+
+const memberOfSelectedGroup = computed(() => {
+  const users = store.direct.state.usersCache.users
+  if (!users?.size || groupInput.value === null) {
+    return []
+  }
+  return [...users.values()].filter(({ userId }) =>
+    groupInput.value?.members.includes(userId)
+  )
+})
 </script>

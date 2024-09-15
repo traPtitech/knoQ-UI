@@ -44,24 +44,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+<script setup lang="ts">
 import UserAvatar from '@/components/shared/UserAvatar.vue'
 
-@Component({
-  components: {
-    UserAvatar,
-  },
-})
-export default class EventAttendeeItem extends Vue {
-  @Prop({ type: String, required: true })
-  name!: string
-  @Prop({ type: String, required: true })
-  icon!: string
-  @Prop({ type: String, required: true })
-  state!: string
-  @Prop({ type: Boolean, required: true })
-  isAdmin!: boolean
-}
+defineProps<{
+  name?: string
+  icon?: string
+  state: string
+  isAdmin: boolean
+}>()
 </script>
