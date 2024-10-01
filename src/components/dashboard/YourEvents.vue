@@ -10,7 +10,7 @@
       <template v-else>
         <v-list-item v-if="!events.length">
           <span class="text--secondary">
-            あなたの作成したイベントはありません
+            所属するグループや，出席するイベントはありません
           </span>
         </v-list-item>
         <template v-for="(event, i) in events">
