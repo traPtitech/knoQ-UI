@@ -31,8 +31,10 @@ export default class CalendarPage extends Vue {
   async fetchMonthlyEvents(newDate) {
     this.status = 'loading'
     this.events = []
-    const startDate = new Date(newDate.getFullYear(), newDate.getMonth(), 1)
+    const startDate = new Date(newDate.getFullYear(), newDate.getMonth() - 1, 1)
     const endDate = new Date(newDate.getFullYear(), newDate.getMonth() + 2, 0)
+    console.log(startDate)
+    console.log(endDate)
     try {
       this.events = await api.events.getEvents({
         dateBegin: startDate.toISOString(),
