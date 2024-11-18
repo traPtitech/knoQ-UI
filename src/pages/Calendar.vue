@@ -32,7 +32,7 @@ export default class CalendarPage extends Vue {
     this.status = 'loading'
     this.events = []
     const startDate = new Date(newDate.getFullYear(), newDate.getMonth() - 1, 1)
-    const endDate = new Date(newDate.getFullYear(), newDate.getMonth() + 2, 0)
+    const endDate = new Date(newDate.getFullYear(), newDate.getMonth() + 2, 0, 23, 59, 59)
     try {
       this.events = await api.events.getEvents({
         dateBegin: startDate.toISOString(),
