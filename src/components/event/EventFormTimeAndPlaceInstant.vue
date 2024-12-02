@@ -15,7 +15,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
-      @blur="setDefaultDateEnd"
+      @blur="autoFillDateEnd"
     />
     <v-text-field
       v-model="timeStartMem"
@@ -33,6 +33,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
+      @blur="calcDateDiff"
     />
     <v-text-field
       v-model="timeEndMem"
@@ -73,6 +74,13 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   private dateEndMem = ''
   private timeStartMem = ''
   private timeEndMem = ''
+  private yearDiff = 0
+  private monthDiff = 0
+  private dateDiff = 0
+  private hourDiff = 1
+
+  @Ref()
+  readonly form!: { validate(): void }
 
   created() {
     this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)
@@ -81,8 +89,16 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
-  @Ref()
-  readonly form!: { validate(): void }
+  get dateMin(): string {
+    return today()
+  }
+
+  get valid(): boolean {
+    return this.value
+  }
+  set valid(value: boolean) {
+    this.$emit('input', value)
+  }
 
   @Watch('timeStartInput')
   @Watch('timeEndInput')
@@ -102,10 +118,6 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  public setDefaultDateEnd() {
-    if (!this.dateEndMem) this.dateEndMem = this.dateStartMem
-  }
-
   @Watch('dateEndMem')
   @Watch('timeEndMem')
   private onTimeEndMemChange() {
@@ -114,15 +126,49 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  get dateMin(): string {
-    return today()
+  public autoFillDateEnd() {
+    if (!this.dateEndMem) {
+      this.dateEndMem = this.dateStartMem
+      this.yearDiff = 0
+      this.monthDiff = 0
+      this.dateDiff = 0
+    } else {
+      const startDate = new Date(this.dateStartMem)
+      const endDate = new Date(this.dateEndMem)
+
+      endDate.setFullYear(startDate.getFullYear() + this.yearDiff)
+      endDate.setMonth(startDate.getMonth() + this.monthDiff)
+      endDate.setDate(startDate.getDate() + this.dateDiff)
+
+      this.dateEndMem = endDate.toISOString().split('T')[0]
+    }
   }
 
-  get valid(): boolean {
-    return this.value
-  }
-  set valid(value: boolean) {
-    this.$emit('input', value)
+  public calcDateDiff() {
+    if (this.dateStartMem && this.dateEndMem) {
+      const startDate = new Date(this.dateStartMem)
+      const endDate = new Date(this.dateEndMem)
+
+      this.yearDiff = endDate.getFullYear() - startDate.getFullYear()
+      if (this.yearDiff < 0) {
+        this.yearDiff = 0
+      }
+
+      this.monthDiff =
+        endDate.getMonth() -
+        startDate.getMonth() +
+        12 * (endDate.getFullYear() - startDate.getFullYear())
+      if (this.monthDiff < 0) {
+        this.monthDiff = 0
+      }
+
+      this.dateDiff = Math.floor(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+      )
+      if (this.dateDiff < 0) {
+        this.dateDiff = 0
+      }
+    }
   }
 }
 </script>
