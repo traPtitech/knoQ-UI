@@ -15,7 +15,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
-      @blur="setDefaultDateEnd"
+      @blur="autoFillDateEnd"
     />
     <v-text-field
       v-model="timeStartMem"
@@ -23,6 +23,7 @@
       label="開始時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
+      @blur="autoFillTimeEnd"
     />
     <v-text-field
       v-model="dateEndMem"
@@ -33,6 +34,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
+      @blur="calcDateDiff"
     />
     <v-text-field
       v-model="timeEndMem"
@@ -40,6 +42,7 @@
       label="終了時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
+      @blur="calcTimeDiff"
     />
   </v-form>
 </template>
@@ -73,6 +76,11 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   private dateEndMem = ''
   private timeStartMem = ''
   private timeEndMem = ''
+  private dateDiff = 0
+  private minuteDiff = 60
+
+  @Ref()
+  readonly form!: { validate(): void }
 
   created() {
     this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)
@@ -81,8 +89,16 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
-  @Ref()
-  readonly form!: { validate(): void }
+  get dateMin(): string {
+    return today()
+  }
+
+  get valid(): boolean {
+    return this.value
+  }
+  set valid(value: boolean) {
+    this.$emit('input', value)
+  }
 
   @Watch('timeStartInput')
   @Watch('timeEndInput')
@@ -102,10 +118,6 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  public setDefaultDateEnd() {
-    if (!this.dateEndMem) this.dateEndMem = this.dateStartMem
-  }
-
   @Watch('dateEndMem')
   @Watch('timeEndMem')
   private onTimeEndMemChange() {
@@ -114,15 +126,72 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  get dateMin(): string {
-    return today()
+  private ajustDate(dateStr: string, days: number): string {
+    let date = new Date(dateStr)
+    date.setDate(date.getDate() + days)
+    return date.toISOString().split('T')[0]
   }
 
-  get valid(): boolean {
-    return this.value
+  public autoFillDateEnd() {
+    if (!this.dateEndMem) {
+      this.dateDiff = 0
+      this.dateEndMem = this.dateStartMem
+    } else {
+      this.dateEndMem = this.ajustDate(this.dateStartMem, this.dateDiff)
+    }
   }
-  set valid(value: boolean) {
-    this.$emit('input', value)
+
+  public autoFillTimeEnd() {
+    if (!this.timeEndMem) {
+      this.minuteDiff = 60
+    }
+
+    let endTime = new Date(this.timeStartInput)
+    endTime.setMinutes(endTime.getMinutes() + this.minuteDiff)
+
+    // 正の向きに日付を跨いだかどうかの判定
+    if (endTime.getDate() - new Date(this.timeStartInput).getDate() > 0) {
+      this.dateEndMem = this.ajustDate(this.dateEndMem, 1)
+    }
+    // 負の向きに日付を跨いだかどうかの判定
+    else if (endTime.getDate() - new Date(this.timeEndInput).getDate() < 0) {
+      this.dateEndMem = this.ajustDate(this.dateEndMem, -1)
+    }
+
+    const endHour = endTime.getHours()
+    const endMinute = endTime.getMinutes()
+    this.timeEndMem = `${String(endHour).padStart(2, '0')}:${String(
+      endMinute
+    ).padStart(2, '0')}`
+  }
+
+  public calcDateDiff() {
+    if (this.dateStartMem && this.dateEndMem) {
+      const startDate = new Date(this.dateStartMem)
+      const endDate = new Date(this.dateEndMem)
+      this.dateDiff = Math.floor(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+      )
+      if (this.dateDiff < 0) {
+        this.dateDiff = 0
+      }
+    }
+  }
+
+  public calcTimeDiff() {
+    if (this.timeStartMem && this.timeEndMem) {
+      const startDateTime = new Date(
+        `${this.dateStartMem}T${this.timeStartMem}`
+      )
+      const endDateTime = new Date(`${this.dateEndMem}T${this.timeEndMem}`)
+      const diffInMilliseconds = endDateTime.getTime() - startDateTime.getTime()
+      if (diffInMilliseconds > 0) {
+        this.minuteDiff = Math.floor(diffInMilliseconds / (1000 * 60))
+      } else {
+        this.minuteDiff = 0
+      }
+    }
+    console.log(this.minuteDiff)
   }
 }
 </script>
