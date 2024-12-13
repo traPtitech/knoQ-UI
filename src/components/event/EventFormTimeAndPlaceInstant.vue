@@ -126,15 +126,18 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
+  private ajustDate(dateStr: string, days: number): string {
+    let date = new Date(dateStr)
+    date.setDate(date.getDate() + days)
+    return date.toISOString().split('T')[0]
+  }
+
   public autoFillDateEnd() {
     if (!this.dateEndMem) {
       this.dateDiff = 0
       this.dateEndMem = this.dateStartMem
     } else {
-      let startDate = new Date(this.dateStartMem)
-      let endDate = startDate
-      endDate.setDate(startDate.getDate() + this.dateDiff)
-      this.dateEndMem = endDate.toISOString().split('T')[0]
+      this.dateEndMem = this.ajustDate(this.dateStartMem, this.dateDiff)
     }
   }
 
@@ -144,31 +147,24 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
 
     let endTime = new Date(this.timeStartInput)
-
     endTime.setMinutes(endTime.getMinutes() + this.minuteDiff)
-
-    const endHour = endTime.getHours()
-    const endMinute = endTime.getMinutes()
 
     // 正の向きに日付を跨いだかどうかの判定
     if (endTime.getDate() - new Date(this.timeStartInput).getDate() > 0) {
-      let startDate = new Date(this.dateEndMem)
-      let endDate = startDate
-      endDate.setDate(startDate.getDate() + 1)
-      this.dateEndMem = endDate.toISOString().split('T')[0]
+      this.dateEndMem = this.ajustDate(this.dateEndMem, 1)
     }
     // 負の向きに日付を跨いだかどうかの判定
     else if (endTime.getDate() - new Date(this.timeEndInput).getDate() < 0) {
-      let startDate = new Date(this.dateEndMem)
-      let endDate = startDate
-      endDate.setDate(startDate.getDate() - 1)
-      this.dateEndMem = endDate.toISOString().split('T')[0]
+      this.dateEndMem = this.ajustDate(this.dateEndMem, -1)
     }
 
+    const endHour = endTime.getHours()
+    const endMinute = endTime.getMinutes()
     this.timeEndMem = `${String(endHour).padStart(2, '0')}:${String(
       endMinute
     ).padStart(2, '0')}`
   }
+
   public calcDateDiff() {
     if (this.dateStartMem && this.dateEndMem) {
       const startDate = new Date(this.dateStartMem)
