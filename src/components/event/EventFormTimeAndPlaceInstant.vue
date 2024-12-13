@@ -76,8 +76,6 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   private dateEndMem = ''
   private timeStartMem = ''
   private timeEndMem = ''
-  private yearDiff = 0
-  private monthDiff = 0
   private dateDiff = 0
   private hourDiff = 1
   private minuteDiff = 0
@@ -131,16 +129,11 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
 
   public autoFillDateEnd() {
     if (!this.dateEndMem) {
-      this.dateEndMem = this.dateStartMem
-      this.yearDiff = 0
-      this.monthDiff = 0
       this.dateDiff = 0
+      this.dateEndMem = this.dateStartMem
     } else {
-      const startDate = new Date(this.dateStartMem)
-      const endDate = new Date(this.dateEndMem)
-
-      endDate.setFullYear(startDate.getFullYear() + this.yearDiff)
-      endDate.setMonth(startDate.getMonth() + this.monthDiff)
+      let startDate = new Date(this.dateStartMem)
+      let endDate = startDate
       endDate.setDate(startDate.getDate() + this.dateDiff)
       this.dateEndMem = endDate.toISOString().split('T')[0]
     }
@@ -171,20 +164,6 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     if (this.dateStartMem && this.dateEndMem) {
       const startDate = new Date(this.dateStartMem)
       const endDate = new Date(this.dateEndMem)
-
-      this.yearDiff = endDate.getFullYear() - startDate.getFullYear()
-      if (this.yearDiff < 0) {
-        this.yearDiff = 0
-      }
-
-      this.monthDiff =
-        endDate.getMonth() -
-        startDate.getMonth() +
-        12 * (endDate.getFullYear() - startDate.getFullYear())
-      if (this.monthDiff < 0) {
-        this.monthDiff = 0
-      }
-
       this.dateDiff = Math.floor(
         (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
       )
