@@ -77,8 +77,7 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   private timeStartMem = ''
   private timeEndMem = ''
   private dateDiff = 0
-  private hourDiff = 1
-  private minuteDiff = 0
+  private minuteDiff = 60
 
   @Ref()
   readonly form!: { validate(): void }
@@ -141,25 +140,35 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
 
   public autoFillTimeEnd() {
     if (!this.timeEndMem) {
-      this.hourDiff = 1
-      this.minuteDiff = 0
+      this.minuteDiff = 60
     }
-    const [startHour, startMinute] = this.timeStartMem.split(':').map(Number)
-    let endMinute = startMinute + this.minuteDiff
-    let endHour = startHour + this.hourDiff
 
-    if (endMinute >= 60) {
-      endHour += 1
-      endMinute -= 60
+    let endTime = new Date(this.timeStartInput)
+
+    endTime.setMinutes(endTime.getMinutes() + this.minuteDiff)
+
+    const endHour = endTime.getHours()
+    const endMinute = endTime.getMinutes()
+
+    // 正の向きに日付を跨いだかどうかの判定
+    if (endTime.getDate() - new Date(this.timeStartInput).getDate() > 0) {
+      let startDate = new Date(this.dateEndMem)
+      let endDate = startDate
+      endDate.setDate(startDate.getDate() + 1)
+      this.dateEndMem = endDate.toISOString().split('T')[0]
     }
-    if (endHour >= 24) {
-      endHour -= 24
+    // 負の向きに日付を跨いだかどうかの判定
+    else if (endTime.getDate() - new Date(this.timeEndInput).getDate() < 0) {
+      let startDate = new Date(this.dateEndMem)
+      let endDate = startDate
+      endDate.setDate(startDate.getDate() - 1)
+      this.dateEndMem = endDate.toISOString().split('T')[0]
     }
+
     this.timeEndMem = `${String(endHour).padStart(2, '0')}:${String(
       endMinute
     ).padStart(2, '0')}`
   }
-
   public calcDateDiff() {
     if (this.dateStartMem && this.dateEndMem) {
       const startDate = new Date(this.dateStartMem)
@@ -181,14 +190,12 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
       const endDateTime = new Date(`${this.dateEndMem}T${this.timeEndMem}`)
       const diffInMilliseconds = endDateTime.getTime() - startDateTime.getTime()
       if (diffInMilliseconds > 0) {
-        this.hourDiff = Math.floor(diffInMilliseconds / (1000 * 60 * 60)) % 24
-        this.minuteDiff = Math.floor(diffInMilliseconds / (1000 * 60)) % 60
+        this.minuteDiff = Math.floor(diffInMilliseconds / (1000 * 60))
       } else {
-        this.hourDiff = 0
         this.minuteDiff = 0
       }
     }
-    console.log(this.hourDiff, this.minuteDiff)
+    console.log(this.minuteDiff)
   }
 }
 </script>
