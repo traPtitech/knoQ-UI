@@ -23,6 +23,7 @@
       label="開始時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
+      @blur="autoFillTimeEnd"
     />
     <v-text-field
       v-model="dateEndMem"
@@ -41,6 +42,7 @@
       label="終了時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
+      @blur="calcTimeDiff"
     />
   </v-form>
 </template>
@@ -78,6 +80,7 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   private monthDiff = 0
   private dateDiff = 0
   private hourDiff = 1
+  private minuteDiff = 0
 
   @Ref()
   readonly form!: { validate(): void }
@@ -139,9 +142,29 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
       endDate.setFullYear(startDate.getFullYear() + this.yearDiff)
       endDate.setMonth(startDate.getMonth() + this.monthDiff)
       endDate.setDate(startDate.getDate() + this.dateDiff)
-
       this.dateEndMem = endDate.toISOString().split('T')[0]
     }
+  }
+
+  public autoFillTimeEnd() {
+    if (!this.timeEndMem) {
+      this.hourDiff = 1
+      this.minuteDiff = 0
+    }
+    const [startHour, startMinute] = this.timeStartMem.split(':').map(Number)
+    let endMinute = startMinute + this.minuteDiff
+    let endHour = startHour + this.hourDiff
+
+    if (endMinute >= 60) {
+      endHour += 1
+      endMinute -= 60
+    }
+    if (endHour >= 24) {
+      endHour -= 24
+    }
+    this.timeEndMem = `${String(endHour).padStart(2, '0')}:${String(
+      endMinute
+    ).padStart(2, '0')}`
   }
 
   public calcDateDiff() {
@@ -169,6 +192,24 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
         this.dateDiff = 0
       }
     }
+  }
+
+  public calcTimeDiff() {
+    if (this.timeStartMem && this.timeEndMem) {
+      const startDateTime = new Date(
+        `${this.dateStartMem}T${this.timeStartMem}`
+      )
+      const endDateTime = new Date(`${this.dateEndMem}T${this.timeEndMem}`)
+      const diffInMilliseconds = endDateTime.getTime() - startDateTime.getTime()
+      if (diffInMilliseconds > 0) {
+        this.hourDiff = Math.floor(diffInMilliseconds / (1000 * 60 * 60)) % 24
+        this.minuteDiff = Math.floor(diffInMilliseconds / (1000 * 60)) % 60
+      } else {
+        this.hourDiff = 0
+        this.minuteDiff = 0
+      }
+    }
+    console.log(this.hourDiff, this.minuteDiff)
   }
 }
 </script>
