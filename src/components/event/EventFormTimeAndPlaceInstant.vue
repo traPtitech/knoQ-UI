@@ -141,6 +141,7 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
+  // TODO:やっぱり日付を跨いだ時の処理がおかしい
   public autoFillTimeEnd() {
     if (!this.timeEndMem) {
       this.minuteDiff = 60

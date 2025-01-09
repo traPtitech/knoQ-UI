@@ -77,6 +77,7 @@ import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
 import { useDraftConfirmer } from '@/workers/draftConfirmer'
 import { removeDraftConfirmer } from '@/workers/draftConfirmer'
+import { today } from '@/workers/date'
 import router from '@/router'
 import { Route } from 'vue-router'
 
@@ -126,6 +127,20 @@ export default class EventFormBase extends Vue {
 
   beforeEachControl: (() => void) | null = null
 
+  roundToNextHour(date: Date): Date {
+    const roundedDate = new Date(date)
+    const minutes = roundedDate.getMinutes()
+    const seconds = roundedDate.getSeconds()
+    const milliseconds = roundedDate.getMilliseconds()
+
+    if (minutes > 0 || seconds > 0 || milliseconds > 0) {
+      roundedDate.setHours(roundedDate.getHours() + 1)
+    }
+    roundedDate.setMinutes(0, 0, 0)
+
+    return roundedDate
+  }
+
   created() {
     this.content = {
       name: this.event?.name ?? '',
@@ -149,8 +164,15 @@ export default class EventFormBase extends Vue {
           : true,
     }
     this.timeAndPlaceInstant = {
-      timeStart: this.event?.instant ? this.event.timeStart ?? '' : '',
-      timeEnd: this.event?.instant ? this.event.timeEnd ?? '' : '',
+      // TODO: placeだけ初期値がないとvalidationが先に走ってしまう
+      timeStart: this.event?.instant
+        ? this.event.timeStart ?? ''
+        : this.roundToNextHour(new Date()).toISOString(),
+      timeEnd: this.event?.instant
+        ? this.event.timeEnd ?? ''
+        : this.roundToNextHour(
+            new Date(new Date().getTime() + 60 * 60 * 1000)
+          ).toISOString(),
       place: this.event?.instant ? this.event.place ?? '' : '',
     }
     this.instant = this.event?.instant ?? false
