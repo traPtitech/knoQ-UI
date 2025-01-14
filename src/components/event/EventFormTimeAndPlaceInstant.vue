@@ -15,7 +15,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
-      @blur="autoFillDateEnd"
+      @blur="updateEndDateTime"
     />
     <v-text-field
       v-model="timeStartMem"
@@ -23,7 +23,7 @@
       label="開始時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
-      @blur="autoFillTimeEnd"
+      @blur="updateEndDateTime"
     />
     <v-text-field
       v-model="dateEndMem"
@@ -34,7 +34,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
-      @blur="calcDateDiff"
+      @blur="recalculateTimeDiff"
     />
     <v-text-field
       v-model="timeEndMem"
@@ -42,7 +42,7 @@
       label="終了時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
-      @blur="calcTimeDiff"
+      @blur="recalculateTimeDiff"
     />
   </v-form>
 </template>
@@ -126,60 +126,25 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  private ajustDate(dateStr: string, days: number): string {
-    let date = new Date(dateStr)
-    date.setDate(date.getDate() + days)
-    return date.toISOString().split('T')[0]
-  }
-
-  public autoFillDateEnd() {
-    if (!this.dateEndMem) {
-      this.dateDiff = 0
-      this.dateEndMem = this.dateStartMem
-    } else {
-      this.dateEndMem = this.ajustDate(this.dateStartMem, this.dateDiff)
-    }
-  }
-
-  // TODO:やっぱり日付を跨いだ時の処理がおかしい
-  public autoFillTimeEnd() {
-    if (!this.timeEndMem) {
+  public updateEndDateTime() {
+    if (!this.minuteDiff) {
       this.minuteDiff = 60
     }
 
-    let endTime = new Date(this.timeStartInput)
-    endTime.setMinutes(endTime.getMinutes() + this.minuteDiff)
+    const startDateTime = new Date(`${this.dateStartMem}T${this.timeStartMem}`)
+    startDateTime.setMinutes(startDateTime.getMinutes() + this.minuteDiff)
 
-    // 正の向きに日付を跨いだかどうかの判定
-    if (endTime.getDate() - new Date(this.timeStartInput).getDate() > 0) {
-      this.dateEndMem = this.ajustDate(this.dateEndMem, 1)
-    }
-    // 負の向きに日付を跨いだかどうかの判定
-    else if (endTime.getDate() - new Date(this.timeEndInput).getDate() < 0) {
-      this.dateEndMem = this.ajustDate(this.dateEndMem, -1)
-    }
+    const localDateTime = new Date(
+      startDateTime.getTime() - startDateTime.getTimezoneOffset() * 60000
+    ).toISOString()
+    this.dateEndMem = localDateTime.split('T')[0]
 
-    const endHour = endTime.getHours()
-    const endMinute = endTime.getMinutes()
-    this.timeEndMem = `${String(endHour).padStart(2, '0')}:${String(
-      endMinute
-    ).padStart(2, '0')}`
+    const hours = String(startDateTime.getHours()).padStart(2, '0')
+    const minutes = String(startDateTime.getMinutes()).padStart(2, '0')
+    this.timeEndMem = `${hours}:${minutes}`
   }
 
-  public calcDateDiff() {
-    if (this.dateStartMem && this.dateEndMem) {
-      const startDate = new Date(this.dateStartMem)
-      const endDate = new Date(this.dateEndMem)
-      this.dateDiff = Math.floor(
-        (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-      )
-      if (this.dateDiff < 0) {
-        this.dateDiff = 0
-      }
-    }
-  }
-
-  public calcTimeDiff() {
+  public recalculateTimeDiff() {
     if (this.timeStartMem && this.timeEndMem) {
       const startDateTime = new Date(
         `${this.dateStartMem}T${this.timeStartMem}`
@@ -192,7 +157,6 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
         this.minuteDiff = 0
       }
     }
-    console.log(this.minuteDiff)
   }
 }
 </script>
