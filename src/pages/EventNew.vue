@@ -13,16 +13,16 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import api from '@/api'
 import EventFormBase, {
   EventInput,
   EventOutput,
 } from '@/components/event/EventFormBase.vue'
-import { isTrapGroup } from '@/workers/isTrapGroup'
-import api from '@/api'
 import LoadFailedText from '@/components/shared/LoadFailedText.vue'
 import ProgressCircular from '@/components/shared/ProgressCircular.vue'
+import { isTrapGroup } from '@/workers/isTrapGroup'
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
 
 @Component({
   components: {
@@ -79,12 +79,6 @@ export default class EventNew extends Vue {
     if (isTrapGroup(event.group)) {
       const confirmed = window.confirm(
         'traP部員全体が対象となるようなイベントを開催しようとしています。本当によろしいですか？'
-      )
-      if (!confirmed) return
-    }
-    if (event.instant) {
-      const confirmed = window.confirm(
-        'traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認しましたか？'
       )
       if (!confirmed) return
     }

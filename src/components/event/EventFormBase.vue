@@ -46,7 +46,9 @@
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <event-form-summary v-bind="{ ...summary, content, isEdit: isEdit }" />
+        <event-form-summary
+          v-bind="{ ...summary, content, isEdit: isEdit, isInstant: instant }"
+        />
         <form-back-button class="mr-2" @click="step = 2">
           Back
         </form-back-button>
@@ -59,26 +61,27 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { Component, Prop, Emit } from 'vue-property-decorator'
 import EventFormContent, {
   EventInputContent,
 } from '@/components/event/EventFormContent.vue'
+import EventFormSummary, {
+  EventSummary,
+} from '@/components/event/EventFormSummary.vue'
 import EventFormTimeAndPlace, {
   EventInputTimeAndPlace,
 } from '@/components/event/EventFormTimeAndPlace.vue'
 import EventFormTimeAndPlaceInstant, {
   EventInputTimeAndPlaceInstant,
 } from '@/components/event/EventFormTimeAndPlaceInstant.vue'
-import EventFormSummary, {
-  EventSummary,
-} from '@/components/event/EventFormSummary.vue'
-import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
-import { useDraftConfirmer } from '@/workers/draftConfirmer'
-import { removeDraftConfirmer } from '@/workers/draftConfirmer'
-import { today } from '@/workers/date'
+import FormNextButton from '@/components/shared/FormNextButton.vue'
 import router from '@/router'
+import {
+  removeDraftConfirmer,
+  useDraftConfirmer,
+} from '@/workers/draftConfirmer'
+import Vue from 'vue'
+import { Component, Emit, Prop } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 
 export type EventInput = EventInputContent &
