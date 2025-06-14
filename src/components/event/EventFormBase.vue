@@ -46,7 +46,9 @@
       </v-stepper-content>
 
       <v-stepper-content step="3">
-        <event-form-summary v-bind="{ ...summary, content, isEdit: isEdit }" />
+        <event-form-summary
+          v-bind="{ ...summary, content, isEdit: isEdit, isInstant: instant }"
+        />
         <form-back-button class="mr-2" @click="step = 2">
           Back
         </form-back-button>
@@ -59,25 +61,27 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { Component, Prop, Emit } from 'vue-property-decorator'
 import EventFormContent, {
   EventInputContent,
 } from '@/components/event/EventFormContent.vue'
+import EventFormSummary, {
+  EventSummary,
+} from '@/components/event/EventFormSummary.vue'
 import EventFormTimeAndPlace, {
   EventInputTimeAndPlace,
 } from '@/components/event/EventFormTimeAndPlace.vue'
 import EventFormTimeAndPlaceInstant, {
   EventInputTimeAndPlaceInstant,
 } from '@/components/event/EventFormTimeAndPlaceInstant.vue'
-import EventFormSummary, {
-  EventSummary,
-} from '@/components/event/EventFormSummary.vue'
-import FormNextButton from '@/components/shared/FormNextButton.vue'
 import FormBackButton from '@/components/shared/FormBackButton.vue'
-import { useDraftConfirmer } from '@/workers/draftConfirmer'
-import { removeDraftConfirmer } from '@/workers/draftConfirmer'
+import FormNextButton from '@/components/shared/FormNextButton.vue'
 import router from '@/router'
+import {
+  removeDraftConfirmer,
+  useDraftConfirmer,
+} from '@/workers/draftConfirmer'
+import Vue from 'vue'
+import { Component, Emit, Prop } from 'vue-property-decorator'
 import { Route } from 'vue-router'
 
 export type EventInput = EventInputContent &
@@ -126,6 +130,20 @@ export default class EventFormBase extends Vue {
 
   beforeEachControl: (() => void) | null = null
 
+  roundToNextHour(date: Date): Date {
+    const roundedDate = new Date(date)
+    const minutes = roundedDate.getMinutes()
+    const seconds = roundedDate.getSeconds()
+    const milliseconds = roundedDate.getMilliseconds()
+
+    if (minutes > 0 || seconds > 0 || milliseconds > 0) {
+      roundedDate.setHours(roundedDate.getHours() + 1)
+    }
+    roundedDate.setMinutes(0, 0, 0)
+
+    return roundedDate
+  }
+
   created() {
     this.content = {
       name: this.event?.name ?? '',
@@ -149,8 +167,15 @@ export default class EventFormBase extends Vue {
           : true,
     }
     this.timeAndPlaceInstant = {
-      timeStart: this.event?.instant ? this.event.timeStart ?? '' : '',
-      timeEnd: this.event?.instant ? this.event.timeEnd ?? '' : '',
+      // TODO: placeだけ初期値がないとvalidationが先に走ってしまう
+      timeStart: this.event?.instant
+        ? this.event.timeStart ?? ''
+        : this.roundToNextHour(new Date()).toISOString(),
+      timeEnd: this.event?.instant
+        ? this.event.timeEnd ?? ''
+        : this.roundToNextHour(
+            new Date(new Date().getTime() + 60 * 60 * 1000)
+          ).toISOString(),
       place: this.event?.instant ? this.event.place ?? '' : '',
     }
     this.instant = this.event?.instant ?? false

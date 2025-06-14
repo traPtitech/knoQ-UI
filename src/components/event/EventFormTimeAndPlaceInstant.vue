@@ -15,7 +15,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
-      @blur="setDefaultDateEnd"
+      @blur="updateEndDateTime"
     />
     <v-text-field
       v-model="timeStartMem"
@@ -23,6 +23,7 @@
       label="開始時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
+      @blur="updateEndDateTime"
     />
     <v-text-field
       v-model="dateEndMem"
@@ -33,6 +34,7 @@
         $rules.eventTimeInstant(timeStartInput, timeEndInput)
       "
       type="date"
+      @blur="recalculateTimeDiff"
     />
     <v-text-field
       v-model="timeEndMem"
@@ -40,6 +42,7 @@
       label="終了時刻"
       :rules="$rules.eventTimeInstant(timeStartInput, timeEndInput)"
       type="time"
+      @blur="recalculateTimeDiff"
     />
   </v-form>
 </template>
@@ -73,6 +76,11 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
   private dateEndMem = ''
   private timeStartMem = ''
   private timeEndMem = ''
+  private dateDiff = 0
+  private minuteDiff = 60
+
+  @Ref()
+  readonly form!: { validate(): void }
 
   created() {
     this.dateStartMem = this.timeStartInput && getDate(this.timeStartInput)
@@ -81,8 +89,16 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     this.timeEndMem = this.timeEndInput && getTime(this.timeEndInput)
   }
 
-  @Ref()
-  readonly form!: { validate(): void }
+  get dateMin(): string {
+    return today()
+  }
+
+  get valid(): boolean {
+    return this.value
+  }
+  set valid(value: boolean) {
+    this.$emit('input', value)
+  }
 
   @Watch('timeStartInput')
   @Watch('timeEndInput')
@@ -102,10 +118,6 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  public setDefaultDateEnd() {
-    if (!this.dateEndMem) this.dateEndMem = this.dateStartMem
-  }
-
   @Watch('dateEndMem')
   @Watch('timeEndMem')
   private onTimeEndMemChange() {
@@ -114,15 +126,37 @@ export default class EventFormTimeAndPlaceInstant extends Vue {
     }
   }
 
-  get dateMin(): string {
-    return today()
+  public updateEndDateTime() {
+    if (!this.minuteDiff) {
+      this.minuteDiff = 60
+    }
+
+    const startDateTime = new Date(`${this.dateStartMem}T${this.timeStartMem}`)
+    startDateTime.setMinutes(startDateTime.getMinutes() + this.minuteDiff)
+
+    const localDateTime = new Date(
+      startDateTime.getTime() - startDateTime.getTimezoneOffset() * 60000
+    ).toISOString()
+    this.dateEndMem = localDateTime.split('T')[0]
+
+    const hours = String(startDateTime.getHours()).padStart(2, '0')
+    const minutes = String(startDateTime.getMinutes()).padStart(2, '0')
+    this.timeEndMem = `${hours}:${minutes}`
   }
 
-  get valid(): boolean {
-    return this.value
-  }
-  set valid(value: boolean) {
-    this.$emit('input', value)
+  public recalculateTimeDiff() {
+    if (this.timeStartMem && this.timeEndMem) {
+      const startDateTime = new Date(
+        `${this.dateStartMem}T${this.timeStartMem}`
+      )
+      const endDateTime = new Date(`${this.dateEndMem}T${this.timeEndMem}`)
+      const diffInMilliseconds = endDateTime.getTime() - startDateTime.getTime()
+      if (diffInMilliseconds > 0) {
+        this.minuteDiff = Math.floor(diffInMilliseconds / (1000 * 60))
+      } else {
+        this.minuteDiff = 0
+      }
+    }
   }
 }
 </script>

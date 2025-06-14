@@ -1,12 +1,19 @@
 <template>
   <div>
+    <v-alert
+      v-if="isInstant"
+      border="left"
+      prominent
+      type="warning"
+      variant="outlined"
+    >
+      traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認してください。
+    </v-alert>
     <SummaryItem>
       <SummaryItemCaption>New Event</SummaryItemCaption>
-      <SummaryItemMain>{{ name }}</SummaryItemMain>
-      <!-- <SummaryItemSubtext>
-        <v-icon :color="openIcon.color">{{ openIcon.icon }}</v-icon>
-        {{ openString }}
-      </SummaryItemSubtext> -->
+      <SummaryItemMain>
+        {{ name }}
+      </SummaryItemMain>
       <EventTag
         v-for="tag in tags"
         :key="tag.name"
@@ -86,19 +93,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
-import MarkdownField from '@/components/shared/MarkdownField.vue'
+import { ResponseUser } from '@/api'
+import { EventInputContent } from '@/components/event/EventFormContent.vue'
+import EventPlace from '@/components/event/EventPlace.vue'
 import EventTag from '@/components/shared/EventTag.vue'
+import MarkdownField from '@/components/shared/MarkdownField.vue'
 import SummaryItem from '@/components/shared/SummaryItem.vue'
 import SummaryItemCaption from '@/components/shared/SummaryItemCaption.vue'
 import SummaryItemMain from '@/components/shared/SummaryItemMain.vue'
-import SummaryItemText from '@/components/shared/SummaryItemText.vue'
 import SummaryItemSubtext from '@/components/shared/SummaryItemSubtext.vue'
-import { formatDate, DATETIME_DISPLAY_FORMAT } from '@/workers/date'
-import EventPlace from '@/components/event/EventPlace.vue'
-import { EventInputContent } from '@/components/event/EventFormContent.vue'
-import { ResponseUser } from '@/api'
+import SummaryItemText from '@/components/shared/SummaryItemText.vue'
+import { DATETIME_DISPLAY_FORMAT, formatDate } from '@/workers/date'
+import Vue from 'vue'
+import { Component, Prop } from 'vue-property-decorator'
 export type EventSummary = {
   name: string
   description: string
@@ -110,6 +117,7 @@ export type EventSummary = {
   sharedRoom: boolean
   timeStart: string
   timeEnd: string
+  isInstant?: boolean
 }
 
 @Component({
@@ -160,6 +168,9 @@ export default class EventFormSummary extends Vue {
 
   @Prop({ type: Boolean, required: true })
   isEdit!: boolean
+
+  @Prop({ type: Boolean, required: true })
+  isInstant!: boolean
 
   page: number = 1
   inviteesPerPage: number = 6
