@@ -83,6 +83,7 @@ import {
 import Vue from 'vue'
 import { Component, Emit, Prop } from 'vue-property-decorator'
 import { Route } from 'vue-router'
+import { isTrapGroup } from '@/workers/isTrapGroup'
 
 export type EventInput = EventInputContent &
   (
@@ -212,6 +213,12 @@ export default class EventFormBase extends Vue {
     )
   }
 
+  get isTrapGroup(): boolean {
+    return this.content.group
+      ? isTrapGroup(this.content.group)
+      : false
+  }
+
   get summary(): EventSummary {
     return {
       name: this.content.name,
@@ -230,6 +237,7 @@ export default class EventFormBase extends Vue {
       timeEnd: this.instant
         ? this.timeAndPlaceInstant.timeEnd
         : this.timeAndPlace.timeEnd,
+      isTrapGroup: this.isTrapGroup,
     }
   }
 

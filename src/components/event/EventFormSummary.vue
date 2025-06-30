@@ -9,6 +9,16 @@
     >
       traPが予約していない場所でイベントを開催しようとしています。そこでイベントを開催できるか確認してください。
     </v-alert>
+    <v-alert
+      v-if="isTrapGroup"
+      border="left"
+      prominent
+      type="warning"
+      variant="outlined"
+    >
+      traP部員全体が対象となるようなイベントを開催しようとしています。
+    </v-alert>
+
     <SummaryItem>
       <SummaryItemCaption>New Event</SummaryItemCaption>
       <SummaryItemMain>
@@ -118,6 +128,7 @@ export type EventSummary = {
   timeStart: string
   timeEnd: string
   isInstant?: boolean
+  isTrapGroup?: boolean
 }
 
 @Component({
@@ -171,6 +182,9 @@ export default class EventFormSummary extends Vue {
 
   @Prop({ type: Boolean, required: true })
   isInstant!: boolean
+
+  @Prop({ type: Boolean, required: true })
+  isTrapGroup!: boolean
 
   page: number = 1
   inviteesPerPage: number = 6
