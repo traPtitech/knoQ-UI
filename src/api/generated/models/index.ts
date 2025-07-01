@@ -12,6 +12,7 @@ export * from './RequestRoom';
 export * from './RequestSchedule';
 export * from './RequestTag';
 export * from './ResponseEvent';
+export * from './ResponseEventAttendees';
 export * from './ResponseEventDetail';
 export * from './ResponseEventDetailAttendees';
 export * from './ResponseEventTags';
