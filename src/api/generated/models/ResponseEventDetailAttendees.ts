@@ -14,44 +14,51 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * 
+ * ユーザの参加状況
  * @export
- * @interface RequestSchedule
+ * @interface ResponseEventDetailAttendees
  */
-export interface RequestSchedule {
+export interface ResponseEventDetailAttendees {
+    /**
+     * 
+     * @type {string}
+     * @memberof ResponseEventDetailAttendees
+     */
+    userId: string;
     /**
      * pending or absent or attendance
      * @type {string}
-     * @memberof RequestSchedule
+     * @memberof ResponseEventDetailAttendees
      */
-    schedule: RequestScheduleScheduleEnum;
+    schedule: ResponseEventDetailAttendeesScheduleEnum;
 }
 
 /**
 * @export
 * @enum {string}
 */
-export enum RequestScheduleScheduleEnum {
+export enum ResponseEventDetailAttendeesScheduleEnum {
     Pending = 'pending',
     Absent = 'absent',
     Attendance = 'attendance'
 }
 
-export function RequestScheduleFromJSON(json: any): RequestSchedule {
-    return RequestScheduleFromJSONTyped(json, false);
+export function ResponseEventDetailAttendeesFromJSON(json: any): ResponseEventDetailAttendees {
+    return ResponseEventDetailAttendeesFromJSONTyped(json, false);
 }
 
-export function RequestScheduleFromJSONTyped(json: any, ignoreDiscriminator: boolean): RequestSchedule {
+export function ResponseEventDetailAttendeesFromJSONTyped(json: any, ignoreDiscriminator: boolean): ResponseEventDetailAttendees {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
+        'userId': json['userId'],
         'schedule': json['schedule'],
     };
 }
 
-export function RequestScheduleToJSON(value?: RequestSchedule | null): any {
+export function ResponseEventDetailAttendeesToJSON(value?: ResponseEventDetailAttendees | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -60,6 +67,7 @@ export function RequestScheduleToJSON(value?: RequestSchedule | null): any {
     }
     return {
         
+        'userId': value.userId,
         'schedule': value.schedule,
     };
 }

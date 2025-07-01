@@ -71,13 +71,19 @@ export default class YourEvents extends Vue {
     this.status = 'loading'
     try {
       const [adminEvents, belongingEvents] = await Promise.all([
-        api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Admins }),
-        api.events.getMyEvents({ relation: GetMyEventsRelationEnum.Belongs }),
+        api.events.getMyEvents({ 
+          relation: GetMyEventsRelationEnum.Admins,
+          dateBegin: today()
+        }),
+        api.events.getMyEvents({ 
+          relation: GetMyEventsRelationEnum.Belongs,
+          dateBegin: today()
+        }),
       ])
       this.events = uniqueBy(
         event => event.eventId,
         [...adminEvents, ...belongingEvents]
-      ).filter(event => today() <= event.timeStart)
+      )
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'

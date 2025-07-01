@@ -26,7 +26,7 @@
     />
     <ProgressCircular v-if="status === 'loading'" />
     <LoadFailed v-else-if="status === 'error'" />
-    <EventList v-else :events="events" :event-filter="filterFn" />
+    <EventList v-else :events="displayEvents" :event-filter="filterFn" />
   </v-container>
 </template>
 
@@ -53,20 +53,58 @@ import api, { ResponseEvent, ResponseTag } from '@/api'
 export default class EventSearch extends Vue {
   status: 'loading' | 'loaded' | 'error' = 'loading'
 
-  events: ResponseEvent[] = []
+  futureEvents: ResponseEvent[] = []
+  pastEvents: ResponseEvent[] = []
+  allEvents: ResponseEvent[] = []
   tags: ResponseTag[] = []
+  hasFetchedPastEvents = false
 
   async created() {
+    await this.fetchEvents()
+  }
+
+  async fetchEvents() {
     this.status = 'loading'
     try {
-      ;[this.events, this.tags] = await Promise.all([
-        api.events.getEvents({}),
+      const [futureEvents, tags] = await Promise.all([
+        api.events.getEvents({ dateBegin: today() }),
         api.tags.getTag(),
       ])
+
+      this.futureEvents = futureEvents
+      this.tags = tags
+
       this.status = 'loaded'
     } catch (__) {
       this.status = 'error'
     }
+  }
+
+  async fetchPastEvents() {
+    if (this.hasFetchedPastEvents) return
+
+    try {
+      const allEvents = await api.events.getEvents({})
+      this.allEvents = allEvents
+
+      const todayStr = today()
+      this.futureEvents = allEvents.filter(
+        e => formatDate()(e.timeEnd) >= todayStr
+      )
+      this.pastEvents = allEvents.filter(
+        e => formatDate()(e.timeEnd) < todayStr
+      )
+
+      this.hasFetchedPastEvents = true
+    } catch (error) {
+      console.error('Failed to fetch past events:', error)
+    }
+  }
+
+  get displayEvents(): ResponseEvent[] {
+    return this.showFinished
+      ? [...this.pastEvents, ...this.futureEvents]
+      : this.futureEvents
   }
 
   get filterTags(): string[] {
@@ -102,6 +140,13 @@ export default class EventSearch extends Vue {
         e.tags.some(({ name }) => name === t)
       )
       return (this.showFinished || !isFinished) && hasTags
+    }
+  }
+
+  @Watch('showFinished')
+  async onShowFinishedChanged(newVal: boolean) {
+    if (newVal && !this.hasFetchedPastEvents) {
+      await this.fetchPastEvents()
     }
   }
 

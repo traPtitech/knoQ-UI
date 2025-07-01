@@ -23,8 +23,8 @@ models/RequestRoom.ts
 models/RequestSchedule.ts
 models/RequestTag.ts
 models/ResponseEvent.ts
-models/ResponseEventAttendees.ts
 models/ResponseEventDetail.ts
+models/ResponseEventDetailAttendees.ts
 models/ResponseEventTags.ts
 models/ResponseGroup.ts
 models/ResponseRoom.ts
