@@ -14,6 +14,7 @@ export * from './RequestTag';
 export * from './ResponseEvent';
 export * from './ResponseEventAttendees';
 export * from './ResponseEventDetail';
+export * from './ResponseEventDetailAttendees';
 export * from './ResponseEventTags';
 export * from './ResponseGroup';
 export * from './ResponseRoom';
