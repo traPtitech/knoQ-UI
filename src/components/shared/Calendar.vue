@@ -2,21 +2,18 @@
   <div>
     <v-sheet :height="status === 'loading' ? 60 : 64">
       <v-toolbar flat>
-        <v-btn
-          outlined
-          class="mr-4"
-          color="grey darken-2"
-          @click="jumpToCurrentDate"
-        >
+        <v-btn outlined color="grey darken-2" @click="jumpToCurrentDate">
           <v-icon v-if="buttonSlim"> mdi-calendar-today-outline </v-icon>
           <span v-else> Today </span>
         </v-btn>
-        <v-btn fab text small color="grey darken-2" @click="prev">
-          <v-icon small> mdi-chevron-left </v-icon>
-        </v-btn>
-        <v-btn fab text small color="grey darken-2" @click="next">
-          <v-icon small> mdi-chevron-right </v-icon>
-        </v-btn>
+        <div class="mx-2">
+          <v-btn fab text small color="grey darken-2" @click="prev">
+            <v-icon small> mdi-chevron-left </v-icon>
+          </v-btn>
+          <v-btn fab text small color="grey darken-2" @click="next">
+            <v-icon small> mdi-chevron-right </v-icon>
+          </v-btn>
+        </div>
         <v-toolbar-title v-if="$refs.calendar">
           {{ calendarTitle }}
         </v-toolbar-title>
