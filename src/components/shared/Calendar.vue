@@ -29,15 +29,27 @@
           </template>
           <v-list>
             <v-list-item @click="type = 'day'">
+              <v-list-item-icon class="mr-4">
+                <v-icon>mdi-view-day-outline</v-icon>
+              </v-list-item-icon>
               <v-list-item-title>{{ typeToLabel['day'] }}</v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = '4day'">
+              <v-list-item-icon class="mr-4">
+                <v-icon>mdi-view-array-outline</v-icon>
+              </v-list-item-icon>
               <v-list-item-title>{{ typeToLabel['4day'] }}</v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = 'week'">
+              <v-list-item-icon class="mr-4">
+                <v-icon>mdi-view-week-outline</v-icon>
+              </v-list-item-icon>
               <v-list-item-title>{{ typeToLabel['week'] }}</v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = 'month'">
+              <v-list-item-icon class="mr-4">
+                <v-icon>mdi-view-grid-outline</v-icon>
+              </v-list-item-icon>
               <v-list-item-title>{{ typeToLabel['month'] }}</v-list-item-title>
             </v-list-item>
           </v-list>
