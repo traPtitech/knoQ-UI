@@ -49,7 +49,7 @@
     "sass": "~1.69",
     "typescript": "5.7.2",
     "unplugin-vue-components": "^0.27.4",
-    "vite": "^4.5.5",
+    "vite": "^5.4.20",
     "vue-template-compiler": "^2.7.14"
   },
   "browserslist": [
