@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  IMAGE_NAME: knoq-ui
+  IMAGE_NAME: knoq-ui-v1
 
 jobs:
   image:
