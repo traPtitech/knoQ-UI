@@ -2,20 +2,18 @@
   <div>
     <v-sheet :height="status === 'loading' ? 60 : 64">
       <v-toolbar flat>
-        <v-btn
-          outlined
-          class="mr-4"
-          color="grey darken-2"
-          @click="jumpToCurrentDate"
-        >
-          Today
+        <v-btn outlined color="grey darken-2" @click="jumpToCurrentDate">
+          <v-icon v-if="buttonSlim"> mdi-calendar-today-outline </v-icon>
+          <span v-else> Today </span>
         </v-btn>
-        <v-btn fab text small color="grey darken-2" @click="prev">
-          <v-icon small> mdi-chevron-left </v-icon>
-        </v-btn>
-        <v-btn fab text small color="grey darken-2" @click="next">
-          <v-icon small> mdi-chevron-right </v-icon>
-        </v-btn>
+        <div class="mx-2">
+          <v-btn fab text small color="grey darken-2" @click="prev">
+            <v-icon small> mdi-chevron-left </v-icon>
+          </v-btn>
+          <v-btn fab text small color="grey darken-2" @click="next">
+            <v-icon small> mdi-chevron-right </v-icon>
+          </v-btn>
+        </div>
         <v-toolbar-title v-if="$refs.calendar">
           {{ calendarTitle }}
         </v-toolbar-title>
@@ -23,22 +21,43 @@
         <v-menu bottom right>
           <template #activator="{ on, attrs }">
             <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
-              <span>{{ typeToLabel[type] }}</span>
+              <v-icon v-if="buttonSlim">{{ typeToLabel[type].icon }}</v-icon>
+              <span v-else>{{ typeToLabel[type].text }}</span>
               <v-icon right> mdi-menu-down </v-icon>
             </v-btn>
           </template>
           <v-list>
             <v-list-item @click="type = 'day'">
-              <v-list-item-title>{{ typeToLabel['day'] }}</v-list-item-title>
+              <v-list-item-icon class="mr-4">
+                <v-icon>{{ typeToLabel['day'].icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                {{ typeToLabel['day'].text }}
+              </v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = '4day'">
-              <v-list-item-title>{{ typeToLabel['4day'] }}</v-list-item-title>
+              <v-list-item-icon class="mr-4">
+                <v-icon>{{ typeToLabel['4day'].icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                {{ typeToLabel['4day'].text }}
+              </v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = 'week'">
-              <v-list-item-title>{{ typeToLabel['week'] }}</v-list-item-title>
+              <v-list-item-icon class="mr-4">
+                <v-icon>{{ typeToLabel['week'].icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                {{ typeToLabel['week'].text }}
+              </v-list-item-title>
             </v-list-item>
             <v-list-item @click="type = 'month'">
-              <v-list-item-title>{{ typeToLabel['month'] }}</v-list-item-title>
+              <v-list-item-icon class="mr-4">
+                <v-icon>{{ typeToLabel['month'].icon }}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>
+                {{ typeToLabel['month'].text }}
+              </v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -146,10 +165,22 @@ export default class Calendar extends Vue {
   selectedOpen = false
 
   typeToLabel = {
-    month: 'Month',
-    week: 'Week',
-    '4day': '4 Days',
-    day: 'Day',
+    month: {
+      text: 'Month',
+      icon: 'mdi-view-grid-outline',
+    },
+    week: {
+      text: 'Week',
+      icon: 'mdi-view-week-outline',
+    },
+    '4day': {
+      text: '4 Days',
+      icon: 'mdi-view-array-outline',
+    },
+    day: {
+      text: 'Day',
+      icon: 'mdi-view-day-outline',
+    },
   }
 
   calendarRefName = 'calendar'
@@ -229,6 +260,10 @@ export default class Calendar extends Vue {
   onMonthChange(value) {
     value = new Date(value)
     this.$emit('monthChanged', value)
+  }
+
+  get buttonSlim() {
+    return this.$vuetify.breakpoint.xs
   }
 }
 </script>
