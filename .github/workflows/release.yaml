@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: 'yarn'
+          cache: "yarn"
       - name: Enable Corepack
         run: corepack enable
       - name: Install dependencies
@@ -38,6 +38,9 @@ jobs:
 
   image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - name: Set IMAGE_TAG env
